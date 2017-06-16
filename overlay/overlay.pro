@@ -1,6 +1,6 @@
 include (../compiler.pri)
 
-VERSION = 1.2.4
+VERSION = 1.0.0
 TARGET_EXT = .dll
 TEMPLATE = lib
 CONFIG -= qt
