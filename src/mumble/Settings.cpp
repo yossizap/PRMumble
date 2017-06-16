@@ -120,7 +120,7 @@ const QString Settings::cqsDefaultPushClickOn = QLatin1String(":/on.ogg");
 const QString Settings::cqsDefaultPushClickOff = QLatin1String(":/off.ogg");
 
 OverlaySettings::OverlaySettings() {
-	bEnable = true;
+	bEnable = false;
 
 	fX = 1.0f;
 	fY = 0.0f;
@@ -251,18 +251,18 @@ Settings::Settings() {
 	qRegisterMetaTypeStreamOperators<ShortcutTarget> ("ShortcutTarget");
 	qRegisterMetaType<QVariant> ("QVariant");
 
-	atTransmit = VAD;
-	bTransmitPosition = false;
+	atTransmit = PushToTalk;
+	bTransmitPosition = true;
 	bMute = bDeaf = false;
 	bTTS = true;
 	bTTSMessageReadBack = false;
 	iTTSVolume = 75;
 	iTTSThreshold = 250;
 	iQuality = 40000;
-	fVolume = 1.0f;
-	fOtherVolume = 0.5f;
+	fVolume = 0.6f;
+	fOtherVolume = 1.0f;
 	bAttenuateOthersOnTalk = false;
-	bAttenuateOthers = true;
+	bAttenuateOthers = false;
 	iMinLoudness = 1000;
 	iVoiceHold = 50;
 	iJitterBufferSize = 1;
@@ -281,25 +281,25 @@ Settings::Settings() {
 	qsTxAudioCueOn = cqsDefaultPushClickOn;
 	qsTxAudioCueOff = cqsDefaultPushClickOff;
 
-	bUserTop = true;
+	bUserTop = false;
 
 	bWhisperFriends = false;
 
 	uiDoublePush = 0;
 	uiPTTHold = 0;
-	bExpert = false;
+	bExpert = true;
 
 #ifdef NO_UPDATE_CHECK
 	bUpdateCheck = false;
 	bPluginCheck = false;
 #else
-	bUpdateCheck = true;
-	bPluginCheck = true;
+	bUpdateCheck = false;
+	bPluginCheck = false;
 #endif
 
 	qsImagePath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
 
-	ceExpand = ChannelsWithUsers;
+	ceExpand = NoChannels;
 	ceChannelDrag = Ask;
 	bMinimalView = false;
 	bHideFrame = false;
@@ -307,21 +307,23 @@ Settings::Settings() {
 	bAskOnQuit = true;
 #ifdef Q_OS_WIN
 	// Don't enable minimize to tray by default on Windows 7 or Windows 8
-	const QSysInfo::WinVersion winVer = QSysInfo::windowsVersion();
-	bHideInTray = (winVer != QSysInfo::WV_WINDOWS7 && winVer != QSysInfo::WV_WINDOWS8);
+	//const QSysInfo::WinVersion winVer = QSysInfo::windowsVersion();
+	bHideInTray = true;//(winVer != QSysInfo::WV_WINDOWS7 && winVer != QSysInfo::WV_WINDOWS8);
 #else
 	bHideInTray = true;
 #endif
-	bStateInTray = true;
-	bUsage = true;
-	bShowUserCount = false;
+	bStateInTray = false;
+	bUsage = false;
+	bShowUserCount = true;
 	bChatBarUseSelection = false;
-	wlWindowLayout = LayoutClassic;
+	wlWindowLayout = LayoutStacked;
 	bShowContextMenuInMenuBar = false;
 
 	ssFilter = ShowReachable;
 
-	iOutputDelay = 5;
+	qsSkin = QLatin1String(":/Reality.qss");
+	
+	iOutputDelay = 1;
 
 	qsALSAInput=QLatin1String("default");
 	qsALSAOutput=QLatin1String("default");
@@ -336,11 +338,11 @@ Settings::Settings() {
 	iPortAudioOutput = -1; // default device
 
 	bPositionalAudio = true;
-	bPositionalHeadphone = false;
-	fAudioMinDistance = 1.0f;
-	fAudioMaxDistance = 15.0f;
-	fAudioMaxDistVolume = 0.80f;
-	fAudioBloom = 0.5f;
+	bPositionalHeadphone = true;
+	fAudioMinDistance = 2.5f;
+	fAudioMaxDistance = 75.0f;
+	fAudioMaxDistVolume = 0.0f;
+	fAudioBloom = 0.15f;
 
 	iLCDUserViewMinColWidth = 50;
 	iLCDUserViewSplitterWidth = 2;
@@ -390,7 +392,8 @@ Settings::Settings() {
 	bSuppressMacEventTapWarning = false;
 
 	for (int i=Log::firstMsgType; i<=Log::lastMsgType; ++i)
-		qmMessages.insert(i, Settings::LogConsole | Settings::LogBalloon | Settings::LogTTS);
+		//qmMessages.insert(i, Settings::LogConsole | Settings::LogBalloon | Settings::LogTTS);
+		qmMessages.insert(i, Settings::LogConsole);
 
 	for (int i=Log::firstMsgType; i<=Log::lastMsgType; ++i)
 		qmMessageSounds.insert(i, QString());
@@ -408,14 +411,13 @@ Settings::Settings() {
 	qmMessageSounds[Log::YouKicked] = QLatin1String(":/UserKickedYouOrByYou.ogg");
 	qmMessageSounds[Log::Recording] = QLatin1String(":/RecordingStateChanged.ogg");
 
-	qmMessages[Log::DebugInfo] = Settings::LogConsole;
-	qmMessages[Log::Warning] = Settings::LogConsole | Settings::LogBalloon;
-	qmMessages[Log::Information] = Settings::LogConsole;
-	qmMessages[Log::UserJoin] = Settings::LogConsole;
-	qmMessages[Log::UserLeave] = Settings::LogConsole;
-	qmMessages[Log::UserKicked] = Settings::LogConsole;
-	qmMessages[Log::OtherSelfMute] = Settings::LogConsole;
-	qmMessages[Log::OtherMutedOther] = Settings::LogConsole;
+	qmMessages[Log::UserJoin] = Settings::LogNone;
+	qmMessages[Log::UserLeave] = Settings::LogNone;
+	qmMessages[Log::OtherMutedOther] = Settings::LogNone;
+	qmMessages[Log::ChannelJoin] = Settings::LogNone;
+	qmMessages[Log::ChannelLeave] = Settings::LogNone;
+	
+	addButtons(qlShortcuts);
 }
 
 bool Settings::doEcho() const {
@@ -686,6 +688,7 @@ void Settings::load(QSettings* settings_ptr) {
 	SAVELOAD(bShortcutEnable, "shortcut/enable");
 	SAVELOAD(bSuppressMacEventTapWarning, "shortcut/mac/suppresswarning");
 
+	qlShortcuts.clear();
 	int nshorts = settings_ptr->beginReadArray(QLatin1String("shortcuts"));
 	for (int i=0; i<nshorts; i++) {
 		settings_ptr->setArrayIndex(i);
@@ -697,10 +700,15 @@ void Settings::load(QSettings* settings_ptr) {
 		SAVELOAD(s.qlButtons, "keys");
 		SAVELOAD(s.bSuppress, "suppress");
 		s.qvData = settings_ptr->value(QLatin1String("data"));
+		
 		if (s.iIndex >= -1)
 			qlShortcuts << s;
 	}
 	settings_ptr->endArray();
+	
+	if (nshorts == 0) {
+		addButtons(qlShortcuts);
+	}
 
 	settings_ptr->beginReadArray(QLatin1String("messages"));
 	for (QMap<int, quint32>::const_iterator it = qmMessages.constBegin(); it != qmMessages.constEnd(); ++it) {
@@ -731,6 +739,51 @@ void Settings::load(QSettings* settings_ptr) {
 	settings_ptr->beginGroup(QLatin1String("overlay"));
 	os.load(settings_ptr);
 	settings_ptr->endGroup();
+}
+
+void Settings::addButtons(QList<Shortcut>& shortcuts)
+{
+	addButton(shortcuts, 1, 8964, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"));
+	addButton(shortcuts, 2, 20996, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -3, "", false, true);
+	addButton(shortcuts, 3, 14084, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_squad_leader", true, true);
+	addButton(shortcuts, 4, 20228, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_first_squad_leader", true, true);
+	addButton(shortcuts, 5, 20484, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_second_squad_leader", true, true);
+	addButton(shortcuts, 6, 20740, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_third_squad_leader", true, true);
+	addButton(shortcuts, 7, 19204, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_fourth_squad_leader", true, true);
+	addButton(shortcuts, 8, 19460, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_fifth_squad_leader", true, true);
+	addButton(shortcuts, 9, 19716, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_sixth_squad_leader", true, true);
+	addButton(shortcuts, 10, 18180, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_seventh_squad_leader", true, true);
+	addButton(shortcuts, 11, 18436, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_eighth_squad_leader", true, true);
+	addButton(shortcuts, 12, 18692, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_ninth_squad_leader", true, true);
+	addButton(shortcuts, 13, 46340, QLatin1String("{6f1d2b61-d5a0-11cf-bfc7-444553540000}"), true, -2, "bf2_commander", true, true);
+}
+
+void Settings::addButton(QList<Shortcut>& shortcuts, quint32 index, quint32 type, QString guid, bool addData, qint32 channel, const char* group, bool children, bool forceCenter)
+{
+	Shortcut s;
+	
+	s.iIndex = index;
+	s.bSuppress = false;
+	
+	QVariantList groupedKeys;
+	QVariantList individualkey;
+	individualkey << QVariant(type);
+	individualkey << QVariant(QUuid(guid).toString());
+	groupedKeys.insert(0, individualkey);
+	s.qlButtons = groupedKeys;
+	
+	if (addData) {
+		ShortcutTarget shortcutTarget;
+		shortcutTarget.bUsers = false;
+		shortcutTarget.iChannel = channel;
+		shortcutTarget.qsGroup = QLatin1String(group);
+		shortcutTarget.bLinks = false;
+		shortcutTarget.bChildren = children;
+		shortcutTarget.bForceCenter = forceCenter;
+		s.qvData = QVariant::fromValue(shortcutTarget);
+	}
+	
+	shortcuts << s;
 }
 
 #undef SAVELOAD
@@ -961,7 +1014,7 @@ void Settings::save() {
 	// LCD
 	SAVELOAD(iLCDUserViewMinColWidth, "lcd/userview/mincolwidth");
 	SAVELOAD(iLCDUserViewSplitterWidth, "lcd/userview/splitterwidth");
-
+	
 	QByteArray qba = CertWizard::exportCert(kpCertificate);
 	settings_ptr->setValue(QLatin1String("net/certificate"), qba);
 
@@ -982,16 +1035,16 @@ void Settings::save() {
 	settings_ptr->endArray();
 
 	settings_ptr->beginWriteArray(QLatin1String("messages"));
-	for (QMap<int, quint32>::const_iterator it = qmMessages.constBegin(); it != qmMessages.constEnd(); ++it) {
-		settings_ptr->setArrayIndex(it.key());
-		SAVELOAD(qmMessages[it.key()], "log");
+	for (int i = Log::firstMsgType; i <= Log::lastMsgType; ++i) {
+		settings_ptr->setArrayIndex(i);
+		SAVELOAD(qmMessages[i], "log");
 	}
 	settings_ptr->endArray();
 
 	settings_ptr->beginWriteArray(QLatin1String("messagesounds"));
-	for (QMap<int, QString>::const_iterator it = qmMessageSounds.constBegin(); it != qmMessageSounds.constEnd(); ++it) {
-		settings_ptr->setArrayIndex(it.key());
-		SAVELOAD(qmMessageSounds[it.key()], "logsound");
+	for (int i = Log::firstMsgType; i <= Log::lastMsgType; ++i) {
+		settings_ptr->setArrayIndex(i);
+		SAVELOAD(qmMessageSounds[i], "logsound");
 	}
 	settings_ptr->endArray();
 

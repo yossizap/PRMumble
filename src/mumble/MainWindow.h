@@ -90,6 +90,8 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		GlobalShortcut *gsPushTalk, *gsResetAudio, *gsMuteSelf, *gsDeafSelf;
 		GlobalShortcut *gsUnlink, *gsPushMute, *gsMetaChannel, *gsToggleOverlay;
 		GlobalShortcut *gsMinimal, *gsVolumeUp, *gsVolumeDown, *gsWhisper, *gsMetaLink;
+		GlobalShortcut *gsPRSquad, *gsPRSLAll, *gsPRSL1, *gsPRSL2, *gsPRSL3, *gsPRSL4;
+		GlobalShortcut *gsPRSL5, *gsPRSL6, *gsPRSL7, *gsPRSL8, *gsPRSL9, *gsPRSLCommander;
 		DockTitleBar *dtbLogDockTitle, *dtbChatDockTitle;
 
 		ACLEditor *aclEdit;
@@ -147,6 +149,7 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void customEvent(QEvent *evt);
 		void findDesiredChannel();
 		void setupView(bool toggle_minimize = true);
+		int iShowCount;
 		virtual void closeEvent(QCloseEvent *e);
 		virtual void hideEvent(QHideEvent *e);
 		virtual void showEvent(QShowEvent *e);
@@ -228,6 +231,18 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_gsMuteSelf_down(QVariant);
 		void on_gsDeafSelf_down(QVariant);
 		void on_gsWhisper_triggered(bool, QVariant);
+		void on_PRCommSquadRadio_triggered(bool, QVariant);
+		void on_PRCommSLAll_triggered(bool, QVariant);
+		void on_PRCommSL1_triggered(bool, QVariant);
+		void on_PRCommSL2_triggered(bool, QVariant);
+		void on_PRCommSL3_triggered(bool, QVariant);
+		void on_PRCommSL4_triggered(bool, QVariant);
+		void on_PRCommSL5_triggered(bool, QVariant);
+		void on_PRCommSL6_triggered(bool, QVariant);
+		void on_PRCommSL7_triggered(bool, QVariant);
+		void on_PRCommSL8_triggered(bool, QVariant);
+		void on_PRCommSL9_triggered(bool, QVariant);
+		void on_PRCommSLCommander_triggered(bool, QVariant);
 		void on_Reconnect_timeout();
 		void on_Icon_messageClicked();
 		void on_Icon_activated(QSystemTrayIcon::ActivationReason);

@@ -477,7 +477,7 @@
          <number>8000</number>
         </property>
         <property name="maximum">
-         <number>96000</number>
+         <number>40000</number>
         </property>
         <property name="singleStep">
          <number>1000</number>
@@ -490,6 +490,9 @@
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="enabled">
+          <bool>true</bool>
         </property>
        </widget>
       </item>

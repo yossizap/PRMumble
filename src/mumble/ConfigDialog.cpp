@@ -222,6 +222,7 @@ void ConfigDialog::apply() {
 	// They might have changed their keys.
 	g.iPushToTalk = 0;
 	g.s.bExpert = qcbExpert->isChecked();
+	g.s.save();
 
 	Audio::start();
 }

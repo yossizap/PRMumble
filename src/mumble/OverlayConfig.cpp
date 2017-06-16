@@ -47,8 +47,9 @@ static ConfigWidget *OverlayConfigDialogNew(Settings &st) {
 }
 
 // Hide overlay config for Mac OS X universal builds
+// Hide the overlay for Project Reality...
 #if !(defined(Q_OS_MAC) && !defined(QT_MAC_USE_COCOA))
-static ConfigRegistrar registrar(6000, OverlayConfigDialogNew);
+// static ConfigRegistrar registrar(6000, OverlayConfigDialogNew);
 #endif
 
 void OverlayConfig::initDisplay() {

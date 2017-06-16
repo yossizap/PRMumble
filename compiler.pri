@@ -4,9 +4,9 @@ win32 {
 	# Import dependency paths for windows
 	include(winpaths_default.pri)
 
-	INCLUDEPATH *= "$$BOOST_PATH/include/boost-1_49/"
-	QMAKE_LIBDIR *= "$$OPENSSL_PATH/lib" "$$LIBSNDFILE_PATH/lib" "$$BOOST_PATH/lib"
-	INCLUDEPATH *= "$$OPENSSL_PATH/include" "$$LIBSNDFILE_PATH/include"
+	INCLUDEPATH *= "$$BOOST_PATH/include/boost-1_53"
+	QMAKE_LIBDIR *= "$$OPENSSL_PATH/lib" "$$LIBSNDFILE_PATH/lib" "$$BOOST_PATH/lib" "$$DXSDK_PATH"
+	INCLUDEPATH *= "$$OPENSSL_PATH/include" "$$LIBSNDFILE_PATH/include" "$$DXSDK_PATH/include"
 	CONFIG(intelcpp) {
 		DEFINES *= USE_INTEL_IPP
 		DEFINES *= RESTRICT=restrict
@@ -179,5 +179,5 @@ CONFIG(no-pch) {
 }
 
 CONFIG(debug, debug|release) {
-	DEFINES *= SNAPSHOT_BUILD
+	# DEFINES *= SNAPSHOT_BUILD
 }

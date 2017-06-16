@@ -52,7 +52,7 @@ class ClientUser : public QObject, public User {
 		Timer tLastTalkStateChange;
 		bool bLocalIgnore;
 		bool bLocalMute;
-		//float fPosition[3];
+		float fPosition[3];
 		QString qsIdentity;
 
 		float fPowerMin, fPowerMax;
@@ -96,7 +96,6 @@ class ClientUser : public QObject, public User {
 		static void remove(ClientUser *);
 	protected:
 		static bool lessThanOverlay(const ClientUser *, const ClientUser *);
-		//float fPreviousReportedPosition[3];
 	public slots:
 		void setTalking(Settings::TalkState ts);
 		void setMute(bool mute);
@@ -108,11 +107,11 @@ class ClientUser : public QObject, public User {
 		void setSelfDeaf(bool deaf);
 		void setPrioritySpeaker(bool priority);
 		void setRecording(bool recording);
-		//void setPosition(float x, float y, float z);
+		void setPosition(float x, float y, float z);
 	signals:
 		void talkingChanged();
 		void muteDeafChanged();
-		//void positionChanged();
+		void positionChanged();
 };
 
 QDataStream &operator<<(QDataStream &, const ClientUser::JitterRecord &);

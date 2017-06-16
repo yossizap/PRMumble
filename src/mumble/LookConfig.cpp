@@ -74,6 +74,21 @@ LookConfig::LookConfig(Settings &st) : ConfigWidget(st) {
 	qcbChannelDrag->insertItem(Settings::Ask, tr("Ask"), Settings::Ask);
 	qcbChannelDrag->insertItem(Settings::DoNothing, tr("Do Nothing"), Settings::DoNothing);
 	qcbChannelDrag->insertItem(Settings::Move, tr("Move"), Settings::Move);
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbStyle->setItemDelegate(itemDelegate1);
+	
+	QStyledItemDelegate* itemDelegate2 = new QStyledItemDelegate();
+	qcbLanguage->setItemDelegate(itemDelegate2);
+	
+	QStyledItemDelegate* itemDelegate3 = new QStyledItemDelegate();
+	qcbAlwaysOnTop->setItemDelegate(itemDelegate3);
+	
+	QStyledItemDelegate* itemDelegate4 = new QStyledItemDelegate();
+	qcbChannelDrag->setItemDelegate(itemDelegate4);
+	
+	QStyledItemDelegate* itemDelegate5 = new QStyledItemDelegate();
+	qcbExpand->setItemDelegate(itemDelegate5);
 }
 
 QString LookConfig::title() const {

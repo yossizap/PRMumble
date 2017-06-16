@@ -38,7 +38,7 @@ class QDBusMessage;
 class MumbleDBus : public QDBusAbstractAdaptor {
 	private:
 		Q_OBJECT
-		Q_CLASSINFO("D-Bus Interface", "net.sourceforge.mumble.Mumble")
+		Q_CLASSINFO("D-Bus Interface", "com.reality.PRMumble.PRMumble")
 		Q_DISABLE_COPY(MumbleDBus)
 		Q_PROPERTY(bool mute READ isSelfMuted WRITE setSelfMuted)
 		Q_PROPERTY(bool deaf READ isSelfDeaf WRITE setSelfDeaf)

@@ -82,7 +82,7 @@ void LCDDeviceManager::initialize() {
 		}
 	}
 	if (qlDevices.count() > 0) {
-		crLCD = new ConfigRegistrar(5900, LCDConfigDialogNew);
+		crLCD = NULL;//new ConfigRegistrar(5900, LCDConfigDialogNew);
 	} else {
 		crLCD = NULL;
 	}

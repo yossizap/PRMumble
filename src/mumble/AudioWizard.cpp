@@ -60,6 +60,18 @@ AudioWizard::AudioWizard(QWidget *p) : QWizard(p) {
 	ticker->setObjectName(QLatin1String("Ticker"));
 
 	setupUi(this);
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbInput->setItemDelegate(itemDelegate1);
+	
+	QStyledItemDelegate* itemDelegate2 = new QStyledItemDelegate();
+	qcbInputDevice->setItemDelegate(itemDelegate2);
+	
+	QStyledItemDelegate* itemDelegate3 = new QStyledItemDelegate();
+	qcbOutput->setItemDelegate(itemDelegate3);
+	
+	QStyledItemDelegate* itemDelegate4 = new QStyledItemDelegate();
+	qcbOutputDevice->setItemDelegate(itemDelegate4);
 
 	// Done
 	qcbUsage->setChecked(g.s.bUsage);
@@ -149,12 +161,12 @@ AudioWizard::AudioWizard(QWidget *p) : QWizard(p) {
 		}
 	}
 
-	if (g.s.atTransmit == Settings::PushToTalk)
+	//if (g.s.atTransmit == Settings::PushToTalk)
 		qrPTT->setChecked(true);
-	else if (g.s.vsVAD == Settings::Amplitude)
+	/*else if (g.s.vsVAD == Settings::Amplitude)
 		qrAmplitude->setChecked(true);
 	else
-		qrSNR->setChecked(true);
+		qrSNR->setChecked(true);*/
 
 	abVAD->qcBelow = Qt::red;
 	abVAD->qcInside = Qt::yellow;
@@ -355,9 +367,9 @@ void AudioWizard::showPage(int pageid) {
 		else if (qrPTT->isChecked())
 			g.s.atTransmit = Settings::PushToTalk;
 		else
-			g.s.atTransmit = Settings::VAD;
+			g.s.atTransmit = Settings::PushToTalk;
 	} else {
-		g.s.atTransmit = Settings::Continous;
+		g.s.atTransmit = Settings::PushToTalk;
 	}
 }
 
@@ -420,7 +432,7 @@ void AudioWizard::accept() {
 	else if (qrPTT->isChecked())
 		g.s.atTransmit = Settings::PushToTalk;
 	else
-		g.s.atTransmit = Settings::VAD;
+		g.s.atTransmit = Settings::PushToTalk;
 
 	g.s.bMute = sOldSettings.bMute;
 	g.s.bDeaf = sOldSettings.bDeaf;
@@ -537,7 +549,7 @@ void AudioWizard::on_qsVAD_valueChanged(int v) {
 void AudioWizard::on_qrSNR_clicked(bool on) {
 	if (on) {
 		g.s.vsVAD = Settings::SignalToNoise;
-		g.s.atTransmit = Settings::VAD;
+		g.s.atTransmit = Settings::PushToTalk;
 		updateTriggerWidgets(false);
 		bTransmitChanged = true;
 	}
@@ -546,7 +558,7 @@ void AudioWizard::on_qrSNR_clicked(bool on) {
 void AudioWizard::on_qrAmplitude_clicked(bool on) {
 	if (on) {
 		g.s.vsVAD = Settings::Amplitude;
-		g.s.atTransmit = Settings::VAD;
+		g.s.atTransmit = Settings::PushToTalk;
 		updateTriggerWidgets(false);
 		bTransmitChanged = true;
 	}

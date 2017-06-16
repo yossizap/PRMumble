@@ -50,6 +50,9 @@ NetworkConfig::NetworkConfig(Settings &st) : ConfigWidget(st) {
 	qcbAutoUpdate->hide();
 	qcbPluginUpdate->hide();
 #endif
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbType->setItemDelegate(itemDelegate1);
 }
 
 QString NetworkConfig::title() const {

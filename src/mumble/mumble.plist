@@ -5,11 +5,11 @@
 	<key>CFBundleExecutable</key>
 	<string>Mumble</string>
 	<key>CFBundleGetInfoString</key>
-	<string>An open source, low-latency, high quality voice chat software primarily intended for use while gaming.</string>
+	<string>An open source, low-latency, high quality voice chat software primarily intended for use while gaming. Customized for Project Reality.</string>
 	<key>CFBundleIconFile</key>
 	<string>mumble.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>net.sourceforge.mumble.Mumble</string>
+	<string>com.reality.PRMumble.PRMumble</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
@@ -26,8 +26,8 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.2.4</string>
+	<string>1.0.0</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (c) 2005-2010 Thorvald Natvig &lt;slicer@users.sourceforge.net&gt;</string>
+	<string>Copyright (C) Project Reality 2013, Copyright (c) 2005-2010 Thorvald Natvig &lt;slicer@users.sourceforge.net&gt;</string>
 </dict>
 </plist>

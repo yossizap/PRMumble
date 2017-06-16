@@ -1310,8 +1310,8 @@ void UserModel::userTalkingChanged() {
 	if (!p)
 		return;
 	
-	QModelIndex idx = index(p);
-	emit dataChanged(idx, idx);
+	/*QModelIndex idx = index(p);
+	emit dataChanged(idx, idx);*/
 	updateOverlay();
 }
 

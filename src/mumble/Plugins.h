@@ -40,6 +40,7 @@
 #endif
 
 #include "ConfigDialog.h"
+#include "Settings.h"
 
 #include "ui_Plugins.h"
 
@@ -86,6 +87,7 @@ class Plugins : public QObject {
 		HANDLE hToken;
 		TOKEN_PRIVILEGES tpPrevious;
 		DWORD cbPrevious;
+		float fPreviousPosition[3];
 #endif
 	public:
 		std::string ssContext, ssContextSent;
@@ -94,6 +96,7 @@ class Plugins : public QObject {
 		bool bUnlink;
 		float fPosition[3], fFront[3], fTop[3];
 		float fCameraPosition[3], fCameraFront[3], fCameraTop[3];
+		Settings::TalkState tsState;
 
 		Plugins(QObject *p = NULL);
 		~Plugins();

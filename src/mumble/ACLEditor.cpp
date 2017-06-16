@@ -85,6 +85,21 @@ ACLEditor::ACLEditor(int channelid, const MumbleProto::ACL &mea, QWidget *p) : Q
 	msg = mea;
 
 	setupUi(this);
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbGroupList->setItemDelegate(itemDelegate1);
+	
+	QStyledItemDelegate* itemDelegate2 = new QStyledItemDelegate();
+	qcbGroupAdd->setItemDelegate(itemDelegate2);
+	
+	QStyledItemDelegate* itemDelegate3 = new QStyledItemDelegate();
+	qcbGroupRemove->setItemDelegate(itemDelegate3);
+	
+	QStyledItemDelegate* itemDelegate4 = new QStyledItemDelegate();
+	qcbACLGroup->setItemDelegate(itemDelegate4);
+	
+	QStyledItemDelegate* itemDelegate5 = new QStyledItemDelegate();
+	qcbACLUser->setItemDelegate(itemDelegate5);
 
 	qcbChannelTemporary->hide();
 

@@ -87,6 +87,9 @@ VoiceRecorderDialog::VoiceRecorderDialog(QWidget *p = NULL) : QDialog(p), qtTime
 		g.s.iRecordingFormat = 0;
 
 	qcbFormat->setCurrentIndex(g.s.iRecordingFormat);
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbFormat->setItemDelegate(itemDelegate1);
 }
 
 VoiceRecorderDialog::~VoiceRecorderDialog() {
@@ -137,7 +140,7 @@ void VoiceRecorderDialog::on_qpbStart_clicked() {
 		return;
 	}
 
-	if (g.sh->uiVersion < 0x010203) {
+	if (g.sh->uiVersion < 0x010000) {
 		QMessageBox::critical(this,
 		                      tr("Recorder"),
 		                      tr("The server you are currently connected to is version 1.2.2 or older. "

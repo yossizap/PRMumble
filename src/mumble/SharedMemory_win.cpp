@@ -43,17 +43,19 @@ struct SharedMemory2Private {
 	HANDLE hMemory;
 };
 
-SharedMemory2::SharedMemory2(QObject *p, unsigned int minsize, const QString &memname) : QObject(p) {
+SharedMemory2::SharedMemory2(QObject *p, unsigned int minsize, const QString &memname, bool create) : QObject(p) {
 	a_ucData = NULL;
 
 	d = new SharedMemory2Private();
 	d->hMemory = NULL;
 
-	if (memname.isEmpty()) {
+	if (memname.isEmpty() || create) {
 		// Create a new segment
-
+		QString name = QString::fromLatin1("MumbleOverlayMemory");
+		if (create && !memname.isEmpty())
+			name = memname;
 		for (int i=0;i<100;++i) {
-			qsName = QString::fromLatin1("Local\\MumbleOverlayMemory%1").arg(++uiIndex);
+			qsName = QString::fromLatin1("Local\\%1%2").arg(name).arg(++uiIndex);
 			d->hMemory = CreateFileMappingW(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, minsize, qsName.toStdWString().c_str());
 			if (d->hMemory && GetLastError() != ERROR_ALREADY_EXISTS)
 				break;

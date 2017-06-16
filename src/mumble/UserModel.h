@@ -166,7 +166,7 @@ class UserModel : public QAbstractItemModel {
 		unsigned int uiSessionComment;
 		int iChannelDescription;
 	public slots:
-		//void userPositionChanged();
+		void userPositionChanged();
 		void userTalkingChanged();
 		void userMuteDeafChanged();
 		void ensureSelfVisible();

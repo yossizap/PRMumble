@@ -5,6 +5,7 @@
 #include <QtGlobal>
 
 static const char *licenseMumble = 
+	"Copyright (C) 2013, Project Reality <http://www.realitymod.com>\n"
 	"Copyright (C) 2005-2013, Thorvald Natvig <thorvald@natvig.com>\n"
 	"Copyright (C) 2007, Stefan Gehn <mETz AT gehn DOT net>\n"
 	"Copyright (C) 2007, Sebastian Schlingmann <mit_service@users.sourceforge.net>\n"

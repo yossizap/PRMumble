@@ -47,7 +47,7 @@ void MumbleDBus::openUrl(const QString &url, const QDBusMessage &msg) {
 	bool valid = u.isValid();
 	valid = valid && (u.scheme() == QLatin1String("mumble"));
 	if (! valid) {
-		QDBusConnection::sessionBus().send(msg.createErrorReply(QLatin1String("net.sourceforge.mumble.Error.url"), QLatin1String("Invalid URL")));
+		QDBusConnection::sessionBus().send(msg.createErrorReply(QLatin1String("SOURCES_PATH_CORE.Error.url"), QLatin1String("Invalid URL")));
 	} else {
 		g.mw->openUrl(u);
 	}
@@ -55,7 +55,7 @@ void MumbleDBus::openUrl(const QString &url, const QDBusMessage &msg) {
 
 void MumbleDBus::getCurrentUrl(const QDBusMessage &msg) {
 	if (!g.sh || !g.sh->isRunning() || ! g.uiSession) {
-		QDBusConnection::sessionBus().send(msg.createErrorReply(QLatin1String("net.sourceforge.mumble.Error.connection"), QLatin1String("Not connected")));
+		QDBusConnection::sessionBus().send(msg.createErrorReply(QLatin1String("com.reality.PRMumble.Error.connection"), QLatin1String("Not connected")));
 		return;
 	}
 	QString host, user, pw;

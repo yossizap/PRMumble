@@ -272,7 +272,7 @@ void os_init() {
 
 	g.qdBasePath.mkpath(QLatin1String("Snapshots"));
 	if (bIsWin7)
-		SetCurrentProcessExplicitAppUserModelID(L"net.sourceforge.mumble.Mumble");
+		SetCurrentProcessExplicitAppUserModelID(L"com.reality.PRMumble.PRMumble");
 }
 
 DWORD WinVerifySslCert(const QByteArray& cert) {

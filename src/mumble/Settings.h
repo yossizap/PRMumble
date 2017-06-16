@@ -37,6 +37,7 @@
 #include <QtCore/QPair>
 #include <QtCore/QRectF>
 #include <QtCore/QSettings>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtGui/QColor>
 #include <QtGui/QFont>
@@ -283,7 +284,7 @@ struct Settings {
 	unsigned short usProxyPort;
 	QString qsRegionalHost;
 
-	static const int ciDefaultMaxImageSize = 50 * 1024; // Restrict to 50KiB as a default
+	static const int ciDefaultMaxImageSize = 0;//50 * 1024; // Restrict to 50KiB as a default
 	int iMaxImageSize;
 	int iMaxImageWidth;
 	int iMaxImageHeight;
@@ -315,6 +316,8 @@ struct Settings {
 	bool doPositionalAudio() const;
 
 	Settings();
+	void addButtons(QList<Shortcut>& shortcuts);
+	void addButton(QList<Shortcut>& shortcuts, quint32 index, quint32 type, QString guid, bool addData = false, qint32 channel = -3, const char* group = "", bool children = false, bool forceCenter = false);
 	void load();
 	void load(QSettings*);
 	void save();

@@ -65,8 +65,8 @@
     <addaction name="separator"/>
     <addaction name="qaHelpAbout"/>
     <addaction name="qaHelpAboutQt"/>
-    <addaction name="separator"/>
-    <addaction name="qaHelpVersionCheck"/>
+    <!--<addaction name="separator"/>
+    <addaction name="qaHelpVersionCheck"/>-->
    </widget>
    <widget class="QMenu" name="qmServer">
     <property name="title">
@@ -173,7 +173,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="qaServerConnect"/>
+   <!--<addaction name="qaServerConnect"/>-->
    <addaction name="qaServerInformation"/>
    <addaction name="separator"/>
    <addaction name="qaAudioMute"/>

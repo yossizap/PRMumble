@@ -42,6 +42,11 @@ unsigned int SharedMemory2::size() const {
 	return a_ucData ? uiSize : 0;
 }
 
+void SharedMemory2::setData(unsigned char* data, size_t length) {
+	if (a_ucData)
+		memcpy(a_ucData, data, length);
+}
+
 unsigned char *SharedMemory2::data() {
 	return a_ucData;
 }

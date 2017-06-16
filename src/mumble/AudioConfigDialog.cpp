@@ -85,6 +85,21 @@ AudioInputDialog::AudioInputDialog(Settings &st) : ConfigWidget(st) {
 	on_qcbPushClick_clicked(g.s.bTxAudioCue);
 	on_Tick_timeout();
 	on_qcbIdleAction_currentIndexChanged(g.s.iaeIdleAction);
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbSystem->setItemDelegate(itemDelegate1);
+	
+	QStyledItemDelegate* itemDelegate2 = new QStyledItemDelegate();
+	qcbTransmit->setItemDelegate(itemDelegate2);
+	
+	QStyledItemDelegate* itemDelegate3 = new QStyledItemDelegate();
+	qcbDevice->setItemDelegate(itemDelegate3);
+	
+	QStyledItemDelegate* itemDelegate4 = new QStyledItemDelegate();
+	qcbEcho->setItemDelegate(itemDelegate4);
+	
+	QStyledItemDelegate* itemDelegate5 = new QStyledItemDelegate();
+	qcbIdleAction->setItemDelegate(itemDelegate5);
 }
 
 QString AudioInputDialog::title() const {
@@ -158,7 +173,7 @@ void AudioInputDialog::save() const {
 	s.iFramesPerPacket = (s.iFramesPerPacket == 1) ? 1 : ((s.iFramesPerPacket-1) * 2);
 	s.uiDoublePush = qsDoublePush->value() * 1000;
 	s.uiPTTHold = qsPTTHold->value();
-	s.atTransmit = static_cast<Settings::AudioTransmit>(qcbTransmit->currentIndex());
+	s.atTransmit = Settings::PushToTalk;//static_cast<Settings::AudioTransmit>(qcbTransmit->currentIndex());
 
 	// Idle auto actions
 	s.iIdleTime = qsbIdle->value() * 60;
@@ -189,6 +204,7 @@ bool AudioInputDialog::expert(bool b) {
 	qliFrames->setVisible(b);
 	qsFrames->setVisible(b);
 	qlFrames->setVisible(b);
+	qgbTransmission->setVisible(false);
 	qswTransmit->setVisible(b);
 	qliIdle->setVisible(b);
 	qsbIdle->setVisible(b);
@@ -275,13 +291,11 @@ void AudioInputDialog::updateBitrate() {
 
 	int total = audiorate + overhead + posrate;
 
-	QPalette pal;
-
 	if (g.uiSession && (total > g.iMaxBandwidth)) {
-		pal.setColor(qlBitrate->foregroundRole(), Qt::red);
+		qlBitrate->setEnabled(false);
+	} else {
+		qlBitrate->setEnabled(true);
 	}
-
-	qlBitrate->setPalette(pal);
 
 	QString v = tr("%1 kbit/s (Audio %2, Position %4, Overhead %3)")
 	        .arg(total / 1000.0, 0, 'f', 1)
@@ -423,6 +437,15 @@ AudioOutputDialog::AudioOutputDialog(Settings &st) : ConfigWidget(st) {
 	qcbLoopback->addItem(tr("Server"), Settings::Server);
 
 	qcbDevice->view()->setTextElideMode(Qt::ElideRight);
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbSystem->setItemDelegate(itemDelegate1);
+	
+	QStyledItemDelegate* itemDelegate2 = new QStyledItemDelegate();
+	qcbLoopback->setItemDelegate(itemDelegate2);
+	
+	QStyledItemDelegate* itemDelegate3 = new QStyledItemDelegate();
+	qcbDevice->setItemDelegate(itemDelegate3);
 }
 
 QString AudioOutputDialog::title() const {
@@ -496,6 +519,7 @@ void AudioOutputDialog::save() const {
 }
 
 bool AudioOutputDialog::expert(bool b) {
+	qcbPositional->setVisible(false);
 	return b;
 }
 
@@ -516,7 +540,7 @@ void AudioOutputDialog::on_qcbSystem_currentIndexChanged(int) {
 			++idx;
 		}
 		bool canmute = aor->canMuteOthers();
-		qsOtherVolume->setEnabled(canmute);
+		//qsOtherVolume->setEnabled(canmute);
 		qcbAttenuateOthersOnTalk->setEnabled(canmute);
 		qcbAttenuateOthers->setEnabled(canmute);
 		qlOtherVolume->setEnabled(canmute);
@@ -599,12 +623,12 @@ void AudioOutputDialog::on_qcbPositional_stateChanged(int v) {
 
 void AudioOutputDialog::on_qcbAttenuateOthersOnTalk_clicked(bool checked) {
 	bool b = qcbAttenuateOthers->isChecked() || checked;
-	qsOtherVolume->setEnabled(b);
-	qlOtherVolume->setEnabled(b);
+	//qsOtherVolume->setEnabled(b);
+	//qlOtherVolume->setEnabled(b);
 }
 
 void AudioOutputDialog::on_qcbAttenuateOthers_clicked(bool checked) {
 	bool b = qcbAttenuateOthersOnTalk->isChecked() || checked;
-	qsOtherVolume->setEnabled(b);
-	qlOtherVolume->setEnabled(b);
+	//qsOtherVolume->setEnabled(b);
+	//qlOtherVolume->setEnabled(b);
 }

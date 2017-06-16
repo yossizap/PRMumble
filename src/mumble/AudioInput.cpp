@@ -783,9 +783,9 @@ void AudioInput::encodeAudioFrame() {
 		iHoldFrames = 0;
 	}
 
-	if (g.s.atTransmit == Settings::Continous)
-		bIsSpeech = true;
-	else if (g.s.atTransmit == Settings::PushToTalk)
+	//if (g.s.atTransmit == Settings::Continous)
+	//	bIsSpeech = true;
+	//else if (g.s.atTransmit == Settings::PushToTalk)
 		bIsSpeech = g.s.uiDoublePush && ((g.uiDoublePush < g.s.uiDoublePush) || (g.tDoublePush.elapsed() < g.s.uiDoublePush));
 
 	bIsSpeech = bIsSpeech || (g.iPushToTalk > 0);

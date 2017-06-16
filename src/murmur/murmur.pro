@@ -12,7 +12,7 @@ CONFIG(ermine) {
 CONFIG	-= gui
 QT *= network sql xml
 QT -= gui
-TARGET = murmur
+TARGET = PRMurmur
 DBFILE  = murmur.db
 LANGUAGE	= C++
 FORMS =
@@ -51,7 +51,7 @@ unix {
 
   HEADERS *= UnixMurmur.h
   SOURCES *= UnixMurmur.cpp
-  TARGET = murmurd
+  TARGET = prmurmurd
 }
 
 macx {
@@ -114,12 +114,12 @@ ice {
 		slice.commands = $$(MUMBLE_ICE_PREFIX)/bin/slice2cpp --checksum -I$$(MUMBLE_ICE_PREFIX)/slice/ Murmur.ice
 	}
 
-	unix:!macx:CONFIG(static) {
-		INCLUDEPATH *= /opt/Ice-3.3/include
-		QMAKE_LIBDIR *= /opt/Ice-3.3/lib
+	unix {
+		INCLUDEPATH *= /opt/Ice-3.4.2/include
+		QMAKE_LIBDIR *= /opt/Ice-3.4.2/lib
 		LIBS *= -lbz2
 		QMAKE_CXXFLAGS *= -fPIC
-		slice.commands = /opt/Ice-3.3/bin/slice2cpp --checksum -I/opt/Ice-3.3/slice Murmur.ice
+		slice.commands = /opt/Ice-3.4.2/bin/slice2cpp --checksum -I/opt/Ice-3.4.2/slice Murmur.ice
 	}
 
 	macx:CONFIG(static) {

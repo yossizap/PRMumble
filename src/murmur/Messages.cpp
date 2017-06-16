@@ -368,6 +368,8 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 			mpus.set_comment(u8(u->qsComment));
 		if (! u->qsHash.isEmpty())
 			mpus.set_hash(u8(u->qsHash));
+		if (! u->qsIdentity.isEmpty())
+			mpus.set_plugin_identity(u8(u->qsIdentity));
 
 		sendMessage(uSource, mpus);
 	}

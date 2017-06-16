@@ -374,7 +374,7 @@ bool Plugins::fetch() {
 	}
 	bValid = ok;
 	
-	if (tsState != Settings::Passive &&
+	if (g.uiSession && tsState != Settings::Passive &&
 		((fabs(fPreviousPosition[0] - fPosition[0]) > 10) ||
 		(fabs(fPreviousPosition[1] - fPosition[1]) > 10) ||
 		(fabs(fPreviousPosition[2] - fPosition[2]) > 10))) {

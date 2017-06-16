@@ -137,6 +137,9 @@
         <property name="text">
          <string>Show talking status in tray icon</string>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
      </layout>

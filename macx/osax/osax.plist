@@ -7,13 +7,13 @@
 	<key>CFBundleExecutable</key>
 	<string>MumbleOverlay</string>
 	<key>CFBundleIdentifier</key>
-	<string>net.sourceforge.mumble.OverlayScriptingAddition</string>
+	<string>com.reality.PRMumble.OverlayScriptingAddition</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>osax</string>
 	<key>CFbundleVersion</key>
-	<string>1.2.4</string>
+	<string>1.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>MUOL</string>
 	<key>CSResourcesFileMapped</key>
@@ -40,6 +40,6 @@
 	<key>MumbleOverlayVersion</key>
 	<integer>18</integer>
 	<key>MumbleOverlayMinMumbleVersion</key>
-	<string>1.2.4</string>
+	<string>1.0.0</string>
 </dict>
 </plist>

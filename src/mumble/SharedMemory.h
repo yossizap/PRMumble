@@ -46,7 +46,7 @@ class SharedMemory2 : QObject {
 		unsigned int uiSize;
 		static unsigned int uiIndex;
 	public:
-		SharedMemory2(QObject *p, unsigned int minsize, const QString &name = QString());
+		SharedMemory2(QObject *p, unsigned int minsize, const QString &name = QString(), bool create = false);
 		~SharedMemory2();
 
 		void erase();
@@ -54,6 +54,7 @@ class SharedMemory2 : QObject {
 
 		QString name() const;
 		unsigned int size() const;
+		void setData(unsigned char* data, size_t length);
 		unsigned char *data();
 		const unsigned char *data() const;
 };

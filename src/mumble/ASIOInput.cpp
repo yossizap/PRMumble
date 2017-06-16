@@ -190,6 +190,9 @@ ASIOConfig::ASIOConfig(Settings &st) : ConfigWidget(st) {
 		qpbQuery->setEnabled(false);
 		qpbConfig->setEnabled(false);
 	}
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbDevice->setItemDelegate(itemDelegate1);
 }
 
 void ASIOConfig::on_qpbQuery_clicked() {

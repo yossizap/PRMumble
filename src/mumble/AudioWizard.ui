@@ -198,6 +198,9 @@ Please be aware that as long as this wizard is active, audio will be looped loca
          <property name="text">
           <string>Enable positional audio</string>
          </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item row="4" column="1">
@@ -210,6 +213,9 @@ Please be aware that as long as this wizard is active, audio will be looped loca
          </property>
          <property name="text">
           <string>Attenuate applications while other users talk</string>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -495,6 +501,9 @@ Speak loudly, as when you are annoyed or excited. Decrease the volume in the sou
       <property name="text">
        <string>Signal-To-Noise ratio</string>
       </property>
+      <property name="visible">
+       <bool>false</bool>
+      </property>
      </widget>
     </item>
     <item row="5" column="0" colspan="2">
@@ -572,6 +581,9 @@ Speak loudly, as when you are annoyed or excited. Decrease the volume in the sou
      <widget class="QRadioButton" name="qrAmplitude">
       <property name="text">
        <string>Raw amplitude from input</string>
+      </property>
+      <property name="visible">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -696,6 +708,9 @@ Speak loudly, as when you are annoyed or excited. Decrease the volume in the sou
      <widget class="QGroupBox" name="qgbNotifications">
       <property name="title">
        <string>Notification settings</string>
+      </property>
+      <property name="visible">
+       <bool>false</bool>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>

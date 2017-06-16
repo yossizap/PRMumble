@@ -37,7 +37,7 @@
 #include "licenses.h"
 
 AboutDialog::AboutDialog(QWidget *p) : QDialog(p) {
-	setWindowTitle(tr("About Mumble"));
+	setWindowTitle(tr("About Project Reality Mumble"));
 
 	QTabWidget *qtwTab = new QTabWidget(this);
 	QVBoxLayout *vblMain = new QVBoxLayout(this);
@@ -68,16 +68,22 @@ AboutDialog::AboutDialog(QWidget *p) : QDialog(p) {
 	QLabel *text=new QLabel(about);
 	text->setOpenExternalLinks(true);
 	text->setText(tr(
-	                  "<h3>Mumble (%1)</h3>"
-	                  "<p>Copyright %3 Thorvald Natvig<br />slicer@users.sourceforge.net</p>"
-	                  "<p><b>A voice-chat utility for gamers</b></p>"
+	                  "<h3>Project Reality Mumble %1</h3>"
+	                  "<p>Copyright (C) %5 Project Reality<br /><tt><a href=\"%3\">%3</a></tt></p>"
+	                  "<p>Copyright %4 Thorvald Natvig<br />slicer@users.sourceforge.net</p>"
+	                  "<p><b>A voice-chat utility for gamers, customized for Project Reality</b></p>"
+	                  "<p><tt><a href=\"%3\">%3</a></tt></p>"
 	                  "<p><tt><a href=\"%2\">%2</a></tt></p>"
-	              ).arg(QLatin1String(MUMBLE_RELEASE)).arg(QLatin1String("http://mumble.sourceforge.net/")).arg(QLatin1String("2005-2012")));
+	              ).arg(QLatin1String(MUMBLE_RELEASE))
+				  .arg(QLatin1String("http://mumble.sourceforge.net/"))
+				  .arg(QLatin1String("http://www.realitymod.com/"))
+				  .arg(QLatin1String("2005-2012"))
+				  .arg(QLatin1String("2013")));
 	QHBoxLayout *qhbl=new QHBoxLayout(about);
 	qhbl->addWidget(icon);
 	qhbl->addWidget(text);
 
-	qtwTab->addTab(about, tr("&About Mumble"));
+	qtwTab->addTab(about, tr("&About PR Mumble"));
 	qtwTab->addTab(qteLicense, tr("&License"));
 	qtwTab->addTab(qtb3rdPartyLicense, tr("3rd &party licenses"));
 

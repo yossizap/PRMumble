@@ -1007,7 +1007,7 @@ void MainWindow::on_qaServerConnect_triggered(bool autoconnect) {
 
 void MainWindow::on_Reconnect_timeout() {
 	if (g.sh->isRunning())
-		return;
+		g.sh->disconnect();
 	g.l->log(Log::Information, tr("Reconnecting."));
 	g.sh->start(QThread::TimeCriticalPriority);
 }
@@ -2174,17 +2174,23 @@ void MainWindow::on_PushToMute_triggered(bool down, QVariant) {
 
 void MainWindow::on_VolumeUp_triggered(bool down, QVariant) {
 	if (down) {
-		float v = floorf(g.s.fVolume * 10.0f);
-		if (v < 20.0f)
+		float v = floorf(g.s.fVolume * 10.0f + 0.5f);
+		if (v < 20.0f) {
 			g.s.fVolume = ++v / 10.0f;
+			g.s.save();
+		}
+		qWarning() << g.s.fVolume;
 	}
 }
 
 void MainWindow::on_VolumeDown_triggered(bool down, QVariant) {
 	if (down) {
-		float v = ceilf(g.s.fVolume * 10.0f);
-		if (v > 0.0f)
+		float v = ceilf(g.s.fVolume * 10.0f - 0.5f);
+		if (v > 0.0f) {
 			g.s.fVolume = --v / 10.0f;
+			g.s.save();
+		}
+		qWarning() << g.s.fVolume;
 	}
 }
 
@@ -2577,8 +2583,8 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 	on_qmConfig_aboutToShow();
 
 	if (! g.sh->qlErrors.isEmpty()) {
-		foreach(QSslError e, g.sh->qlErrors)
-			g.l->log(Log::Warning, tr("SSL Verification failed: %1").arg(e.errorString()));
+		//foreach(QSslError e, g.sh->qlErrors)
+		//	g.l->log(Log::Warning, tr("SSL Verification failed: %1").arg(e.errorString()));
 		if (! g.sh->qscCert.isEmpty()) {
 			QSslCertificate c = g.sh->qscCert.at(0);
 			QString basereason;
