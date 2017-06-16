@@ -571,6 +571,8 @@ QString GlobalShortcutWin::buttonName(const QVariant &v) {
 		device=QLatin1String("M:");
 	else if (guid == GUID_SysKeyboard)
 		device=QLatin1String("K:");
+	else if (guid == GUID_Joystick)
+		device=QLatin1String("J:");
 	else if (id)
 		device=id->name+QLatin1String(":");
 	if (id) {

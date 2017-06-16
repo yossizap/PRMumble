@@ -130,6 +130,8 @@ OpenURLEvent::OpenURLEvent(QUrl u) : QEvent(static_cast<QEvent::Type>(OU_QEVENT)
 const QString MainWindow::defaultStyleSheet = QLatin1String(".log-channel{text-decoration:none;}.log-user{text-decoration:none;}p{margin:0;}");
 
 MainWindow::MainWindow(QWidget *p) : QMainWindow(p) {
+	iShowCount = 0;
+	
 	qiIconMuteSelf.addFile(QLatin1String("skin:muted_self.svg"));
 	qiIconMuteServer.addFile(QLatin1String("skin:muted_server.svg"));
 	qiIconMuteSuppressed.addFile(QLatin1String("skin:muted_suppressed.svg"));
@@ -231,11 +233,74 @@ MainWindow::MainWindow(QWidget *p) : QMainWindow(p) {
 
 void MainWindow::createActions() {
 	int idx = 1;
-	gsPushTalk=new GlobalShortcut(this, idx++, tr("Push-to-Talk", "Global Shortcut"), false);
+	gsPushTalk=new GlobalShortcut(this, idx++, tr("Local Speech", "Global Shortcut"), false);
 	gsPushTalk->setObjectName(QLatin1String("PushToTalk"));
-	gsPushTalk->qsToolTip = tr("Push and hold this button to send voice.", "Global Shortcut");
-	gsPushTalk->qsWhatsThis = tr("This configures the push-to-talk button, and as long as you hold this button down, you will transmit voice.", "Global Shortcut");
+	gsPushTalk->qsToolTip = tr("Push and hold this button to talk to players near you.", "Global Shortcut");
+	gsPushTalk->qsWhatsThis = tr("This configures the Local Speech button, and as long as you hold this button down, you will transmit to other players around you.", "Global Shortcut");
+	
+	// Custom PR buttons, in addition to renaming Local Speech above...
+	
+	gsPRSquad=new GlobalShortcut(this, idx++, tr("Squad Radio", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSquad->setObjectName(QLatin1String("PRCommSquadRadio"));
+	gsPRSquad->qsToolTip = tr("Push and hold this button to talk to your squad, no matter where they are", "Global Shortcut");
+	gsPRSquad->qsWhatsThis = tr("This configures the Squad Radio button, and as long as you hold this button down, you will transmit to your squad, no matter where they are.", "Global Shortcut");
+	
+	gsPRSLAll=new GlobalShortcut(this, idx++, tr("SL To All SL", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSLAll->setObjectName(QLatin1String("PRCommSLAll"));
+	gsPRSLAll->qsToolTip = tr("Push and hold this button to talk to all other squad leaders on your team, if you are a squad leader", "Global Shortcut");
+	gsPRSLAll->qsWhatsThis = tr("This configures the SL To All SL button, and as long as you hold this button down, you will transmit to all other squad leaders on your team, if you are a squad leader", "Global Shortcut");
+	
+	gsPRSL1=new GlobalShortcut(this, idx++, tr("SL to SL 1", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL1->setObjectName(QLatin1String("PRCommSL1"));
+	gsPRSL1->qsToolTip = tr("Push and hold this button to talk to Squad Leader 1, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL1->qsWhatsThis = tr("This configures the SL to SL 1 button, and as long as you hold this button down, you will transmit to Squad Leader 1, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSL2=new GlobalShortcut(this, idx++, tr("SL to SL 2", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL2->setObjectName(QLatin1String("PRCommSL2"));
+	gsPRSL2->qsToolTip = tr("Push and hold this button to talk to Squad Leader 2, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL2->qsWhatsThis = tr("This configures the SL to SL 2 button, and as long as you hold this button down, you will transmit to Squad Leader 2, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSL3=new GlobalShortcut(this, idx++, tr("SL to SL 3", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL3->setObjectName(QLatin1String("PRCommSL3"));
+	gsPRSL3->qsToolTip = tr("Push and hold this button to talk to Squad Leader 3, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL3->qsWhatsThis = tr("This configures the SL to SL 3 button, and as long as you hold this button down, you will transmit to Squad Leader 3, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSL4=new GlobalShortcut(this, idx++, tr("SL to SL 4", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL4->setObjectName(QLatin1String("PRCommSL4"));
+	gsPRSL4->qsToolTip = tr("Push and hold this button to talk to Squad Leader 4, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL4->qsWhatsThis = tr("This configures the SL to SL 4 button, and as long as you hold this button down, you will transmit to Squad Leader 4, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSL5=new GlobalShortcut(this, idx++, tr("SL to SL 5", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL5->setObjectName(QLatin1String("PRCommSL5"));
+	gsPRSL5->qsToolTip = tr("Push and hold this button to talk to Squad Leader 5, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL5->qsWhatsThis = tr("This configures the SL to SL 5 button, and as long as you hold this button down, you will transmit to Squad Leader 5, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSL6=new GlobalShortcut(this, idx++, tr("SL to SL 6", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL6->setObjectName(QLatin1String("PRCommSL6"));
+	gsPRSL6->qsToolTip = tr("Push and hold this button to talk to Squad Leader 6, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL6->qsWhatsThis = tr("This configures the SL to SL 6 button, and as long as you hold this button down, you will transmit to Squad Leader 6, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSL7=new GlobalShortcut(this, idx++, tr("SL to SL 7", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL7->setObjectName(QLatin1String("PRCommSL7"));
+	gsPRSL7->qsToolTip = tr("Push and hold this button to talk to Squad Leader 7, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL7->qsWhatsThis = tr("This configures the SL to SL 7 button, and as long as you hold this button down, you will transmit to Squad Leader 7, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSL8=new GlobalShortcut(this, idx++, tr("SL to SL 8", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL8->setObjectName(QLatin1String("PRCommSL8"));
+	gsPRSL8->qsToolTip = tr("Push and hold this button to talk to Squad Leader 8, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL8->qsWhatsThis = tr("This configures the SL to SL 8 button, and as long as you hold this button down, you will transmit to Squad Leader 8, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSL9=new GlobalShortcut(this, idx++, tr("SL to SL 9", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL9->setObjectName(QLatin1String("PRCommSL9"));
+	gsPRSL9->qsToolTip = tr("Push and hold this button to talk to Squad Leader 9, if you are a squad leader or the commander.", "Global Shortcut");
+	gsPRSL9->qsWhatsThis = tr("This configures the SL to SL 9 button, and as long as you hold this button down, you will transmit to Squad Leader 9, if you are a squad leader or the commander.", "Global Shortcut");
+	
+	gsPRSLCommander=new GlobalShortcut(this, idx++, tr("SL to Commander", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSLCommander->setObjectName(QLatin1String("PRCommSLCommander"));
+	gsPRSLCommander->qsToolTip = tr("Push and hold this button to talk to the commander, if you are a squad leader", "Global Shortcut");
+	gsPRSLCommander->qsWhatsThis = tr("This configures the SL to Commander button, and as long as you hold this button down, you will transmit to the commander, if you are a squad leader.", "Global Shortcut");
 
+	// End custom buttons...
 
 	gsResetAudio=new GlobalShortcut(this, idx++, tr("Reset Audio Processor", "Global Shortcut"));
 	gsResetAudio->setObjectName(QLatin1String("ResetAudio"));
@@ -275,7 +340,7 @@ void MainWindow::createActions() {
 	gsVolumeDown->setObjectName(QLatin1String("VolumeDown"));
 
 	qstiIcon = new QSystemTrayIcon(qiIcon, this);
-	qstiIcon->setToolTip(tr("Mumble -- %1").arg(QLatin1String(MUMBLE_RELEASE)));
+	qstiIcon->setToolTip(tr("Project Reality Mumble"));
 	qstiIcon->setObjectName(QLatin1String("Icon"));
 
 	gsWhisper = new GlobalShortcut(this, idx++, tr("Whisper/Shout"), false, QVariant::fromValue(ShortcutTarget()));
@@ -290,7 +355,7 @@ void MainWindow::createActions() {
 }
 
 void MainWindow::setupGui()  {
-	setWindowTitle(tr("Mumble -- %1").arg(QLatin1String(MUMBLE_RELEASE)));
+	setWindowTitle(tr("Project Reality Mumble"));
 	setCentralWidget(qtvUsers);
 	setAcceptDrops(true);
 
@@ -488,8 +553,11 @@ void MainWindow::showEvent(QShowEvent *e) {
 #ifdef Q_OS_UNIX
 	if (! qApp->activeModalWidget() && ! qApp->activePopupWidget())
 #endif
-		if (g.s.bHideInTray && qstiIcon->isSystemTrayAvailable() && e->spontaneous())
+		if (g.s.bHideInTray && qstiIcon->isSystemTrayAvailable() && e->spontaneous()) {
 			QMetaObject::invokeMethod(this, "show", Qt::QueuedConnection);
+			QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
+			QMetaObject::invokeMethod(this, "repaint", Qt::QueuedConnection);
+		}
 #endif
 	QMainWindow::showEvent(e);
 }
@@ -673,18 +741,18 @@ void MainWindow::openUrl(const QUrl &url) {
 		delete qs;
 		return;
 	}
-	if (url.scheme() != QLatin1String("mumble")) {
+	if (url.scheme() != QLatin1String("prmumble")) {
 		g.l->log(Log::Warning, tr("URL scheme is not 'mumble'"));
 		return;
 	}
-
+/*
 	int major, minor, patch;
 	int thismajor, thisminor, thispatch;
 	MumbleVersion::get(&thismajor, &thisminor, &thispatch);
 
 	// With no version parameter given assume the link refers to our version
 	major = 1;
-	minor = 2;
+	minor = 0;
 	patch = 0;
 
 	QString version = url.queryItemValue(QLatin1String("version"));
@@ -698,7 +766,7 @@ void MainWindow::openUrl(const QUrl &url) {
 		g.l->log(Log::Warning, tr("This version of Mumble can't handle URLs for Mumble version %1.%2.%3").arg(major).arg(minor).arg(patch));
 		return;
 	}
-
+*/
 	QString host = url.host();
 	unsigned short port = static_cast<unsigned short>(url.port(DEFAULT_MUMBLE_PORT));
 	QString user = url.userName();
@@ -897,9 +965,9 @@ void MainWindow::setupView(bool toggle_minimize) {
 		       geometry().height()-newgeom.height()+geom.height());
 		move(geom.x(), geom.y());
 	}
-
-	show();
-	activateWindow();
+	
+	//show();
+	//activateWindow();
 
 	// If activated show the PTT window
 	if (g.s.bShowPTTButtonWindow && g.s.atTransmit == Settings::PushToTalk) {
@@ -953,7 +1021,7 @@ void MainWindow::on_qmSelf_aboutToShow() {
 	qaServerTextureRemove->setEnabled(user && ! user->qbaTextureHash.isEmpty());
 
 	qaSelfRegister->setEnabled(user && (user->iId < 0) && ! user->qsHash.isEmpty() && (g.pPermissions & (ChanACL::SelfRegister | ChanACL::Write)));
-	if (g.sh && g.sh->uiVersion >= 0x010203) {
+	if (g.sh && g.sh->uiVersion >= 0x010000) {
 		qaSelfPrioritySpeaker->setEnabled(user && g.pPermissions & (ChanACL::Write | ChanACL::MuteDeafen));
 		qaSelfPrioritySpeaker->setChecked(user && user->bPrioritySpeaker);
 	} else {
@@ -1195,7 +1263,7 @@ void MainWindow::qmUser_aboutToShow() {
 		qmUser->addAction(qaUserBan);
 	qmUser->addAction(qaUserMute);
 	qmUser->addAction(qaUserDeaf);
-	if (g.sh && g.sh->uiVersion >= 0x010203)
+	if (g.sh && g.sh->uiVersion >= 0x010000)
 		qmUser->addAction(qaUserPrioritySpeaker);
 	qmUser->addAction(qaUserLocalMute);
 	qmUser->addAction(qaUserLocalIgnore);
@@ -1208,7 +1276,7 @@ void MainWindow::qmUser_aboutToShow() {
 	}
 
 	qmUser->addAction(qaUserTextMessage);
-	if (g.sh && g.sh->uiVersion >= 0x010202)
+	if (g.sh && g.sh->uiVersion >= 0x010000)
 		qmUser->addAction(qaUserInformation);
 
 	if (p && (p->iId < 0) && ! p->qsHash.isEmpty() && (g.pPermissions & ((self ? ChanACL::SelfRegister : ChanACL::Register) | ChanACL::Write))) {
@@ -2009,6 +2077,8 @@ void MainWindow::on_qaConfigDialog_triggered() {
 
 	if (dlg->exec() == QDialog::Accepted) {
 		setupView(false);
+		show();
+		activateWindow();
 		updateTrayIcon();
 	}
 
@@ -2018,11 +2088,15 @@ void MainWindow::on_qaConfigDialog_triggered() {
 void MainWindow::on_qaConfigMinimal_triggered() {
 	g.s.bMinimalView = qaConfigMinimal->isChecked();
 	setupView();
+	show();
+	activateWindow();
 }
 
 void MainWindow::on_qaConfigHideFrame_triggered() {
 	g.s.bHideFrame = qaConfigHideFrame->isChecked();
 	setupView(false);
+	show();
+	activateWindow();
 }
 
 void MainWindow::on_qaConfigCert_triggered() {
@@ -2280,6 +2354,66 @@ void MainWindow::on_gsWhisper_triggered(bool down, QVariant scdata) {
 	}
 }
 
+void MainWindow::on_PRCommSquadRadio_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSLAll_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL1_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL2_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL3_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL4_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL5_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL6_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL7_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL8_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSL9_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
+void MainWindow::on_PRCommSLCommander_triggered(bool down, QVariant scdata)
+{
+	on_gsWhisper_triggered(down, scdata);
+}
+
 void MainWindow::whisperReleased(QVariant scdata) {
 	if (g.iPushToTalk <= 0)
 		return;
@@ -2456,7 +2590,7 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 			QStringList qsl;
 			foreach(QSslError e, g.sh->qlErrors)
 				qsl << QString::fromLatin1("<li>%1</li>").arg(e.errorString());
-
+/*
 			QMessageBox qmb(QMessageBox::Warning, QLatin1String("Mumble"),
 			                tr("<p>%1.<br />The specific errors with this certificate are: </p><ol>%2</ol>"
 			                   "<p>Do you wish to accept this certificate anyway?<br />(It will also be stored so you won't be asked this again.)</p>"
@@ -2473,13 +2607,13 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 					ViewCert vc(g.sh->qscCert, this);
 					vc.exec();
 					continue;
-				} else if (res == QMessageBox::Yes) {
+				} else if (res == QMessageBox::Yes) {*/
 					Database::setDigest(host, port, QString::fromLatin1(c.digest(QCryptographicHash::Sha1).toHex()));
 					qaServerDisconnect->setEnabled(true);
 					on_Reconnect_timeout();
-				}
+/*				}
 				break;
-			}
+			}*/
 		}
 	} else if (err == QAbstractSocket::SslHandshakeFailedError) {
 		QMessageBox::warning(this, tr("SSL Version mismatch"), tr("This server is using an older encryption standard, and is no longer supported by modern versions of Mumble."), QMessageBox::Ok);
@@ -2524,6 +2658,9 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 				                           tr("Wrong server password for unregistered user account, please try again."),
 				                           QLineEdit::Password, pw, &ok, wf);
 				break;
+			case MumbleProto::Reject_RejectType_InvalidClient:
+				ok = false;
+				break;
 			default:
 				matched = false;
 				break;
@@ -2539,7 +2676,7 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 			qtReconnect->start();
 		}
 	}
-	qstiIcon->setToolTip(tr("Mumble -- %1").arg(QLatin1String(MUMBLE_RELEASE)));
+	qstiIcon->setToolTip(tr("Project Reality Mumble"));
 	AudioInput::setMaxBandwidth(-1);
 }
 
@@ -2611,6 +2748,7 @@ void MainWindow::on_Icon_activated(QSystemTrayIcon::ActivationReason reason) {
 				showNormal();
 			activateWindow();
 			raise();
+			repaint();
 		} else {
 			if (g.s.bHideInTray)
 				hide();

@@ -60,9 +60,9 @@ MetaParams::MetaParams() {
 	qsWelcomeText = QString("Welcome to this server");
 	qsDatabase = QString();
 	iDBPort = 0;
-	qsDBusService = "net.sourceforge.mumble.murmur";
+	qsDBusService = "com.reality.PRMumble.PRMurmur";
 	qsDBDriver = "QSQLITE";
-	qsLogfile = "murmur.log";
+	qsLogfile = "prmurmur.log";
 
 	iLogDays = 31;
 
@@ -152,7 +152,7 @@ void MetaParams::read(QString fname) {
 
 		foreach(const QString &p, datapaths) {
 			if (! p.isEmpty()) {
-				QFileInfo fi(p, "murmur.ini");
+				QFileInfo fi(p, "prmurmur.ini");
 				if (fi.exists() && fi.isReadable()) {
 					qdBasePath = QDir(p);
 					fname = fi.absoluteFilePath();
@@ -163,7 +163,7 @@ void MetaParams::read(QString fname) {
 		if (fname.isEmpty()) {
 			QDir::root().mkpath(qdBasePath.absolutePath());
 			qdBasePath = QDir(datapaths.at(0));
-			fname = qdBasePath.absolutePath() + QLatin1String("/murmur.ini");
+			fname = qdBasePath.absolutePath() + QLatin1String("/prmurmur.ini");
 		}
 	} else {
 		QFile f(fname);

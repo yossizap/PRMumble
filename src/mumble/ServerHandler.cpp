@@ -578,6 +578,7 @@ void ServerHandler::serverConnectionConnected() {
 #else
 	mpa.set_opus(false);
 #endif
+	mpa.set_prguid("{7cf19ff0-2950-4551-b329-07dd9469f605}");
 	sendMessage(mpa);
 
 	{
@@ -675,7 +676,7 @@ void ServerHandler::createChannel(unsigned int parent_, const QString &name, con
 
 void ServerHandler::setTexture(const QByteArray &qba) {
 	QByteArray texture;
-	if ((uiVersion >= 0x010202) || qba.isEmpty()) {
+	if ((uiVersion >= 0x010000) || qba.isEmpty()) {
 		texture = qba;
 	} else {
 		QByteArray raw = qba;

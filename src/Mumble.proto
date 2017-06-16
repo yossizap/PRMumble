@@ -19,6 +19,7 @@ message Authenticate {
 	repeated string tokens = 3;
 	repeated int32 celt_versions = 4;
 	optional bool opus = 5 [default = false];
+	optional string prguid = 6;
 }
 
 message Ping {
@@ -45,6 +46,7 @@ message Reject {
 		UsernameInUse = 5;
 		ServerFull = 6;
 		NoCertificate = 7;
+		InvalidClient = 8;
 	}
 	optional RejectType type = 1;
 	optional string reason = 2;
@@ -109,6 +111,7 @@ message UserState {
 	optional bytes texture_hash = 17;
 	optional bool priority_speaker = 18;
 	optional bool recording = 19;
+	repeated float position = 20;
 }
 
 message BanList {

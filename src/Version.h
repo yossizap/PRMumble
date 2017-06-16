@@ -36,7 +36,8 @@
 #define MUMTEXT(X) MUMXTEXT(X)
 
 #ifndef MUMBLE_VERSION
-#define MUMBLE_RELEASE "Compiled " __DATE__ " " __TIME__
+//#define MUMBLE_RELEASE "Compiled " __DATE__ " " __TIME__
+#define MUMBLE_RELEASE "v" MUMTEXT(MUMBLE_VERSION_STRING)
 #else
 #define MUMBLE_RELEASE MUMTEXT(MUMBLE_VERSION)
 #endif

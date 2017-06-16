@@ -36,7 +36,7 @@
 #include <QtNetwork/Q_IPV6ADDR>
 
 #ifndef DEFAULT_MUMBLE_PORT
-#define DEFAULT_MUMBLE_PORT 64738
+#define DEFAULT_MUMBLE_PORT 64740
 #endif
 
 struct HostAddress {

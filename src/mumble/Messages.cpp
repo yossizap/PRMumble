@@ -103,6 +103,9 @@ void MainWindow::msgReject(const MumbleProto::Reject &msg) {
 		case MumbleProto::Reject_RejectType_WrongServerPW:
 			reason = tr("Wrong password");
 			break;
+		case MumbleProto::Reject_RejectType_InvalidClient:
+			reason = tr("Invalid Client");
+			break;
 		default:
 			break;
 	}
@@ -496,6 +499,14 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 		pmModel->setCommentHash(pDst, blob(msg.comment_hash()));
 	if (msg.has_comment())
 		pmModel->setComment(pDst, u8(msg.comment()));
+	
+	if (msg.has_plugin_identity()) {
+		pDst->qsIdentity = u8(msg.plugin_identity());
+	}
+	
+	if (msg.position_size()) {
+		pDst->setPosition(msg.position(0), msg.position(1), msg.position(2));
+	}
 }
 
 void MainWindow::msgUserRemove(const MumbleProto::UserRemove &msg) {
@@ -766,7 +777,7 @@ void MainWindow::msgCodecVersion(const MumbleProto::CodecVersion &msg) {
 #endif
 
 	// Workaround for broken 1.2.2 servers
-	if (g.sh && g.sh->uiVersion == 0x010202 && alpha != -1 && alpha == beta) {
+	if (g.sh && g.sh->uiVersion == 0x010000 && alpha != -1 && alpha == beta) {
 		if (pref)
 			beta = g.iCodecBeta;
 		else

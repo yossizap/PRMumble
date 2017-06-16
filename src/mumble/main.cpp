@@ -42,6 +42,7 @@
 #include "Plugins.h"
 #include "Global.h"
 #include "LCD.h"
+#include "RealityData.h"
 #ifdef USE_BONJOUR
 #include "BonjourClient.h"
 #endif
@@ -148,10 +149,15 @@ int main(int argc, char **argv) {
 
 	// Initialize application object.
 	QAppMumble a(argc, argv);
-	a.setApplicationName(QLatin1String("Mumble"));
-	a.setOrganizationName(QLatin1String("Mumble"));
-	a.setOrganizationDomain(QLatin1String("mumble.sourceforge.net"));
+	a.setApplicationName(QLatin1String("PR Mumble"));
+	a.setOrganizationName(QLatin1String("Project Reality"));
+	a.setOrganizationDomain(QLatin1String("realitymod.com"));
 	a.setQuitOnLastWindowClosed(false);
+	
+	QPalette newPal(a.palette());
+	newPal.setColor(QPalette::Link, "#3399cc");
+	newPal.setColor(QPalette::LinkVisited, "#3399cc");
+	a.setPalette(newPal);
 
 	#ifdef USE_SBCELT
 	{
@@ -171,6 +177,7 @@ int main(int argc, char **argv) {
 #endif
 
 	bool bAllowMultiple = false;
+	bool bStartMinimized = false;
 	QUrl url;
 	if (a.arguments().count() > 1) {
 		QStringList args = a.arguments();
@@ -180,7 +187,7 @@ int main(int argc, char **argv) {
 				|| args.at(i) == QLatin1String("/?")
 #endif
 			) {
-				QString helpmessage = MainWindow::tr( "Usage: mumble [options] [<url>]\n"
+				QString helpmessage = MainWindow::tr( "Usage: PRMumble [options] [<url>]\n"
 					"\n"
 					"<url> specifies a URL to connect to after startup instead of showing\n"
 					"the connection window, and has the following form:\n"
@@ -193,6 +200,8 @@ int main(int argc, char **argv) {
 					"  -h, --help    Show this help text and exit.\n"
 					"  -m, --multiple\n"
 					"                Allow multiple instances of the client to be started.\n"
+					"  -z, --minimize\n"
+					"                Starts PR Mumble minimized to the tray.\n"
 					"  -n, --noidentity\n"
 					"                Suppress loading of identity files (i.e., certificates.)\n"
 					);
@@ -204,11 +213,13 @@ int main(int argc, char **argv) {
 				return 1;
 			} else if (args.at(i) == QLatin1String("-m") || args.at(i) == QLatin1String("--multiple")) {
 				bAllowMultiple = true;
+			} else if (args.at(i) == QLatin1String("-z") || args.at(i) == QLatin1String("--minimize")) {
+				bStartMinimized = true;
 			} else if (args.at(i) == QLatin1String("-n") || args.at(i) == QLatin1String("--noidentity")) {
 				g.s.bSuppressIdentity = true;
 			} else {
 				QUrl u = QUrl::fromEncoded(args.at(i).toUtf8());
-				if (u.isValid() && (u.scheme() == QLatin1String("mumble"))) {
+				if (u.isValid() && (u.scheme() == QLatin1String("prmumble"))) {
 					url = u;
 				} else {
 					QFile f(args.at(i));
@@ -248,7 +259,7 @@ int main(int argc, char **argv) {
 #endif
 			bool sent = false;
 #ifdef USE_DBUS
-			QDBusInterface qdbi(QLatin1String("net.sourceforge.mumble.mumble"), QLatin1String("/"), QLatin1String("net.sourceforge.mumble.Mumble"));
+			QDBusInterface qdbi(QLatin1String("com.reality.PRMumble.PRMumble"), QLatin1String("/"), QLatin1String("com.reality.PRMumble.PRMumble"));
 
 			QDBusMessage reply=qdbi.call(QLatin1String("openUrl"), QLatin1String(url.toEncoded()));
 			sent = (reply.type() == QDBusMessage::ReplyMessage);
@@ -260,7 +271,7 @@ int main(int argc, char **argv) {
 		} else {
 			bool sent = false;
 #ifdef USE_DBUS
-			QDBusInterface qdbi(QLatin1String("net.sourceforge.mumble.mumble"), QLatin1String("/"), QLatin1String("net.sourceforge.mumble.Mumble"));
+			QDBusInterface qdbi(QLatin1String("com.reality.PRMumble.PRMumble"), QLatin1String("/"), QLatin1String("com.reality.PRMumble.PRMumble"));
 
 			QDBusMessage reply=qdbi.call(QLatin1String("focus"));
 			sent = (reply.type() == QDBusMessage::ReplyMessage);
@@ -367,9 +378,10 @@ int main(int argc, char **argv) {
 #endif
 
 	g.o = new Overlay();
-	g.o->setActive(g.s.os.bEnable);
+	g.o->setActive(true/*g.s.os.bEnable*/);
 
 	g.lcd = new LCD();
+	g.rd = new RealityData();
 
 	// Process any waiting events before initializing our MainWindow.
 	// The mumble:// URL support for Mac OS X happens through AppleEvents,
@@ -378,17 +390,29 @@ int main(int argc, char **argv) {
 
 	// Main Window
 	g.mw=new MainWindow(NULL);
-	g.mw->show();
+	g.mw->qteLog->document()->setDefaultStyleSheet(a.styleSheet());
+	
+	QMetaObject::invokeMethod(g.mw, "setupView", Qt::QueuedConnection, Q_ARG(bool, false));
+	if (!bStartMinimized) {
+		QMetaObject::invokeMethod(g.mw, "show", Qt::QueuedConnection);
+		QMetaObject::invokeMethod(g.mw, "activateWindow", Qt::QueuedConnection);
+	} else {
+		QMetaObject::invokeMethod(g.mw, "showMinimized", Qt::QueuedConnection);
+		if (g.s.bHideInTray) {
+			QMetaObject::invokeMethod(g.mw, "hide", Qt::QueuedConnection);
+			QMetaObject::invokeMethod(g.mw, "updateTrayIcon", Qt::QueuedConnection);
+		}
+	}
 
 #ifdef USE_DBUS
 	new MumbleDBus(g.mw);
 	QDBusConnection::sessionBus().registerObject(QLatin1String("/"), g.mw);
-	QDBusConnection::sessionBus().registerService(QLatin1String("net.sourceforge.mumble.mumble"));
+	QDBusConnection::sessionBus().registerService(QLatin1String("com.reality.PRMumble.PRMumble"));
 #endif
 
 	SocketRPC *srpc = new SocketRPC(QLatin1String("Mumble"));
 
-	g.l->log(Log::Information, MainWindow::tr("Welcome to Mumble."));
+	g.l->log(Log::Information, MainWindow::tr("Welcome to Project Reality Mumble."));
 
 	// Plugins
 	g.p = new Plugins(NULL);
@@ -404,7 +428,7 @@ int main(int argc, char **argv) {
 	bool runaudiowizard = false;
 	if (g.s.uiUpdateCounter == 0) {
 		// Previous version was an pre 1.2.3 release or this is the first run
-		runaudiowizard = true;
+		runaudiowizard = false;
 
 	} else if (g.s.uiUpdateCounter == 1) {
 		// Previous versions used old idle action style, convert it
@@ -427,7 +451,14 @@ int main(int argc, char **argv) {
 
 	if (! CertWizard::validateCert(g.s.kpCertificate)) {
 		QDir qd(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-		QFile qf(qd.absoluteFilePath(QLatin1String("MumbleAutomaticCertificateBackup.p12")));
+		
+		// copy the old certificate, because PR_Mumble just looks so shit :p
+		// TODO: maybe in a later version the old one should be deleted
+		if (QFile::exists(qd.absoluteFilePath(QLatin1String("PR_MumbleAutomaticCertificateBackup.p12"))))
+			QFile::copy(qd.absoluteFilePath(QLatin1String("PR_MumbleAutomaticCertificateBackup.p12")), qd.absoluteFilePath(QLatin1String("PRMumbleCertificateBackup.p12")));
+		
+		QFile qf(qd.absoluteFilePath(QLatin1String("PRMumbleCertificateBackup.p12")));
+		
 		if (qf.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
 			Settings::KeyPair kp = CertWizard::importCert(qf.readAll());
 			qf.close();
@@ -435,10 +466,12 @@ int main(int argc, char **argv) {
 				g.s.kpCertificate = kp;
 		}
 		if (! CertWizard::validateCert(g.s.kpCertificate)) {
-			CertWizard *cw = new CertWizard(g.mw);
+			// because seriously, who actually fills these out properly?
+			// just automatically generate it and call it a day
+			/*CertWizard *cw = new CertWizard(g.mw);
 			cw->exec();
-			delete cw;
-
+			delete cw;*/
+			
 			if (! CertWizard::validateCert(g.s.kpCertificate)) {
 				g.s.kpCertificate = CertWizard::generateNewCert();
 				if (qf.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered)) {
@@ -456,7 +489,8 @@ int main(int argc, char **argv) {
 #ifndef SNAPSHOT_BUILD
 	if (g.s.bUpdateCheck)
 #endif
-		new VersionCheck(true, g.mw);
+		// Disable version checking, don't need it in PR Mumble since we have PRUpdater
+		// new VersionCheck(true, g.mw);
 #ifdef SNAPSHOT_BUILD
 	new VersionCheck(false, g.mw, true);
 #endif
@@ -476,7 +510,8 @@ int main(int argc, char **argv) {
 		qApp->postEvent(g.mw, oue);
 #endif
 	} else {
-		g.mw->on_qaServerConnect_triggered(true);
+		// turn off the dialog to connect to server...
+		//g.mw->on_qaServerConnect_triggered(true);
 	}
 
 	if (! g.bQuit)
@@ -507,6 +542,7 @@ int main(int argc, char **argv) {
 
 	delete g.nam;
 	delete g.lcd;
+	delete g.rd;
 
 	delete g.db;
 	delete g.p;

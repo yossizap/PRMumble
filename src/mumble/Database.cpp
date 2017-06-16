@@ -70,7 +70,7 @@ Database::Database() {
 	datapaths << g.qdBasePath.absolutePath();
 	datapaths << QDesktopServices::storageLocation(QDesktopServices::DataLocation);
 #if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
-	datapaths << QDir::homePath() + QLatin1String("/.config/Mumble");
+	datapaths << QDir::homePath() + QLatin1String("/.config/PRMumble");
 #endif
 	datapaths << QDir::homePath();
 	datapaths << QDir::currentPath();
@@ -80,13 +80,13 @@ Database::Database() {
 
 	for (i = 0; (i < datapaths.size()) && ! found; i++) {
 		if (!datapaths[i].isEmpty()) {
-			QFile f(datapaths[i] + QLatin1String("/mumble.sqlite"));
+			QFile f(datapaths[i] + QLatin1String("/PRMumble.sqlite"));
 			if (f.exists()) {
 				db.setDatabaseName(f.fileName());
 				found = db.open();
 			}
 
-			QFile f2(datapaths[i] + QLatin1String("/.mumble.sqlite"));
+			QFile f2(datapaths[i] + QLatin1String("/.PRMumble.sqlite"));
 			if (f2.exists()) {
 				db.setDatabaseName(f2.fileName());
 				found = db.open();
@@ -99,9 +99,9 @@ Database::Database() {
 			if (!datapaths[i].isEmpty()) {
 				QDir::root().mkpath(datapaths[i]);
 #ifdef Q_OS_WIN
-				QFile f(datapaths[i] + QLatin1String("/mumble.sqlite"));
+				QFile f(datapaths[i] + QLatin1String("/PRMumble.sqlite"));
 #else
-				QFile f(datapaths[i] + QLatin1String("/.mumble.sqlite"));
+				QFile f(datapaths[i] + QLatin1String("/.PRMumble.sqlite"));
 #endif
 				db.setDatabaseName(f.fileName());
 				found = db.open();
@@ -110,7 +110,7 @@ Database::Database() {
 	}
 
 	if (! found) {
-		QMessageBox::critical(NULL, QLatin1String("Mumble"), tr("Mumble failed to initialize a database in any\nof the possible locations."), QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton);
+		QMessageBox::critical(NULL, QLatin1String("Project Reality Mumble"), tr("Project Reality failed to initialize a database in any\nof the possible locations."), QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton);
 		qFatal("Database: Failed initialization");
 	}
 

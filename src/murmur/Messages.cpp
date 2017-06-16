@@ -172,6 +172,12 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 		rtType = MumbleProto::Reject_RejectType_NoCertificate;
 		ok = false;
 	}
+	
+	if (ok && msg.prguid() != "{7cf19ff0-2950-4551-b329-07dd9469f605}") {
+		reason = QString::fromLatin1("This server requires you to use Project Reality Mumble. This is automatically launched when playing Project Reality. http://www.realitymod.com");
+		rtType = MumbleProto::Reject_RejectType_InvalidClient;
+		ok = false;
+	}
 
 	if (! ok) {
 		log(uSource, QString("Rejected connection: %1").arg(reason));
@@ -243,7 +249,7 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 
 		mpcs.set_position(c->iPosition);
 
-		if ((uSource->uiVersion >= 0x010202) && ! c->qbaDescHash.isEmpty())
+		if ((uSource->uiVersion >= 0x010000) && ! c->qbaDescHash.isEmpty())
 			mpcs.set_description_hash(blob(c->qbaDescHash));
 		else if (! c->qsDesc.isEmpty())
 			mpcs.set_description(u8(c->qsDesc));
@@ -332,7 +338,7 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 		mpus.set_name(u8(u->qsName));
 		if (u->iId >= 0)
 			mpus.set_user_id(u->iId);
-		if (uSource->uiVersion >= 0x010202) {
+		if (uSource->uiVersion >= 0x010000) {
 			if (! u->qbaTextureHash.isEmpty())
 				mpus.set_texture_hash(blob(u->qbaTextureHash));
 			else if (! u->qbaTexture.isEmpty())
@@ -356,7 +362,7 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 			mpus.set_self_deaf(true);
 		else if (u->bSelfMute)
 			mpus.set_self_mute(true);
-		if ((uSource->uiVersion >= 0x010202) && ! u->qbaCommentHash.isEmpty())
+		if ((uSource->uiVersion >= 0x010000) && ! u->qbaCommentHash.isEmpty())
 			mpus.set_comment_hash(blob(u->qbaCommentHash));
 		else if (! u->qsComment.isEmpty())
 			mpus.set_comment(u8(u->qsComment));
@@ -570,7 +576,7 @@ void Server::msgUserState(ServerUser *uSource, MumbleProto::UserState &msg) {
 	}
 
 	// Prevent self-targeting state changes from being applied to others
-	if ((pDstServerUser != uSource) && (msg.has_self_deaf() || msg.has_self_mute() || msg.has_texture() || msg.has_plugin_context() || msg.has_plugin_identity() || msg.has_recording()))
+	if ((pDstServerUser != uSource) && (msg.has_self_deaf() || msg.has_self_mute() || msg.has_texture() || msg.has_plugin_context() || msg.has_recording()))
 		return;
 
 	/*
@@ -609,6 +615,11 @@ void Server::msgUserState(ServerUser *uSource, MumbleProto::UserState &msg) {
 		bBroadcast = true;
 	}
 
+	if (msg.position_size()) {
+		bBroadcast = true;
+		//qWarning() << "Server received position change...";
+	}
+
 	if (msg.has_plugin_context()) {
 		uSource->ssContext = msg.plugin_context();
 		// Make sure to clear this from the packet so we don't broadcast it
@@ -618,7 +629,10 @@ void Server::msgUserState(ServerUser *uSource, MumbleProto::UserState &msg) {
 	if (msg.has_plugin_identity()) {
 		uSource->qsIdentity = u8(msg.plugin_identity());
 		// Make sure to clear this from the packet so we don't broadcast it
-		msg.clear_plugin_identity();
+		//msg.clear_plugin_identity();
+		// Actually, in PRMumble we do want to broadcast it...
+		bBroadcast = true;
+		//qWarning() << "Server received identity change...";
 	}
 
 	if (! comment.isNull()) {
@@ -1470,7 +1484,7 @@ void Server::msgUserList(ServerUser *uSource, MumbleProto::UserList &msg) {
 				} else {
 					MumbleProto::PermissionDenied mppd;
 					mppd.set_type(MumbleProto::PermissionDenied_DenyType_UserName);
-					if (uSource->uiVersion < 0x010201)
+					if (uSource->uiVersion < 0x010000)
 						mppd.set_reason(u8(QString::fromLatin1("%1 is not a valid username").arg(name)));
 					else
 						mppd.set_name(u8(name));

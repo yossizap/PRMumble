@@ -44,7 +44,8 @@ static ConfigWidget *PluginConfigDialogNew(Settings &st) {
 	return new PluginConfig(st);
 }
 
-static ConfigRegistrar registrar(5000, PluginConfigDialogNew);
+// Hide the plugin page, don't need that shit with PR Mumble...
+// static ConfigRegistrar registrar(5000, PluginConfigDialogNew);
 
 struct PluginInfo {
 	bool locked;
@@ -372,6 +373,27 @@ bool Plugins::fetch() {
 		}
 	}
 	bValid = ok;
+	
+	if (tsState != Settings::Passive &&
+		((fabs(fPreviousPosition[0] - fPosition[0]) > 10) ||
+		(fabs(fPreviousPosition[1] - fPosition[1]) > 10) ||
+		(fabs(fPreviousPosition[2] - fPosition[2]) > 10))) {
+		
+		fPreviousPosition[0] = fPosition[0];
+		fPreviousPosition[1] = fPosition[1];
+		fPreviousPosition[2] = fPosition[2];
+		
+		MumbleProto::UserState mpus;
+		mpus.set_session(g.uiSession);
+		mpus.add_position(fPosition[0]);
+		mpus.add_position(fPosition[1]);
+		mpus.add_position(fPosition[2]);
+		if (g.sh)
+			g.sh->sendMessage(mpus);
+		
+		//qWarning() << "Sent position update...";
+	}
+	
 	return bValid;
 }
 

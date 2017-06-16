@@ -98,6 +98,7 @@ Global::Global() {
 	ocIntercept = NULL;
 	bc = NULL;
 	lcd = NULL;
+	rd = NULL;
 	o = NULL;
 	l = NULL;
 
@@ -115,7 +116,7 @@ Global::Global() {
 		appdata = QDir::fromNativeSeparators(QString::fromWCharArray(appData));
 
 		if (!appdata.isEmpty()) {
-			appdata.append(QLatin1String("/Mumble"));
+			appdata.append(QLatin1String("/Project Reality/Project Reality Mumble"));
 			qsl << appdata;
 		}
 	}

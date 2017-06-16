@@ -73,6 +73,9 @@
         <property name="text">
          <string>Reconnect to last server on startup</string>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -85,6 +88,12 @@
         </property>
         <property name="text">
          <string>Suppress certificate and password storage</string>
+        </property>
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -312,6 +321,12 @@ Prevents the client from downloading images embedded into chat messages with the
         <property name="text">
          <string>Check for application updates on startup</string>
         </property>
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -324,6 +339,12 @@ Prevents the client from downloading images embedded into chat messages with the
         </property>
         <property name="text">
          <string>Download plugin and overlay updates on startup</string>
+        </property>
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>

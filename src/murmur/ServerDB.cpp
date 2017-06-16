@@ -93,7 +93,7 @@ ServerDB::ServerDB() {
 
 			for (i = 0; (i < datapaths.size()) && ! found; i++) {
 				if (!datapaths[i].isEmpty()) {
-					QFile f(datapaths[i] + "/murmur.sqlite");
+					QFile f(datapaths[i] + "/prmurmur.sqlite");
 					if (f.exists()) {
 						db->setDatabaseName(f.fileName());
 						found = db->open();
@@ -104,7 +104,7 @@ ServerDB::ServerDB() {
 			if (! found) {
 				for (i = 0; (i < datapaths.size()) && ! found; i++) {
 					if (!datapaths[i].isEmpty()) {
-						QFile f(datapaths[i] + "/murmur.sqlite");
+						QFile f(datapaths[i] + "/prmurmur.sqlite");
 						db->setDatabaseName(f.fileName());
 						found = db->open();
 					}

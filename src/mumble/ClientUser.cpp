@@ -32,6 +32,7 @@
 
 #include "ClientUser.h"
 
+#include "Plugins.h"
 #include "Channel.h"
 #include "Global.h"
 #include "AudioOutput.h"
@@ -155,6 +156,8 @@ QString ClientUser::getFlagsString() const {
 }
 
 void ClientUser::setTalking(Settings::TalkState ts) {
+	g.p->tsState = ts;
+	
 	if (tsState == ts)
 		return;
 
@@ -166,6 +169,7 @@ void ClientUser::setTalking(Settings::TalkState ts) {
 
 	tsState = ts;
 	tLastTalkStateChange.restart();
+
 	emit talkingChanged();
 
 	if (nstate && cChannel) {
@@ -240,6 +244,13 @@ void ClientUser::setRecording(bool recording) {
 		return;
 	bRecording = recording;
 	emit muteDeafChanged();
+}
+
+void ClientUser::setPosition(float x, float y, float z) {
+	fPosition[0] = x;
+	fPosition[1] = y;
+	fPosition[2] = z;
+	emit positionChanged();
 }
 
 bool ClientUser::lessThanOverlay(const ClientUser *first, const ClientUser *second) {

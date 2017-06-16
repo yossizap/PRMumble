@@ -42,6 +42,7 @@
 #include "MainWindow.h"
 #include "Message.h"
 #include "Overlay.h"
+#include "RealityData.h"
 #include "ServerHandler.h"
 #include "Usage.h"
 #include "User.h"
@@ -845,6 +846,7 @@ ClientUser *UserModel::addUser(unsigned int id, const QString &name) {
 
 	connect(p, SIGNAL(talkingChanged()), this, SLOT(userTalkingChanged()));
 	connect(p, SIGNAL(muteDeafChanged()), this, SLOT(userMuteDeafChanged()));
+	connect(p, SIGNAL(positionChanged()), this, SLOT(userPositionChanged()));
 
 	Channel *c = Channel::get(0);
 	ModelItem *citem = ModelItem::c_qhChannels.value(c);
@@ -1291,10 +1293,23 @@ Channel *UserModel::getSubChannel(Channel *p, int idx) const {
 	return NULL;
 }
 
+void UserModel::userPositionChanged() {
+	ClientUser *p=static_cast<ClientUser *>(sender());
+	if (!p)
+		return;
+		
+	//qWarning() << "User position changed, updating overlay...";
+	
+	QModelIndex idx = index(p);
+	emit dataChanged(idx, idx);
+	updateOverlay();
+}
+
 void UserModel::userTalkingChanged() {
 	ClientUser *p=static_cast<ClientUser *>(sender());
 	if (!p)
 		return;
+	
 	QModelIndex idx = index(p);
 	emit dataChanged(idx, idx);
 	updateOverlay();
@@ -1510,6 +1525,7 @@ bool UserModel::dropMimeData(const QMimeData *md, Qt::DropAction, int row, int c
 }
 
 void UserModel::updateOverlay() const {
-	g.o->updateOverlay();
-	g.lcd->updateUserView();
+	g.rd->update();
+	//g.o->updateOverlay();
+	//g.lcd->updateUserView();
 }

@@ -309,6 +309,9 @@ ShortcutTargetDialog::ShortcutTargetDialog(const ShortcutTarget &st, QWidget *pw
 
 	qcbLinks->setChecked(st.bLinks);
 	qcbChildren->setChecked(st.bChildren);
+	
+	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
+	qcbUser->setItemDelegate(itemDelegate1);
 
 	// Insert all known friends into the possible targets list
 	const QMap<QString, QString> &friends = Database::getFriends();

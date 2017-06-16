@@ -31,6 +31,9 @@
         <property name="text">
          <string>Link to Game and Transmit Position</string>
         </property>
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
      </layout>
@@ -48,6 +51,9 @@
          <bool>false</bool>
         </property>
         <property name="headerHidden">
+         <bool>false</bool>
+        </property>
+        <property name="enabled">
          <bool>false</bool>
         </property>
         <attribute name="headerStretchLastSection">

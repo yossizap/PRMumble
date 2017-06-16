@@ -68,6 +68,9 @@
                <property name="text">
                 <string>Enable Overlay</string>
                </property>
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
               </widget>
              </item>
              <item>
