@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -43,8 +18,13 @@
 #include "NetworkConfig.h"
 #include "OSInfo.h"
 #include "PacketDataStream.h"
+#include "RichTextEditor.h"
 #include "SSL.h"
 #include "User.h"
+#include "Net.h"
+#include "HostAddress.h"
+#include "ServerResolver.h"
+#include "ServerResolverRecord.h"
 
 ServerHandlerMessageEvent::ServerHandlerMessageEvent(const QByteArray &msg, unsigned int mtype, bool flush) : QEvent(static_cast<QEvent::Type>(SERVERSEND_EVENT)) {
 	qbaMsg = msg;
@@ -58,6 +38,8 @@ static HANDLE loadQoS() {
 
 	HRESULT hr = E_FAIL;
 
+// We don't support delay-loading QoS on MinGW. Only enable it for MSVC.
+#ifdef _MSC_VER
 	__try {
 		hr = __HrLoadAllImportsForDll("qwave.dll");
 	}
@@ -65,6 +47,7 @@ static HANDLE loadQoS() {
 	__except(EXCEPTION_EXECUTE_HANDLER) {
 		hr = E_FAIL;
 	}
+#endif
 
 	if (! SUCCEEDED(hr)) {
 		qWarning("ServerHandler: Failed to load qWave.dll, no QoS available");
@@ -92,22 +75,34 @@ ServerHandler::ServerHandler() {
 	bUdp = true;
 	tConnectionTimeoutTimer = NULL;
 	uiVersion = 0;
+	iInFlightTCPPings = 0;
 
-	// For some strange reason, on Win32, we have to call supportsSsl before the cipher list is ready.
+	// Historically, the qWarning line below initialized OpenSSL for us.
+	// It used to have this comment:
+	//
+	//     "For some strange reason, on Win32, we have to call
+	//      supportsSsl before the cipher list is ready."
+	//
+	// Now, OpenSSL is initialized in main() via MumbleSSL::initialize(),
+	// but since it's handy to have the OpenSSL version available, we
+	// keep this one around as well.
 	qWarning("OpenSSL Support: %d (%s)", QSslSocket::supportsSsl(), SSLeay_version(SSLEAY_VERSION));
 
 	MumbleSSL::addSystemCA();
 
 	{
-		QList<QSslCipher> pref;
-		foreach(QSslCipher c, QSslSocket::defaultCiphers()) {
-			if (c.usedBits() < 128)
-				continue;
-			pref << c;
+		QList<QSslCipher> ciphers = MumbleSSL::ciphersFromOpenSSLCipherString(g.s.qsSslCiphers);
+		if (ciphers.isEmpty()) {
+			qFatal("Invalid 'net/sslciphers' config option. Either the cipher string is invalid or none of the ciphers are available:: \"%s\"", qPrintable(g.s.qsSslCiphers));
 		}
-		if (pref.isEmpty())
-			qFatal("No ciphers of at least 128 bit found");
-		QSslSocket::setDefaultCiphers(pref);
+
+		QSslSocket::setDefaultCiphers(ciphers);
+
+		QStringList pref;
+		foreach (QSslCipher c, ciphers) {
+			pref << c.name();
+		}
+		qWarning("ServerHandler: TLS cipher preference is \"%s\"", qPrintable(pref.join(QLatin1String(":"))));
 	}
 
 #ifdef Q_OS_WIN
@@ -155,7 +150,7 @@ void ServerHandler::udpReady() {
 		quint16 senderPort;
 		qusUdp->readDatagram(encrypted, qMin(2048U, buflen), &senderAddr, &senderPort);
 
-		if (!(senderAddr == qhaRemote) || (senderPort != usPort))
+		if (!(HostAddress(senderAddr) == HostAddress(qhaRemote)) || (senderPort != usPort))
 			continue;
 
 		ConnectionPtr connection(cConnection);
@@ -263,82 +258,140 @@ void ServerHandler::sendProtoMessage(const ::google::protobuf::Message &msg, uns
 	}
 }
 
-void ServerHandler::run() {
-	qbaDigest = QByteArray();
-	bStrong = true;
-	QSslSocket *qtsSock = new QSslSocket(this);
+void ServerHandler::hostnameResolved() {
+	ServerResolver *sr = qobject_cast<ServerResolver *>(QObject::sender());
+	QList<ServerResolverRecord> records = sr->records();
 
-	if (! g.s.bSuppressIdentity && CertWizard::validateCert(g.s.kpCertificate)) {
-		qtsSock->setPrivateKey(g.s.kpCertificate.second);
-		qtsSock->setLocalCertificate(g.s.kpCertificate.first.at(0));
-		QList<QSslCertificate> certs = qtsSock->caCertificates();
-		certs << g.s.kpCertificate.first;
-		qtsSock->setCaCertificates(certs);
+	// Exit the ServerHandler thread's event loop with an
+	// error code in case our hostname lookup failed.
+	if (records.isEmpty()) {
+		exit(-1);
 	}
 
-	{
-		ConnectionPtr connection(new Connection(this, qtsSock));
-		cConnection = connection;
-
-		qlErrors.clear();
-		qscCert.clear();
-
-		connect(qtsSock, SIGNAL(encrypted()), this, SLOT(serverConnectionConnected()));
-		connect(qtsSock, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(serverConnectionStateChanged(QAbstractSocket::SocketState)));
-		connect(connection.get(), SIGNAL(connectionClosed(QAbstractSocket::SocketError, const QString &)), this, SLOT(serverConnectionClosed(QAbstractSocket::SocketError, const QString &)));
-		connect(connection.get(), SIGNAL(message(unsigned int, const QByteArray &)), this, SLOT(message(unsigned int, const QByteArray &)));
-		connect(connection.get(), SIGNAL(handleSslErrors(const QList<QSslError> &)), this, SLOT(setSslErrors(const QList<QSslError> &)));
-	}
-	bUdp = false;
-
-
-	qtsSock->setProtocol(QSsl::TlsV1);
-	qtsSock->connectToHostEncrypted(qsHostName, usPort);
-
-	tTimestamp.restart();
-
-	// Setup ping timer;
-	QTimer *ticker = new QTimer(this);
-	connect(ticker, SIGNAL(timeout()), this, SLOT(sendPing()));
-	ticker->start(5000);
-
-	g.mw->rtLast = MumbleProto::Reject_RejectType_None;
-
-	accUDP = accTCP = accClean;
-
-	uiVersion = 0;
-	qsRelease = QString();
-	qsOS = QString();
-	qsOSVersion = QString();
-
-	exec();
-
-	if (qusUdp) {
-		QMutexLocker qml(&qmUdp);
-
-#ifdef Q_OS_WIN
-		if (hQoS != NULL) {
-			if (! QOSRemoveSocketFromFlow(hQoS, 0, dwFlowUDP, 0))
-				qWarning("ServerHandler: Failed to remove UDP from QoS");
-			dwFlowUDP = 0;
+	// Create the list of target host:port pairs
+	// that the ServerHandler should try to connect to.
+	QList<ServerAddress> ql;
+	foreach (ServerResolverRecord record, records) {
+		foreach (HostAddress addr, record.addresses()) {
+			ql.append(ServerAddress(addr, record.port()));
 		}
-#endif
-		delete qusUdp;
-		qusUdp = NULL;
+	}
+	qlAddresses = ql;
+
+	// Exit the event loop with 'success' status code,
+	// to continue connecting to the server.
+	exit(0);
+}
+
+void ServerHandler::run() {
+	// Resolve the hostname...
+	{
+		ServerResolver *sr = new ServerResolver();
+		QObject::connect(sr, SIGNAL(resolved()), this, SLOT(hostnameResolved()));
+		sr->resolve(qsHostName, usPort);
+		int ret = exec();
+		if (ret < 0) {
+			qWarning("ServerHandler: failed to resolve hostname");
+			return;
+		}
 	}
 
-	ticker->stop();
+	QList<ServerAddress> targetAddresses(qlAddresses);
+	bool shouldTryNextTargetServer = true;
+	do {
+		saTargetServer = qlAddresses.takeFirst();
 
-	ConnectionPtr cptr(cConnection);
-	if (cptr) {
-		cptr->disconnectSocket(true);
-	}
+		qbaDigest = QByteArray();
+		bStrong = true;
+		qtsSock = new QSslSocket(this);
 
-	cConnection.reset();
-	while (! cptr.unique()) {
-		msleep(100);
-	}
-	delete qtsSock;
+		if (! g.s.bSuppressIdentity && CertWizard::validateCert(g.s.kpCertificate)) {
+			qtsSock->setPrivateKey(g.s.kpCertificate.second);
+			qtsSock->setLocalCertificate(g.s.kpCertificate.first.at(0));
+			QList<QSslCertificate> certs = qtsSock->caCertificates();
+			certs << g.s.kpCertificate.first;
+			qtsSock->setCaCertificates(certs);
+		}
+
+		{
+			ConnectionPtr connection(new Connection(this, qtsSock));
+			cConnection = connection;
+
+			qlErrors.clear();
+			qscCert.clear();
+
+			connect(qtsSock, SIGNAL(encrypted()), this, SLOT(serverConnectionConnected()));
+			connect(qtsSock, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(serverConnectionStateChanged(QAbstractSocket::SocketState)));
+			connect(connection.get(), SIGNAL(connectionClosed(QAbstractSocket::SocketError, const QString &)), this, SLOT(serverConnectionClosed(QAbstractSocket::SocketError, const QString &)));
+			connect(connection.get(), SIGNAL(message(unsigned int, const QByteArray &)), this, SLOT(message(unsigned int, const QByteArray &)));
+			connect(connection.get(), SIGNAL(handleSslErrors(const QList<QSslError> &)), this, SLOT(setSslErrors(const QList<QSslError> &)));
+		}
+		bUdp = false;
+
+
+	#if QT_VERSION >= 0x050500
+		qtsSock->setProtocol(QSsl::TlsV1_0OrLater);
+	#elif QT_VERSION >= 0x050400
+		// In Qt 5.4, QSsl::SecureProtocols is equivalent
+		// to "TLSv1.0 or later", which we require.
+		qtsSock->setProtocol(QSsl::SecureProtocols);
+	#elif QT_VERSION >= 0x050000
+		qtsSock->setProtocol(QSsl::TlsV1_0);
+	#else
+		qtsSock->setProtocol(QSsl::TlsV1);
+	#endif
+		qtsSock->connectToHost(saTargetServer.host.toAddress(), saTargetServer.port);
+
+		tTimestamp.restart();
+
+		// Setup ping timer;
+		QTimer *ticker = new QTimer(this);
+		connect(ticker, SIGNAL(timeout()), this, SLOT(sendPing()));
+		ticker->start(5000);
+
+		g.mw->rtLast = MumbleProto::Reject_RejectType_None;
+
+		accUDP = accTCP = accClean;
+
+		uiVersion = 0;
+		qsRelease = QString();
+		qsOS = QString();
+		qsOSVersion = QString();
+
+		int ret = exec();
+		if (ret == -2) {
+			shouldTryNextTargetServer = true;
+		} else {
+			shouldTryNextTargetServer = false;
+		}
+
+		if (qusUdp) {
+			QMutexLocker qml(&qmUdp);
+
+	#ifdef Q_OS_WIN
+			if (hQoS != NULL) {
+				if (! QOSRemoveSocketFromFlow(hQoS, 0, dwFlowUDP, 0))
+					qWarning("ServerHandler: Failed to remove UDP from QoS");
+				dwFlowUDP = 0;
+			}
+	#endif
+			delete qusUdp;
+			qusUdp = NULL;
+		}
+
+		ticker->stop();
+
+		ConnectionPtr cptr(cConnection);
+		if (cptr) {
+			cptr->disconnectSocket(true);
+		}
+
+		cConnection.reset();
+		while (! cptr.unique()) {
+			msleep(100);
+		}
+		delete qtsSock;
+	} while (shouldTryNextTargetServer && !qlAddresses.isEmpty());
 }
 
 #ifdef Q_OS_WIN
@@ -394,6 +447,15 @@ void ServerHandler::sendPing() {
 	if (!connection)
 		return;
 
+	if (qtsSock->state() != QAbstractSocket::ConnectedState) {
+		return;
+	}
+
+	if (g.s.iMaxInFlightTCPPings >= 0 && iInFlightTCPPings >= g.s.iMaxInFlightTCPPings) {
+		serverConnectionClosed(QAbstractSocket::UnknownSocketError, tr("Server is not responding to TCP pings"));
+		return;
+	}
+
 	CryptState &cs = connection->csCrypt;
 
 	quint64 t = tTimestamp.elapsed();
@@ -428,6 +490,8 @@ void ServerHandler::sendPing() {
 	mpp.set_tcp_packets(static_cast<int>(boost::accumulators::count(accTCP)));
 
 	sendMessage(mpp);
+
+	iInFlightTCPPings += 1;
 }
 
 void ServerHandler::message(unsigned int msgType, const QByteArray &qbaMsg) {
@@ -455,6 +519,11 @@ void ServerHandler::message(unsigned int msgType, const QByteArray &qbaMsg) {
 		if (msg.ParseFromArray(qbaMsg.constData(), qbaMsg.size())) {
 			ConnectionPtr connection(cConnection);
 			if (!connection) return;
+
+			// Reset in-flight TCP ping counter to 0.
+			// We've received a ping. That means the
+			// connection is still OK.
+			iInFlightTCPPings = 0;
 
 			CryptState &cs = connection->csCrypt;
 			cs.uiRemoteGood = msg.good();
@@ -508,6 +577,20 @@ void ServerHandler::serverConnectionClosed(QAbstractSocket::SocketError err, con
 	AudioOutputPtr ao = g.ao;
 	if (ao)
 		ao->wipe();
+
+	// Try next server in the list if possible.
+	// Otherwise, emit disconnect and exit with
+	// a normal status code.
+	if (!qlAddresses.isEmpty()) {
+		if (err == QAbstractSocket::ConnectionRefusedError || err == QAbstractSocket::SocketTimeoutError) {
+			qWarning("ServerHandler: connection attempt to %s:%i failed: %s (%li); trying next server....",
+						qPrintable(saTargetServer.host.toString()), static_cast<int>(saTargetServer.port),
+						qPrintable(reason), static_cast<long>(err));
+			exit(-2);
+			return;
+		}
+	}
+
 	emit disconnected(err, reason);
 	exit(0);
 }
@@ -527,12 +610,17 @@ void ServerHandler::serverConnectionStateChanged(QAbstractSocket::SocketState st
 		connect(tConnectionTimeoutTimer, SIGNAL(timeout()), this, SLOT(serverConnectionTimeoutOnConnect()));
 		tConnectionTimeoutTimer->setSingleShot(true);
 		tConnectionTimeoutTimer->start(30000);
+	} else if (state == QAbstractSocket::ConnectedState) {
+		// Start TLS handshake
+		qtsSock->startClientEncryption();
 	}
 }
 
 void ServerHandler::serverConnectionConnected() {
 	ConnectionPtr connection(cConnection);
 	if (!connection) return;
+
+	iInFlightTCPPings = 0;
 
 	tConnectionTimeoutTimer->stop();
 
@@ -547,7 +635,10 @@ void ServerHandler::serverConnectionConnected() {
 		qbaDigest = sha1(qsc.publicKey().toDer());
 		bUdp = Database::getUdp(qbaDigest);
 	} else {
-		bUdp = true;
+		// Shouldn't reach this
+		qCritical("Server must have a certificate. Dropping connection");
+		disconnect();
+		return;
 	}
 
 	MumbleProto::Version mpv;
@@ -558,8 +649,11 @@ void ServerHandler::serverConnectionConnected() {
 		mpv.set_version(version);
 	}
 
-	mpv.set_os(u8(OSInfo::getOS()));
-	mpv.set_os_version(u8(OSInfo::getOSVersion()));
+	if (!g.s.bHideOS) {
+		mpv.set_os(u8(OSInfo::getOS()));
+		mpv.set_os_version(u8(OSInfo::getOSDisplayableVersion()));
+	}
+
 	sendMessage(mpv);
 
 	MumbleProto::Authenticate mpa;
@@ -585,12 +679,21 @@ void ServerHandler::serverConnectionConnected() {
 		QMutexLocker qml(&qmUdp);
 
 		qhaRemote = connection->peerAddress();
+		qhaLocal = connection->localAddress();
+		if (qhaLocal.isNull()) {
+			qFatal("ServerHandler: qhaLocal is unexpectedly a null addr");
+		}
 
 		qusUdp = new QUdpSocket(this);
-		if (qhaRemote.protocol() == QAbstractSocket::IPv6Protocol)
-			qusUdp->bind(QHostAddress(QHostAddress::AnyIPv6), 0);
-		else
-			qusUdp->bind(QHostAddress(QHostAddress::Any), 0);
+		if (g.s.bUdpForceTcpAddr) {
+			qusUdp->bind(qhaLocal, 0);
+		} else {
+			if (qhaRemote.protocol() == QAbstractSocket::IPv6Protocol) {
+				qusUdp->bind(QHostAddress(QHostAddress::AnyIPv6), 0);
+			} else {
+				qusUdp->bind(QHostAddress(QHostAddress::Any), 0);
+			}
+		}
 
 		connect(qusUdp, SIGNAL(readyRead()), this, SLOT(udpReady()));
 
@@ -598,17 +701,17 @@ void ServerHandler::serverConnectionConnected() {
 
 #if defined(Q_OS_UNIX)
 			int val = 0xe0;
-			if (setsockopt(qusUdp->socketDescriptor(), IPPROTO_IP, IP_TOS, &val, sizeof(val))) {
+			if (setsockopt(static_cast<int>(qusUdp->socketDescriptor()), IPPROTO_IP, IP_TOS, &val, sizeof(val))) {
 				val = 0x80;
-				if (setsockopt(qusUdp->socketDescriptor(), IPPROTO_IP, IP_TOS, &val, sizeof(val)))
+				if (setsockopt(static_cast<int>(qusUdp->socketDescriptor()), IPPROTO_IP, IP_TOS, &val, sizeof(val)))
 					qWarning("ServerHandler: Failed to set TOS for UDP Socket");
 			}
 #if defined(SO_PRIORITY)
 			socklen_t optlen = sizeof(val);
-			if (getsockopt(qusUdp->socketDescriptor(), SOL_SOCKET, SO_PRIORITY, &val, &optlen) == 0) {
+			if (getsockopt(static_cast<int>(qusUdp->socketDescriptor()), SOL_SOCKET, SO_PRIORITY, &val, &optlen) == 0) {
 				if (val == 0) {
 					val = 6;
-					setsockopt(qusUdp->socketDescriptor(), SOL_SOCKET, SO_PRIORITY, &val, sizeof(val));
+					setsockopt(static_cast<int>(qusUdp->socketDescriptor()), SOL_SOCKET, SO_PRIORITY, &val, sizeof(val));
 				}
 			}
 #endif
@@ -621,7 +724,7 @@ void ServerHandler::serverConnectionConnected() {
 				addr.sin_addr.s_addr = htonl(qhaRemote.toIPv4Address());
 
 				dwFlowUDP = 0;
-				if (! QOSAddSocketToFlow(hQoS, qusUdp->socketDescriptor(), reinterpret_cast<sockaddr *>(&addr), QOSTrafficTypeVoice, QOS_NON_ADAPTIVE_FLOW, &dwFlowUDP))
+				if (! QOSAddSocketToFlow(hQoS, qusUdp->socketDescriptor(), reinterpret_cast<sockaddr *>(&addr), QOSTrafficTypeVoice, QOS_NON_ADAPTIVE_FLOW, reinterpret_cast<PQOS_FLOWID>(&dwFlowUDP)))
 					qWarning("ServerHandler: Failed to add UDP to QOS");
 			}
 #endif
@@ -656,65 +759,22 @@ void ServerHandler::requestUserStats(unsigned int uiSession, bool statsOnly) {
 	sendMessage(mpus);
 }
 
-void ServerHandler::joinChannel(unsigned int channel) {
+void ServerHandler::joinChannel(unsigned int uiSession, unsigned int channel) {
 	MumbleProto::UserState mpus;
-	// TODO: remove global uiSession reference
-	mpus.set_session(g.uiSession);
+	mpus.set_session(uiSession);
 	mpus.set_channel_id(channel);
 	sendMessage(mpus);
 }
 
-void ServerHandler::createChannel(unsigned int parent_, const QString &name, const QString &description, unsigned int position, bool temporary) {
+void ServerHandler::createChannel(unsigned int parent_id, const QString &name, const QString &description, unsigned int position, bool temporary, unsigned int maxUsers) {
 	MumbleProto::ChannelState mpcs;
-	mpcs.set_parent(parent_);
+	mpcs.set_parent(parent_id);
 	mpcs.set_name(u8(name));
 	mpcs.set_description(u8(description));
 	mpcs.set_position(position);
 	mpcs.set_temporary(temporary);
+	mpcs.set_max_users(maxUsers);
 	sendMessage(mpcs);
-}
-
-void ServerHandler::setTexture(const QByteArray &qba) {
-	QByteArray texture;
-	if ((uiVersion >= 0x010000) || qba.isEmpty()) {
-		texture = qba;
-	} else {
-		QByteArray raw = qba;
-		QBuffer qb(& raw);
-		qb.open(QIODevice::ReadOnly);
-		QImageReader qir;
-		if (qba.startsWith("<?xml"))
-			qir.setFormat("svg");
-		qir.setDevice(&qb);
-
-		QSize sz = qir.size();
-		sz.scale(600, 60, Qt::KeepAspectRatio);
-		qir.setScaledSize(sz);
-
-		QImage tex = qir.read();
-
-		if (tex.isNull())
-			return;
-
-		qWarning() << tex.width() << tex.height();
-
-		raw = QByteArray(600*60*4, 0);
-		QImage img(reinterpret_cast<unsigned char *>(raw.data()), 600, 60, QImage::Format_ARGB32);
-
-		QPainter imgp(&img);
-		imgp.setRenderHint(QPainter::Antialiasing);
-		imgp.setRenderHint(QPainter::TextAntialiasing);
-		imgp.setCompositionMode(QPainter::CompositionMode_SourceOver);
-		imgp.drawImage(0, 0, tex);
-
-		texture = qCompress(QByteArray(reinterpret_cast<const char *>(img.bits()), 600*60*4));
-	}
-	MumbleProto::UserState mpus;
-	mpus.set_texture(blob(texture));
-	sendMessage(mpus);
-
-	if (! texture.isEmpty())
-		Database::setBlob(sha1(texture), texture);
 }
 
 void ServerHandler::requestBanList() {
@@ -764,7 +824,7 @@ void ServerHandler::sendChannelTextMessage(unsigned int channel, const QString &
 	} else {
 		mptm.add_channel_id(channel);
 
-		if (message_ == QString::fromAscii(g.ccHappyEaster + 10)) g.bHappyEaster = true;
+		if (message_ == QString::fromUtf8(g.ccHappyEaster + 10)) g.bHappyEaster = true;
 	}
 	mptm.set_message(u8(message_));
 	sendMessage(mptm);
@@ -775,6 +835,69 @@ void ServerHandler::setUserComment(unsigned int uiSession, const QString &commen
 	mpus.set_session(uiSession);
 	mpus.set_comment(u8(comment));
 	sendMessage(mpus);
+}
+
+void ServerHandler::setUserTexture(unsigned int uiSession, const QByteArray &qba) {
+	QByteArray texture;
+
+	if ((uiVersion >= 0x010202) || qba.isEmpty()) {
+		texture = qba;
+	} else {
+		QByteArray raw = qba;
+
+		QBuffer qb(& raw);
+		qb.open(QIODevice::ReadOnly);
+
+		QImageReader qir;
+		qir.setDecideFormatFromContent(false);
+
+		QByteArray fmt;
+		if (!RichTextImage::isValidImage(qba, fmt)) {
+			return;
+		}
+
+		qir.setFormat(fmt);
+		qir.setDevice(&qb);
+
+		QSize sz = qir.size();
+		const int TEX_MAX_WIDTH = 600;
+		const int TEX_MAX_HEIGHT = 60;
+		const int TEX_RGBA_SIZE = TEX_MAX_WIDTH*TEX_MAX_HEIGHT*4;
+		sz.scale(TEX_MAX_WIDTH, TEX_MAX_HEIGHT, Qt::KeepAspectRatio);
+		qir.setScaledSize(sz);
+
+		QImage tex = qir.read();
+		if (tex.isNull()) {
+			return;
+		}
+
+		raw = QByteArray(TEX_RGBA_SIZE, 0);
+		QImage img(reinterpret_cast<unsigned char *>(raw.data()), TEX_MAX_WIDTH, TEX_MAX_HEIGHT, QImage::Format_ARGB32);
+
+		QPainter imgp(&img);
+		imgp.setRenderHint(QPainter::Antialiasing);
+		imgp.setRenderHint(QPainter::TextAntialiasing);
+		imgp.setCompositionMode(QPainter::CompositionMode_SourceOver);
+		imgp.drawImage(0, 0, tex);
+
+		texture = qCompress(QByteArray(reinterpret_cast<const char *>(img.bits()), TEX_RGBA_SIZE));
+	}
+
+	MumbleProto::UserState mpus;
+	mpus.set_session(uiSession);
+	mpus.set_texture(blob(texture));
+	sendMessage(mpus);
+
+	if (! texture.isEmpty()) {
+		Database::setBlob(sha1(texture), texture);
+	}
+}
+
+void ServerHandler::setTokens(const QStringList &tokens) {
+	MumbleProto::Authenticate msg;
+	foreach(const QString &qs, tokens)
+		msg.add_tokens(u8(qs));
+	sendMessage(msg);
 }
 
 void ServerHandler::removeChannel(unsigned int channel) {
@@ -814,5 +937,23 @@ void ServerHandler::announceRecordingState(bool recording) {
 	MumbleProto::UserState mpus;
 	mpus.set_recording(recording);
 	sendMessage(mpus);
+}
+
+QUrl ServerHandler::getServerURL(bool withPassword) const {
+	QUrl url;
+	
+	url.setScheme(QLatin1String("mumble"));
+	url.setHost(qsHostName);
+	if (usPort != DEFAULT_MUMBLE_PORT) {
+		url.setPort(usPort);
+	}
+	
+	url.setUserName(qsUserName);
+	
+	if (withPassword && !qsPassword.isEmpty()) {
+		url.setPassword(qsPassword);
+	}
+	
+	return url;
 }
 

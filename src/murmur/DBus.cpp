@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "murmur_pch.h"
 
@@ -176,7 +151,7 @@ void MurmurDBus::registerTypes() {
 	qDBusRegisterMetaType<QList<LogEntry> >();
 }
 
-QDBusConnection MurmurDBus::qdbc(QLatin1String("mainbus"));
+QDBusConnection *MurmurDBus::qdbc = NULL;
 
 MurmurDBus::MurmurDBus(Server *srv) : QDBusAbstractAdaptor(srv) {
 	server = srv;
@@ -191,7 +166,7 @@ void MurmurDBus::removeAuthenticator() {
 
 
 void MurmurDBus::idToNameSlot(QString &name, int id) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusReply<QString> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "getUserName",id);
 	if (reply.isValid())
 		name = reply.value();
@@ -202,7 +177,7 @@ void MurmurDBus::idToNameSlot(QString &name, int id) {
 }
 
 void MurmurDBus::idToTextureSlot(QByteArray &qba, int id) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusReply<QByteArray> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "getUserTexture",id);
 	if (reply.isValid()) {
 		qba = reply.value();
@@ -210,7 +185,7 @@ void MurmurDBus::idToTextureSlot(QByteArray &qba, int id) {
 }
 
 void MurmurDBus::nameToIdSlot(int &id, const QString &name) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusReply<int> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "getUserId",name);
 	if (reply.isValid())
 		id = reply.value();
@@ -221,7 +196,7 @@ void MurmurDBus::nameToIdSlot(int &id, const QString &name) {
 }
 
 void MurmurDBus::registerUserSlot(int &res, const QMap<int, QString> &info) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusReply<int> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "registerPlayer", info.value(ServerDB::User_Name));
 	if (reply.isValid()) {
 		res = reply.value();
@@ -231,14 +206,14 @@ void MurmurDBus::registerUserSlot(int &res, const QMap<int, QString> &info) {
 }
 
 void MurmurDBus::unregisterUserSlot(int &res, int id) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusReply<int> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "unregisterPlayer", id);
 	if (reply.isValid())
 		res = reply.value();
 }
 
 void MurmurDBus::getRegistrationSlot(int &res, int id, QMap<int, QString> &info) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusReply<RegisteredPlayer> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "getRegistration", id);
 	if (reply.isValid()) {
 		const RegisteredPlayer &r = reply.value();
@@ -250,7 +225,7 @@ void MurmurDBus::getRegistrationSlot(int &res, int id, QMap<int, QString> &info)
 }
 
 void  MurmurDBus::getRegisteredUsersSlot(const QString &filter, QMap<int, QString > &m) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusReply<QList<RegisteredPlayer> > reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "getRegisteredPlayers", filter);
 	if (reply.isValid()) {
 		const QList<RegisteredPlayer> &r = reply.value();
@@ -262,19 +237,19 @@ void  MurmurDBus::getRegisteredUsersSlot(const QString &filter, QMap<int, QStrin
 
 void MurmurDBus::setInfoSlot(int &res, int id, const QMap<int, QString> &info) {
 	if (info.contains(ServerDB::User_Name)) {
-		QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+		QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 		QDBusReply<int> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "setName",id, info.value(ServerDB::User_Name));
 		if (reply.isValid())
 			res = reply.value();
 	}
 	if (info.contains(ServerDB::User_Password)) {
-		QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+		QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 		QDBusReply<int> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "setPW",id, info.value(ServerDB::User_Password));
 		if (reply.isValid())
 			res = reply.value();
 	}
 	if (info.contains(ServerDB::User_Email)) {
-		QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+		QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 		QDBusReply<int> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "setEmail",id, info.value(ServerDB::User_Email));
 		if (reply.isValid())
 			res = reply.value();
@@ -282,14 +257,14 @@ void MurmurDBus::setInfoSlot(int &res, int id, const QMap<int, QString> &info) {
 }
 
 void MurmurDBus::setTextureSlot(int &res, int id, const QByteArray &texture) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusReply<int> reply = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "setTexture",id, texture);
 	if (reply.isValid())
 		res = reply.value();
 }
 
 void MurmurDBus::authenticateSlot(int &res, QString &uname, int sessionId, const QList<QSslCertificate> &, const QString &, bool, const QString &pw) {
-	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),qdbc);
+	QDBusInterface remoteApp(qsAuthService,qsAuthPath,QString(),*qdbc);
 	QDBusMessage msg = remoteApp.call(bReentrant ? QDBus::BlockWithGui : QDBus::Block, "authenticate",uname,pw);
 	QDBusError err = msg;
 	if (! err.isValid()) {
@@ -416,6 +391,7 @@ void MurmurDBus::removeChannel(int id, const QDBusMessage &msg) {
 		qdbc.send(msg.createErrorReply("com.reality.PRMumble.Error.channel", "Invalid channel id"));
 		return;
 	}
+
 	server->removeChannel(cChannel);
 }
 
@@ -682,7 +658,7 @@ void MurmurDBus::setAuthenticator(const QDBusObjectPath &path, bool reentrant, c
 	qsAuthPath = path.path();
 	qsAuthService = msg.service();
 
-	QDBusConnectionInterface *interface = qdbc.interface();
+	QDBusConnectionInterface *interface = qdbc->interface();
 	QDBusReply<QStringList> names = interface->registeredServiceNames();
 	if (names.isValid()) {
 		foreach(const QString &name, names.value()) {
@@ -770,6 +746,10 @@ void MurmurDBus::userStateChanged(const User *p) {
 	emit playerStateChanged(PlayerInfo(p));
 }
 
+void MurmurDBus::userTextMessage(const User *, const TextMessage &) {
+	// Not implemented for DBus.
+}
+
 void MurmurDBus::userConnected(const User *p) {
 	emit playerConnected(PlayerInfo(p));
 }
@@ -798,8 +778,8 @@ MetaDBus::MetaDBus(Meta *m) : QDBusAbstractAdaptor(m) {
 
 void MetaDBus::started(Server *s) {
 	new MurmurDBus(s);
-	if (MurmurDBus::qdbc.isConnected())
-		MurmurDBus::qdbc.registerObject(QString::fromLatin1("/%1").arg(s->iServerNum), s);
+	if (MurmurDBus::qdbc->isConnected())
+		MurmurDBus::qdbc->registerObject(QString::fromLatin1("/%1").arg(s->iServerNum), s);
 
 	emit started(s->iServerNum);
 }

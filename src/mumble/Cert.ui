@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Certificate Management</string>
   </property>
+  <property name="wizardStyle">
+   <enum>QWizard::ClassicStyle</enum>
+  </property>
   <widget class="QWizardPage" name="qwpWelcome">
    <property name="title">
     <string>Certificate Authentication</string>
@@ -27,11 +30,7 @@
     <item>
      <widget class="QLabel" name="qlIntroText">
       <property name="text">
-       <string>&lt;p&gt;Mumble can use certificates to authenticate with servers. Using certificates avoids passwords, meaning you don't need to disclose any password to the remote site. It also enables very easy user registration.&lt;/p&gt;&lt;p&gt;While Mumble can work without certificates, the majority of servers will expect you to have one.&lt;/p&gt;
-&lt;p&gt;
-It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://mumble.info/certificate.php&quot;&gt;create a trusted certificate&lt;/a&gt;.
-&lt;/p&gt;
-</string>
+       <string>&lt;p&gt;Mumble can use certificates to authenticate with servers. Using certificates avoids passwords, meaning you don't need to disclose any password to the remote site. It also enables very easy user registration and a client side friends list independent of servers.&lt;/p&gt;&lt;p&gt;While Mumble can work without certificates, the majority of servers will expect you to have one.&lt;/p&gt;&lt;p&gt;Creating a new certificate automatically is sufficient for most use cases. But Mumble also supports certificates representing trust in the users ownership of an email address. These certificates are issued by third parties. For more information see our &lt;a href=&quot;http://mumble.info/certificate.php&quot;&gt;user certificate documentation&lt;/a&gt;. &lt;/p&gt;</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -166,7 +165,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
       </property>
      </widget>
     </item>
-    <item row="1" column="0" rowspan="2">
+    <item row="1" column="0">
      <widget class="QLabel" name="qlImportFile">
       <property name="text">
        <string>Import from</string>
@@ -176,7 +175,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="1" column="1">
      <widget class="QLineEdit" name="qleImportFile">
       <property name="toolTip">
        <string>Filename to import from</string>
@@ -186,7 +185,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
       </property>
      </widget>
     </item>
-    <item row="1" column="2" rowspan="2">
+    <item row="1" column="2">
      <widget class="QPushButton" name="qpbImportFile">
       <property name="toolTip">
        <string>Select file to import from</string>
@@ -203,7 +202,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="2" column="0">
      <widget class="QLabel" name="qlPassword">
       <property name="text">
        <string>Password</string>
@@ -213,7 +212,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="2" column="1">
      <widget class="QLineEdit" name="qlePassword">
       <property name="toolTip">
        <string>Password for PKCS#12 file</string>
@@ -223,6 +222,24 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
       </property>
       <property name="echoMode">
        <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="3">
+     <widget class="QLabel" name="qlPasswordNotice">
+      <property name="font">
+       <font>
+        <italic>true</italic>
+       </font>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:#ff0000;</string>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </item>
@@ -335,7 +352,7 @@ Are you sure you wish to replace your certificate?
       </property>
      </widget>
     </item>
-    <item row="1" column="0" rowspan="2">
+    <item row="1" column="0">
      <widget class="QLabel" name="qlExportFile">
       <property name="text">
        <string>Export to</string>
@@ -345,7 +362,7 @@ Are you sure you wish to replace your certificate?
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="1" column="1">
      <widget class="QLineEdit" name="qleExportFile">
       <property name="toolTip">
        <string>Filename to export to</string>
@@ -355,7 +372,7 @@ Are you sure you wish to replace your certificate?
       </property>
      </widget>
     </item>
-    <item row="1" column="2" rowspan="2">
+    <item row="1" column="2">
      <widget class="QPushButton" name="qpbExportFile">
       <property name="text">
        <string>Save As...</string>
@@ -366,7 +383,7 @@ Are you sure you wish to replace your certificate?
       </property>
      </widget>
     </item>
-    <item row="3" column="0" colspan="3">
+    <item row="2" column="0" colspan="3">
      <widget class="CertView" name="cvExport">
       <property name="toolTip">
        <string>Current certificate</string>
@@ -502,9 +519,6 @@ Are you sure you wish to replace your certificate?
   <tabstop>qleName</tabstop>
   <tabstop>qleEmail</tabstop>
  </tabstops>
- <resources>
-  <include location="mumble.qrc"/>
-  <include location="mumble_tango.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

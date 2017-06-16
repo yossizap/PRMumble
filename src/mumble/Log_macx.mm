@@ -1,43 +1,22 @@
-/* Copyright (C) 2012, Mikkel Krautz <mikkel@krautz.dk>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
 #include "Log.h"
 #include "Global.h"
 
-@interface MUUserNotificationCenterDelegate : NSObject
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
+
+@interface MUUserNotificationCenterDelegate : NSObject <NSUserNotificationCenterDelegate>
 @end
 
 @implementation MUUserNotificationCenterDelegate
 - (void) userNotificationCenter:(NSUserNotificationCenter *)center didDeliverNotification:(NSUserNotification *)notification {
+	Q_UNUSED(center);
+	Q_UNUSED(notification);
 }
 
 - (void) userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
@@ -45,6 +24,9 @@
 }
 
 - (BOOL) userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
+	Q_UNUSED(center);
+	Q_UNUSED(notification);
+
 	return NO;
 }
 @end
@@ -54,6 +36,9 @@ static NSString *Log_QString_to_NSString(const QString& string) {
 	                                reinterpret_cast<const UniChar *>(string.unicode()), string.length())));
 }
 
+#endif
+
+#if QT_VERSION < 0x050800
 extern bool qt_mac_execute_apple_script(const QString &script, AEDesc *ret);
 
 static bool growl_available() {
@@ -81,9 +66,11 @@ static bool growl_available() {
 	}
 	return isAvailable == 1;
 }
+#endif // QT_VERSION
 
-void Log::postNotification(MsgType mt, const QString &console, const QString &plain) {
+void Log::postNotification(MsgType mt, const QString &plain) {
 	QString title = msgName(mt);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
 	if (QSysInfo::MacintoshVersion >= QSysInfo::MV_MOUNTAINLION) {
 		NSUserNotificationCenter *userNotificationCenter = [NSUserNotificationCenter defaultUserNotificationCenter];
 		if (userNotificationCenter.delegate == nil) {
@@ -95,12 +82,16 @@ void Log::postNotification(MsgType mt, const QString &console, const QString &pl
 		userNotification.title = [Log_QString_to_NSString(title) autorelease];
 		userNotification.informativeText = [Log_QString_to_NSString(plain) autorelease];
 		[userNotificationCenter scheduleNotification:userNotification];
-	} else {
+	} else
+#endif
+	{
+#if QT_VERSION < 0x050800
 		QString qsScript = QString::fromLatin1(
 			"tell application \"GrowlHelperApp\"\n"
 			"	notify with name \"%1\" title \"%1\" description \"%2\" application name \"Mumble\"\n"
 			"end tell\n").arg(title).arg(plain);
 		if (growl_available())
 			qt_mac_execute_apple_script(qsScript, NULL);
+#endif
 	}
 }

@@ -1,39 +1,15 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2008-2011, Mikkel Krautz <mikkel@krautz.dk>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#include "GlobalShortcut_macx.h"
-#include "Overlay.h"
+#include "mumble_pch.hpp"
 
 #import <AppKit/AppKit.h>
 #import <Carbon/Carbon.h>
+
+#include "GlobalShortcut_macx.h"
+#include "OverlayClient.h"
 
 #define MOD_OFFSET   0x10000
 #define MOUSE_OFFSET 0x20000
@@ -104,7 +80,7 @@ CGEventRef GlobalShortcutMac::callback(CGEventTapProxy proxy, CGEventType type,
 			CGEventFlags f = CGEventGetFlags(event);
 
 			// Dump active event taps on Ctrl+Alt+Cmd.
-			CGEventFlags ctrlAltCmd = kCGEventFlagMaskControl|kCGEventFlagMaskAlternate|kCGEventFlagMaskCommand;
+			CGEventFlags ctrlAltCmd = static_cast<CGEventFlags>(kCGEventFlagMaskControl|kCGEventFlagMaskAlternate|kCGEventFlagMaskCommand);
 			if ((f & ctrlAltCmd) == ctrlAltCmd)
 				gs->dumpEventTaps();
 
@@ -144,7 +120,7 @@ CGEventRef GlobalShortcutMac::callback(CGEventTapProxy proxy, CGEventType type,
 	return suppress ? NULL : event;
 }
 
-GlobalShortcutMac::GlobalShortcutMac() : modmask(0) {
+GlobalShortcutMac::GlobalShortcutMac() : modmask(static_cast<CGEventFlags>(0)) {
 #ifndef QT_NO_DEBUG
 	qWarning("GlobalShortcutMac: Debug build detected. Disabling shortcut engine.");
 	return;
@@ -179,7 +155,10 @@ GlobalShortcutMac::GlobalShortcutMac() : modmask(0) {
 	kbdLayout = NULL;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
-	if (TISCopyCurrentKeyboardInputSource && TISGetInputSourceProperty) {
+# if MAC_OS_X_VERSION_MIN_REQUIRED < 1050
+	if (TISCopyCurrentKeyboardInputSource && TISGetInputSourceProperty)
+# endif
+	{
 		TISInputSourceRef inputSource = TISCopyCurrentKeyboardInputSource();
 		if (inputSource) {
 			CFDataRef data = static_cast<CFDataRef>(TISGetInputSourceProperty(inputSource, kTISPropertyUnicodeKeyLayoutData));
@@ -214,15 +193,15 @@ GlobalShortcutMac::~GlobalShortcutMac() {
 
 void GlobalShortcutMac::dumpEventTaps() {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	CGTableCount ntaps = 0;
+	uint32_t ntaps = 0;
 	CGEventTapInformation table[64];
 	if (CGGetEventTapList(20, table, &ntaps) == kCGErrorSuccess) {
 		qWarning("--- Installed Event Taps ---");
-		for (CGTableCount i = 0; i < ntaps; i++) {
+		for (uint32_t i = 0; i < ntaps; i++) {
 			CGEventTapInformation *info = &table[i];
 
 			ProcessSerialNumber psn;
-			NSString *processName;
+			NSString *processName = nil;
 			OSStatus err = GetProcessForPID(info->tappingProcess, &psn);
 			if (err == noErr) {
 				CFStringRef str = NULL;
@@ -295,6 +274,9 @@ void GlobalShortcutMac::forwardEvent(void *evt) {
 			break;
 		case NSMouseMoved:
 			sel = @selector(mouseMoved:);
+			break;
+		default:
+			// Ignore the rest. We only care about mouse events.
 			break;
 	}
 
@@ -440,7 +422,7 @@ QString GlobalShortcutMac::translateKeyName(const unsigned int keycode) const {
 		}
 	}
 
-	return QString::fromRawData(reinterpret_cast<const QChar *>(unicodeString), len).toUpper();
+	return QString(reinterpret_cast<const QChar *>(unicodeString), len).toUpper();
 }
 
 QString GlobalShortcutMac::buttonName(const QVariant &v) {

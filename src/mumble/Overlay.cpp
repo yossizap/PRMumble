@@ -1,37 +1,13 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
 #include "Overlay.h"
 
+#include "OverlayClient.h"
 #include "Channel.h"
 #include "ClientUser.h"
 #include "Database.h"
@@ -40,9 +16,124 @@
 #include "MainWindow.h"
 #include "Message.h"
 #include "OverlayText.h"
+#include "RichTextEditor.h"
 #include "ServerHandler.h"
 #include "User.h"
 #include "WebFetch.h"
+
+QString OverlayAppInfo::applicationIdentifierForPath(const QString &path) {
+#ifdef Q_OS_MAC
+	QString qsIdentifier;
+	CFDictionaryRef plist = NULL;
+	CFDataRef data = NULL;
+
+	QFile qfAppBundle(QString::fromLatin1("%1/Contents/Info.plist").arg(path));
+	if (qfAppBundle.exists()) {
+		qfAppBundle.open(QIODevice::ReadOnly);
+		QByteArray qbaPlistData = qfAppBundle.readAll();
+
+		data = CFDataCreateWithBytesNoCopy(NULL, reinterpret_cast<UInt8 *>(qbaPlistData.data()), qbaPlistData.count(), kCFAllocatorNull);
+		plist = static_cast<CFDictionaryRef>(CFPropertyListCreateFromXMLData(NULL, data, kCFPropertyListImmutable, NULL));
+		if (plist) {
+			CFStringRef ident = static_cast<CFStringRef>(CFDictionaryGetValue(plist, CFSTR("CFBundleIdentifier")));
+			if (ident) {
+				char buf[4096];
+				CFStringGetCString(ident, buf, 4096, kCFStringEncodingUTF8);
+				qsIdentifier = QString::fromUtf8(buf);
+			}
+		}
+	}
+
+	if (data) {
+		CFRelease(data);
+	}
+	if (plist) {
+		CFRelease(plist);
+	}
+
+	return qsIdentifier;
+#else
+	return QDir::toNativeSeparators(path);
+#endif
+}
+
+OverlayAppInfo OverlayAppInfo::applicationInfoForId(const QString &identifier) {
+	QString qsAppName(identifier);
+	QIcon qiAppIcon;
+#if defined(Q_OS_MAC)
+	CFStringRef bundleId = NULL;
+	CFURLRef bundleUrl = NULL;
+	CFBundleRef bundle = NULL;
+	OSStatus err = noErr;
+	char buf[4096];
+
+	bundleId = CFStringCreateWithCharacters(kCFAllocatorDefault, reinterpret_cast<const UniChar *>(identifier.unicode()), identifier.length());
+	err = LSFindApplicationForInfo(kLSUnknownCreator, bundleId, NULL, NULL, &bundleUrl);
+	if (err == noErr) {
+		// Figure out the bundle name of the application.
+		CFStringRef absBundlePath = CFURLCopyFileSystemPath(bundleUrl, kCFURLPOSIXPathStyle);
+		CFStringGetCString(absBundlePath, buf, 4096, kCFStringEncodingUTF8);
+		QString qsBundlePath = QString::fromUtf8(buf);
+		CFRelease(absBundlePath);
+		qsAppName = QFileInfo(qsBundlePath).bundleName();
+
+		// Load the bundle's icon.
+		bundle = CFBundleCreate(NULL, bundleUrl);
+		if (bundle) {
+			CFDictionaryRef info = CFBundleGetInfoDictionary(bundle);
+			if (info) {
+				CFStringRef iconFileName = reinterpret_cast<CFStringRef>(CFDictionaryGetValue(info, CFSTR("CFBundleIconFile")));
+				if (iconFileName) {
+					CFStringGetCString(iconFileName, buf, 4096, kCFStringEncodingUTF8);
+					QString qsIconPath = QString::fromLatin1("%1/Contents/Resources/%2")
+					                     .arg(qsBundlePath, QString::fromUtf8(buf));
+					if (! QFile::exists(qsIconPath)) {
+						qsIconPath += QString::fromLatin1(".icns");
+					}
+					if (QFile::exists(qsIconPath)) {
+						qiAppIcon = QIcon(qsIconPath);
+					}
+				}
+			}
+		}
+	}
+
+	if (bundleId) {
+		CFRelease(bundleId);
+	}
+	if (bundleUrl) {
+		CFRelease(bundleUrl);
+	}
+	if (bundle) {
+		CFRelease(bundle);
+	}
+
+#elif defined(Q_OS_WIN)
+	// qWinAppInst(), whose return value we used to pass
+	// to ExtractIcon below, was removed in Qt 5.8.
+	//
+	// It was removed via
+	// https://github.com/qt/qtbase/commit/64507c7165e42c2a5029353d8f97a0d841fa6b01
+	//
+	// In both Qt 4 and Qt 5, the qWinAppInst() implementation
+	// simply calls GetModuleHandle(0).
+	//
+	// To sidestep the removal of the function, we simply
+	// call through to GetModuleHandle() directly.
+	HINSTANCE qWinAppInstValue = GetModuleHandle(NULL);
+	HICON icon = ExtractIcon(qWinAppInstValue, identifier.toStdWString().c_str(), 0);
+	if (icon) {
+#if QT_VERSION >= 0x050000
+		extern QPixmap qt_pixmapFromWinHICON(HICON icon);
+		qiAppIcon = QIcon(qt_pixmapFromWinHICON(icon));
+#else
+		qiAppIcon = QIcon(QPixmap::fromWinHICON(icon));
+#endif
+		DestroyIcon(icon);
+	}
+#endif
+	return OverlayAppInfo(qsAppName, qiAppIcon);
+}
 
 OverlayAppInfo::OverlayAppInfo(QString name, QIcon icon) {
 	qsDisplayName = name;
@@ -90,7 +181,17 @@ Overlay::Overlay() : QObject() {
 #ifdef Q_OS_WIN
 	pipepath = QLatin1String("MumbleOverlayPipe");
 #else
-	pipepath = QDir::home().absoluteFilePath(QLatin1String(".MumbleOverlayPipe"));
+	{
+		QString xdgRuntimePath = QProcessEnvironment::systemEnvironment().value(QLatin1String("XDG_RUNTIME_DIR"));
+		QDir xdgRuntimeDir = QDir(xdgRuntimePath);
+
+		if (! xdgRuntimePath.isNull() && xdgRuntimeDir.exists()) {
+			pipepath = xdgRuntimeDir.absoluteFilePath(QLatin1String("MumbleOverlayPipe"));
+		} else {
+			pipepath = QDir::home().absoluteFilePath(QLatin1String(".MumbleOverlayPipe"));
+		}
+	}
+
 	{
 		QFile f(pipepath);
 		if (f.exists()) {
@@ -101,7 +202,7 @@ Overlay::Overlay() : QObject() {
 #endif
 
 	if (! qlsServer->listen(pipepath)) {
-		QMessageBox::warning(NULL, QLatin1String("Mumble"), tr("Failed to create communication with overlay at %2: %1. No overlay will be available.").arg(qlsServer->errorString(),pipepath), QMessageBox::Ok, QMessageBox::NoButton);
+		QMessageBox::warning(NULL, QLatin1String("Mumble"), tr("Failed to create communication with overlay at %2: %1. No overlay will be available.").arg(Qt::escape(qlsServer->errorString()), Qt::escape(pipepath)), QMessageBox::Ok, QMessageBox::NoButton);
 	} else {
 		qWarning() << "Overlay: Listening on" << qlsServer->fullServerName();
 		connect(qlsServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
@@ -116,11 +217,18 @@ Overlay::~Overlay() {
 
 	// Need to be deleted first, since destructor references lingering QLocalSockets
 	foreach(OverlayClient *oc, qlClients)
+	{
+		// As we're the one closing the connection, we do not need to be
+		// notified of disconnects. This is important because on disconnect we
+		// also remove (and 'delete') the overlay client.
+		disconnect(oc->qlsSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+		disconnect(oc->qlsSocket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(error(QLocalSocket::LocalSocketError)));
 		delete oc;
+	}
 }
 
 void Overlay::newConnection() {
-	while (1) {
+	while (true) {
 		QLocalSocket *qls = qlsServer->nextPendingConnection();
 		if (! qls)
 			break;
@@ -168,7 +276,7 @@ void Overlay::toggleShow() {
 				ProcessSerialNumber psn;
 				GetFrontProcess(&psn);
 				GetProcessPID(&psn, &pid);
-				if (pid != oc->uiPid)
+				if (static_cast<quint64>(pid) != oc->uiPid)
 					continue;
 #if 0
 				// Fullscreen only.
@@ -272,15 +380,21 @@ void Overlay::verifyTexture(ClientUser *cp, bool allowupdate) {
 			qb.open(QIODevice::ReadOnly);
 
 			QImageReader qir;
-			if (cp->qbaTexture.startsWith("<?xml"))
-				qir.setFormat("svg");
-			qir.setDevice(&qb);
-			if (! qir.canRead() || (qir.size().width() > 1024) || (qir.size().height() > 1024)) {
-				valid = false;
+			qir.setAutoDetectImageFormat(false);
+
+			QByteArray fmt;
+			if (RichTextImage::isValidImage(cp->qbaTexture, fmt)) {
+				qir.setFormat(fmt);
+				qir.setDevice(&qb);
+				if (! qir.canRead() || (qir.size().width() > 1024) || (qir.size().height() > 1024)) {
+					valid = false;
+				} else {
+					cp->qbaTextureFormat = qir.format();
+					QImage qi = qir.read();
+					valid = ! qi.isNull();
+				}
 			} else {
-				cp->qbaTextureFormat = qir.format();
-				QImage qi = qir.read();
-				valid = ! qi.isNull();
+				valid = false;
 			}
 		}
 		if (! valid) {
@@ -306,7 +420,7 @@ void Overlay::updateOverlay() {
 
 	foreach(OverlayClient *oc, qlClients) {
 		if (! oc->update()) {
-			qWarning() << "Overlay: Dead client detected";
+			qWarning() << "Overlay: Dead client detected. PID" << oc->uiPid << oc->qsExecutablePath;
 			qlClients.removeAll(oc);
 			oc->scheduleDelete();
 			break;

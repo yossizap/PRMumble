@@ -1,4 +1,4 @@
-include(../../compiler.pri)
+include(../../qmake/compiler.pri)
 
 TEMPLATE = app
 CONFIG += qt thread warn_on debug console
@@ -15,4 +15,4 @@ win32 {
 }
 
 VPATH += ..
-INCLUDEPATH += .. ../murmur ../mumble
+INCLUDEPATH += .. ../murmur ../mumble ../../3rdparty/celt-0.7.0-src/libcelt ../../3rdparty/speex-src/include

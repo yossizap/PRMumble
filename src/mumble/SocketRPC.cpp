@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -111,9 +86,9 @@ void SocketRPCClient::processXml() {
 			QDomAttr attr = attributes.item(i).toAttr();
 			qmRequest.insert(attr.name(), attr.value());
 		}
-		QDomNodeList children = request.childNodes();
-		for (int i=0;i<children.count();++i) {
-			QDomElement child = children.item(i).toElement();
+		QDomNodeList childNodes = request.childNodes();
+		for (int i=0;i<childNodes.count();++i) {
+			QDomElement child = childNodes.item(i).toElement();
 			if (! child.isNull())
 				qmRequest.insert(child.nodeName(), child.text());
 		}
@@ -137,6 +112,25 @@ void SocketRPCClient::processXml() {
 					g.mw->qaAudioMute->trigger();
 				}
 			}
+			iter = qmRequest.find(QLatin1String("unmute"));
+			if (iter != qmRequest.constEnd()) {
+				bool set = iter.value().toBool();
+				if (set == g.s.bMute) {
+					g.mw->qaAudioMute->setChecked(set);
+					g.mw->qaAudioMute->trigger();
+				}
+			}
+			iter = qmRequest.find(QLatin1String("togglemute"));
+			if (iter != qmRequest.constEnd()) {
+				bool set = iter.value().toBool();
+				if (set == g.s.bMute) {
+					g.mw->qaAudioMute->setChecked(set);
+					g.mw->qaAudioMute->trigger();
+				} else {
+					g.mw->qaAudioMute->setChecked(! set);
+					g.mw->qaAudioMute->trigger();
+				}
+			}
 			iter = qmRequest.find(QLatin1String("deaf"));
 			if (iter != qmRequest.constEnd()) {
 				bool set = iter.value().toBool();
@@ -145,7 +139,25 @@ void SocketRPCClient::processXml() {
 					g.mw->qaAudioDeaf->trigger();
 				}
 			}
-
+			iter = qmRequest.find(QLatin1String("undeaf"));
+			if (iter != qmRequest.constEnd()) {
+				bool set = iter.value().toBool();
+				if (set == g.s.bDeaf) {
+					g.mw->qaAudioDeaf->setChecked(set);
+					g.mw->qaAudioDeaf->trigger();
+				}
+			}
+			iter = qmRequest.find(QLatin1String("toggledeaf"));
+			if (iter != qmRequest.constEnd()) {
+				bool set = iter.value().toBool();
+				if (set == g.s.bDeaf) {
+					g.mw->qaAudioDeaf->setChecked(set);
+					g.mw->qaAudioDeaf->trigger();
+				} else {
+					g.mw->qaAudioDeaf->setChecked(! set);
+					g.mw->qaAudioDeaf->trigger();
+				}
+			}
 			ack = true;
 		} else if (request.nodeName() == QLatin1String("url")) {
 			if (g.sh && g.sh->isRunning() && g.uiSession) {
@@ -158,7 +170,15 @@ void SocketRPCClient::processXml() {
 				u.setHost(host);
 				u.setPort(port);
 				u.setUserName(user);
+
+#if QT_VERSION >= 0x050000
+				QUrlQuery query;
+				query.addQueryItem(QLatin1String("version"), QLatin1String("1.2.0"));
+				u.setQuery(query);
+#else
 				u.addQueryItem(QLatin1String("version"), QLatin1String("1.2.0"));
+#endif
+
 				QStringList path;
 				Channel *c = ClientUser::get(g.uiSession)->cChannel;
 				while (c->cParent) {
@@ -208,7 +228,17 @@ SocketRPC::SocketRPC(const QString &basename, QObject *p) : QObject(p) {
 #ifdef Q_OS_WIN
 	pipepath = basename;
 #else
-	pipepath = QDir::home().absoluteFilePath(QLatin1String(".") + basename + QLatin1String("Socket"));
+	{
+		QString xdgRuntimePath = QProcessEnvironment::systemEnvironment().value(QLatin1String("XDG_RUNTIME_DIR"));
+		QDir xdgRuntimeDir = QDir(xdgRuntimePath);
+
+		if (! xdgRuntimePath.isNull() && xdgRuntimeDir.exists()) {
+			pipepath = xdgRuntimeDir.absoluteFilePath(basename + QLatin1String("Socket"));
+		} else {
+			pipepath = QDir::home().absoluteFilePath(QLatin1String(".") + basename + QLatin1String("Socket"));
+		}
+	}
+
 	{
 		QFile f(pipepath);
 		if (f.exists()) {
@@ -228,7 +258,7 @@ SocketRPC::SocketRPC(const QString &basename, QObject *p) : QObject(p) {
 }
 
 void SocketRPC::newConnection() {
-	while (1) {
+	while (true) {
 		QLocalSocket *qls = qlsServer->nextPendingConnection();
 		if (! qls)
 			break;
@@ -242,7 +272,16 @@ bool SocketRPC::send(const QString &basename, const QString &request, const QMap
 #ifdef Q_OS_WIN
 	pipepath = basename;
 #else
-	pipepath = QDir::home().absoluteFilePath(QLatin1String(".") + basename + QLatin1String("Socket"));
+	{
+		QString xdgRuntimePath = QProcessEnvironment::systemEnvironment().value(QLatin1String("XDG_RUNTIME_DIR"));
+		QDir xdgRuntimeDir = QDir(xdgRuntimePath);
+
+		if (! xdgRuntimePath.isNull() && xdgRuntimeDir.exists()) {
+			pipepath = xdgRuntimeDir.absoluteFilePath(basename + QLatin1String("Socket"));
+		} else {
+			pipepath = QDir::home().absoluteFilePath(QLatin1String(".") + basename + QLatin1String("Socket"));
+		}
+	}
 #endif
 
 	QLocalSocket qls;

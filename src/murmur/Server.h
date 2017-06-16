@@ -1,38 +1,15 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2009-2011, Stefan Hacker <dd0t@users.sourceforge.net>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
+#ifndef MUMBLE_MURMUR_SERVER_H_
+#define MUMBLE_MURMUR_SERVER_H_
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
+#ifndef Q_MOC_RUN
+# include <boost/function.hpp>
+#endif
 
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef SERVER_H_
-#define SERVER_H_
-
-#include <boost/function.hpp>
 #include <QtCore/QEvent>
 #include <QtCore/QMutex>
 #include <QtCore/QTimer>
@@ -46,6 +23,9 @@
 #include <QtNetwork/QSslKey>
 #include <QtNetwork/QSslSocket>
 #include <QtNetwork/QTcpServer>
+#if defined(USE_QSSLDIFFIEHELLMANPARAMETERS)
+# include <QtNetwork/QSslDiffieHellmanParameters>
+#endif
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
@@ -53,8 +33,10 @@
 #include "ACL.h"
 #include "Message.h"
 #include "Mumble.pb.h"
-#include "Net.h"
+#include "User.h"
 #include "Timer.h"
+#include "HostAddress.h"
+#include "Ban.h"
 
 class BonjourServer;
 class Channel;
@@ -70,27 +52,23 @@ struct TextMessage {
 	QString qsText;
 };
 
-class LogEmitter : public QObject {
-	private:
-		Q_OBJECT
-		Q_DISABLE_COPY(LogEmitter)
-	signals:
-		void newLogEntry(const QString &msg);
-	public:
-		LogEmitter(QObject *parent = NULL);
-		void addLogEntry(const QString &msg);
-};
-
 class SslServer : public QTcpServer {
 	private:
 		Q_OBJECT;
 		Q_DISABLE_COPY(SslServer)
 	protected:
 		QList<QSslSocket *> qlSockets;
-		void incomingConnection(int);
+#if QT_VERSION >= 0x050000
+		void incomingConnection(qintptr) Q_DECL_OVERRIDE;
+#else
+		void incomingConnection(int) Q_DECL_OVERRIDE;
+#endif
 	public:
 		QSslSocket *nextPendingSSLConnection();
 		SslServer(QObject *parent = NULL);
+
+		/// Checks whether the AF_INET6 socket on this system has dual-stack support.
+		static bool hasDualStackSupport();
 };
 
 #define EXEC_QEVENT (QEvent::User + 959)
@@ -137,6 +115,7 @@ class Server : public QThread {
 		QString qsPassword;
 		QString qsWelcomeText;
 		bool bCertRequired;
+		bool bForceExternalAuth;
 
 		QString qsRegName;
 		QString qsRegPassword;
@@ -153,9 +132,22 @@ class Server : public QThread {
 		QVariant qvSuggestPositional;
 		QVariant qvSuggestPushToTalk;
 
-		QList<QSslCertificate> qlCA;
+		bool bUsingMetaCert;
 		QSslCertificate qscCert;
 		QSslKey qskKey;
+
+		/// qlIntermediates contains the certificates
+		/// from this virtual server's certificate PEM
+		// bundle that do not match the virtual server's
+		// private key.
+		///
+		/// Simply put: it contains any certificates
+		/// that aren't the main certificate, or "leaf"
+		/// certificate.
+		QList<QSslCertificate> qlIntermediates;
+#if defined(USE_QSSLDIFFIEHELLMANPARAMETERS)
+		QSslDiffieHellmanParameters qsdhpDHParams;
+#endif
 
 		Timer tUptime;
 
@@ -188,6 +180,11 @@ class Server : public QThread {
 		// Certificate stuff, implemented partially in Cert.cpp
 	public:
 		static bool isKeyForCert(const QSslKey &key, const QSslCertificate &cert);
+		/// Attempt to load a private key in PEM format from |buf|.
+		/// If |passphrase| is non-empty, it will be used for decrypting the private key in |buf|.
+		/// If a valid RSA, DSA or EC key is found, it is returned.
+		/// If no valid private key is found, a null QSslKey is returned.
+		static QSslKey privateKeyFromPEM(const QByteArray &buf, const QByteArray &pass = QByteArray());
 		void initializeCert();
 		const QString getDigest() const;
 
@@ -220,13 +217,60 @@ class Server : public QThread {
 		quint32 uiVersionBlob;
 		QList<QSocketNotifier *> qlUdpNotifier;
 
+		/// This lock provides synchronization between the
+		/// main thread (where control channel messages and
+		/// RPC happens), and the Server's voice thread.
+		///
+		/// These are the only two threads in Murmur that
+		/// access a Server's data.
+		///
+		/// The easiest way to understand the locking strategy
+		/// and synchronization between the main thread and the
+		/// Server's voice thread is by using the concept of
+		/// ownership.
+		///
+		/// A thread owning an object means that it is the only
+		/// thread that is allowed to write to that object. To
+		/// make changes to it.
+		///
+		/// Most data in the Server class is owned by the main
+		/// thread. That means that the main thread is the only
+		/// thread that writes/updates those structures.
+		///
+		/// When processing incoming voice data (and re-
+		/// broadcasting) that voice data), the Server's voice
+		/// thread needs to access various parts of Server's data,
+		/// such as qhUsers, qhChannels, User->cChannel, etc.
+		/// However, these are owned by the main thread.
+		///
+		/// To ensure correct synchronization between the two
+		/// threads, the contract for using qrwlVoiceThread is
+		/// as follows:
+		///
+		///  - When the Server's voice thread needs to read data
+		///    owned by the main thread, it must hold a read lock
+		///    on qrwlVoiceThread.
+		///
+		///  - The Server's voice thread does not write to any data
+		///    that is owned by the main thread.
+		///
+		///  - When the main thread needs to write to data owned by
+		///    itself that is accessed by the voice thread, it must
+		///    hold a write lock on qrwlVoiceThread.
+		///
+		///  - When the main thread needs to read data that is owned
+		///    by itself, it DOES NOT hold a lock on qrwlVoiceThread.
+		///    That is because ownership of data guarantees that no
+		///    other thread can write to that data.
+		QReadWriteLock qrwlVoiceThread;
 		QHash<unsigned int, ServerUser *> qhUsers;
 		QHash<QPair<HostAddress, quint16>, ServerUser *> qhPeerUsers;
 		QHash<HostAddress, QSet<ServerUser *> > qhHostUsers;
 		QHash<unsigned int, Channel *> qhChannels;
-		QReadWriteLock qrwlUsers;
-		ChanACL::ACLCache acCache;
+
 		QMutex qmCache;
+		ChanACL::ACLCache acCache;
+
 		QHash<int, QString> qhUserNameCache;
 		QHash<QString, int> qhUserIDCache;
 
@@ -309,16 +353,45 @@ class Server : public QThread {
 		void channelCreated(const Channel *);
 		void channelRemoved(const Channel *);
 
+		void textMessageFilterSig(int &, const User *, MumbleProto::TextMessage &);
+
 		void contextAction(const User *, const QString &, unsigned int, int);
 	public:
 		void setUserState(User *p, Channel *parent, bool mute, bool deaf, bool suppressed, bool prioritySpeaker, const QString& name = QString(), const QString &comment = QString());
+
+		/// Update a channel's state using the ChannelState protobuf message and
+		/// broadcast the changes appropriately to the server. On return, if
+		/// err is non-empty, the operation failed, and err contains a description
+		/// of the error.
+		///
+		/// This method is equivalent to the logic that happens in
+		/// Server::msgChannelState  when a ChannelState message is recieved from
+		/// a user. However, this method doesn't do permissions checking.
+		///
+		/// This method is used by the gRPC implementation to perform channel
+		/// state changes.
+		bool setChannelStateGRPC(const MumbleProto::ChannelState &cs, QString &err);
+
 		bool setChannelState(Channel *c, Channel *parent, const QString &qsName, const QSet<Channel *> &links, const QString &desc = QString(), const int position = 0);
+
+		/// Send a text message using the TextMessage protobuf message
+		/// as a template.
+		/// This is equivalent to the logic that happens in Server::msgTextMessage
+		/// when sending a receieved TextMessage, with the exception that this
+		/// method does not perform any permission checks.
+		/// It is used by our gRPC implementation to send text messages.
+		void sendTextMessageGRPC(const ::MumbleProto::TextMessage &tm);
+
 		void sendTextMessage(Channel *cChannel, ServerUser *pUser, bool tree, const QString &text);
+
+		/// Returns true if a channel is full. If a user is provided, false will always
+		/// be returned if the user has write permission in the channel.
+		bool isChannelFull(Channel *c, ServerUser *u = 0);
 
 		// Database / DBus functions. Implementation in ServerDB.cpp
 		void initialize();
 		int authenticate(QString &name, const QString &pw, int sessionId = 0, const QStringList &emails = QStringList(), const QString &certhash = QString(), bool bStrongCert = false, const QList<QSslCertificate> & = QList<QSslCertificate>());
-		Channel *addChannel(Channel *c, const QString &name, bool temporary = false, int position = 0);
+		Channel *addChannel(Channel *c, const QString &name, bool temporary = false, int position = 0, unsigned int maxUsers = 0);
 		void removeChannelDB(const Channel *c);
 		void readChannels(Channel *p = NULL);
 		void readLinks();
@@ -333,6 +406,7 @@ class Server : public QThread {
 		QMap<int, QString> getRegistration(int id);
 		int registerUser(const QMap<int, QString> &info);
 		bool unregisterUserDB(int id);
+		QList<UserInfo> getRegisteredUsersEx();
 		QMap<int, QString > getRegisteredUsers(const QString &filter = QString());
 		bool setInfo(int id, const QMap<int, QString> &info);
 		bool setTexture(int id, const QByteArray &texture);

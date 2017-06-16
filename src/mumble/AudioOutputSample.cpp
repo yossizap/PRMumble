@@ -1,33 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2009-2011, Stefan Hacker <dd0t@users.sourceforge.net>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -41,6 +15,7 @@ SoundFile::SoundFile(const QString &fname) {
 	siInfo.samplerate = 0;
 	siInfo.sections = 0;
 	siInfo.seekable = 0;
+	siInfo.format = 0;
 
 	sfFile = NULL;
 
@@ -207,14 +182,14 @@ SoundFile* AudioOutputSample::loadSndfile(const QString &filename) {
 	return sf;
 }
 
-QString AudioOutputSample::browseForSndfile() {
-	QString file = QFileDialog::getOpenFileName(NULL, tr("Choose sound file"), QString(), QLatin1String("*.wav *.ogg *.ogv *.oga *.flac"));
+QString AudioOutputSample::browseForSndfile(QString defaultpath) {
+	QString file = QFileDialog::getOpenFileName(NULL, tr("Choose sound file"), defaultpath, QLatin1String("*.wav *.ogg *.ogv *.oga *.flac"));
 	if (! file.isEmpty()) {
 		SoundFile *sf = AudioOutputSample::loadSndfile(file);
 		if (sf == NULL) {
 			QMessageBox::critical(NULL,
 			                      tr("Invalid sound file"),
-			                      tr("The file '%1' cannot be used by Mumble. Please select a file with a compatible format and encoding.").arg(file));
+			                      tr("The file '%1' cannot be used by Mumble. Please select a file with a compatible format and encoding.").arg(Qt::escape(file)));
 			return QString();
 		}
 		delete sf;
@@ -237,7 +212,6 @@ bool AudioOutputSample::needSamples(unsigned int snum) {
 	unsigned int iInputFrames = static_cast<unsigned int>(ceilf(static_cast<float>(snum * sfHandle->samplerate()) / static_cast<float>(iOutSampleRate)));
 	unsigned int iInputSamples = iInputFrames * sfHandle->channels();
 
-	float *pOut;
 	bool mix = sfHandle->channels() > 1;
 	STACKVAR(float, fOut, iInputSamples);
 	STACKVAR(float, fMix, iInputFrames);
@@ -248,7 +222,7 @@ bool AudioOutputSample::needSamples(unsigned int snum) {
 		resizeBuffer(iBufferFilled + snum);
 
 		// If we need to resample or mix write to the buffer on stack
-		pOut = (srs || mix) ? fOut : pfBuffer + iBufferFilled;
+		float *pOut = (srs || mix) ? fOut : pfBuffer + iBufferFilled;
 
 		// Try to read all samples needed to satifsy this request
 		if ((read = sfHandle->read(pOut, iInputSamples)) < iInputSamples) {

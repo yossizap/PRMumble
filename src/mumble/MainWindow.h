@@ -1,45 +1,30 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2009-2011, Stefan Hacker <dd0t@users.sourceforge.net>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
+#ifndef MUMBLE_MUMBLE_MAINWINDOW_H_
+#define MUMBLE_MUMBLE_MAINWINDOW_H_
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
+#include <QtCore/QtGlobal>
+#if QT_VERSION >= 0x050000
+# include <QtCore/QPointer>
+# include <QtWidgets/QMainWindow>
+# include <QtWidgets/QSystemTrayIcon>
+#else
+# include <QtCore/QWeakPointer>
+# include <QtGui/QMainWindow>
+# include <QtGui/QSystemTrayIcon>
+#endif
 
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef MAINWINDOW_H_
-#define MAINWINDOW_H_
-
-#include <QtGui/QMainWindow>
-#include <QtGui/QSystemTrayIcon>
 #include <QtNetwork/QAbstractSocket>
 
 #include "CustomElements.h"
 #include "Message.h"
 #include "Mumble.pb.h"
 #include "Usage.h"
+#include "UserLocalVolumeDialog.h"
+#include "MUComboBox.h"
 
 #include "ui_MainWindow.h"
 
@@ -83,9 +68,11 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		QSystemTrayIcon *qstiIcon;
 		QMenu *qmUser;
 		QMenu *qmChannel;
+		QMenu *qmDeveloper;
 		QMenu *qmTray;
-		QIcon qiIcon, qiIconMuteSelf, qiIconMuteServer, qiIconDeafSelf, qiIconDeafServer, qiIconMuteSuppressed;
+		QIcon qiIcon, qiIconMutePushToMute, qiIconMuteSelf, qiIconMuteServer, qiIconDeafSelf, qiIconDeafServer, qiIconMuteSuppressed;
 		QIcon qiTalkingOn, qiTalkingWhisper, qiTalkingShout, qiTalkingOff;
+		QMap<unsigned int, UserLocalVolumeDialog *> qmUserVolTracker;
 
 		GlobalShortcut *gsPushTalk, *gsResetAudio, *gsMuteSelf, *gsDeafSelf;
 		GlobalShortcut *gsUnlink, *gsPushMute, *gsMetaChannel, *gsToggleOverlay;
@@ -102,13 +89,26 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		VoiceRecorderDialog *voiceRecorderDialog;
 
 		MumbleProto::Reject_RejectType rtLast;
+		bool bRetryServer;
 		QString qsDesiredChannel;
 
 		bool bSuppressAskOnQuit;
+		/// Restart the client after shutdown
+		bool restartOnQuit;
 		bool bAutoUnmute;
 
+		/// Contains the cursor whose position is immediately before the image to
+		/// save when activating the "Save Image As..." context menu item.
+		QTextCursor qtcSaveImageCursor;
+
+#if QT_VERSION >= 0x050000
+		QPointer<Channel> cContextChannel;
+		QPointer<ClientUser> cuContextUser;
+#else
 		QWeakPointer<Channel> cContextChannel;
 		QWeakPointer<ClientUser> cuContextUser;
+#endif
+
 		QPoint qpContextPosition;
 
 		void recheckTTS();
@@ -116,15 +116,20 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void setOnTop(bool top);
 		void setShowDockTitleBars(bool doShow);
 		void updateTrayIcon();
+		void focusNextMainWidget();
+		void updateTransmitModeComboBox();
 		QPair<QByteArray, QImage> openImageFile();
-		static const QString defaultStyleSheet;
-
+		
 		void updateChatBar();
 		void openTextMessageDialog(ClientUser *p);
+		void openUserLocalVolumeDialog(ClientUser *p);
 
 #ifdef Q_OS_WIN
-		Timer tInactive;
-		bool winEvent(MSG *, long *);
+#if QT_VERSION >= 0x050000
+		bool nativeEvent(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE;
+#else
+		bool winEvent(MSG *, long *) Q_DECL_OVERRIDE;
+#endif
 		unsigned int uiNewHardware;
 #endif
 	protected:
@@ -135,7 +140,7 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		QList<QAction *> qlChannelActions;
 		QList<QAction *> qlUserActions;
 
-		QSet<ShortcutTarget> qsCurrentTargets;
+		QHash<ShortcutTarget, int> qmCurrentTargets;
 		QHash<QList<ShortcutTarget>, int> qmTargets;
 		QMap<int, int> qmTargetUse;
 		Channel *mapChannel(int idx) const;
@@ -144,9 +149,20 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 
 		PTTButtonWidget *qwPTTButtonWidget;
 
+		MUComboBox *qcbTransmitMode;
+		QAction *qaTransmitMode;
+		QAction *qaTransmitModeSeparator;
+
 		void createActions();
 		void setupGui();
-		void customEvent(QEvent *evt);
+		void updateWindowTitle();
+		/// updateToolbar updates the state of the toolbar depending on the current
+		/// window layout setting.
+		/// If the window layout setting is 'custom', the toolbar is made movable. If the
+		/// window layout is not 'custom', the toolbar is locked in place at the top of
+		/// the MainWindow.
+		void updateToolbar();
+		void customEvent(QEvent *evt) Q_DECL_OVERRIDE;
 		void findDesiredChannel();
 		void setupView(bool toggle_minimize = true);
 		int iShowCount;
@@ -171,8 +187,10 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_qmSelf_aboutToShow();
 		void on_qaSelfComment_triggered();
 		void on_qaSelfRegister_triggered();
+		void qcbTransmitMode_activated(int index);
 		void qmUser_aboutToShow();
 		void on_qaUserCommentReset_triggered();
+		void on_qaUserTextureReset_triggered();
 		void on_qaUserCommentView_triggered();
 		void on_qaUserKick_triggered();
 		void on_qaUserBan_triggered();
@@ -182,6 +200,7 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_qaUserPrioritySpeaker_triggered();
 		void on_qaUserLocalIgnore_triggered();
 		void on_qaUserLocalMute_triggered();
+		void on_qaUserLocalVolume_triggered();
 		void on_qaUserTextMessage_triggered();
 		void on_qaUserRegister_triggered();
 		void on_qaUserInformation_triggered();
@@ -197,6 +216,7 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_qaChannelUnlink_triggered();
 		void on_qaChannelUnlinkAll_triggered();
 		void on_qaChannelSendMessage_triggered();
+		void on_qaChannelFilter_triggered();
 		void on_qaChannelCopyURL_triggered();
 		void on_qaAudioReset_triggered();
 		void on_qaAudioMute_triggered();
@@ -211,19 +231,20 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_qaConfigMinimal_triggered();
 		void on_qaConfigCert_triggered();
 		void on_qaAudioWizard_triggered();
+		void on_qaDeveloperConsole_triggered();
 		void on_qaHelpWhatsThis_triggered();
 		void on_qaHelpAbout_triggered();
 		void on_qaHelpAboutQt_triggered();
 		void on_qaHelpVersionCheck_triggered();
 		void on_qaQuit_triggered();
+		void on_qaHide_triggered();
 		void on_qteChat_tabPressed();
+		void on_qteChat_backtabPressed();
 		void on_qteChat_ctrlSpacePressed();
 		void on_qtvUsers_customContextMenuRequested(const QPoint &mpos);
 		void on_qteLog_customContextMenuRequested(const QPoint &pos);
 		void on_qteLog_anchorClicked(const QUrl &);
 		void on_qteLog_highlighted(const QUrl & link);
-		void on_qdwChat_dockLocationChanged(Qt::DockWidgetArea);
-		void on_qdwLog_dockLocationChanged(Qt::DockWidgetArea);
 		void on_PushToTalk_triggered(bool, QVariant);
 		void on_PushToMute_triggered(bool, QVariant);
 		void on_VolumeUp_triggered(bool, QVariant);
@@ -255,16 +276,28 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void context_triggered();
 		void updateTarget();
 		void updateMenuPermissions();
-		void talkingChanged();
+		/// Handles state changes like talking mode changes and mute/unmute
+		/// or priority speaker flag changes for the gui user
+		void userStateChanged();
 		void destroyUserInformation();
 		void trayAboutToShow();
 		void sendChatbarMessage(QString msg);
 		void pttReleased();
 		void whisperReleased(QVariant scdata);
 		void onResetAudio();
+		void on_qaFilterToggle_triggered();
+		/// Opens a save dialog for the image referenced by qtcSaveImageCursor.
+		void saveImageAs();
+		/// Returns the path to the user's image directory, optionally with a
+		/// filename included.
+		QString getImagePath(QString filename = QString()) const;
+		/// Updates the user's image directory to the given path (any included
+		/// filename is discarded).
+		void updateImagePath(QString filepath) const;
+
 	public:
 		MainWindow(QWidget *parent);
-		~MainWindow();
+		~MainWindow() Q_DECL_OVERRIDE;
 
 		// From msgHandler. Implementation in Messages.cpp
 #define MUMBLE_MH_MSG(x) void msg##x(const MumbleProto:: x &);

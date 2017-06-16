@@ -1,4 +1,4 @@
-include(../../compiler.pri)
+include(../../qmake/compiler.pri)
 TEMPLATE = app
 CONFIG += qt thread warn_on release qtestlib no_keywords console
 CONFIG -= app_bundle
@@ -7,7 +7,7 @@ TARGET = Resample
 SOURCES = Resample.cpp Timer.cpp
 HEADERS = Timer.h
 VPATH += ..
-INCLUDEPATH	*= .. ../../speex/include ../../speex/libspeex ../../speexbuild
+INCLUDEPATH	*= .. ../../3rdparty/speex-src/include ../../3rdparty/speex-src/libspeex ../../3rdparty/speex-build
 LIBS 		*= -lspeex
 
 win32 {
@@ -21,11 +21,11 @@ win32 {
 }
 
 CONFIG(debug, debug|release) {
-  LIBPATH	+= ../../debug
+  QMAKE_LIBDIR = ../../debug $$QMAKE_LIBDIR
   DESTDIR	= ../../debug
 }
 
 CONFIG(release, debug|release) {
-  LIBPATH	+= ../../release
+  QMAKE_LIBDIR = ../../release $$QMAKE_LIBDIR
   DESTDIR	= ../../release
 }

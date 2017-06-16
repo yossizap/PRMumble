@@ -1,32 +1,7 @@
-/* Copyright (C) 2009-2011, Mikkel Krautz <mikkel@krautz.dk>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -35,6 +10,7 @@
 #include "Global.h"
 #include "NetworkConfig.h"
 #include "OSInfo.h"
+#include "EnvUtils.h"
 
 CrashReporter::CrashReporter(QWidget *p) : QDialog(p) {
 	setWindowTitle(tr("Mumble Crash Report"));
@@ -147,7 +123,7 @@ void CrashReporter::run() {
 	 * if something weird happened.
 	 */
 	foreach(QFileInfo fi, qfilEntries) {
-		int delta = abs(qdtModification.secsTo(fi.lastModified()));
+		qint64 delta = qAbs<qint64>(qdtModification.secsTo(fi.lastModified()));
 		if (delta < 8) {
 			QFile f(fi.absoluteFilePath());
 			f.open(QIODevice::ReadOnly);
@@ -171,11 +147,10 @@ void CrashReporter::run() {
 			qsl << qtf.fileName();
 
 			QString app = QLatin1String("dxdiag.exe");
-			wchar_t *sr = NULL;
-			size_t srsize = 0;
-			if (_wdupenv_s(&sr, &srsize, L"SystemRoot") == 0) {
-				app = QDir::fromNativeSeparators(QString::fromWCharArray(sr)) + QLatin1String("/System32/dxdiag.exe");
-				free(sr);
+			QString systemRoot = EnvUtils::getenv(QLatin1String("SystemRoot"));
+
+			if (systemRoot.count() > 0) {
+				app = QDir::fromNativeSeparators(systemRoot + QLatin1String("/System32/dxdiag.exe"));
 			}
 
 			qp.start(app, qsl);
@@ -215,7 +190,7 @@ void CrashReporter::run() {
 
 		QByteArray post = os.toUtf8() + ver.toUtf8() + email.toUtf8() + descr.toUtf8() + det.toUtf8() + head.toUtf8() + qbaDumpContents + end.toUtf8();
 
-		QUrl url(QLatin1String("https://mumble.hive.no/crashreport.php"));
+		QUrl url(QLatin1String("https://crash-report.mumble.info/v1/report"));
 		QNetworkRequest req(url);
 		req.setHeader(QNetworkRequest::ContentTypeHeader, QString::fromLatin1("multipart/form-data; boundary=%1").arg(boundary));
 		req.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(post.size()));

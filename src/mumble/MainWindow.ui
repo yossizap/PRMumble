@@ -99,7 +99,7 @@
    <property name="minimumSize">
     <size>
      <width>250</width>
-     <height>50</height>
+     <height>93</height>
     </size>
    </property>
    <property name="features">
@@ -183,6 +183,8 @@
    <addaction name="qaSelfComment"/>
    <addaction name="separator"/>
    <addaction name="qaConfigDialog"/>
+   <addaction name="separator"/>
+   <addaction name="qaFilterToggle"/>
   </widget>
   <action name="qaQuit">
    <property name="text">
@@ -198,13 +200,24 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
+  <action name="qaHide">
+   <property name="text">
+    <string>&amp;Hide Mumble</string>
+   </property>
+   <property name="toolTip">
+    <string>Hides the main Mumble window.</string>
+   </property>
+   <property name="whatsThis">
+    <string>Hides the main Mumble window. Restore by clicking on the tray icon or starting Mumble again.</string>
+   </property>
+  </action>
   <action name="qaServerConnect">
    <property name="icon">
-    <iconset resource="mumble_tango.qrc">
+    <iconset>
      <normaloff>skin:categories/applications-internet.svg</normaloff>skin:categories/applications-internet.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Connect</string>
+    <string>&amp;Connect...</string>
    </property>
    <property name="toolTip">
     <string>Open the server connection dialog</string>
@@ -235,13 +248,13 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>&amp;Ban lists</string>
+    <string>&amp;Ban list...</string>
    </property>
    <property name="toolTip">
-    <string>Edit ban lists on server</string>
+    <string>Edit ban list on server</string>
    </property>
    <property name="whatsThis">
-    <string>This lets you edit the server-side IP ban lists.</string>
+    <string>This lets you edit the server-side IP ban list.</string>
    </property>
   </action>
   <action name="qaServerInformation">
@@ -249,11 +262,11 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="mumble.qrc">
+    <iconset>
      <normaloff>skin:Information_icon.svg</normaloff>skin:Information_icon.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Information</string>
+    <string>&amp;Information...</string>
    </property>
    <property name="toolTip">
     <string>Show information about the server connection</string>
@@ -267,7 +280,7 @@
   </action>
   <action name="qaUserKick">
    <property name="text">
-    <string>&amp;Kick</string>
+    <string>&amp;Kick...</string>
    </property>
    <property name="toolTip">
     <string>Kick user (with reason)</string>
@@ -292,7 +305,7 @@
   </action>
   <action name="qaUserBan">
    <property name="text">
-    <string>&amp;Ban</string>
+    <string>&amp;Ban...</string>
    </property>
    <property name="toolTip">
     <string>Kick and ban user (with reason)</string>
@@ -329,6 +342,17 @@
     <string>Silently drops all text messages from the user.</string>
    </property>
   </action>
+  <action name="qaUserLocalVolume">
+   <property name="text">
+    <string>Local Volume Adjustment...</string>
+   </property>
+   <property name="toolTip">
+    <string>Locally adjust the user's speech volume.</string>
+   </property>
+   <property name="whatsThis">
+    <string>Opens a dialog with a volume slider. Use this on other users in the same room.</string>
+   </property>
+  </action>
   <action name="qaUserLocalMute">
    <property name="checkable">
     <bool>true</bool>
@@ -345,7 +369,7 @@
   </action>
   <action name="qaUserTextMessage">
    <property name="text">
-    <string>Send &amp;Message</string>
+    <string>Send &amp;Message...</string>
    </property>
    <property name="toolTip">
     <string>Send a Text Message</string>
@@ -356,7 +380,7 @@
   </action>
   <action name="qaChannelAdd">
    <property name="text">
-    <string>&amp;Add</string>
+    <string>&amp;Add...</string>
    </property>
    <property name="toolTip">
     <string>Add new channel</string>
@@ -367,7 +391,7 @@
   </action>
   <action name="qaChannelRemove">
    <property name="text">
-    <string>&amp;Remove</string>
+    <string>&amp;Remove...</string>
    </property>
    <property name="toolTip">
     <string>Remove channel</string>
@@ -378,7 +402,7 @@
   </action>
   <action name="qaChannelACL">
    <property name="text">
-    <string>&amp;Edit</string>
+    <string>&amp;Edit...</string>
    </property>
    <property name="toolTip">
     <string>Edit Groups and ACL for channel</string>
@@ -436,7 +460,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="mumble_tango.qrc">
+    <iconset>
      <normaloff>skin:actions/audio-input-microphone.svg</normaloff>
      <normalon>skin:actions/audio-input-microphone-muted.svg</normalon>
      <activeon>skin:actions/audio-input-microphone-muted.svg</activeon>skin:actions/audio-input-microphone.svg</iconset>
@@ -459,7 +483,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="mumble.qrc">
+    <iconset>
      <normaloff>skin:self_undeafened.svg</normaloff>
      <normalon>skin:deafened_self.svg</normalon>
      <activeon>skin:deafened_self.svg</activeon>skin:self_undeafened.svg</iconset>
@@ -493,7 +517,7 @@
   </action>
   <action name="qaAudioStats">
    <property name="text">
-    <string>Audio S&amp;tatistics</string>
+    <string>Audio S&amp;tatistics...</string>
    </property>
    <property name="toolTip">
     <string>Display audio statistics</string>
@@ -515,11 +539,11 @@
   </action>
   <action name="qaConfigDialog">
    <property name="icon">
-    <iconset resource="mumble.qrc">
+    <iconset>
      <normaloff>skin:config_basic.png</normaloff>skin:config_basic.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Settings</string>
+    <string>&amp;Settings...</string>
    </property>
    <property name="toolTip">
     <string>Configure Mumble</string>
@@ -534,15 +558,55 @@
     <bool>false</bool>
    </property>
   </action>
+  <action name="qaFilterToggle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>skin:filter_off.svg</normaloff>
+     <normalon>skin:filter_on.svg</normalon>
+     <activeon>skin:filter_on.svg</activeon>skin:filter_off.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Filter on/off</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle the channel filter (Ctrl+F)</string>
+   </property>
+   <property name="whatsThis">
+    <string>Enable or disable the filtering of select channels.
+By default all empty channels will be filtered.
+You can mark additional channels for filtering from
+the channel's context menu.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
   <action name="qaAudioWizard">
    <property name="text">
-    <string>&amp;Audio Wizard</string>
+    <string>&amp;Audio Wizard...</string>
    </property>
    <property name="toolTip">
     <string>Start the audio configuration wizard</string>
    </property>
    <property name="whatsThis">
     <string>This will guide you through the process of configuring your audio hardware.</string>
+   </property>
+  </action>
+  <action name="qaDeveloperConsole">
+   <property name="text">
+    <string>Developer &amp;Console...</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the Developer Console</string>
+   </property>
+   <property name="whatsThis">
+    <string>Shows the Mumble Developer Console, where Mumble's log output can be inspected.</string>
    </property>
   </action>
   <action name="qaHelpWhatsThis">
@@ -558,7 +622,7 @@
   </action>
   <action name="qaHelpAbout">
    <property name="text">
-    <string>&amp;About</string>
+    <string>&amp;About...</string>
    </property>
    <property name="toolTip">
     <string>Information about Mumble</string>
@@ -572,7 +636,7 @@
   </action>
   <action name="qaHelpAboutSpeex">
    <property name="text">
-    <string>About &amp;Speex</string>
+    <string>About &amp;Speex...</string>
    </property>
    <property name="toolTip">
     <string>Information about Speex</string>
@@ -586,7 +650,7 @@
   </action>
   <action name="qaHelpAboutQt">
    <property name="text">
-    <string>About &amp;Qt</string>
+    <string>About &amp;Qt...</string>
    </property>
    <property name="toolTip">
     <string>Information about Qt</string>
@@ -611,7 +675,7 @@
   </action>
   <action name="qaChannelSendMessage">
    <property name="text">
-    <string>Send &amp;Message</string>
+    <string>Send &amp;Message...</string>
    </property>
    <property name="toolTip">
     <string>Send a Text Message</string>
@@ -661,7 +725,7 @@
   </action>
   <action name="qaConfigCert">
    <property name="text">
-    <string>&amp;Certificate Wizard</string>
+    <string>&amp;Certificate Wizard...</string>
    </property>
    <property name="toolTip">
     <string>Configure certificates for strong authentication</string>
@@ -672,7 +736,7 @@
   </action>
   <action name="qaUserRegister">
    <property name="text">
-    <string>&amp;Register</string>
+    <string>&amp;Register...</string>
    </property>
    <property name="toolTip">
     <string>Register user on server</string>
@@ -716,7 +780,7 @@
   </action>
   <action name="qaServerUserList">
    <property name="text">
-    <string>Registered &amp;Users</string>
+    <string>Registered &amp;Users...</string>
    </property>
    <property name="toolTip">
     <string>Edit registered users list</string>
@@ -727,7 +791,7 @@
   </action>
   <action name="qaServerTexture">
    <property name="text">
-    <string>Change &amp;Avatar</string>
+    <string>Change &amp;Avatar...</string>
    </property>
    <property name="toolTip">
     <string>Change your avatar image on this server</string>
@@ -735,7 +799,7 @@
   </action>
   <action name="qaServerTokens">
    <property name="text">
-    <string>&amp;Access Tokens</string>
+    <string>&amp;Access Tokens...</string>
    </property>
    <property name="toolTip">
     <string>Add or remove text-based access tokens</string>
@@ -751,10 +815,18 @@
   </action>
   <action name="qaUserCommentReset">
    <property name="text">
-    <string>Reset &amp;Comment</string>
+    <string>Reset &amp;Comment...</string>
    </property>
    <property name="toolTip">
     <string>Reset the comment of the selected user.</string>
+   </property>
+  </action>
+  <action name="qaUserTextureReset">
+   <property name="text">
+    <string>Reset &amp;Avatar...</string>
+   </property>
+   <property name="toolTip">
+    <string>Reset the avatar of the selected user.</string>
    </property>
   </action>
   <action name="qaChannelJoin">
@@ -762,9 +834,17 @@
     <string>&amp;Join Channel</string>
    </property>
   </action>
+  <action name="qaChannelFilter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Hide Channel when Filtering</string>
+   </property>
+  </action>
   <action name="qaUserCommentView">
    <property name="text">
-    <string>View Comment</string>
+    <string>View Comment...</string>
    </property>
    <property name="toolTip">
     <string>View comment in editor</string>
@@ -772,7 +852,7 @@
   </action>
   <action name="qaUserInformation">
    <property name="text">
-    <string>&amp;Information</string>
+    <string>&amp;Information...</string>
    </property>
    <property name="toolTip">
     <string>Query server for connection information for user</string>
@@ -780,11 +860,11 @@
   </action>
   <action name="qaSelfComment">
    <property name="icon">
-    <iconset resource="mumble.qrc">
-     <normaloff>skin:comment.svg</normaloff>skin:comment.svg</iconset>
+    <iconset>
+     <normaloff>skin:self_comment.svg</normaloff>skin:self_comment.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Change Comment</string>
+    <string>&amp;Change Comment...</string>
    </property>
    <property name="toolTip">
     <string>Change your own comment</string>
@@ -795,7 +875,7 @@
   </action>
   <action name="qaSelfRegister">
    <property name="text">
-    <string>R&amp;egister</string>
+    <string>R&amp;egister...</string>
    </property>
    <property name="toolTip">
     <string>Register yourself on the server</string>
@@ -819,7 +899,7 @@
   </action>
   <action name="qaRecording">
    <property name="icon">
-    <iconset resource="mumble_tango.qrc">
+    <iconset>
      <normaloff>skin:actions/media-record.svg</normaloff>skin:actions/media-record.svg</iconset>
    </property>
    <property name="text">
@@ -847,9 +927,6 @@
    <header>CustomElements.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="mumble.qrc"/>
-  <include location="mumble_tango.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

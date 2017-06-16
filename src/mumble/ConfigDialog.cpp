@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -48,8 +23,7 @@ ConfigDialog::ConfigDialog(QWidget *p) : QDialog(p) {
 		addPage(cwn(s), ++idx);
 	}
 
-	qcbExpert->setChecked(g.s.bExpert);
-	on_qcbExpert_clicked(g.s.bExpert);
+	updateListView();
 
 	QPushButton *okButton = dialogButtonBox->button(QDialogButtonBox::Ok);
 	okButton->setToolTip(tr("Accept changes"));
@@ -132,7 +106,6 @@ void ConfigDialog::on_pageButtonBox_clicked(QAbstractButton *b) {
 	switch (pageButtonBox->standardButton(b)) {
 		case QDialogButtonBox::RestoreDefaults: {
 				Settings def;
-				def.bExpert = g.s.bExpert;
 				conf->load(def);
 				break;
 			}
@@ -167,7 +140,7 @@ void ConfigDialog::on_qlwIcons_currentItemChanged(QListWidgetItem *current, QLis
 	}
 }
 
-void ConfigDialog::on_qcbExpert_clicked(bool b) {
+void ConfigDialog::updateListView() {
 	QWidget *ccw = qmIconWidgets.value(qlwIcons->currentItem());
 	QListWidgetItem *sel = NULL;
 
@@ -175,29 +148,26 @@ void ConfigDialog::on_qcbExpert_clicked(bool b) {
 	qlwIcons->clear();
 
 	QFontMetrics qfm(qlwIcons->font());
-	int width = 0;
+	int configNavbarWidth = 0;
 
 	foreach(ConfigWidget *cw, qmWidgets) {
-		bool showit = cw->expert(b);
-		width = qMax(width, qfm.width(cw->title()));
-		if (showit || b)  {
-			QListWidgetItem *i = new QListWidgetItem(qlwIcons);
-			i->setIcon(cw->icon());
-			i->setText(cw->title());
-			i->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+		configNavbarWidth = qMax(configNavbarWidth, qfm.width(cw->title()));
 
+		QListWidgetItem *i = new QListWidgetItem(qlwIcons);
+		i->setIcon(cw->icon());
+		i->setText(cw->title());
+		i->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-			qmIconWidgets.insert(i, cw);
-			if (cw == ccw)
-				sel = i;
-		}
+		qmIconWidgets.insert(i, cw);
+		if (cw == ccw)
+			sel = i;
 	}
 
 	// Add space for icon and some padding.
-	width += qlwIcons->iconSize().width() + 25;
+	configNavbarWidth += qlwIcons->iconSize().width() + 25;
 
-	qlwIcons->setMinimumWidth(width);
-	qlwIcons->setMaximumWidth(width);
+	qlwIcons->setMinimumWidth(configNavbarWidth);
+	qlwIcons->setMaximumWidth(configNavbarWidth);
 
 	if (sel)
 		qlwIcons->setCurrentItem(sel);
@@ -215,14 +185,12 @@ void ConfigDialog::apply() {
 
 	foreach(ConfigWidget *cw, qmWidgets)
 		cw->accept();
-
+	
 	if (!g.s.bAttenuateOthersOnTalk)
 		g.bAttenuateOthers = false;
 
 	// They might have changed their keys.
 	g.iPushToTalk = 0;
-	g.s.bExpert = qcbExpert->isChecked();
-	g.s.save();
 
 	Audio::start();
 }

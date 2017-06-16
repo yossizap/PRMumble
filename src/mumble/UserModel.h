@@ -1,35 +1,10 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef USERMODEL_H_
-#define USERMODEL_H_
+#ifndef MUMBLE_MUMBLE_USERMODEL_H_
+#define MUMBLE_MUMBLE_USERMODEL_H_
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QHash>
@@ -41,7 +16,7 @@ class User;
 class ClientUser;
 class Channel;
 
-struct ModelItem {
+struct ModelItem Q_DECL_FINAL {
 	friend class UserModel;
 
 private:
@@ -54,6 +29,7 @@ public:
 
 	ModelItem *parent;
 	QList<ModelItem *> qlChildren;
+	QList<ModelItem *> qlHiddenChildren;
 	int iUsers;
 
 	static QHash <Channel *, ModelItem *> c_qhChannels;
@@ -94,7 +70,7 @@ class UserModel : public QAbstractItemModel {
 		QIcon qiDeafenedSelf, qiDeafenedServer;
 		QIcon qiAuthenticated, qiChannel, qiLinkedChannel, qiActiveChannel;
 		QIcon qiFriend;
-		QIcon qiComment, qiCommentSeen;
+		QIcon qiComment, qiCommentSeen, qiFilter;
 		ModelItem *miRoot;
 		QSet<Channel *> qsLinked;
 		QMap<QString, ClientUser *> qmHashes;
@@ -107,23 +83,23 @@ class UserModel : public QAbstractItemModel {
 		QString stringIndex(const QModelIndex &index) const;
 	public:
 		UserModel(QObject *parent = 0);
-		~UserModel();
+		~UserModel() Q_DECL_OVERRIDE;
 
 		QModelIndex index(ClientUser *, int column = 0) const;
 		QModelIndex index(Channel *, int column = 0) const;
 		QModelIndex index(ModelItem *) const;
 
-		QVariant data(const QModelIndex &index, int role) const;
-		Qt::ItemFlags flags(const QModelIndex &index) const;
-		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-		QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-		QModelIndex parent(const QModelIndex &index) const;
-		int rowCount(const QModelIndex &parent = QModelIndex()) const;
-		int columnCount(const QModelIndex &parent = QModelIndex()) const;
-		Qt::DropActions supportedDropActions() const;
-		QStringList mimeTypes() const;
-		QMimeData *mimeData(const QModelIndexList &idx) const;
-		bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
+		QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+		Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
+		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+		QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+		QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
+		int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+		int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+		Qt::DropActions supportedDropActions() const Q_DECL_OVERRIDE;
+		QStringList mimeTypes() const Q_DECL_OVERRIDE;
+		QMimeData *mimeData(const QModelIndexList &idx) const Q_DECL_OVERRIDE;
+		bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex & parent) Q_DECL_OVERRIDE;
 
 		ClientUser *addUser(unsigned int id, const QString &name);
 		ClientUser *getUser(const QModelIndex &idx) const;
@@ -166,12 +142,12 @@ class UserModel : public QAbstractItemModel {
 		unsigned int uiSessionComment;
 		int iChannelDescription;
 	public slots:
-		void userPositionChanged();
-		void userTalkingChanged();
-		void userMuteDeafChanged();
+		/// Invalidates the model data of the ClientUser triggering this slot.
+		void userStateChanged();
 		void ensureSelfVisible();
 		void recheckLinks();
 		void updateOverlay() const;
+		void toggleChannelFiltered(Channel *c);
 };
 
 #endif

@@ -1,11 +1,16 @@
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
+
 /* Copyright (C) 2012, dark_skeleton (d-rez) <dark.skeleton@gmail.com> 
    Copyright (C) 2005-2012, Thorvald Natvig <thorvald@natvig.com>
 
    All rights reserved.
- 
+
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
-   are met: 
+   are met:
 
    - Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
@@ -29,7 +34,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "../mumble_plugin_win32.h"
+#include "../mumble_plugin_win32_32bit.h"
 
 /*
 	Arrays of bytes to find addresses accessed by respective functions so we don't have to blindly search for addresses after every update
@@ -40,7 +45,7 @@
 		2) Camera position (?)
 		3) Avatar position
 	Camera front vector function:				46 BF 00 89 15 (disassemble, then go up a few times in disassembly)
-	Unit front vector function:					89 1E 8B 5F 04 89 5E 04 8B 7F 08 89 7E 08 8B 7D 10 8D 71 28 
+	Unit front vector function:					89 1E 8B 5F 04 89 5E 04 8B 7F 08 89 7E 08 8B 7D 10 8D 71 28
 		To find the right front vector pointer, you'll need to make a pointer scan for the address that gets updated only when >you< move, using different characters in different locations. It should leave you with only two possible pointers after just 2 scans.
 	Location function:							8D 14 DB 8D 34 90 8D 4E 14 (target instruction is the one above the one you find)
 	Area function:								A3 58 11 A3 00 E8 B8 02 00 00 BA 37 00 00 00 8B CE
@@ -62,23 +67,23 @@
 		26 or 27: Town
 		0 when logged in / in character select / in loading screen
 		1 when not logged in (in login screen)
-	
-	Area Pointer: 
+
+	Area Pointer:
 		This is a 4-byte decimal stating which area we are in. Note however, that some missions have the same area assigned as cities, therefore we need our Location Pointer to distinguish where we are exactly to specify context properly.
 
 */
 
-static BYTE *camptr = (BYTE *) 0xa30274;
-static BYTE *posptr = (BYTE *) 0xa302a4;
-static BYTE *camfrontptr = (BYTE *) 0xbf46b8;
-static BYTE *frontptr_ = (BYTE *) 0xd55610;
-static BYTE *frontptr;
+static procptr32_t camptr = 0xa30274;
+static procptr32_t posptr = 0xa302a4;
+static procptr32_t camfrontptr = 0xbf46b8;
+static procptr32_t frontptr_ = 0xd55610;
+static procptr32_t frontptr;
 
-static BYTE *locationptr = (BYTE *) 0xa3fa08;
-static BYTE *areaptr = (BYTE *) 0xa31158;
+static procptr32_t locationptr = 0xa3fa08;
+static procptr32_t areaptr = 0xa31158;
 
 static char prev_location;
-static int  prev_areaid;
+static int prev_areaid;
 
 static bool calcout(float *pos, float *front, float *cam, float *camfront, float *opos, float *ofront, float *ocam, float *ocamfront) {
 
@@ -107,15 +112,15 @@ static bool calcout(float *pos, float *front, float *cam, float *camfront, float
 
 static bool refreshPointers(void)
 {
-	frontptr = NULL;
+	frontptr = 0;
 
-	frontptr = peekProc<BYTE *>(frontptr_);
+	frontptr = peekProc<procptr32_t>(frontptr_);
 	if (!frontptr)
 		return false;
-	frontptr = peekProc<BYTE *>(frontptr + 0x8);
+	frontptr = peekProc<procptr32_t>(frontptr + 0x8);
 	if (!frontptr)
 		return false;
-	frontptr = peekProc<BYTE *>(frontptr);
+	frontptr = peekProc<procptr32_t>(frontptr);
 	if (!frontptr)
 		return false;
 	frontptr = frontptr + 0x1c;
@@ -140,7 +145,7 @@ static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, floa
 
 	if (!ok) // First we check, if the game is even running or if we should unlink because it's not / it's broken
 		return false;
-	
+
 	ok = refreshPointers(); // yes, we need to do this pretty often since the pointer gets wiped and changed evey time you leave a world instance (that means on loading screens etc)
 	if (!ok) { // Next we check, if we're inside the game or in menus/in a loading screen
 		context.clear();
@@ -217,10 +222,10 @@ static MumblePlugin2 gwplug2 = {
 	trylock
 };
 
-extern "C" __declspec(dllexport) MumblePlugin *getMumblePlugin() {
+extern "C" MUMBLE_PLUGIN_EXPORT MumblePlugin *getMumblePlugin() {
 	return &gwplug;
 }
 
-extern "C" __declspec(dllexport) MumblePlugin2 *getMumblePlugin2() {
+extern "C" MUMBLE_PLUGIN_EXPORT MumblePlugin2 *getMumblePlugin2() {
 	return &gwplug2;
 }

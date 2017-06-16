@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -34,10 +9,15 @@
 
 Global *Global::g_global_struct;
 
+#ifndef Q_OS_WIN
 static void migrateDataDir() {
 #ifdef Q_OS_MAC
 	QString olddir = QDir::homePath() + QLatin1String("/Library/Preferences/Mumble");
+#if QT_VERSION >= 0x050000
+	QString newdir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#else
 	QString newdir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#endif // QT_VERSION
 	QString linksTo = QFile::readLink(olddir);
 	if (!QFile::exists(newdir) && QFile::exists(olddir) && linksTo.isEmpty()) {
 		QDir d;
@@ -57,14 +37,40 @@ static void migrateDataDir() {
 	}
 
 	qWarning("Application data migration failed.");
-#endif
+#endif // Q_OS_MAC
+
+// Qt4 used another data directory on Unix-like systems, to ensure a seamless
+// transition we must first move the users data to the new directory.
+#if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
+#if QT_VERSION >= 0x050000
+	QString olddir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/data/Mumble");
+	QString newdir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/Mumble");
+
+	if (!QFile::exists(newdir) && QFile::exists(olddir)) {
+		QDir d;
+		d.mkpath(newdir + QLatin1String("/.."));
+		if (d.rename(olddir, newdir)) {
+			qWarning("Migrated application data directory from '%s' to '%s'",
+			         qPrintable(olddir), qPrintable(newdir));
+			return;
+		}
+	} else {
+		/* Data dir has already been migrated. */
+		return;
+	}
+
+	qWarning("Application data migration failed.");
+#endif // QT_VERSION
+#endif // defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
 }
+#endif // Q_OS_WIN
 
 Global::Global() {
 	mw = 0;
 	db = 0;
 	p = 0;
 	nam = 0;
+	c = 0;
 	uiSession = 0;
 	uiDoublePush = 1000000;
 	iPushToTalk = 0;
@@ -88,10 +94,12 @@ Global::Global() {
 #endif
 
 	bAttenuateOthers = false;
+	prioritySpeakerActiveOverride = false;
 
 	bAllowHTML = true;
 	uiMessageLength = 5000;
 	uiImageLength = 131072;
+	uiMaxUsers = 0;
 
 	qs = NULL;
 
@@ -108,7 +116,11 @@ Global::Global() {
 
 	QStringList qsl;
 	qsl << QCoreApplication::instance()->applicationDirPath();
+#if QT_VERSION >= 0x050000
+	qsl << QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#else
 	qsl << QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#endif
 #if defined(Q_OS_WIN)
 	QString appdata;
 	wchar_t appData[MAX_PATH];
@@ -138,7 +150,11 @@ Global::Global() {
 			qdBasePath.setPath(appdata);
 #else
 		migrateDataDir();
+#if QT_VERSION >= 0x050000
+		qdBasePath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#else
 		qdBasePath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#endif
 #endif
 		if (! qdBasePath.exists()) {
 			QDir::root().mkpath(qdBasePath.absolutePath());
@@ -151,6 +167,8 @@ Global::Global() {
 		qdBasePath.mkpath(QLatin1String("Plugins"));
 	if (! qdBasePath.exists(QLatin1String("Overlay")))
 		qdBasePath.mkpath(QLatin1String("Overlay"));
+	if (! qdBasePath.exists(QLatin1String("Themes")))
+		qdBasePath.mkpath(QLatin1String("Themes"));
 
 	qs->setIniCodec("UTF-8");
 }

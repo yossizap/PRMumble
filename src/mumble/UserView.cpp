@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -40,33 +15,9 @@
 #include "ServerHandler.h"
 #include "UserModel.h"
 
-/*!
-  \fn bool UserView::event(QEvent *evt)
-  This implementation contains a special handler to display
-  custom what's this entries for items. All other events are
-  passed on.
-*/
-
-/*!
-  \fn void UserView::mouseReleaseEvent(QMouseEvent *evt)
-  This function is used to create custom behaviour when clicking
-  on user/channel flags (e.g. showing the comment)
-*/
-
-/*!
-  \fn void UserView::activated(const QModelIndex &idx)
-  Depending on whether idx points to a channel or user this function
-  either moves the player to the channel or opens a message window.
-  This Slot connected to the objects activated signal. The activated
-  signal could, for example, be triggered by doubleclick.
-*/
-
-/*!
-  \fn void UserView::keyboardSearch(const QString &search)
-  This implementation provides a recursive realtime search over
-  the whole channel tree. It also features delayed selection
-  with with automatic expanding of folded channels.
-*/
+const int UserDelegate::FLAG_ICON_DIMENSION = 16;
+const int UserDelegate::FLAG_ICON_PADDING = 1;
+const int UserDelegate::FLAG_DIMENSION = 18;
 
 UserDelegate::UserDelegate(QObject *p) : QStyledItemDelegate(p) {
 }
@@ -77,20 +28,36 @@ void UserDelegate::paint(QPainter * painter, const QStyleOptionViewItem &option,
 	QVariant data = m->data(idxc1);
 	QList<QVariant> ql = data.toList();
 
+	// Allow a UserView's BackgroundRole to override the current theme's default color.
+	QVariant bg = index.data(Qt::BackgroundRole);
+	if (bg.isValid()) {
+		painter->fillRect(option.rect, bg.value<QBrush>());
+	}
+
 	painter->save();
 
+#if QT_VERSION >= 0x050000
+	QStyleOptionViewItem o = option;
+#else
 	QStyleOptionViewItemV4 o = option;
+#endif
+
 	initStyleOption(&o, index);
 
 	QStyle *style = o.widget->style();
 	QIcon::Mode iconMode = QIcon::Normal;
 
 	QPalette::ColorRole colorRole = ((o.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text);
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 	// Qt's Vista Style has the wrong highlight color for treeview items
 	// We can't check for QStyleSheetStyle so we have to search the children list search for a QWindowsVistaStyle
-	if (qobject_cast<QWindowsVistaStyle *>(style) || style->findChild<QWindowsVistaStyle *>()) {
-		colorRole = QPalette::Text;
+	QList<QObject *> hierarchy = style->findChildren<QObject *>();
+	hierarchy.insert(0, style);
+	foreach (QObject *obj, hierarchy) {
+		if (QString::fromUtf8(obj->metaObject()->className()) == QString::fromUtf8("QWindowsVistaStyle")) {
+			colorRole = QPalette::Text;
+			break;
+		}
 	}
 #endif
 
@@ -98,7 +65,7 @@ void UserDelegate::paint(QPainter * painter, const QStyleOptionViewItem &option,
 	style->drawPrimitive(QStyle::PE_PanelItemViewItem, &o, painter, o.widget);
 
 	// resize rect to exclude the flag icons
-	o.rect = option.rect.adjusted(0, 0, -18 * ql.count(), 0);
+	o.rect = option.rect.adjusted(0, 0, -FLAG_DIMENSION * ql.count(), 0);
 
 	// draw icon
 	QRect decorationRect = style->subElementRect(QStyle::SE_ItemViewItemDecoration, &o, o.widget);
@@ -111,11 +78,14 @@ void UserDelegate::paint(QPainter * painter, const QStyleOptionViewItem &option,
 	style->drawItemText(painter, textRect, o.displayAlignment, o.palette, true, itemText, colorRole);
 
 	// draw flag icons to original rect
-	QRect ps = QRect(option.rect.right() - (ql.size() * 18), option.rect.y(), ql.size() * 18, option.rect.height());
+	QRect ps = QRect(option.rect.right() - (ql.size() * FLAG_DIMENSION),
+					 option.rect.y(), ql.size() * FLAG_DIMENSION,
+					 option.rect.height());
+
 	for (int i = 0; i < ql.size(); ++i) {
 		QRect r = ps;
-		r.setSize(QSize(16, 16));
-		r.translate(i * 18 + 1, 1);
+		r.setSize(QSize(FLAG_ICON_DIMENSION, FLAG_ICON_DIMENSION));
+		r.translate(i * FLAG_DIMENSION + FLAG_ICON_PADDING, FLAG_ICON_PADDING);
 		QRect p = QStyle::alignedRect(option.direction, option.decorationAlignment, r.size(), r);
 		qvariant_cast<QIcon>(ql[i]).paint(painter, p, option.decorationAlignment, iconMode, QIcon::On);
 	}
@@ -126,15 +96,14 @@ void UserDelegate::paint(QPainter * painter, const QStyleOptionViewItem &option,
 bool UserDelegate::helpEvent(QHelpEvent *evt, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index) {
 	if (index.isValid()) {
 		const QAbstractItemModel *m = index.model();
-		const QModelIndex idxc1 = index.sibling(index.row(), 1);
-		QVariant data = m->data(idxc1);
-		QList<QVariant> ql = data.toList();
-		int offset = 0;
-		offset = ql.size() * 18;
-		offset = option.rect.topRight().x() - offset;
+		const QModelIndex firstColumnIdx = index.sibling(index.row(), 1);
+		QVariant data = m->data(firstColumnIdx);
+		QList<QVariant> flagList = data.toList();
+		const int offset = flagList.size() * -FLAG_DIMENSION;
+		const int firstFlagPos = option.rect.topRight().x() + offset;
 
-		if (evt->pos().x() >= offset) {
-			return QStyledItemDelegate::helpEvent(evt, view, option, idxc1);
+		if (evt->pos().x() >= firstFlagPos) {
+			return QStyledItemDelegate::helpEvent(evt, view, option, firstColumnIdx);
 		}
 	}
 	return QStyledItemDelegate::helpEvent(evt, view, option, index);
@@ -152,6 +121,11 @@ UserView::UserView(QWidget *p) : QTreeView(p) {
 	connect(qtSearch, SIGNAL(timeout()), this, SLOT(selectSearchResult()));
 }
 
+/**
+ * This implementation contains a special handler to display
+ * custom what's this entries for items. All other events are
+ * passed on.
+ */
 bool UserView::event(QEvent *evt) {
 	if (evt->type() == QEvent::WhatsThisClicked) {
 		QWhatsThisClickedEvent *qwtce = static_cast<QWhatsThisClickedEvent *>(evt);
@@ -162,55 +136,69 @@ bool UserView::event(QEvent *evt) {
 	return QTreeView::event(evt);
 }
 
+/**
+ * This function is used to create custom behaviour when clicking
+ * on user/channel flags (e.g. showing the comment)
+ */
 void UserView::mouseReleaseEvent(QMouseEvent *evt) {
-	QPoint qpos = evt->pos();
+	QPoint clickPosition = evt->pos();
 
-	QModelIndex idx = indexAt(qpos);
+	QModelIndex idx = indexAt(clickPosition);
 	if ((evt->button() == Qt::LeftButton) && idx.isValid()) {
-		UserModel *um = static_cast<UserModel *>(model());
-		ClientUser *cu = um->getUser(idx);
-		Channel * c = um->getChannel(idx);
-		if ((cu && ! cu->qbaCommentHash.isEmpty()) ||
-		        (! cu && c && ! c->qbaDescHash.isEmpty())) {
+		UserModel *userModel = qobject_cast<UserModel *>(model());
+		ClientUser *clientUser = userModel->getUser(idx);
+		Channel *channel = userModel->getChannel(idx);
+
+		int commentFlagPxOffset = -UserDelegate::FLAG_DIMENSION;
+		bool hasComment = false;
+
+		if (clientUser && !clientUser->qbaCommentHash.isEmpty()) {
+			hasComment = true;
+
+			if (clientUser->bLocalIgnore)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->bRecording)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->bPrioritySpeaker)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->bMute)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->bSuppress)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->bSelfMute)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->bLocalMute)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->bSelfDeaf)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->bDeaf)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (! clientUser->qsFriendName.isEmpty())
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+			if (clientUser->iId >= 0)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+
+		} else if (channel && !channel->qbaDescHash.isEmpty()) {
+			hasComment = true;
+
+			if (channel->bFiltered)
+				commentFlagPxOffset -= UserDelegate::FLAG_DIMENSION;
+
+		}
+
+		if (hasComment) {
 			QRect r = visualRect(idx);
+			const int commentFlagPxPos = r.topRight().x() + commentFlagPxOffset;
 
-			int offset = 18;
-
-			if (cu) {
-				// Calculate pixel offset of comment flag
-				if (cu->bLocalIgnore)
-					offset += 18;
-				if (cu->bRecording)
-					offset += 18;
-				if (cu->bPrioritySpeaker)
-					offset += 18;
-				if (cu->bMute)
-					offset += 18;
-				if (cu->bSuppress)
-					offset += 18;
-				if (cu->bSelfMute)
-					offset += 18;
-				if (cu->bLocalMute)
-					offset += 18;
-				if (cu->bSelfDeaf)
-					offset += 18;
-				if (cu->bDeaf)
-					offset += 18;
-				if (! cu->qsFriendName.isEmpty())
-					offset += 18;
-				if (cu->iId >= 0)
-					offset += 18;
-			}
-
-			offset = r.topRight().x() - offset;
-
-			if ((qpos.x() >= offset) && (qpos.x() <= (offset+18))) {
-				QString str = um->data(idx, Qt::ToolTipRole).toString();
+			if ((clickPosition.x() >= commentFlagPxPos)
+					&& (clickPosition.x() <= (commentFlagPxPos + UserDelegate::FLAG_DIMENSION))) {
+				// Clicked comment icon
+				QString str = userModel->data(idx, Qt::ToolTipRole).toString();
 				if (str.isEmpty()) {
-					um->bClicked = true;
+					userModel->bClicked = true;
 				} else {
 					QWhatsThis::showText(viewport()->mapToGlobal(r.bottomRight()), str, this);
-					um->seenComment(idx);
+					userModel->seenComment(idx);
 				}
 				return;
 			}
@@ -236,10 +224,15 @@ void UserView::nodeActivated(const QModelIndex &idx) {
 	Channel *c = um->getChannel(idx);
 	if (c) {
 		// if a channel is activated join it
-		g.sh->joinChannel(c->iId);
+		g.sh->joinChannel(g.uiSession, c->iId);
 	}
 }
 
+/**
+ * This implementation provides a recursive realtime search over
+ * the whole channel tree. It also features delayed selection
+ * with with automatic expanding of folded channels.
+ */
 void UserView::keyboardSearch(const QString &search) {
 
 	if (qtSearch->isActive()) {
@@ -304,3 +297,92 @@ void UserView::selectSearchResult() {
 	}
 	qpmiSearch = QPersistentModelIndex();
 }
+
+bool channelHasUsers(const Channel *c)
+{
+	if(c->qlUsers.isEmpty() == false)
+		return true;
+
+	int i;	
+
+	for(i=0;i<c->qlChannels.count();i++)
+	{
+		if(channelHasUsers(c->qlChannels[i]))
+			return true;
+	}
+	return false;
+}
+
+static bool channelFiltered(const Channel *c)
+{
+	while(c) {
+		if(c->bFiltered)
+			return true;
+		c=c->cParent;
+	}
+	return false;
+}
+
+void UserView::updateChannel(const QModelIndex &idx) {
+	UserModel *um = static_cast<UserModel *>(model());
+
+	if(!idx.isValid())
+		return;
+
+	Channel * c = um->getChannel(idx);
+
+
+	for(int i = 0; idx.child(i, 0).isValid(); ++i) {
+		updateChannel(idx.child(i,0));
+	}
+
+	if(c && idx.parent().isValid()) {
+
+		if(g.s.bFilterActive == false) {
+			setRowHidden(idx.row(),idx.parent(),false);
+		} else {
+			bool isChannelUserIsIn = false;
+			
+			// Check whether user resides in this channel or a subchannel
+			if (g.uiSession != 0) {
+				const ClientUser* user = ClientUser::get(g.uiSession);
+				if (user != NULL) {
+					Channel *chan = user->cChannel;
+					while (chan) {
+						if (chan == c) {
+							isChannelUserIsIn = true;
+							break;
+						}
+						chan = chan->cParent;
+					}
+				}
+			}
+			
+			if(channelFiltered(c) && !isChannelUserIsIn) {
+				setRowHidden(idx.row(),idx.parent(),true);
+			} else {
+				if(g.s.bFilterHidesEmptyChannels && !channelHasUsers(c)) {
+					setRowHidden(idx.row(),idx.parent(),true);
+				} else {
+					setRowHidden(idx.row(),idx.parent(),false);
+				}
+			}
+		}
+	}
+}
+
+#if QT_VERSION >= 0x050000
+void UserView::dataChanged ( const QModelIndex & topLeft, const QModelIndex & bottomRight, const QVector<int> &)
+#else
+void UserView::dataChanged ( const QModelIndex & topLeft, const QModelIndex & bottomRight)
+#endif
+{
+	UserModel *um = static_cast<UserModel *>(model());
+	int nRowCount = um->rowCount();
+	int i;
+	for(i=0;i<nRowCount;i++)
+		updateChannel(um->index(i,0));
+
+	QTreeView::dataChanged(topLeft,bottomRight);
+}
+

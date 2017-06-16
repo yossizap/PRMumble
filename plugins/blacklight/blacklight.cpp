@@ -1,11 +1,16 @@
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
+
 /* Copyright (C) 2012, dark_skeleton (d-rez) <dark.skeleton@gmail.com>
    Copyright (C) 2005-2012, Thorvald Natvig <thorvald@natvig.com>
 
    All rights reserved.
- 
+
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
-   are met: 
+   are met:
 
    - Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
@@ -29,7 +34,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "../mumble_plugin_win32.h"
+#include "../mumble_plugin_win32_32bit.h"
 
 /* 
 	Arrays of bytes to find addresses accessed by respective functions so we don't have to blindly search for addresses after every update
@@ -49,10 +54,10 @@
 	TODO: Find Avatar position, front, top vectors, protect against version change (find a random pointer to check), distinguish spectator and normal mode
 */
 
-static BYTE *camfrontptr = (BYTE *)0x141bc20;
-static BYTE *camtopptr = camfrontptr + 0xC;
-static BYTE *camptr = camfrontptr + 0x18;
-static BYTE *hostipportptr;
+static procptr32_t camfrontptr = 0x141bc20;
+static procptr32_t camtopptr = camfrontptr + 0xC;
+static procptr32_t camptr = camfrontptr + 0x18;
+static procptr32_t hostipportptr;
 
 static char prev_hostipport[22];
 
@@ -70,7 +75,7 @@ static bool calcout(float *cam, float *camfront, float *camtop, float *ocam, flo
 }
 
 static bool refreshPointers(void) {
-	hostipportptr = NULL;
+	hostipportptr = 0;
 
 	hostipportptr = pModule + 0xB8C57;
 
@@ -86,11 +91,11 @@ static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, floa
 	char hostipport[sizeof(prev_hostipport)];
 
 	ok = peekProc(camfrontptr, camfront, 12) &&
-		 peekProc(camtopptr, camtop, 12) &&
-		 peekProc(hostipportptr, hostipport) &&
-		 peekProc(camptr, cam);
+	     peekProc(camtopptr, camtop, 12) &&
+	     peekProc(hostipportptr, hostipport) &&
+	     peekProc(camptr, cam);
 
-	if (!ok) 
+	if (!ok)
 		return false;
 	
 	hostipport[sizeof(hostipport) - 1] = '\0';
@@ -172,10 +177,10 @@ static MumblePlugin2 blacklightplug2 = {
 	trylock
 };
 
-extern "C" __declspec(dllexport) MumblePlugin *getMumblePlugin() {
+extern "C" MUMBLE_PLUGIN_EXPORT MumblePlugin *getMumblePlugin() {
 	return &blacklightplug;
 }
 
-extern "C" __declspec(dllexport) MumblePlugin2 *getMumblePlugin2() {
+extern "C" MUMBLE_PLUGIN_EXPORT MumblePlugin2 *getMumblePlugin2() {
 	return &blacklightplug2;
 }

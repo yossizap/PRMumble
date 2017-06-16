@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -68,7 +43,11 @@ Database::Database() {
 	int i;
 
 	datapaths << g.qdBasePath.absolutePath();
+#if QT_VERSION >= 0x050000
+	datapaths << QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#else
 	datapaths << QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#endif
 #if defined(Q_OS_UNIX) && ! defined(Q_OS_MAC)
 	datapaths << QDir::homePath() + QLatin1String("/.config/PRMumble");
 #endif
@@ -80,15 +59,19 @@ Database::Database() {
 
 	for (i = 0; (i < datapaths.size()) && ! found; i++) {
 		if (!datapaths[i].isEmpty()) {
-			QFile f(datapaths[i] + QLatin1String("/PRMumble.sqlite"));
-			if (f.exists()) {
-				db.setDatabaseName(f.fileName());
+			// Try the legacy path first, and use it if it exists.
+			// If it doesn't, use the new, non-hidden version.
+			QFile legacyDatabaseFile(datapaths[i] + QLatin1String("/.PRMumble.sqlite"));
+			if (legacyDatabaseFile.exists()) {
+				db.setDatabaseName(legacyDatabaseFile.fileName());
 				found = db.open();
 			}
-
-			QFile f2(datapaths[i] + QLatin1String("/.PRMumble.sqlite"));
-			if (f2.exists()) {
-				db.setDatabaseName(f2.fileName());
+			if (found) {
+				break;
+			}
+			QFile databaseFile(datapaths[i] + QLatin1String("/PRMumble.sqlite"));
+			if (databaseFile.exists()) {
+				db.setDatabaseName(databaseFile.fileName());
 				found = db.open();
 			}
 		}
@@ -98,11 +81,7 @@ Database::Database() {
 		for (i = 0; (i < datapaths.size()) && ! found; i++) {
 			if (!datapaths[i].isEmpty()) {
 				QDir::root().mkpath(datapaths[i]);
-#ifdef Q_OS_WIN
 				QFile f(datapaths[i] + QLatin1String("/PRMumble.sqlite"));
-#else
-				QFile f(datapaths[i] + QLatin1String("/.PRMumble.sqlite"));
-#endif
 				db.setDatabaseName(f.fileName());
 				found = db.open();
 			}
@@ -117,7 +96,7 @@ Database::Database() {
 	QFileInfo fi(db.databaseName());
 
 	if (! fi.isWritable()) {
-		QMessageBox::critical(NULL, QLatin1String("Mumble"), tr("The database '%1' is read-only. Mumble cannot store server settings (i.e. SSL certificates) until you fix this problem.").arg(fi.filePath()), QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton);
+		QMessageBox::critical(NULL, QLatin1String("Project Reality Mumble"), tr("The database '%1' is read-only. PRMumble cannot store server settings (i.e. SSL certificates) until you fix this problem.").arg(Qt::escape(fi.filePath())), QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton);
 		qWarning("Database: Database is read-only");
 	}
 
@@ -160,6 +139,12 @@ Database::Database() {
 
 	execQueryAndLogFailure(query, QLatin1String("CREATE TABLE IF NOT EXISTS `muted` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `hash` TEXT)"));
 	execQueryAndLogFailure(query, QLatin1String("CREATE UNIQUE INDEX IF NOT EXISTS `muted_hash` ON `muted`(`hash`)"));
+	execQueryAndLogFailure(query, QLatin1String("CREATE TABLE IF NOT EXISTS `volume` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `hash` TEXT, `volume` FLOAT)"));
+	execQueryAndLogFailure(query, QLatin1String("CREATE UNIQUE INDEX IF NOT EXISTS `volume_hash` ON `volume`(`hash`)"));
+
+	//Note: A previous snapshot version created a table called 'hidden'
+	execQueryAndLogFailure(query, QLatin1String("CREATE TABLE IF NOT EXISTS `filtered_channels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `server_cert_digest` TEXT NOT NULL, `channel_id` INTEGER NOT NULL)"));
+	execQueryAndLogFailure(query, QLatin1String("CREATE UNIQUE INDEX IF NOT EXISTS `filtered_channels_entry` ON `filtered_channels`(`server_cert_digest`, `channel_id`)"));
 
 	execQueryAndLogFailure(query, QLatin1String("CREATE TABLE IF NOT EXISTS `pingcache` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `hostname` TEXT, `port` INTEGER, `ping` INTEGER)"));
 	execQueryAndLogFailure(query, QLatin1String("CREATE UNIQUE INDEX IF NOT EXISTS `pingcache_host_port` ON `pingcache`(`hostname`,`port`)"));
@@ -235,10 +220,7 @@ bool Database::isLocalIgnored(const QString &hash) {
 	query.prepare(QLatin1String("SELECT `hash` FROM `ignored` WHERE `hash` = ?"));
 	query.addBindValue(hash);
 	execQueryAndLogFailure(query);
-	while (query.next()) {
-		return true;
-	}
-	return false;
+	return query.next();
 }
 
 void Database::setLocalIgnored(const QString &hash, bool ignored) {
@@ -258,10 +240,28 @@ bool Database::isLocalMuted(const QString &hash) {
 	query.prepare(QLatin1String("SELECT `hash` FROM `muted` WHERE `hash` = ?"));
 	query.addBindValue(hash);
 	execQueryAndLogFailure(query);
-	while (query.next()) {
-		return true;
+	return query.next();
+}
+
+void Database::setUserLocalVolume(const QString &hash, float volume) {
+	QSqlQuery query;
+
+	query.prepare(QLatin1String("INSERT OR REPLACE INTO `volume` (`hash`, `volume`) VALUES (?,?)"));
+	query.addBindValue(hash);
+	query.addBindValue(QString::number(volume));
+	execQueryAndLogFailure(query);
+}
+
+float Database::getUserLocalVolume(const QString &hash) {
+	QSqlQuery query;
+
+	query.prepare(QLatin1String("SELECT `volume` FROM `volume` WHERE `hash` = ?"));
+	query.addBindValue(hash);
+	execQueryAndLogFailure(query);
+	if (query.first()) {
+		return query.value(0).toString().toFloat();
 	}
-	return false;
+	return 1.0f;
 }
 
 void Database::setLocalMuted(const QString &hash, bool muted) {
@@ -275,21 +275,46 @@ void Database::setLocalMuted(const QString &hash, bool muted) {
 	execQueryAndLogFailure(query);
 }
 
-QMap<QPair<QString, unsigned short>, unsigned int> Database::getPingCache() {
+bool Database::isChannelFiltered(const QByteArray &server_cert_digest, const int channel_id) {
 	QSqlQuery query;
-	QMap<QPair<QString, unsigned short>, unsigned int> map;
+	
+	query.prepare(QLatin1String("SELECT `channel_id` FROM `filtered_channels` WHERE `server_cert_digest` = ? AND `channel_id` = ?"));
+	query.addBindValue(server_cert_digest);
+	query.addBindValue(channel_id);
+	execQueryAndLogFailure(query);
+
+	return query.next();
+}
+
+void Database::setChannelFiltered(const QByteArray &server_cert_digest, const int channel_id, const bool hidden) {
+	QSqlQuery query;
+	
+	if (hidden)
+		query.prepare(QLatin1String("INSERT INTO `filtered_channels` (`server_cert_digest`, `channel_id`) VALUES (?, ?)"));
+	else
+		query.prepare(QLatin1String("DELETE FROM `filtered_channels` WHERE `server_cert_digest` = ? AND `channel_id` = ?"));
+
+	query.addBindValue(server_cert_digest);
+	query.addBindValue(channel_id);
+
+	execQueryAndLogFailure(query);
+}
+
+QMap<UnresolvedServerAddress, unsigned int> Database::getPingCache() {
+	QSqlQuery query;
+	QMap<UnresolvedServerAddress, unsigned int> map;
 
 	query.prepare(QLatin1String("SELECT `hostname`, `port`, `ping` FROM `pingcache`"));
 	execQueryAndLogFailure(query);
 	while (query.next()) {
-		map.insert(QPair<QString, unsigned short>(query.value(0).toString(), query.value(1).toUInt()), query.value(2).toUInt());
+		map.insert(UnresolvedServerAddress(query.value(0).toString(), static_cast<unsigned short>(query.value(1).toUInt())), query.value(2).toUInt());
 	}
 	return map;
 }
 
-void Database::setPingCache(const QMap<QPair<QString, unsigned short>, unsigned int> &map) {
+void Database::setPingCache(const QMap<UnresolvedServerAddress, unsigned int> &map) {
 	QSqlQuery query;
-	QMap<QPair<QString, unsigned short>, unsigned int>::const_iterator i;
+	QMap<UnresolvedServerAddress, unsigned int>::const_iterator i;
 
 	QSqlDatabase::database().transaction();
 
@@ -298,8 +323,8 @@ void Database::setPingCache(const QMap<QPair<QString, unsigned short>, unsigned 
 
 	query.prepare(QLatin1String("REPLACE INTO `pingcache` (`hostname`, `port`, `ping`) VALUES (?,?,?)"));
 	for (i = map.constBegin(); i != map.constEnd(); ++i) {
-		query.addBindValue(i.key().first);
-		query.addBindValue(i.key().second);
+		query.addBindValue(i.key().hostname);
+		query.addBindValue(i.key().port);
 		query.addBindValue(i.value());
 		execQueryAndLogFailure(query);
 	}

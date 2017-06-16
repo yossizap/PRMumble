@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -39,6 +14,9 @@
 #include "ServerHandler.h"
 #include "../../plugins/mumble_plugin.h"
 #include "WebFetch.h"
+#include "MumbleApplication.h"
+
+#include "ManualPlugin.h"
 
 static ConfigWidget *PluginConfigDialogNew(Settings &st) {
 	return new PluginConfig(st);
@@ -56,6 +34,7 @@ struct PluginInfo {
 	QString shortname;
 	MumblePlugin *p;
 	MumblePlugin2 *p2;
+	MumblePluginQt *pqt;
 	PluginInfo();
 };
 
@@ -64,13 +43,29 @@ PluginInfo::PluginInfo() {
 	enabled = false;
 	p = NULL;
 	p2 = NULL;
+	pqt = NULL;
 }
+
+struct PluginFetchMeta {
+	QString hash;
+	QString path;
+	
+	PluginFetchMeta(const QString &hash_ = QString(), const QString &path_ = QString())
+		: hash(hash_)
+		, path(path_) { /* Empty */ }
+};
+
 
 PluginConfig::PluginConfig(Settings &st) : ConfigWidget(st) {
 	setupUi(this);
 
+#if QT_VERSION >= 0x050000
+	qtwPlugins->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+	qtwPlugins->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+#else
 	qtwPlugins->header()->setResizeMode(0, QHeaderView::Stretch);
 	qtwPlugins->header()->setResizeMode(1, QHeaderView::ResizeToContents);
+#endif
 
 	refillPluginList();
 }
@@ -105,10 +100,6 @@ void PluginConfig::save() const {
 	}
 }
 
-bool PluginConfig::expert(bool) {
-	return false;
-}
-
 PluginInfo *PluginConfig::pluginForItem(QTreeWidgetItem *i) const {
 	if (i) {
 		foreach(PluginInfo *pi, g.p->qlPlugins) {
@@ -129,10 +120,13 @@ void PluginConfig::on_qpbConfig_clicked() {
 	if (! pi)
 		return;
 
-	if (pi->p->config)
-		pi->p->config(winId());
-	else
+	if (pi->pqt && pi->pqt->config) {
+		pi->pqt->config(this);
+	} else if (pi->p->config) {
+		pi->p->config(0);
+	} else {
 		QMessageBox::information(this, QLatin1String("Mumble"), tr("Plugin has no configure function."), QMessageBox::Ok, QMessageBox::NoButton);
+	}
 }
 
 void PluginConfig::on_qpbAbout_clicked() {
@@ -145,10 +139,13 @@ void PluginConfig::on_qpbAbout_clicked() {
 	if (! pi)
 		return;
 
-	if (pi->p->about)
-		pi->p->about(winId());
-	else
+	if (pi->pqt && pi->pqt->about) {
+		pi->pqt->about(this);
+	} else if (pi->p->about) {
+		pi->p->about(0);
+	} else {
 		QMessageBox::information(this, QLatin1String("Mumble"), tr("Plugin has no about function."), QMessageBox::Ok, QMessageBox::NoButton);
+	}
 }
 
 void PluginConfig::on_qpbReload_clicked() {
@@ -166,7 +163,7 @@ void PluginConfig::refillPluginList() {
 		i->setCheckState(1, pi->enabled ? Qt::Checked : Qt::Unchecked);
 		i->setText(0, pi->description);
 		if (pi->p->longdesc)
-			i->setToolTip(0, QString::fromStdWString(pi->p->longdesc()));
+			i->setToolTip(0, Qt::escape(QString::fromStdWString(pi->p->longdesc())));
 		i->setData(0, Qt::UserRole, pi->filename);
 	}
 	qtwPlugins->setCurrentItem(qtwPlugins->topLevelItem(0));
@@ -178,8 +175,23 @@ void PluginConfig::on_qtwPlugins_currentItemChanged(QTreeWidgetItem *current, QT
 
 	PluginInfo *pi=pluginForItem(current);
 	if (pi) {
-		qpbAbout->setEnabled(pi->p->about != NULL);
-		qpbConfig->setEnabled(pi->p->config != NULL);
+		bool showAbout = false;
+		if (pi->p->about) {
+			showAbout = true;
+		}
+		if (pi->pqt && pi->pqt->about) {
+			showAbout = true;
+		}
+		qpbAbout->setEnabled(showAbout);
+
+		bool showConfig = false;
+		if (pi->p->config) {
+			showConfig = true;
+		}
+		if (pi->pqt && pi->pqt->config) {
+			showConfig = true;
+		}
+		qpbConfig->setEnabled(showConfig);
 	} else {
 		qpbAbout->setEnabled(false);
 		qpbConfig->setEnabled(false);
@@ -199,9 +211,8 @@ Plugins::Plugins(QObject *p) : QObject(p) {
 
 #ifdef QT_NO_DEBUG
 #ifndef PLUGIN_PATH
-#ifndef Q_OS_MAC
-	qsSystemPlugins=QString::fromLatin1("%1/plugins").arg(qApp->applicationDirPath());
-#else
+	qsSystemPlugins=QString::fromLatin1("%1/plugins").arg(MumbleApplication::instance()->applicationVersionRootPath());
+#ifdef Q_OS_MAC
 	qsSystemPlugins=QString::fromLatin1("%1/../Plugins").arg(qApp->applicationDirPath());
 #endif
 #else
@@ -210,7 +221,7 @@ Plugins::Plugins(QObject *p) : QObject(p) {
 
 	qsUserPlugins = g.qdBasePath.absolutePath() + QLatin1String("/Plugins");
 #else
-	qsSystemPlugins = QString::fromLatin1("%1/plugins").arg(qApp->applicationDirPath());
+	qsSystemPlugins = QString::fromLatin1("%1/plugins").arg(MumbleApplication::instance()->applicationVersionRootPath());
 	qsUserPlugins = QString();
 #endif
 
@@ -307,6 +318,14 @@ void Plugins::rescanPlugins() {
 							}
 						}
 
+						mumblePluginQtFunc mpfqt = reinterpret_cast<mumblePluginQtFunc>(pi->lib.resolve("getMumblePluginQt"));
+						if (mpfqt) {
+							pi->pqt = mpfqt();
+							if (pi->pqt->magic != MUMBLE_PLUGIN_MAGIC_QT) {
+								pi->pqt = NULL;
+							}
+						}
+
 						qlPlugins << pi;
 						continue;
 					}
@@ -317,6 +336,21 @@ void Plugins::rescanPlugins() {
 			}
 			delete pi;
 		}
+	}
+
+	// Handle built-in plugins
+	{
+#if defined(USE_MANUAL_PLUGIN)
+		// Manual plugin
+		PluginInfo *pi = new PluginInfo();
+		pi->filename = QLatin1String("manual.builtin");
+		pi->p = ManualPlugin_getMumblePlugin();
+		pi->pqt = ManualPlugin_getMumblePluginQt();
+		pi->description = QString::fromStdWString(pi->p->description);
+		pi->shortname = QString::fromStdWString(pi->p->shortname);
+		pi->enabled = g.s.qmPositionalAudioPlugins.value(pi->filename, true);
+		qlPlugins << pi;
+#endif
 	}
 }
 
@@ -403,7 +437,7 @@ void Plugins::on_Timer_timeout() {
 	QReadLocker lock(&qrwlPlugins);
 
 	if (prevlocked) {
-		g.l->log(Log::Information, tr("%1 lost link.").arg(prevlocked->shortname));
+		g.l->log(Log::Information, tr("%1 lost link.").arg(Qt::escape(prevlocked->shortname)));
 		prevlocked = NULL;
 	}
 
@@ -457,7 +491,7 @@ void Plugins::on_Timer_timeout() {
 		iPluginTry = 0;
 
 	std::multimap<std::wstring, unsigned long long int> pids;
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 	PROCESSENTRY32 pe;
 
 	pe.dwSize = sizeof(pe);
@@ -471,13 +505,62 @@ void Plugins::on_Timer_timeout() {
 		}
 		CloseHandle(hSnap);
 	}
+#elif defined(Q_OS_LINUX)
+	QDir d(QLatin1String("/proc"));
+	QStringList entries = d.entryList();
+	bool ok;
+	foreach (const QString &entry, entries) {
+		// Check if the entry is a PID
+		// by checking whether it's a number.
+		// If it is not, skip it.
+		unsigned long long int pid = static_cast<unsigned long long int>(entry.toLongLong(&ok, 10));
+		if (!ok) {
+			continue;
+		}
+
+		QString exe = QFile::symLinkTarget(QString(QLatin1String("/proc/%1/exe")).arg(entry));
+		QFileInfo fi(exe);
+		QString firstPart = fi.baseName();
+		QString completeSuffix = fi.completeSuffix();
+		QString baseName;
+		if (completeSuffix.isEmpty()) {
+			baseName = firstPart;
+		} else {
+			baseName = firstPart + QLatin1String(".") + completeSuffix;
+		}
+
+		if (baseName == QLatin1String("wine-preloader") || baseName == QLatin1String("wine64-preloader")) {
+			QFile f(QString(QLatin1String("/proc/%1/cmdline")).arg(entry));
+			if (f.open(QIODevice::ReadOnly)) {
+				QByteArray cmdline = f.readAll();
+				f.close();
+
+				int nul = cmdline.indexOf('\0');
+				if (nul != -1) {
+					cmdline.truncate(nul);
+				}
+
+				QString exe = QString::fromUtf8(cmdline);
+				if (exe.contains(QLatin1String("\\"))) {
+					int lastBackslash = exe.lastIndexOf(QLatin1String("\\"));
+					if (exe.count() > lastBackslash + 1) {
+						baseName = exe.mid(lastBackslash + 1);
+					}
+				}
+			}
+		}
+
+		if (!baseName.isEmpty()) {
+			pids.insert(std::pair<std::wstring, unsigned long long int>(baseName.toStdWString(), pid));
+		}
+	}
 #endif
 
 	PluginInfo *pi = qlPlugins.at(iPluginTry);
 	if (pi->enabled) {
 		if (pi->p2 ? pi->p2->trylock(pids) : pi->p->trylock()) {
 			pi->shortname = QString::fromStdWString(pi->p->shortname);
-			g.l->log(Log::Information, tr("%1 linked.").arg(pi->shortname));
+			g.l->log(Log::Information, tr("%1 linked.").arg(Qt::escape(pi->shortname)));
 			pi->locked = true;
 			bUnlink = false;
 			locked = pi;
@@ -487,58 +570,113 @@ void Plugins::on_Timer_timeout() {
 
 void Plugins::checkUpdates() {
 	QUrl url;
-	url.setPath(QLatin1String("/plugins.php"));
+	url.setPath(QLatin1String("/v1/pa-plugins"));
 
-	url.addQueryItem(QLatin1String("ver"), QLatin1String(QUrl::toPercentEncoding(QLatin1String(MUMBLE_RELEASE))));
+	QList<QPair<QString, QString> > queryItems;
+	queryItems << qMakePair(QString::fromUtf8("ver"), QString::fromUtf8(QUrl::toPercentEncoding(QString::fromUtf8(MUMBLE_RELEASE))));
 #if defined(Q_OS_WIN)
-	url.addQueryItem(QLatin1String("os"), QLatin1String("Win32"));
-	url.addQueryItem(QLatin1String("abi"), QLatin1String(MUMTEXT(_MSC_VER)));
+# if defined(Q_OS_WIN64)
+	queryItems << qMakePair(QString::fromUtf8("os"), QString::fromUtf8("WinX64"));
+# else
+	queryItems << qMakePair(QString::fromUtf8("os"), QString::fromUtf8("Win32"));
+# endif
+	queryItems << qMakePair(QString::fromUtf8("abi"), QString::fromUtf8(MUMTEXT(_MSC_VER)));
 #elif defined(Q_OS_MAC)
-	url.addQueryItem(QLatin1String("os"), QLatin1String("MacOSX"));
+# if defined(USE_MAC_UNIVERSAL)
+	queryItems << qMakePair(QString::fromUtf8("os"), QString::fromUtf8("MacOSX-Universal"));
+# else
+	queryItems << qMakePair(QString::fromUtf8("os"), QString::fromUtf8("MacOSX"));
+# endif
 #else
-	url.addQueryItem(QLatin1String("os"), QLatin1String("Unix"));
+	queryItems << qMakePair(QString::fromUtf8("os"), QString::fromUtf8("Unix"));
 #endif
 
+
 #ifdef QT_NO_DEBUG
-	WebFetch::fetch(url, this, SLOT(fetched(QByteArray,QUrl)));
+#if QT_VERSION >= 0x050000
+	QUrlQuery query;
+	query.setQueryItems(queryItems);
+	url.setQuery(query);
+#else
+	for (int i = 0; i < queryItems.size(); i++) {
+		const QPair<QString, QString> &queryPair = queryItems.at(i);
+		url.addQueryItem(queryPair.first, queryPair.second);
+	}
+#endif
+	WebFetch::fetch(QLatin1String("update"), url, this, SLOT(fetchedUpdatePAPlugins(QByteArray,QUrl)));
 #else
 	g.mw->msgBox(tr("Skipping plugin update in debug mode."));
 #endif
 }
 
-void Plugins::fetched(QByteArray data, QUrl url) {
+void Plugins::fetchedUpdatePAPlugins(QByteArray data, QUrl) {
 	if (data.isNull())
 		return;
 
 	bool rescan = false;
-	const QString &path = url.path();
-	if (path == QLatin1String("/plugins.php")) {
-		qmPluginHash.clear();
-		QDomDocument doc;
-		doc.setContent(data);
+	qmPluginFetchMeta.clear();
+	QDomDocument doc;
+	doc.setContent(data);
 
-		QDomElement root=doc.documentElement();
-		QDomNode n = root.firstChild();
-		while (!n.isNull()) {
-			QDomElement e = n.toElement();
-			if (!e.isNull()) {
-				if (e.tagName() == QLatin1String("plugin")) {
-					QString name = QFileInfo(e.attribute(QLatin1String("name"))).fileName();
-					QString hash = e.attribute(QLatin1String("hash"));
-					qmPluginHash.insert(name, hash);
+	QDomElement root=doc.documentElement();
+	QDomNode n = root.firstChild();
+	while (!n.isNull()) {
+		QDomElement e = n.toElement();
+		if (!e.isNull()) {
+			if (e.tagName() == QLatin1String("plugin")) {
+				QString name = QFileInfo(e.attribute(QLatin1String("name"))).fileName();
+				QString hash = e.attribute(QLatin1String("hash"));
+				QString path = e.attribute(QLatin1String("path"));
+				qmPluginFetchMeta.insert(name, PluginFetchMeta(hash, path));
+			}
+		}
+		n = n.nextSibling();
+	}
+
+	QDir qd(qsSystemPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
+	QDir qdu(qsUserPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
+
+	QFileInfoList libs = qd.entryInfoList();
+	foreach(const QFileInfo &libinfo, libs) {
+		QString libname = libinfo.absoluteFilePath();
+		QString filename = libinfo.fileName();
+		PluginFetchMeta pfm = qmPluginFetchMeta.value(filename);
+		QString wanthash = pfm.hash;
+		if (! wanthash.isNull() && QLibrary::isLibrary(libname)) {
+			QFile f(libname);
+			if (wanthash.isEmpty()) {
+				// Outdated plugin
+				if (f.exists()) {
+					clearPlugins();
+					f.remove();
+					rescan=true;
+				}
+			} else if (f.open(QIODevice::ReadOnly)) {
+				QString h = QLatin1String(sha1(f.readAll()).toHex());
+				f.close();
+				if (h == wanthash) {
+					if (qd != qdu) {
+						QFile qfuser(qsUserPlugins + QString::fromLatin1("/") + filename);
+						if (qfuser.exists()) {
+							clearPlugins();
+							qfuser.remove();
+							rescan=true;
+						}
+					}
+					// Mark for removal from userplugins
+					qmPluginFetchMeta.insert(filename, PluginFetchMeta());
 				}
 			}
-			n = n.nextSibling();
 		}
+	}
 
-		QDir qd(qsSystemPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
-		QDir qdu(qsUserPlugins, QString(), QDir::Name, QDir::Files | QDir::Readable);
-
-		QFileInfoList libs = qd.entryInfoList();
+	if (qd != qdu) {
+		libs = qdu.entryInfoList();
 		foreach(const QFileInfo &libinfo, libs) {
 			QString libname = libinfo.absoluteFilePath();
 			QString filename = libinfo.fileName();
-			QString wanthash = qmPluginHash.value(filename);
+			PluginFetchMeta pfm = qmPluginFetchMeta.value(filename);
+			QString wanthash = pfm.hash;
 			if (! wanthash.isNull() && QLibrary::isLibrary(libname)) {
 				QFile f(libname);
 				if (wanthash.isEmpty()) {
@@ -552,120 +690,102 @@ void Plugins::fetched(QByteArray data, QUrl url) {
 					QString h = QLatin1String(sha1(f.readAll()).toHex());
 					f.close();
 					if (h == wanthash) {
-						if (qd != qdu) {
-							QFile qfuser(qsUserPlugins + QString::fromLatin1("/") + filename);
-							if (qfuser.exists()) {
-								clearPlugins();
-								qfuser.remove();
-								rescan=true;
-							}
-						}
-						// Mark for removal from userplugins
-						qmPluginHash.insert(filename, QString());
+						qmPluginFetchMeta.remove(filename);
 					}
 				}
 			}
 		}
-
-		if (qd != qdu) {
-			libs = qdu.entryInfoList();
-			foreach(const QFileInfo &libinfo, libs) {
-				QString libname = libinfo.absoluteFilePath();
-				QString filename = libinfo.fileName();
-				QString wanthash = qmPluginHash.value(filename);
-				if (! wanthash.isNull() && QLibrary::isLibrary(libname)) {
-					QFile f(libname);
-					if (wanthash.isEmpty()) {
-						// Outdated plugin
-						if (f.exists()) {
-							clearPlugins();
-							f.remove();
-							rescan=true;
-						}
-					} else if (f.open(QIODevice::ReadOnly)) {
-						QString h = QLatin1String(sha1(f.readAll()).toHex());
-						f.close();
-						if (h == wanthash) {
-							qmPluginHash.remove(filename);
-						}
-					}
-				}
+	}
+	QMap<QString, PluginFetchMeta>::const_iterator i;
+	for (i = qmPluginFetchMeta.constBegin(); i != qmPluginFetchMeta.constEnd(); ++i) {
+		PluginFetchMeta pfm = i.value();
+		if (! pfm.hash.isEmpty()) {
+			QUrl pluginDownloadUrl;
+			if (pfm.path.isEmpty()) {
+				pluginDownloadUrl.setPath(QString::fromLatin1("%1").arg(i.key()));
+			} else {
+				pluginDownloadUrl.setPath(pfm.path);
 			}
-		}
-		QMap<QString, QString>::const_iterator i;
-		for (i = qmPluginHash.constBegin(); i != qmPluginHash.constEnd(); ++i) {
-			if (! i.value().isEmpty()) {
-				QUrl url;
-				url.setPath(QString::fromLatin1("plugins/%1").arg(i.key()));
 
-				WebFetch::fetch(url, this, SLOT(fetched(QByteArray,QUrl)));
-			}
+			WebFetch::fetch(QLatin1String("pa-plugin-dl"), pluginDownloadUrl, this, SLOT(fetchedPAPluginDL(QByteArray,QUrl)));
 		}
-	} else {
-		QString fname = QFileInfo(path).fileName();
-		if (qmPluginHash.contains(fname)) {
-			if (qmPluginHash.value(fname) == QLatin1String(sha1(data).toHex())) {
-				bool verified = true;
+	}
+
+	if (rescan)
+		rescanPlugins();
+}
+
+void Plugins::fetchedPAPluginDL(QByteArray data, QUrl url) {
+	if (data.isNull())
+		return;
+
+	bool rescan = false;
+
+	const QString &urlPath = url.path();
+	QString fname = QFileInfo(urlPath).fileName();
+	if (qmPluginFetchMeta.contains(fname)) {
+		PluginFetchMeta pfm = qmPluginFetchMeta.value(fname);
+		if (pfm.hash == QLatin1String(sha1(data).toHex())) {
+			bool verified = true;
 #ifdef Q_OS_WIN
-				verified = false;
-				QString tempname;
-				std::wstring tempnative;
-				{
-					QTemporaryFile temp(QDir::tempPath() + QLatin1String("/plugin_XXXXXX.dll"));
-					if (temp.open()) {
-						tempname = temp.fileName();
-						tempnative = QDir::toNativeSeparators(tempname).toStdWString();
-						temp.write(data);
-						temp.setAutoRemove(false);
-					}
+			verified = false;
+			QString tempname;
+			std::wstring tempnative;
+			{
+				QTemporaryFile temp(QDir::tempPath() + QLatin1String("/plugin_XXXXXX.dll"));
+				if (temp.open()) {
+					tempname = temp.fileName();
+					tempnative = QDir::toNativeSeparators(tempname).toStdWString();
+					temp.write(data);
+					temp.setAutoRemove(false);
 				}
-				if (! tempname.isNull()) {
-					WINTRUST_FILE_INFO file;
-					ZeroMemory(&file, sizeof(file));
-					file.cbStruct = sizeof(file);
-					file.pcwszFilePath = tempnative.c_str();
+			}
+			if (! tempname.isNull()) {
+				WINTRUST_FILE_INFO file;
+				ZeroMemory(&file, sizeof(file));
+				file.cbStruct = sizeof(file);
+				file.pcwszFilePath = tempnative.c_str();
 
-					WINTRUST_DATA data;
-					ZeroMemory(&data, sizeof(data));
-					data.cbStruct = sizeof(data);
-					data.dwUIChoice = WTD_UI_NONE;
-					data.fdwRevocationChecks = WTD_REVOKE_NONE;
-					data.dwUnionChoice = WTD_CHOICE_FILE;
-					data.pFile = &file;
-					data.dwProvFlags = WTD_SAFER_FLAG | WTD_USE_DEFAULT_OSVER_CHECK | WTD_LIFETIME_SIGNING_FLAG;
-					data.dwUIContext = WTD_UICONTEXT_INSTALL;
+				WINTRUST_DATA data;
+				ZeroMemory(&data, sizeof(data));
+				data.cbStruct = sizeof(data);
+				data.dwUIChoice = WTD_UI_NONE;
+				data.fdwRevocationChecks = WTD_REVOKE_NONE;
+				data.dwUnionChoice = WTD_CHOICE_FILE;
+				data.pFile = &file;
+				data.dwProvFlags = WTD_SAFER_FLAG | WTD_USE_DEFAULT_OSVER_CHECK;
+				data.dwUIContext = WTD_UICONTEXT_INSTALL;
 
-					static GUID guid = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+				static GUID guid = WINTRUST_ACTION_GENERIC_VERIFY_V2;
 
-					LONG ts = WinVerifyTrust(0, &guid , &data);
+				LONG ts = WinVerifyTrust(0, &guid , &data);
 
-					QFile deltemp(tempname);
-					deltemp.remove();
-					verified = (ts == 0);
-				}
+				QFile deltemp(tempname);
+				deltemp.remove();
+				verified = (ts == 0);
+			}
 #endif
-				if (verified) {
-					clearPlugins();
+			if (verified) {
+				clearPlugins();
 
-					QFile f;
-					f.setFileName(qsSystemPlugins + QLatin1String("/") + fname);
+				QFile f;
+				f.setFileName(qsSystemPlugins + QLatin1String("/") + fname);
+				if (f.open(QIODevice::WriteOnly)) {
+					f.write(data);
+					f.close();
+					g.mw->msgBox(tr("Downloaded new or updated plugin to %1.").arg(Qt::escape(f.fileName())));
+				} else {
+					f.setFileName(qsUserPlugins + QLatin1String("/") + fname);
 					if (f.open(QIODevice::WriteOnly)) {
 						f.write(data);
 						f.close();
-						g.mw->msgBox(tr("Downloaded new or updated plugin to %1.").arg(f.fileName()));
+						g.mw->msgBox(tr("Downloaded new or updated plugin to %1.").arg(Qt::escape(f.fileName())));
 					} else {
-						f.setFileName(qsUserPlugins + QLatin1String("/") + fname);
-						if (f.open(QIODevice::WriteOnly)) {
-							f.write(data);
-							f.close();
-							g.mw->msgBox(tr("Downloaded new or updated plugin to %1.").arg(f.fileName()));
-						} else {
-							g.mw->msgBox(tr("Failed to install new plugin to %1.").arg(f.fileName()));
-						}
+						g.mw->msgBox(tr("Failed to install new plugin to %1.").arg(Qt::escape(f.fileName())));
 					}
-
-					rescan=true;
 				}
+
+				rescan=true;
 			}
 		}
 	}

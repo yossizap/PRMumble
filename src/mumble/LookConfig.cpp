@@ -1,37 +1,12 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2009-2011, Stefan Hacker <dd0t@users.sourceforge.net>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
 #include "LookConfig.h"
+#include "Themes.h"
 
 #include "AudioInput.h"
 #include "AudioOutput.h"
@@ -54,19 +29,25 @@ LookConfig::LookConfig(Settings &st) : ConfigWidget(st) {
 
 	qcbLanguage->addItem(tr("System default"));
 	QDir d(QLatin1String(":"),QLatin1String("mumble_*.qm"),QDir::Name,QDir::Files);
-	QStringList langs;
 	foreach(const QString &key, d.entryList()) {
 		QString cc = key.mid(7,key.indexOf(QLatin1Char('.'))-7);
-		langs << cc;
-		qcbLanguage->addItem(cc);
+		QLocale tmpLocale = QLocale(cc);
+
+		//If there is no native language name, use the locale
+		QString displayName = cc;
+		if(!tmpLocale.nativeLanguageName().isEmpty()) {
+			displayName = QString(QLatin1String("%1 (%2)"))
+			        .arg(tmpLocale.nativeLanguageName())
+			        .arg(cc);
+		} else if (cc == QLatin1String("eo")){
+			// Can't initialize QLocale for a countryless language (QTBUG-8452, QTBUG-14592).
+			// We only have one so special case it.
+			displayName = QLatin1String("Esperanto (eo)");
+		}
+		
+		qcbLanguage->addItem(displayName, QVariant(cc));
 	}
 
-	QStringList styles = QStyleFactory::keys();
-	styles.sort();
-	qcbStyle->addItem(tr("System default"));
-	foreach(QString key, styles) {
-		qcbStyle->addItem(key);
-	}
 	qcbExpand->addItem(tr("None"), Settings::NoChannels);
 	qcbExpand->addItem(tr("Only with users"), Settings::ChannelsWithUsers);
 	qcbExpand->addItem(tr("All"), Settings::AllChannels);
@@ -75,20 +56,31 @@ LookConfig::LookConfig(Settings &st) : ConfigWidget(st) {
 	qcbChannelDrag->insertItem(Settings::DoNothing, tr("Do Nothing"), Settings::DoNothing);
 	qcbChannelDrag->insertItem(Settings::Move, tr("Move"), Settings::Move);
 	
-	QStyledItemDelegate* itemDelegate1 = new QStyledItemDelegate();
-	qcbStyle->setItemDelegate(itemDelegate1);
+	qcbUserDrag->insertItem(Settings::Ask, tr("Ask"), Settings::Ask);
+	qcbUserDrag->insertItem(Settings::DoNothing, tr("Do Nothing"), Settings::DoNothing);
+	qcbUserDrag->insertItem(Settings::Move, tr("Move"), Settings::Move);
 	
-	QStyledItemDelegate* itemDelegate2 = new QStyledItemDelegate();
-	qcbLanguage->setItemDelegate(itemDelegate2);
+	QDir userThemeDirectory = Themes::getUserThemesDirectory();
+	if (userThemeDirectory.exists()) {
+		m_themeDirectoryWatcher = new QFileSystemWatcher(this);
+		
+		// Use a timer to cut down floods of directory changes. We only want
+		// to trigger a refresh after nothing has happened for 200ms in the
+		// watched directory.
+		m_themeDirectoryDebouncer = new QTimer(this);
+		m_themeDirectoryDebouncer->setSingleShot(true);
+		m_themeDirectoryDebouncer->setInterval(200);
+		m_themeDirectoryDebouncer->connect(m_themeDirectoryWatcher, SIGNAL(directoryChanged(QString)), SLOT(start()));
+		
+		connect(m_themeDirectoryDebouncer, SIGNAL(timeout()), SLOT(themeDirectoryChanged()));
+		m_themeDirectoryWatcher->addPath(userThemeDirectory.path());
+		
+		QUrl userThemeDirectoryUrl = QUrl::fromLocalFile(userThemeDirectory.path());
+		//: This link is located next to the theme heading in the ui config and opens the user theme directory
+		qlThemesDirectory->setText(tr("<a href=\"%1\">Browse</a>").arg(userThemeDirectoryUrl.toString()));
+		qlThemesDirectory->setOpenExternalLinks(true);
+	}
 	
-	QStyledItemDelegate* itemDelegate3 = new QStyledItemDelegate();
-	qcbAlwaysOnTop->setItemDelegate(itemDelegate3);
-	
-	QStyledItemDelegate* itemDelegate4 = new QStyledItemDelegate();
-	qcbChannelDrag->setItemDelegate(itemDelegate4);
-	
-	QStyledItemDelegate* itemDelegate5 = new QStyledItemDelegate();
-	qcbExpand->setItemDelegate(itemDelegate5);
 }
 
 QString LookConfig::title() const {
@@ -99,10 +91,38 @@ QIcon LookConfig::icon() const {
 	return QIcon(QLatin1String("skin:config_ui.png"));
 }
 
+void LookConfig::reloadThemes(const boost::optional<ThemeInfo::StyleInfo> configuredStyle) {
+	const ThemeMap themes = Themes::getThemes();
+	
+	int selectedThemeEntry = 0;
+	
+	qcbTheme->clear();
+	qcbTheme->addItem(tr("None"));
+	for (ThemeMap::const_iterator theme = themes.begin();
+	     theme != themes.end();
+	     ++theme) {
+		
+		for (ThemeInfo::StylesMap::const_iterator styleit = theme->styles.begin();
+		     styleit != theme->styles.end();
+		     ++styleit) {
+			
+			if (configuredStyle
+			     && configuredStyle->themeName == styleit->themeName
+			     && configuredStyle->name == styleit->name) {
+				selectedThemeEntry = qcbTheme->count();
+			}
+			
+			qcbTheme->addItem(theme->name + QLatin1String(" - ") + styleit->name, QVariant::fromValue(*styleit));
+		}
+	}
+	
+	qcbTheme->setCurrentIndex(selectedThemeEntry);
+}
+
 void LookConfig::load(const Settings &r) {
 	loadComboBox(qcbLanguage, 0);
-	loadComboBox(qcbStyle, 0);
 	loadComboBox(qcbChannelDrag, 0);
+	loadComboBox(qcbUserDrag, 0);
 
 	// Load Layout checkbox state
 	switch (r.wlWindowLayout) {
@@ -124,48 +144,43 @@ void LookConfig::load(const Settings &r) {
 
 
 	for (int i=0;i<qcbLanguage->count();i++) {
-		if (qcbLanguage->itemText(i) == r.qsLanguage) {
+		if (qcbLanguage->itemData(i).toString() == r.qsLanguage) {
 			loadComboBox(qcbLanguage, i);
 			break;
 		}
 	}
-	for (int i=0;i<qcbStyle->count();i++) {
-		if (qcbStyle->itemText(i) == r.qsStyle) {
-			loadComboBox(qcbStyle, i);
-			break;
-		}
-	}
-
+	
 	loadComboBox(qcbAlwaysOnTop, r.aotbAlwaysOnTop);
 
-	qleCSS->setText(r.qsSkin);
 	loadComboBox(qcbExpand, r.ceExpand);
 	loadComboBox(qcbChannelDrag, r.ceChannelDrag);
+	loadComboBox(qcbUserDrag, r.ceUserDrag);
 	loadCheckBox(qcbUsersTop, r.bUserTop);
 	loadCheckBox(qcbAskOnQuit, r.bAskOnQuit);
+	loadCheckBox(qcbEnableDeveloperMenu, r.bEnableDeveloperMenu);
 	loadCheckBox(qcbHideTray, r.bHideInTray);
 	loadCheckBox(qcbStateInTray, r.bStateInTray);
 	loadCheckBox(qcbShowUserCount, r.bShowUserCount);
 	loadCheckBox(qcbShowContextMenuInMenuBar, r.bShowContextMenuInMenuBar);
+	loadCheckBox(qcbShowTransmitModeComboBox, r.bShowTransmitModeComboBox);
 	loadCheckBox(qcbHighContrast, r.bHighContrast);
 	loadCheckBox(qcbChatBarUseSelection, r.bChatBarUseSelection);
+	loadCheckBox(qcbFilterHidesEmptyChannels, r.bFilterHidesEmptyChannels);
+	
+	const boost::optional<ThemeInfo::StyleInfo> configuredStyle = Themes::getConfiguredStyle(r);
+	reloadThemes(configuredStyle);
 }
 
 void LookConfig::save() const {
+	const QString oldLanguage = s.qsLanguage;
 	if (qcbLanguage->currentIndex() == 0)
 		s.qsLanguage = QString();
 	else
-		s.qsLanguage = qcbLanguage->currentText();
-
-	if (qcbStyle->currentIndex() == 0)
-		s.qsStyle = QString();
-	else
-		s.qsStyle = qcbStyle->currentText();
-
-	if (qleCSS->text().isEmpty())
-		s.qsSkin = QString();
-	else
-		s.qsSkin = qleCSS->text();
+		s.qsLanguage = qcbLanguage->itemData(qcbLanguage->currentIndex()).toString();
+	
+	if (s.qsLanguage != oldLanguage) {
+		s.requireRestartToApply = true;
+	}
 
 	// Save Layout radioboxes state
 	if (qrbLClassic->isChecked()) {
@@ -180,53 +195,43 @@ void LookConfig::save() const {
 
 	s.ceExpand=static_cast<Settings::ChannelExpand>(qcbExpand->currentIndex());
 	s.ceChannelDrag=static_cast<Settings::ChannelDrag>(qcbChannelDrag->currentIndex());
-	s.bUserTop=qcbUsersTop->isChecked();
+	s.ceUserDrag=static_cast<Settings::ChannelDrag>(qcbUserDrag->currentIndex());
+	
+	if (qcbUsersTop->isChecked() != s.bUserTop) {
+		s.bUserTop = qcbUsersTop->isChecked();
+		s.requireRestartToApply = true;
+	}
+	
 	s.aotbAlwaysOnTop = static_cast<Settings::AlwaysOnTopBehaviour>(qcbAlwaysOnTop->currentIndex());
 	s.bAskOnQuit = qcbAskOnQuit->isChecked();
+	s.bEnableDeveloperMenu = qcbEnableDeveloperMenu->isChecked();
 	s.bHideInTray = qcbHideTray->isChecked();
 	s.bStateInTray = qcbStateInTray->isChecked();
 	s.bShowUserCount = qcbShowUserCount->isChecked();
 	s.bShowContextMenuInMenuBar = qcbShowContextMenuInMenuBar->isChecked();
+	s.bShowTransmitModeComboBox = qcbShowTransmitModeComboBox->isChecked();
 	s.bHighContrast = qcbHighContrast->isChecked();
 	s.bChatBarUseSelection = qcbChatBarUseSelection->isChecked();
+	s.bFilterHidesEmptyChannels = qcbFilterHidesEmptyChannels->isChecked();
+	
+	QVariant themeData = qcbTheme->itemData(qcbTheme->currentIndex());
+	if (themeData.isNull()) {
+		Themes::setConfiguredStyle(s, boost::none, s.requireRestartToApply);
+	} else {
+		Themes::setConfiguredStyle(s, themeData.value<ThemeInfo::StyleInfo>(), s.requireRestartToApply);
+	}
 }
 
 void LookConfig::accept() const {
-	if (! s.qsStyle.isEmpty() && g.qsCurrentStyle != s.qsStyle) {
-		qApp->setStyle(s.qsStyle);
-		g.qsCurrentStyle = s.qsStyle;
-	}
-	if (s.qsSkin.isEmpty()) {
-		if (qApp->styleSheet() != MainWindow::defaultStyleSheet) {
-			qApp->setStyleSheet(MainWindow::defaultStyleSheet);
-			g.mw->qteLog->document()->setDefaultStyleSheet(qApp->styleSheet());
-		}
-	} else {
-		QFile file(s.qsSkin);
-		file.open(QFile::ReadOnly);
-		QString sheet = QLatin1String(file.readAll());
-		if (! sheet.isEmpty() && (sheet != qApp->styleSheet())) {
-			qApp->setStyleSheet(sheet);
-			g.mw->qteLog->document()->setDefaultStyleSheet(sheet);
-		}
-	}
 	g.mw->setShowDockTitleBars(g.s.wlWindowLayout == Settings::LayoutCustom);
 }
 
-bool LookConfig::expert(bool b) {
-	qcbExpand->setVisible(b);
-	qliExpand->setVisible(b);
-	qcbUsersTop->setVisible(b);
-	qcbStyle->setVisible(b);
-	qliStyle->setVisible(b);
-	qcbStateInTray->setVisible(b);
-	qcbShowContextMenuInMenuBar->setVisible(b);
-	return true;
-}
-
-void LookConfig::on_qpbSkinFile_clicked(bool) {
-	QString file = QFileDialog::getOpenFileName(this, tr("Choose skin file"), QString(), QLatin1String("*.qss"));
-	if (! file.isEmpty()) {
-		qleCSS->setText(file);
+void LookConfig::themeDirectoryChanged() {
+	qWarning() << "Theme directory changed";
+	QVariant themeData = qcbTheme->itemData(qcbTheme->currentIndex());
+	if (themeData.isNull()) {
+		reloadThemes(boost::none);
+	} else {
+		reloadThemes(themeData.value<ThemeInfo::StyleInfo>());
 	}
 }

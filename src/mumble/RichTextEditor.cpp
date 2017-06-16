@@ -1,32 +1,7 @@
-/* copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -35,8 +10,12 @@
 #include "Global.h"
 #include "Log.h"
 #include "MainWindow.h"
+#include "XMLTools.h"
 
 RichTextHtmlEdit::RichTextHtmlEdit(QWidget *p) : QTextEdit(p) {
+	m_document = new LogDocument(this);
+	m_document->setDefaultStyleSheet(qApp->styleSheet());
+	setDocument(m_document);
 }
 
 /* On nix, some programs send utf8, some send wchar_t. Some zeroterminate once, some twice, some not at all.
@@ -82,8 +61,6 @@ void RichTextHtmlEdit::insertFromMimeData(const QMimeData *source) {
 
 #ifndef QT_NO_DEBUG
 	qWarning() << "RichTextHtmlEdit::insertFromMimeData" << source->formats();
-	foreach(const QString &format, source->formats())
-		qWarning() << format << decodeMimeString(source->data(format));
 #endif
 
 	if (source->hasImage()) {
@@ -117,8 +94,7 @@ void RichTextHtmlEdit::insertFromMimeData(const QMimeData *source) {
 #endif
 			urls = decodeMimeString(source->data(QLatin1String("text/uri-list"))).split(newline);
 		if (! urls.isEmpty())
-			uri = urls.at(0);
-		uri = urls.at(0).trimmed();
+			uri = urls.at(0).trimmed();
 	}
 
 	if (uri.isEmpty()) {
@@ -143,8 +119,13 @@ void RichTextHtmlEdit::insertFromMimeData(const QMimeData *source) {
 	if (! uri.isEmpty()) {
 		if (title.isEmpty())
 			title = uri;
+#if QT_VERSION >= 0x050000
+		uri = uri.toHtmlEscaped();
+		title = title.toHtmlEscaped();
+#else
 		uri = Qt::escape(uri);
 		title = Qt::escape(title);
+#endif
 
 		insertHtml(QString::fromLatin1("<a href=\"%1\">%2</a>").arg(uri, title));
 		return;
@@ -171,8 +152,14 @@ QString RichTextEditorLink::text() const {
 	QUrl url(qleUrl->text(), QUrl::StrictMode);
 	QString txt = qleText->text();
 
+#if QT_VERSION >= 0x050000
+	txt = txt.toHtmlEscaped();
+#else
+	txt = Qt::escape(txt);
+#endif
+
 	if (url.isValid() && ! url.isRelative() && ! txt.isEmpty()) {
-		return QString::fromLatin1("<a href=\"%1\">%2</a>").arg(url.toString(), Qt::escape(txt));
+		return QString::fromLatin1("<a href=\"%1\">%2</a>").arg(url.toString(), txt);
 	}
 
 	return QString();
@@ -197,6 +184,9 @@ RichTextEditor::RichTextEditor(QWidget *p) : QTabWidget(p) {
 	updateActions();
 
 	qteRichText->setFocus();
+
+	qteRichText->installEventFilter(this);
+	qptePlainText->installEventFilter(this);
 }
 
 bool RichTextEditor::isModified() const {
@@ -240,7 +230,7 @@ void RichTextEditor::on_qaImage_triggered() {
 	if (qba.isEmpty())
 		return;
 
-	if ((g.uiImageLength > 0) && (qba.length() > g.uiImageLength)) {
+	if ((g.uiImageLength > 0) && (static_cast<unsigned int>(qba.length()) > g.uiImageLength)) {
 		QMessageBox::warning(this, tr("Failed to load image"), tr("Image file too large to embed in document. Please use images smaller than %1 kB.").arg(g.uiImageLength /1024));
 		return;
 	}
@@ -281,11 +271,11 @@ void RichTextEditor::on_qteRichText_textChanged() {
 
 	richToPlain();
 
-	const QString &text = qptePlainText->toPlainText();
+	const QString &plainText = qptePlainText->toPlainText();
 
 	bool over = true;
 
-	unsigned int imagelength = text.length();
+	unsigned int imagelength = plainText.length();
 
 
 	if (g.uiMessageLength && imagelength <= g.uiMessageLength) {
@@ -294,7 +284,7 @@ void RichTextEditor::on_qteRichText_textChanged() {
 		over = true;
 	} else {
 		QString qsOut;
-		QXmlStreamReader qxsr(QString::fromLatin1("<document>%1</document>").arg(text));
+		QXmlStreamReader qxsr(QString::fromLatin1("<document>%1</document>").arg(plainText));
 		QXmlStreamWriter qxsw(&qsOut);
 		while (! qxsr.atEnd()) {
 			switch (qxsr.readNext()) {
@@ -367,206 +357,6 @@ void RichTextEditor::updateActions() {
 	updateColor(qteRichText->textColor());
 }
 
-/* Recursively parse and output XHTML.
- * This will drop <head>, <html> etc, take the contents of <body> and strip out unnecesarry styles.
- * It will also change <span style=""> into matching <b>, <i> or <u>.
- */
-
-static void recurseParse(QXmlStreamReader &reader, QXmlStreamWriter &writer, int &paragraphs, const QMap<QString, QString> &opstyle = QMap<QString, QString>(), const int close = 0, bool ignore = true) {
-	while (! reader.atEnd()) {
-		QXmlStreamReader::TokenType tt = reader.readNext();
-
-		QXmlStreamAttributes a = reader.attributes();
-		QMap<QString, QString> style;
-		QMap<QString, QString> pstyle = opstyle;
-
-		QStringRef styleref = a.value(QLatin1String("style"));
-		if (!styleref.isNull()) {
-			QString stylestring = styleref.toString();
-			QStringList styles = stylestring.split(QLatin1String(";"), QString::SkipEmptyParts);
-			foreach(QString s, styles) {
-				s = s.simplified();
-				int idx = s.indexOf(QLatin1Char(':'));
-				QString key = (idx > 0) ? s.left(idx).simplified() : s;
-				QString val = (idx > 0) ? s.mid(idx+1).simplified() : QString();
-
-				if (! pstyle.contains(key) || (pstyle.value(key) != val)) {
-					style.insert(key,val);
-					pstyle.insert(key,val);
-				}
-			}
-		}
-
-		switch (tt) {
-			case QXmlStreamReader::StartElement: {
-					QString name = reader.name().toString();
-					int rclose = 1;
-					if (name == QLatin1String("body")) {
-						rclose = 0;
-						ignore = false;
-					} else if (name == QLatin1String("span")) {
-						// Substitute style with <b>, <i> and <u>
-
-						rclose = 0;
-						if (style.value(QLatin1String("font-weight")) == QLatin1String("600")) {
-							writer.writeStartElement(QLatin1String("b"));
-							rclose++;
-							style.remove(QLatin1String("font-weight"));
-						}
-						if (style.value(QLatin1String("font-style")) == QLatin1String("italic")) {
-							writer.writeStartElement(QLatin1String("i"));
-							rclose++;
-							style.remove(QLatin1String("font-style"));
-						}
-						if (style.value(QLatin1String("text-decoration")) == QLatin1String("underline")) {
-							writer.writeStartElement(QLatin1String("u"));
-							rclose++;
-							style.remove(QLatin1String("text-decoration"));
-						}
-						if (! style.isEmpty()) {
-							rclose++;
-							writer.writeStartElement(name);
-
-							QStringList qsl;
-							QMap<QString, QString>::const_iterator i;
-							for (i=style.constBegin(); i != style.constEnd(); ++i) {
-								if (! i.value().isEmpty())
-									qsl << QString::fromLatin1("%1:%2").arg(i.key(), i.value());
-								else
-									qsl << i.key();
-							}
-
-							writer.writeAttribute(QLatin1String("style"), qsl.join(QLatin1String("; ")));
-						}
-					} else if (name == QLatin1String("p")) {
-						paragraphs++;
-						if (paragraphs == 1) {
-							// Ignore first paragraph. If it is styled empty drop its contents (e.g. <br />) too.
-							if (style.value(QLatin1String("-qt-paragraph-type")) == QLatin1String("empty")) {
-								reader.skipCurrentElement();
-								continue;
-							}
-							rclose = 0;
-						}
-						else {
-							rclose = 1;
-							writer.writeStartElement(name);
-
-							if (! style.isEmpty()) {
-								QStringList qsl;
-								QMap<QString, QString>::const_iterator i;
-								for (i=style.constBegin(); i != style.constEnd(); ++i) {
-									if (! i.value().isEmpty())
-										qsl << QString::fromLatin1("%1:%2").arg(i.key(), i.value());
-									else
-										qsl << i.key();
-								}
-
-								writer.writeAttribute(QLatin1String("style"), qsl.join(QLatin1String("; ")));
-							}
-						}
-					} else if (name == QLatin1String("a")) {
-						// Set pstyle to include implicit blue underline.
-						rclose = 1;
-						writer.writeCurrentToken(reader);
-						pstyle.insert(QLatin1String("text-decoration"), QLatin1String("underline"));
-						pstyle.insert(QLatin1String("color"), QLatin1String("#0000ff"));
-					} else if (! ignore) {
-						rclose = 1;
-						writer.writeCurrentToken(reader);
-					}
-
-					recurseParse(reader, writer, paragraphs, pstyle, rclose, ignore);
-					break;
-				}
-			case QXmlStreamReader::EndElement:
-				if (!ignore)
-					for (int i=0;i<close;++i)
-						writer.writeEndElement();
-				return;
-			case QXmlStreamReader::Characters:
-				if (! ignore)
-					writer.writeCharacters(reader.text().toString());
-				break;
-			default:
-				break;
-		}
-	}
-}
-
-/* Iterate XML and remove close-followed-by-open.
- * For example, make "<b>bold with </b><b><i>italic</i></b>" into
- * "<b>bold with <i>italic</i></b>"
- */
-
-static bool unduplicateTags(QXmlStreamReader &reader, QXmlStreamWriter &writer) {
-	bool changed = false;
-	bool needclose = false;
-
-	QStringList qslConcat;
-	qslConcat << QLatin1String("b");
-	qslConcat << QLatin1String("i");
-	qslConcat << QLatin1String("u");
-	qslConcat << QLatin1String("a");
-
-	QList<QString> qlNames;
-	QList<QXmlStreamAttributes> qlAttributes;
-
-	while (! reader.atEnd()) {
-		QXmlStreamReader::TokenType tt = reader.readNext();
-		QString name = reader.name().toString();
-		switch (tt) {
-			case QXmlStreamReader::StartDocument:
-			case QXmlStreamReader::EndDocument:
-				break;
-			case QXmlStreamReader::StartElement: {
-					QXmlStreamAttributes a = reader.attributes();
-
-					if (name == QLatin1String("unduplicate"))
-						break;
-
-					if (needclose) {
-						needclose = false;
-
-						if ((a == qlAttributes.last()) && (name == qlNames.last()) && (qslConcat.contains(name))) {
-							changed = true;
-							break;
-						}
-						qlNames.takeLast();
-						qlAttributes.takeLast();
-						writer.writeEndElement();
-					}
-					writer.writeCurrentToken(reader);
-					qlNames.append(name);
-					qlAttributes.append(a);
-				}
-				break;
-			case QXmlStreamReader::EndElement: {
-					if (name == QLatin1String("unduplicate"))
-						break;
-					if (needclose) {
-						qlNames.takeLast();
-						qlAttributes.takeLast();
-						writer.writeCurrentToken(reader);
-					} else {
-						needclose = true;
-					}
-					needclose = true;
-				}
-				break;
-			default:
-				if (needclose) {
-					writer.writeEndElement();
-					needclose = false;
-				}
-				writer.writeCurrentToken(reader);
-		}
-	}
-	if (needclose)
-		writer.writeEndElement();
-	return changed;
-}
-
 void RichTextEditor::richToPlain() {
 	QXmlStreamReader reader(qteRichText->toHtml());
 
@@ -584,18 +374,20 @@ void RichTextEditor::richToPlain() {
 	def.insert(QLatin1String("-qt-block-indent"), QLatin1String("0"));
 	def.insert(QLatin1String("text-indent"), QLatin1String("0px"));
 
-	recurseParse(reader, writer, paragraphs, def);
+	XMLTools::recurseParse(reader, writer, paragraphs, def);
 
 	qsOutput = qsOutput.trimmed();
 
 	bool changed;
 	do {
+		// Make sure the XML has a root element (would be invalid XML otherwise)
+		// The "unduplicate" element will be dropped by XMLTools::unduplciateTags
 		qsOutput = QString::fromLatin1("<unduplicate>%1</unduplicate>").arg(qsOutput);
 
 		QXmlStreamReader r(qsOutput);
 		qsOutput = QString();
 		QXmlStreamWriter w(&qsOutput);
-		changed = unduplicateTags(r, w);
+		changed = XMLTools::unduplicateTags(r, w);
 		qsOutput = qsOutput.trimmed();
 	} while (changed);
 
@@ -626,4 +418,35 @@ QString RichTextEditor::text() {
 
 	bChanged = false;
 	return qptePlainText->toPlainText();
+}
+
+bool RichTextEditor::eventFilter(QObject *obj, QEvent *evt) {
+	if (obj != qptePlainText && obj != qteRichText)
+		return false;
+	if (evt->type() == QEvent::KeyPress) {
+		QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evt);
+		if (((keyEvent->key() == Qt::Key_Enter) || (keyEvent->key() == Qt::Key_Return)) &&
+		        (keyEvent->modifiers() == Qt::ControlModifier)) {
+			emit accept();
+			return true;
+		}
+	}
+	return false;
+}
+
+bool RichTextImage::isValidImage(const QByteArray &ba, QByteArray &fmt) {
+	QBuffer qb;
+	qb.setData(ba);
+	if (!qb.open(QIODevice::ReadOnly)) {
+		return false;
+	}
+
+	QByteArray detectedFormat = QImageReader::imageFormat(&qb).toLower();
+	if (detectedFormat == QByteArray("png") || detectedFormat == QByteArray("jpg")
+            || detectedFormat == QByteArray("jpeg") || detectedFormat == QByteArray("gif")) {
+		fmt = detectedFormat;
+		return true;
+	}
+
+	return false;
 }

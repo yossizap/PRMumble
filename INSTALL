@@ -2,30 +2,30 @@ Binary versions
 ===============
 
 Binary versions for Win32 of the most recent version of mumble are provided
-on sourceforge.net, see http://www.sourceforge.net/projects/mumble/
+at http://www.mumble.info/
 
-The only legitimate releases of Mumble will be on sourceforge, any other
+The only legitimate releases of Mumble will be on www.mumble.info, any other
 place offering Mumble is likely to contain trojans or viruses.
 
 Windows pre-requisites
 ======================
 
 Detailed build instructions are available at
-http://mumble.sourceforge.net/BuildingWindows and it is highly recommended
+http://wiki.mumble.info/wiki/BuildingWindows and it is highly recommended
 to follow them to the letter.
 
 Mac OS X pre-requisites
 =======================
 
 Detailed build instructions are available at
-http://mumble.sourceforge.net/BuildingMacOSX and it is highly recommended
+http://wiki.mumble.info/wiki/BuildingMacOSX and it is highly recommended
 to follow them to the letter.
 
 Linux pre-requisites
 ====================
 
 Detailed build instructions are available at
-http://mumble.sourceforge.net/BuildingLinux and it is highly recommended
+http://wiki.mumble.info/wiki/BuildingLinux and it is highly recommended
 to follow them to the letter.
 
 Please note that in addition to the depending libraries, you also need
@@ -38,8 +38,9 @@ To build mumble and murmur, type
 qmake main.pro
 make release
 
-You may need to edit src/mumble/mumble.pro to reflect the installation paths you
-use for libraries.
+You may need to specify dependency installation paths. Please refer to the
+files in the qmake directory. (For windows, copy winpaths_default.pri to
+winpaths_custom.pri and adjust the copies contents.)
 After building, the binaries will be in the release/ directory.
 
 The qmake step supports a number of configurations options. To enable an
@@ -144,13 +145,57 @@ CONFIG+=no-embed-tango-icons (Mumble)
 
 CONFIG+=no-ice (Murmur)
  Don't build support for Ice RPC.
- 
+
+CONFIG+=grpc (Murmur, Linux)
+ Include experimental support for gRPC.
+ We do not currently recommend that packagers
+ ship packages to end users with gRPC enabled.
+ The gRPC library's API is not yet stable, and
+ Murmur's gRPC interface is not yet frozen, and
+ will most likely change in the future.
+ Support for gRPC requires Qt 5.
+
 CONFIG+=no-bonjour
  Don't build support for Bonjour.
 
-CONFIG+=no-overlay (Mumble, Linux)
+CONFIG+=no-overlay (Mumble)
  Don't build the overlay library.
 
 CONFIG+=no-xinput2 (Mumble, Linux)
  Don't build support for XI2.
 
+CONFIG+=no-gkey (Mumble, Win32)
+ Don't build in support for Logitech G-Keys.
+ Note: This feature does not require any build-
+ time dependencies, and requires Logitech Gaming
+ Software to be installed to have any effect at
+ runtime.
+
+CONFIG+=no-qssldiffiehellmanparameters
+ Don't build in support for custom Diffie-Hellman
+ parameters, even if the QSslDiffieHellmanParameters
+ class is available in the version of Qt you are
+ building against.
+
+CONFIG+=no-xboxinput (Mumble, Win32)
+ Don't build in support for global shortcuts
+ from Xbox controllers via the XInput DLL.
+
+CONFIG+=g15-emulator (Mumble, Win32)
+ Build the g15helper executable in emulator
+ mode. This will cause an emulated G15 window
+ to appear on screen. Allows the use of Mumble's
+ G15 support without owning the physical hardware.
+
+CONFIG+=no-manual-plugin (Mumble)
+ Don't include the built-in 'manual' positional
+ audio plugin.
+
+CONFIG+=qtspeech (Mumble)
+ Use Qt's text-to-speech system (part of the experimental
+ Qt Speech module), if available, instead of Mumble's own
+ OS-specific text-to-speech implementations.
+
+CONFIG+=dpkg-buildflags
+ Add CFLAGS, CXXFLAGS, CPPFLAGS and LDFLAGS
+ from dpkg-buildflags to Mumble's build flags.

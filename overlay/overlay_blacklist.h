@@ -1,35 +1,10 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef _OVERLAY_BLACKLIST_H
-#define _OVERLAY_BLACKLIST_H
+#ifndef MUMBLE_OVERLAY_BLACKLIST_H_
+#define MUMBLE_OVERLAY_BLACKLIST_H_
 
 static const char *overlayBlacklist[] = {
 	"iexplore.exe",
@@ -41,6 +16,9 @@ static const char *overlayBlacklist[] = {
 	"chrome.exe",
 	"acrord32.exe",
 	"explorer.exe",
+	"sihost.exe",
+	"ApplicationFrameHost.exe",
+	"dllhost.exe",
 	"wmpnscfg.exe",
 	"firefox.exe",
 	"thunderbird.exe",
@@ -54,6 +32,7 @@ static const char *overlayBlacklist[] = {
 	"blender.exe",
 	"googleearth.exe",
 	"XBMC.exe", // http://xbmc.org/
+	"kodi.exe", // https://kodi.tv/
 	"BOXEE.exe", // http://www.boxee.tv/
 	"hammer.exe", // VALVE Hammer Editor
 	"hlmv.exe", // Half-Life Model Viewer
@@ -63,8 +42,29 @@ static const char *overlayBlacklist[] = {
 	"Steam.exe", // Prevent invisible hooking
 	"RzSynapse.exe", // Prevent invisible hooking - Razer Synapse (settings online synchronization)
 	"IpOverUsbSvc.exe", // Windows Phone IP over USB Transport
+	"Origin.exe", // EA Origin
+	"HydraSysTray.exe", // Razer Hydra system tray
+	"devenv.exe", // Microsoft Visual Studio
+	"spotify.exe", // Spotify
+	"EpicGamesLauncher.exe", // Epic, Unreal Tournament launcher
+	"dwm.exe", // Windows Desktop Window Manager
+	"MouseKeyboardCenter.exe",
+	"RadeonSettings.exe",
+	"mstsc.exe", // Microsoft Remote Desktop Connection
+	"iCloudServices.exe",
+	"BethesdaNetLauncher.exe",
+	"GTAVLauncher.exe",
+
+	// Microsoft Office
+	"outlook.exe", // Outlook
+	"winword.exe", // Word
+	"excel.exe", // Excel
+	"powerpnt.exe", // PowerPoint
+	"onenote.exe", // OneNote
+	"mspub.exe", // Publisher
+	"msaccess.exe", // Access
+
 	NULL
 };
 
-#endif  // _OVERLAY_BLACKLIST_H
-
+#endif

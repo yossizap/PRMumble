@@ -1,38 +1,14 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "murmur_pch.h"
 
 #include "UnixMurmur.h"
 
 #include "Meta.h"
+#include "EnvUtils.h"
 
 QMutex *LimitTest::qm;
 QWaitCondition *LimitTest::qw;
@@ -110,9 +86,11 @@ extern QFile *qfLog;
 
 int UnixMurmur::iHupFd[2];
 int UnixMurmur::iTermFd[2];
+int UnixMurmur::iUsr1Fd[2];
 
 UnixMurmur::UnixMurmur() {
 	bRoot = true;
+	logToSyslog = false;
 
 	if (geteuid() != 0 && getuid() != 0) {
 		bRoot = false;
@@ -123,13 +101,18 @@ UnixMurmur::UnixMurmur() {
 	if (::socketpair(AF_UNIX, SOCK_STREAM, 0, iTermFd))
 		qFatal("Couldn't create TERM socketpair");
 
+	if (::socketpair(AF_UNIX, SOCK_STREAM, 0, iUsr1Fd))
+		qFatal("Couldn't create USR1 socketpair");
+
 	qsnHup = new QSocketNotifier(iHupFd[1], QSocketNotifier::Read, this);
 	qsnTerm = new QSocketNotifier(iTermFd[1], QSocketNotifier::Read, this);
+	qsnUsr1 = new QSocketNotifier(iUsr1Fd[1], QSocketNotifier::Read, this);
 
 	connect(qsnHup, SIGNAL(activated(int)), this, SLOT(handleSigHup()));
 	connect(qsnTerm, SIGNAL(activated(int)), this, SLOT(handleSigTerm()));
+	connect(qsnUsr1, SIGNAL(activated(int)), this, SLOT(handleSigUsr1()));
 
-	struct sigaction hup, term;
+	struct sigaction hup, term, usr1;
 
 	hup.sa_handler = hupSignalHandler;
 	sigemptyset(&hup.sa_mask);
@@ -145,20 +128,31 @@ UnixMurmur::UnixMurmur() {
 	if (sigaction(SIGTERM, &term, NULL))
 		qFatal("Failed to install SIGTERM handler");
 
+	usr1.sa_handler = usr1SignalHandler;
+	sigemptyset(&usr1.sa_mask);
+	usr1.sa_flags = SA_RESTART;
+
+	if (sigaction(SIGUSR1, &usr1, NULL))
+		qFatal("Failed to install SIGUSR1 handler");
+
 	umask(S_IRWXO);
 }
 
 UnixMurmur::~UnixMurmur() {
 	delete qsnHup;
 	delete qsnTerm;
+	delete qsnUsr1;
 
 	qsnHup = NULL;
 	qsnTerm = NULL;
+	qsnUsr1 = NULL;
 
 	close(iHupFd[0]);
 	close(iHupFd[1]);
 	close(iTermFd[0]);
 	close(iTermFd[1]);
+	close(iUsr1Fd[0]);
+	close(iUsr1Fd[1]);
 }
 
 void UnixMurmur::hupSignalHandler(int) {
@@ -173,6 +167,12 @@ void UnixMurmur::termSignalHandler(int) {
 	Q_UNUSED(len);
 }
 
+void UnixMurmur::usr1SignalHandler(int) {
+	char a = 1;
+	ssize_t len = ::write(iUsr1Fd[0], &a, sizeof(a));
+	Q_UNUSED(len);
+}
+
 
 // Keep these two synchronized with matching actions in DBus.cpp
 
@@ -182,7 +182,9 @@ void UnixMurmur::handleSigHup() {
 	ssize_t len = ::read(iHupFd[1], &tmp, sizeof(tmp));
 	Q_UNUSED(len);
 
-	if (! qfLog) {
+	if (logToSyslog) {
+		qWarning("Caught SIGHUP, but logging to syslog");
+	} else if (! qfLog) {
 		qWarning("Caught SIGHUP, but logfile not in use");
 	} else if (! qfLog->isOpen()) {
 		qWarning("Caught SIGHUP, but logfile not in use -- interpreting as hint to quit");
@@ -221,6 +223,25 @@ void UnixMurmur::handleSigTerm() {
 	qsnTerm->setEnabled(true);
 }
 
+void UnixMurmur::handleSigUsr1() {
+	qsnUsr1->setEnabled(false);
+	char tmp;
+	ssize_t len = ::read(iUsr1Fd[1], &tmp, sizeof(tmp));
+	Q_UNUSED(len);
+
+	if (meta) {
+		qWarning("UnixMurmur: Trying to reload SSL settings...");
+		bool ok = meta->reloadSSLSettings();
+		if (ok) {
+			qWarning("UnixMurmur: Done reloading SSL settings.");
+		} else {
+			qWarning("UnixMurmur: Failed to reload SSL settings. Server state is intact and fully operational. No configuration changes were made.");
+		}
+	}
+
+	qsnUsr1->setEnabled(true);
+}
+
 void UnixMurmur::setuid() {
 	if (Meta::mp.uiUid != 0) {
 #ifdef Q_OS_DARWIN
@@ -254,7 +275,7 @@ void UnixMurmur::setuid() {
 			// QDir::homePath is broken. It only looks at $HOME
 			// instead of getpwuid() so we have to set our home
 			// ourselves
-			::setenv("HOME", qPrintable(Meta::mp.qsHome), 1);
+			EnvUtils::setenv(QLatin1String("HOME"), qPrintable(Meta::mp.qsHome));
 		}
 #endif
 	} else if (bRoot) {

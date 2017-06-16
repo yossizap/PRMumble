@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="sv_SE">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sv" version="2.1">
 <context>
     <name>ACLEditor</name>
     <message>
-        <location filename="ACLEditor.cpp" line="+105"/>
+        <location filename="ACLEditor.cpp" line="+101"/>
         <source>Deny</source>
         <translation>Neka</translation>
     </message>
@@ -24,25 +22,36 @@
         <translation>Neka %1</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-84"/>
         <source>Mumble - Add channel</source>
         <translation>Mumble - Lägg till kanal</translation>
     </message>
     <message>
-        <location line="+22"/>
-        <location line="+165"/>
+        <location line="+11"/>
+        <location line="+50"/>
+        <source>Default server value</source>
+        <translation>Standardvärde för servern</translation>
+    </message>
+    <message>
+        <location line="-28"/>
+        <location line="+176"/>
         <source>Failed: Invalid channel</source>
         <translation>Fel: Ogiltig kanal</translation>
     </message>
     <message>
-        <location line="-153"/>
+        <location line="-164"/>
         <source>Mumble - Edit %1</source>
         <translation>Mumble - Ändra %1</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+2"/>
+        <source>ID: %1</source>
+        <translation>ID: %1</translation>
+    </message>
+    <message>
+        <location line="+46"/>
         <source>This grants the %1 privilege. If a privilege is both allowed and denied, it is denied.&lt;br /&gt;%2</source>
-        <translation>Detta ger %1 behörigheten. Om en behörighet både är tillåten och otillåten, blir den otillåten.&lt;br /&gt;%2</translation>
+        <translation>Detta ger behörigheten %1. Om en behörighet både är tillåten och otillåten, förblir den otillåten.&lt;br /&gt;%2</translation>
     </message>
     <message>
         <location line="+123"/>
@@ -52,7 +61,7 @@
     <message>
         <location line="-131"/>
         <source>This revokes the %1 privilege. If a privilege is both allowed and denied, it is denied.&lt;br /&gt;%2</source>
-        <translation>Detta återkallar %1 behörigheten. Om en behörighet både är tillåten och otillåten, blir den otillåten.&lt;br /&gt;%2</translation>
+        <translation>Detta återkallar behörigheten %1. Om en behörighet både är tillåten och otillåten, förblir den otillåten.&lt;br /&gt;%2</translation>
     </message>
     <message>
         <location filename="ACLEditor.ui"/>
@@ -106,7 +115,7 @@ This value enables you to change the way Mumble arranges the channels in the tre
         <oldsource>&lt;b&gt;Position&lt;/b&gt;&lt;br/&gt;
 This value enables you to change the way mumble arranges the channels in the tree. A channel with a higher &lt;i&gt;Position&lt;/i&gt; value will always be placed below one with a lower value and the other way around. If the &lt;i&gt;Position&lt;/i&gt; value of two channels is equal they will get sorted alphabetically by their name.</oldsource>
         <translation>&lt;b&gt;Position&lt;/b&gt;&lt;br/&gt;
-Detta värde tillåter dig att ändra hur Mumble sorterar kanalerna i trädet. En kanal med högre &lt;i&gt;position&lt;/i&gt; kommer alltid placeras ovanför en med ett lägre värde. Om &lt;i&gt;positionsvärdet&lt;/i&gt; av två kanaler är lika kommer de sorteras efter namn.</translation>
+Detta värde tillåter dig att ändra hur Mumble sorterar kanalerna i trädet. En kanal med högre &lt;i&gt;position&lt;/i&gt; kommer alltid placeras ovanför en med lägre värde. Om &lt;i&gt;positionsvärdet&lt;/i&gt; av två kanaler är lika kommer de sorteras efter namn.</translation>
     </message>
     <message>
         <location/>
@@ -181,7 +190,7 @@ Detta värde tillåter dig att ändra hur Mumble sorterar kanalerna i trädet. E
     <message>
         <location/>
         <source>Add member to group</source>
-        <translation>Lägg till medlem till grupp</translation>
+        <translation>Lägg till medlem i grupp</translation>
     </message>
     <message>
         <location/>
@@ -226,7 +235,7 @@ Detta värde tillåter dig att ändra hur Mumble sorterar kanalerna i trädet. E
     <message>
         <location/>
         <source>This moves the entry up in the list. As entries are evaluated in order, this may change the effective permissions of users. You cannot move an entry above an inherited entry, if you really need that you&apos;ll have to duplicate the inherited entry.</source>
-        <translation>Detta flyttar upp posten i listan. Då poster är utverderade i ordning kan detta ändra gällande behörigheter av användare. Du kan inte flytta en post ovan en ärvd post. Om du verkligen behöver göra detta måste du kopiera den ärvda posten.</translation>
+        <translation>Detta flyttar upp posten i listan. Då poster är utvärderade i ordning kan detta ändra gällande behörigheter av användare. Du kan inte flytta en post ovan en ärvd post. Om du verkligen behöver göra detta måste du kopiera den ärvda posten.</translation>
     </message>
     <message>
         <location/>
@@ -241,7 +250,7 @@ Detta värde tillåter dig att ändra hur Mumble sorterar kanalerna i trädet. E
     <message>
         <location/>
         <source>This moves the entry down in the list. As entries are evaluated in order, this may change the effective permissions of users.</source>
-        <translation>Detta flyttar ned posten i listan. Då poster är utverderade i ordning kan detta ändra gällande behörigheter av användare.</translation>
+        <translation>Detta flyttar ned posten i listan. Då poster är utvärderade i ordning kan detta ändra gällande behörigheter av användare.</translation>
     </message>
     <message>
         <location/>
@@ -287,17 +296,17 @@ Detta värde tillåter dig att ändra hur Mumble sorterar kanalerna i trädet. E
         <location/>
         <source>Entry should apply to this channel.</source>
         <oldsource>Entry should apply to this channel</oldsource>
-        <translation>Posten borde verkställas till denna kanal.</translation>
+        <translation>Posten bör verkställas till denna kanal.</translation>
     </message>
     <message>
         <location/>
         <source>This makes the entry apply to this channel.</source>
-        <translation>Detta gör att posten verkställs till denna kanal.</translation>
+        <translation>Detta gör att posten verkställs till den här kanalen.</translation>
     </message>
     <message>
         <location/>
         <source>Applies to this channel</source>
-        <translation>Verkställs till denna kanal</translation>
+        <translation>Verkställs till den här kanalen</translation>
     </message>
     <message>
         <location/>
@@ -389,7 +398,7 @@ Lägg till en ny grupp.</translation>
     <message>
         <location/>
         <source>User this entry applies to</source>
-        <translation>Användare denna post verkställs till</translation>
+        <translation>Användare denna post gäller</translation>
     </message>
     <message>
         <location/>
@@ -404,13 +413,14 @@ Lägg till en ny grupp.</translation>
     <message>
         <location/>
         <source>&lt;b&gt;Name&lt;/b&gt;&lt;br /&gt;Enter the channel name in this field. The name has to comply with the restriction imposed by the server you are connected to.</source>
-        <translation>&lt;b&gt;Namn&lt;/b&gt;&lt;br /&gt;Ange kanalens namn i detta fält. Namnet måste följa reglerna på den servern du är ansluten till.</translation>
+        <translation>&lt;b&gt;Namn&lt;/b&gt;&lt;br /&gt;Ange kanalens namn i detta fält. Namnet måste följa reglerna på servern du är ansluten till.</translation>
     </message>
     <message>
         <location/>
         <source>&lt;b&gt;Temporary&lt;/b&gt;&lt;br /&gt;
 When checked the channel created will be marked as temporary. This means when the last player leaves it the channel will be automatically deleted by the server.</source>
-        <translation>&lt;b&gt;Temporär&lt;/b&gt;&lt;br /&gt;Vid markering kommer den nuvarande kanalen markeras som temporär. Detta betyder att när den sista användaren som lämnar kanalen kommer den automatiskt tas bort från servern.</translation>
+        <translation>&lt;b&gt;Temporär&lt;/b&gt;&lt;br /&gt;
+Vid markering kommer den nuvarande kanalen markeras som temporär. Detta betyder att när den sista användaren som lämnar kanalen kommer den automatiskt tas bort från servern.</translation>
     </message>
     <message>
         <location/>
@@ -463,23 +473,45 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This controls which group of users this entry applies to.&lt;br /&gt;Note that the group is evaluated in the context of the channel the entry is used in. For example, the default ACL on the Root channel gives &lt;i&gt;Write&lt;/i&gt; permission to the &lt;i&gt;admin&lt;/i&gt; group. This entry, if inherited by a channel, will give a user write privileges if he belongs to the &lt;i&gt;admin&lt;/i&gt; group in that channel, even if he doesn&apos;t belong to the &lt;i&gt;admin&lt;/i&gt; group in the channel where the ACL originated.&lt;br /&gt;If a group name starts with &apos;!&apos;, its membership is negated, and if it starts with &apos;~&apos;, it is evaluated in the channel the ACL was defined in, rather than the channel the ACL is active in.&lt;br /&gt;If a group name starts with &apos;#&apos;, it is interpreted as an access token. Users must have entered whatever follows the &apos;#&apos; in their list of access tokens to match. This can be used for very simple password access to channels for non-authenticated users.&lt;br /&gt;If a group name starts with &apos;$&apos;, it will only match users whose certificate hash matches what follows the &apos;$&apos;.&lt;br /&gt;A few special predefined groups are:&lt;br /&gt;&lt;b&gt;all&lt;/b&gt; - Everyone will match.&lt;br /&gt;&lt;b&gt;auth&lt;/b&gt; - All authenticated users will match.&lt;br /&gt;&lt;b&gt;sub,a,b,c&lt;/b&gt; - User currently in a sub-channel minimum &lt;i&gt;a&lt;/i&gt; common parents, and between &lt;i&gt;b&lt;/i&gt; and &lt;i&gt;c&lt;/i&gt; channels down the chain. See the website for more extensive documentation on this one.&lt;br /&gt;&lt;b&gt;in&lt;/b&gt; - Users currently in the channel will match (convenience for &apos;&lt;i&gt;sub,0,0,0&lt;/i&gt;&apos;).&lt;br /&gt;&lt;b&gt;out&lt;/b&gt; - Users outside the channel will match (convenience for &apos;&lt;i&gt;!sub,0,0,0&lt;/i&gt;&apos;).&lt;br /&gt;Note that an entry applies to either a user or a group, not both.</source>
-        <translation>Detta kontrollerar vilken grupp användare denna post verkställs till.&lt;br /&gt;Kom ihåg att gruppen är utvärderad i samband av kanalen posten används i. T.ex. standard-ACL på Rotkanalen ger &lt;i&gt;Skrivbehörighet&lt;/i&gt; till &lt;i&gt;administratörsgruppen&lt;/i&gt;. Om denna post är ärvd av en kanal kommer den att ge en användare skrivbehörigheter, om den tillhör &lt;i&gt;administratörsgruppen&lt;/i&gt; i kanalen, även om den inte tillhör &lt;i&gt;admininistratörsgruppen&lt;/i&gt; i kanalen för ACLens ursprung.&lt;br /&gt;Om ett gruppnamn börjar med ett &apos;!&apos;, är dess medlemsskap upphävt. Om det börjar med ett &apos;~&apos;, är det utvärderat i kanalen där ACLen definierades, istället för kanlendär ACLen är aktiv i.&lt;br /&gt;Om ett gruppnamn börjar med ett &apos;#&apos;, tolkas det som en tillgångstoken. Användare måste ha angett det som följer &apos;#&apos; i deras lista med tillgångstokens för att matchas. Detta kan användas som enkel lösenordstillgång till kanalerför ej autentiserade användare.&lt;br /&gt;Om ett gruppnamn börjar med ett &apos;$&apos;, kommer det endast att matcha användare vars certrifikat matchar det som följer &apos;$&apos;.&lt;br /&gt;Ett par speciella fördefinierade grupper är:&lt;br /&gt;&lt;b&gt;alla&lt;/b&gt; - Alla kommer att matchas.&lt;br /&gt;&lt;b&gt;ver&lt;/b&gt; - Alla autentiserade användare kommer att matchas.&lt;br /&gt;&lt;b&gt;under,a,b,c&lt;/b&gt; - Användare för närvarande i en underkanal minst &lt;i&gt;a&lt;/i&gt; gemensamma föräldrar och mellan &lt;i&gt;b&lt;/i&gt; och &lt;i&gt;c&lt;/i&gt; kanaler under kedjan. Se hemsidan för mer omfattande dokumentation för detta.&lt;br /&gt;&lt;b&gt;i&lt;/b&gt; - Användare som för närvarande är i kanalen kommer (förmån för &apos;&lt;i&gt;under,0,0,0&lt;/i&gt;&apos;).&lt;br /&gt;&lt;b&gt;ut&lt;/b&gt; - Användare utanför kanalen kommer matcha (förmån för &apos;&lt;i&gt;!under,0,0,0&lt;/i&gt;&apos;).&lt;br /&gt;Kom ihåg att en post verkställs till antingen en användare eller en grupp, inte båda.</translation>
+        <translation>Detta kontrollerar vilken grupp användare denna post verkställs till.&lt;br /&gt;Kom ihåg att gruppen är utvärderad i samband av kanalen posten används i. T.ex. standard-ACL på Rotkanalen ger &lt;i&gt;Skrivbehörighet&lt;/i&gt; till &lt;i&gt;administratörsgruppen&lt;/i&gt;. Om denna post är ärvd av en kanal kommer den att ge en användare skrivbehörigheter, om den tillhör &lt;i&gt;administratörsgruppen&lt;/i&gt; i kanalen, även om den inte tillhör &lt;i&gt;admininistratörsgruppen&lt;/i&gt; i kanalen för ACLens ursprung.&lt;br /&gt;Om ett gruppnamn börjar med ett &apos;!&apos;, är dess medlemsskap upphävt. Om det börjar med ett &apos;~&apos;, är det utvärderat i kanalen där ACLen definierades, istället för kanalen som ACLen är aktiv i.&lt;br /&gt;Om ett gruppnamn börjar med ett &apos;#&apos;, tolkas det som en tillgångstoken. Användare måste ha angett det som följer &apos;#&apos; i deras lista med tillgångstokens för att matchas. Detta kan användas som enkel lösenordstillgång till kanalerför ej autentiserade användare.&lt;br /&gt;Om ett gruppnamn börjar med ett &apos;$&apos;, kommer det endast att matcha användare vars certrifikat matchar det som följer &apos;$&apos;.&lt;br /&gt;Ett par speciella fördefinierade grupper är:&lt;br /&gt;&lt;b&gt;alla&lt;/b&gt; - Alla kommer att matchas.&lt;br /&gt;&lt;b&gt;ver&lt;/b&gt; - Alla autentiserade användare kommer att matchas.&lt;br /&gt;&lt;b&gt;under,a,b,c&lt;/b&gt; - Användare för närvarande i en underkanal minst &lt;i&gt;a&lt;/i&gt; gemensamma föräldrar och mellan &lt;i&gt;b&lt;/i&gt; och &lt;i&gt;c&lt;/i&gt; kanaler under kedjan. Se hemsidan för mer omfattande dokumentation för detta.&lt;br /&gt;&lt;b&gt;i&lt;/b&gt; - Användare som för närvarande är i kanalen kommer (förmån för &apos;&lt;i&gt;under,0,0,0&lt;/i&gt;&apos;).&lt;br /&gt;&lt;b&gt;ut&lt;/b&gt; - Användare utanför kanalen kommer matcha (förmån för &apos;&lt;i&gt;!under,0,0,0&lt;/i&gt;&apos;).&lt;br /&gt;Kom ihåg att en post verkställs till antingen en användare eller en grupp, inte båda.</translation>
     </message>
     <message>
         <location/>
         <source>&lt;b&gt;Password&lt;/b&gt;&lt;br /&gt;This field allows you to easily set and change the password of a channel. It uses Mumble&apos;s access tokens feature in the background. Use ACLs and groups if you need more fine grained and powerful access control.</source>
-        <translation>&lt;b&gt;Lösenord&lt;/b&gt;&lt;br /&gt;Detta fält tillåter dig att lätt ändra lösenordet för en kanal. I bakgrunden används tillgångs token-funktionen. Använd ACLer och grupper om du behöver bättre och mer kraftfull tillgångskontroll.</translation>
+        <translation>&lt;b&gt;Lösenord&lt;/b&gt;&lt;br /&gt;Detta fält tillåter dig att lätt ändra lösenordet för en kanal. I bakgrunden används tillgångstoken-funktionen. Använd ACLer och grupper om du behöver bättre och mer kraftfull tillgångskontroll.</translation>
     </message>
     <message>
         <location/>
         <source>This shows all the entries active on this channel. Entries inherited from parent channels will be shown in italics.&lt;br /&gt;ACLs are evaluated top to bottom, meaning priority increases as you move down the list.</source>
         <translation>Detta visar alla poster aktiva i den här kanalen. Poster ärvda från föräldrakanaler kommer att visas kursivt.&lt;br /&gt;ACLer utvärderas från topp till botten, vilket betyder att prioriteten ökar om du flyttar nedåt i listan.</translation>
     </message>
+    <message>
+        <location/>
+        <source>ID of the channel.</source>
+        <translation>Kanalens ID.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Maximum Users</source>
+        <translation>Max användare</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Maximum number of users allowed in the channel</source>
+        <translation>Maximalt antal tillåtna användare i kanalen</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Maximum Users&lt;/b&gt;&lt;br /&gt;
+This value allows you to set the maximum number of users allowed in the channel. If the value is above zero, only that number of users will be allowed to enter the channel. If the value is zero, the maximum number of users in the channel is given by the server&apos;s default limit.</source>
+        <translation>&lt;b&gt;Max användare&lt;/b&gt;&lt;br /&gt;
+Det värdet tillåter dig att ställa in ett maximalt antal av användare som är tillåtna i kanalen. Om värdet är noll så är det maximala antalet användare för kanalen densamma som serverns standard begränsning.</translation>
+    </message>
 </context>
 <context>
     <name>ALSAAudioInput</name>
     <message>
-        <location filename="ALSAAudio.cpp" line="+174"/>
+        <location filename="ALSAAudio.cpp" line="+149"/>
         <source>Default ALSA Card</source>
         <translation>Standardkort för ALSA</translation>
     </message>
@@ -497,7 +529,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
         <translation>Standardkort för ALSA</translation>
     </message>
     <message>
-        <location line="+325"/>
+        <location line="+328"/>
         <source>Opening chosen ALSA Output failed: %1</source>
         <translation>Kunde inte öppna vald ALSA-utgång: %1</translation>
     </message>
@@ -505,7 +537,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
 <context>
     <name>ASIOConfig</name>
     <message>
-        <location filename="ASIOInput.cpp" line="+225"/>
+        <location filename="ASIOInput.cpp" line="+208"/>
         <source>%1 (version %2)</source>
         <translation>%1 (version %2)</translation>
     </message>
@@ -513,7 +545,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
         <location line="+3"/>
         <source>%1 -&gt; %2 samples buffer, with %3 sample resolution (%4 preferred) at %5 Hz</source>
         <oldsource>%1 -&gt; %2 samples buffer, with %3 sample resolution (%4 preferred) at %5Hz</oldsource>
-        <translation>%1 -&gt; %2 sample buffert, med %3 sample upplösning (%4 föredras) vid %5 Hz</translation>
+        <translation>%1 -&gt; %2 sample-buffert, med %3 sample-upplösning (%4 föredras) vid %5 Hz</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -525,7 +557,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
         <location line="-21"/>
         <location line="+25"/>
         <source>Failed to instantiate ASIO driver</source>
-        <translation>ASIO drivrutin kude inte initieras</translation>
+        <translation>ASIO-drivrutin kude inte initieras</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -565,7 +597,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This queries the selected device for channels. Be aware that many ASIO drivers are buggy to the extreme, and querying them might cause a crash of either the application or the system.</source>
-        <translation>Detta förfrågar den valda enheten om kanler. Var medveten om att många ASIO drivrutiner är mycket buggiga och förfrågning kan orsaka en krasch av programmet eller systemet.</translation>
+        <translation>Detta förfrågar den valda enheten om kanaler. Var medveten om att många ASIO-drivrutiner är mycket buggiga och förfrågning kan orsaka en krasch av programmet eller systemet.</translation>
     </message>
     <message>
         <location/>
@@ -580,7 +612,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This configures the selected device. Be aware that many ASIO drivers are buggy to the extreme, and querying them might cause a crash of either the application or the system.</source>
-        <translation>Detta konfigurerar den valda enheten. Var medveten om att många ASIO drivrutiner är mycket buggiga och förfrågning kan orsaka en krasch av programmet eller systemet.</translation>
+        <translation>Detta konfigurerar den valda enheten. Var medveten om att många ASIO-drivrutiner är mycket buggiga och förfrågning kan orsaka en krasch av programmet eller systemet.</translation>
     </message>
     <message>
         <location/>
@@ -605,7 +637,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This will configure the input channels for ASIO. Make sure you select at least one channel as microphone and speaker. &lt;i&gt;Microphone&lt;/i&gt; should be where your microphone is attached, and &lt;i&gt;Speaker&lt;/i&gt; should be a channel that samples &apos;&lt;i&gt;What you hear&lt;/i&gt;&apos;.&lt;br /&gt;For example, on the Audigy 2 ZS, a good selection for Microphone would be &apos;&lt;i&gt;Mic L&lt;/i&gt;&apos; while Speaker should be &apos;&lt;i&gt;Mix L&lt;/i&gt;&apos; and &apos;&lt;i&gt;Mix R&lt;/i&gt;&apos;.</source>
-        <translation>Dette kommer att konfigurera ingångskanalerna för ASIO. Var säker på att du väljer minst en kanal för mikrofon och högtalare. &lt;i&gt;Mikrofon&lt;/i&gt; ska vara där din mikrofon är ansluten. &lt;i&gt;Högtalare&lt;/i&gt; ska vara en kanal som samplar &apos;&lt;i&gt;Vad du hör&lt;/i&gt;&apos;.&lt;br /&gt;T.ex. för Audigy 2 ZS är ett bra val för mikrofon &apos;&lt;i&gt;Mic L&lt;/i&gt;&apos;, medan högtalare borde vara &apos;&lt;i&gt;Mix L&lt;/i&gt;&apos; och &apos;&lt;i&gt;Mix R&lt;/i&gt;&apos;.</translation>
+        <translation>Detta kommer att konfigurera ingångskanalerna för ASIO. Var säker på att du väljer minst en kanal för mikrofon och högtalare. &lt;i&gt;Mikrofon&lt;/i&gt; ska vara där din mikrofon är ansluten. &lt;i&gt;Högtalare&lt;/i&gt; ska vara en kanal som samplar &apos;&lt;i&gt;Vad du hör&lt;/i&gt;&apos;.&lt;br /&gt;T.ex. för Audigy 2 ZS är ett bra val för mikrofon &apos;&lt;i&gt;Mic L&lt;/i&gt;&apos;, medan högtalare borde vara &apos;&lt;i&gt;Mix L&lt;/i&gt;&apos; och &apos;&lt;i&gt;Mix R&lt;/i&gt;&apos;.</translation>
     </message>
     <message>
         <location/>
@@ -653,23 +685,23 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location line="+104"/>
         <source>Opening selected ASIO device failed. No input will be done.</source>
-        <translation>Kunde inte öppna enhet för ASIO. Ingen ingång kommer att göras.</translation>
+        <translation>Kunde inte öppna vald enhet för ASIO. Ingen ändring kommer att göras.</translation>
     </message>
 </context>
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="About.cpp" line="+40"/>
+        <location filename="About.cpp" line="+15"/>
         <source>About Mumble</source>
         <translation>Om Mumble</translation>
     </message>
     <message>
-        <location line="+30"/>
-        <source>&lt;h3&gt;Mumble (%1)&lt;/h3&gt;&lt;p&gt;Copyright %3 Thorvald Natvig&lt;br /&gt;slicer@users.sourceforge.net&lt;/p&gt;&lt;p&gt;&lt;b&gt;A voice-chat utility for gamers&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;tt&gt;&lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;&lt;/tt&gt;&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Mumble (%1)&lt;/h3&gt;&lt;p&gt;Upphovsrättsskyddad %3 Thorvald Natvig&lt;br /&gt;slicer@users.sourceforge.net&lt;/p&gt;&lt;p&gt;Svensk översättning av Svenne33&lt;br /&gt;&lt;a href=&quot;mailto:svensvennesvensson33@gmail.com&quot;&gt;svensvennesvensson33@gmail.com&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;&lt;b&gt;Ett verktyg för att röstchatta för spelare&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;tt&gt;&lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;&lt;/tt&gt;&lt;/p&gt;</translation>
+        <location line="+34"/>
+        <source>&lt;h3&gt;Mumble (%1)&lt;/h3&gt;&lt;p&gt;%3&lt;/p&gt;&lt;p&gt;&lt;b&gt;A voice-chat utility for gamers&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;tt&gt;&lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;&lt;/tt&gt;&lt;/p&gt;</source>
+        <translation>&lt;h3&gt;Mumble (%1)&lt;/h3&gt;&lt;p&gt;%3&lt;/p&gt;&lt;p&gt;&lt;b&gt;Ett röstchattverktyg för spelare&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;tt&gt;&lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;&lt;/tt&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+12"/>
         <source>&amp;About Mumble</source>
         <translation>&amp;Om Mumble</translation>
     </message>
@@ -677,6 +709,11 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
         <location line="+1"/>
         <source>&amp;License</source>
         <translation>&amp;Licens</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>A&amp;uthors</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
@@ -749,12 +786,12 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>&lt;b&gt;This sets when speech should be transmitted.&lt;/b&gt;&lt;br /&gt;&lt;i&gt;Continuous&lt;/i&gt; - All the time&lt;br /&gt;&lt;i&gt;Voice Activity&lt;/i&gt; - When you are speaking clearly.&lt;br /&gt;&lt;i&gt;Push To Talk&lt;/i&gt; - When you hold down the hotkey set under &lt;i&gt;Shortcuts&lt;/i&gt;.</source>
-        <translation>&lt;b&gt;Detta ställer in när tal ska överföras.&lt;/b&gt;&lt;br /&gt;&lt;i&gt;Kontinuerligt&lt;/i&gt; - Alltid&lt;br /&gt;&lt;i&gt;Röstaktivitet&lt;/i&gt; - När du pratar klart.&lt;br /&gt;&lt;i&gt;Tryck-för-att-Tala&lt;/i&gt; - När du håller nere snabbknappen under &lt;i&gt;Genvägar&lt;/i&gt;.</translation>
+        <translation>&lt;b&gt;Detta ställer in när tal ska överföras.&lt;/b&gt;&lt;br /&gt;&lt;i&gt;Kontinuerligt&lt;/i&gt; - Alltid&lt;br /&gt;&lt;i&gt;Röstaktivitet&lt;/i&gt; - När du talar tydligt.&lt;br /&gt;&lt;i&gt;Tryck-för-att-Tala&lt;/i&gt; - När du håller nere snabbknappen under &lt;i&gt;Genvägar&lt;/i&gt;.</translation>
     </message>
     <message>
         <location/>
         <source>DoublePush Time</source>
-        <translation>Dubbelklicks tid</translation>
+        <translation>Dubbelklicks-tid</translation>
     </message>
     <message>
         <location/>
@@ -764,7 +801,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>&lt;b&gt;DoublePush Time&lt;/b&gt;&lt;br /&gt;If you press the push-to-talk key twice during the configured interval of time it will be locked. Mumble will keep transmitting until you hit the key once more to unlock PTT again.</source>
-        <translation>&lt;b&gt;Dubbelklicks tid&lt;/b&gt;&lt;br /&gt;Om du trycker på Tryck-för-att-Tala-knappen två gånger inom den konfigurerade tidsintervallen, kommer den att låsas. Mumble kommer överföra tills du trycker på knappen en gång till, för att låsa upp TfaT igen.</translation>
+        <translation>&lt;b&gt;Dubbelklicks-tid&lt;/b&gt;&lt;br /&gt;Om du trycker på Tryck-för-att-Tala-knappen två gånger inom den konfigurerade tidsintervallen, kommer den att låsas. Mumble kommer överföra tills du trycker på knappen en gång till, för att låsa upp TfaT igen.</translation>
     </message>
     <message>
         <location/>
@@ -839,12 +876,12 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>&lt;b&gt;This sets the trigger values for voice detection.&lt;/b&gt;&lt;br /&gt;Use this together with the Audio Statistics window to manually tune the trigger values for detecting speech. Input values below &quot;Silence Below&quot; always count as silence. Values above &quot;Speech Above&quot; always count as voice. Values in between will count as voice if you&apos;re already talking, but will not trigger a new detection.</source>
-        <translation>&lt;b&gt;Detta ställer in utlösarvärden för upptäckning av ljudaktivitet.&lt;/b&gt;&lt;br /&gt;Använd detta tillsammans med ljudstatistiken för att manuellt justera utlösaren för upptäckning av ljudaktivitet. Ingångsvärden under &quot;Tystnad under&quot; räknas alltid som tystnad. Värden ovan &quot;Prata över&quot; räknas alltid som röst. Värden däremellan räknas som röst om du redan pratar, men kommmer inte utlösa en ny upptäckt.</translation>
+        <translation>&lt;b&gt;Detta ställer in utlösarvärden för upptäckning av ljudaktivitet.&lt;/b&gt;&lt;br /&gt;Använd detta tillsammans med ljudstatistiken för att manuellt justera utlösaren för upptäckning av ljudaktivitet. Ingångsvärden under &quot;Tystnad under&quot; räknas alltid som tystnad. Värden ovan &quot;Tala över&quot; räknas alltid som röst. Värden däremellan räknas som röst om du redan talar, men kommmer inte utlösa en ny upptäckt.</translation>
     </message>
     <message>
         <location/>
         <source>Speech Above</source>
-        <translation>Prata över</translation>
+        <translation>Tala över</translation>
     </message>
     <message>
         <location/>
@@ -884,12 +921,12 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>&lt;b&gt;This selects how many audio frames should be put in one packet.&lt;/b&gt;&lt;br /&gt;Increasing this will increase the latency of your voice, but will also reduce bandwidth requirements.</source>
-        <translation>&lt;b&gt;Detta ställer in mängden ljud att packetera i ett paket.&lt;/b&gt;&lt;br /&gt;Genom att öka detta kommer latensen för din röst ökas, men också minska bandbreddskravet.</translation>
+        <translation>&lt;b&gt;Detta ställer in mängden ljud att paketera i ett paket.&lt;/b&gt;&lt;br /&gt;Genom att öka detta kommer latensen för din röst ökas, men också minska bandbreddskravet.</translation>
     </message>
     <message>
         <location/>
         <source>&lt;b&gt;This shows peak outgoing bandwidth used.&lt;/b&gt;&lt;br /&gt;This shows the peak amount of bandwidth sent out from your machine. Audio bitrate is the maximum bitrate (as we use VBR) for the audio data alone. Position is the bitrate used for positional information. Overhead is our framing and the IP packet headers (IP and UDP is 75% of this overhead).</source>
-        <translation>&lt;b&gt;Detta visar höjdpunkten för använd utgående bandbredd.&lt;/b&gt;&lt;br /&gt;Detta visar höjdpunkten för mängden bandbredd utsänd från dig. Ljudbitraten är den högsta bitraten (som vi kallar VBR) för själva ljuddatan. Positionen är bitraten som används för platsinformation. Totalt är våran inramning IP-paketet (IP och UDP är 75% av detta totalt).</translation>
+        <translation>&lt;b&gt;Detta visar höjdpunkten för använd utgående bandbredd.&lt;/b&gt;&lt;br /&gt;Detta visar höjdpunkten för mängden bandbredd utsänd från dig. Ljudbitraten är den högsta bitraten (som vi använder VBR) för själva ljuddatan. Positionen är bitraten som används för platsinformation. Totalt är våran inramning IP-paketet (IP och UDP är 75% av detta totalt).</translation>
     </message>
     <message>
         <location/>
@@ -919,12 +956,12 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>&lt;b&gt;Maximum amplification of input.&lt;/b&gt;&lt;br /&gt;Mumble normalizes the input volume before compressing, and this sets how much it&apos;s allowed to amplify.&lt;br /&gt;The actual level is continually updated based on your current speech pattern, but it will never go above the level specified here.&lt;br /&gt;If the &lt;i&gt;Microphone loudness&lt;/i&gt; level of the audio statistics hover around 100%, you probably want to set this to 2.0 or so, but if, like most people, you are unable to reach 100%, set this to something much higher.&lt;br /&gt;Ideally, set it so &lt;i&gt;Microphone Loudness * Amplification Factor &gt;= 100&lt;/i&gt;, even when you&apos;re speaking really soft.&lt;br /&gt;&lt;br /&gt;Note that there is no harm in setting this to maximum, but Mumble will start picking up other conversations if you leave it to auto-tune to that level.</source>
-        <translation>&lt;b&gt;Högsta förstärkning av ingångsljud.&lt;/b&gt;&lt;br /&gt;Mumble normaliserar ingångsvolymen innan komprimering och ställer in hur mycket det tillåts att förstärkas.&lt;br /&gt;Den verkliga nivån är kontinuerligt uppdaterad baserad på ditt nuvarande talmönster, men kommer aldrig att gå under nivån specifierad här.&lt;br /&gt;Om &lt;i&gt;mikrofonstyrkan&lt;/i&gt; av ljudstatistiken är över ungefär 100% kommer du säkerligen villa ställa in detta till 2.0 eller liknande, men som de allra flesta kan du inte nå 100%, ställ in till något mycket högre.&lt;br /&gt;Ställ helst in det till &lt;i&gt;mikrofonstyrka * förstärkningsfaktorr &gt;= 100&lt;/i&gt; även när du pratar mjukt.&lt;br /&gt;&lt;br /&gt;Kom ihåg att det inte tar någon skada att ställa in detta till det högsta. Mumble kommer ta upp andra konversationer om du låter det vara för att automatiskt justera nivån.</translation>
+        <translation>&lt;b&gt;Högsta förstärkning av ingångsljud.&lt;/b&gt;&lt;br /&gt;Mumble normaliserar ingångsvolymen innan komprimering och ställer in hur mycket det tillåts att förstärkas.&lt;br /&gt;Den verkliga nivån är kontinuerligt uppdaterad baserad på ditt nuvarande talmönster, men kommer aldrig att gå under nivån specifierad här.&lt;br /&gt;Om &lt;i&gt;mikrofonstyrkan&lt;/i&gt; av ljudstatistiken är över ungefär 100% kommer du säkerligen villa ställa in detta till 2.0 eller liknande, men som de allra flesta kan du inte nå 100%, ställ in till något mycket högre.&lt;br /&gt;Ställ helst in det till &lt;i&gt;mikrofonstyrka * förstärkningsfaktor &gt;= 100&lt;/i&gt; även när du talar mjukt.&lt;br /&gt;&lt;br /&gt;Kom ihåg att det inte tar någon skada att ställa in detta till det högsta. Mumble kommer ta upp andra konversationer om du låter det vara för att automatiskt justera nivån.</translation>
     </message>
     <message>
         <location/>
         <source>Current speech detection chance</source>
-        <translation>Nuvarande talupptäcknings risk</translation>
+        <translation>Nuvarande talupptäckningsrisk</translation>
     </message>
     <message>
         <location/>
@@ -934,7 +971,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>Enabling this will cancel the echo from your speakers. Mixed has low CPU impact, but only works well if your speakers are equally loud and equidistant from the microphone. Multichannel echo cancellation provides much better echo cancellation, but at a higher CPU cost.</source>
-        <translation>Aktivering av detta kommer att hindra eko från dina högtalare. Blandad har låg CPU-kraft, men fungerar bara bra om dina högtalare hörs lika högt och från samma avstånd från din mikrofon. Multikanal ekoavbrytning ger mycket bättre ekoavbrytning, men tar mer CPU-kraft.</translation>
+        <translation>Aktivering av detta kommer att hindra eko från dina högtalare. Blandad har låg CPU-kraft, men fungerar bara bra om dina högtalare hörs lika högt och från samma avstånd från din mikrofon. Multikanals-ekoavbrytning ger mycket bättre ekoavbrytning, men tar mer CPU-kraft.</translation>
     </message>
     <message>
         <location/>
@@ -943,23 +980,8 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     </message>
     <message>
         <location/>
-        <source>Mixed</source>
-        <translation>Blandad</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Multichannel</source>
-        <translation>Multikanal</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Echo</source>
-        <translation>Eko</translation>
-    </message>
-    <message>
-        <location/>
         <source>&lt;b&gt;This sets speech detection to use Signal to Noise ratio.&lt;/b&gt;&lt;br /&gt;In this mode, the input is analyzed for something resembling a clear signal, and the clarity of that signal is used to trigger speech detection.</source>
-        <translation>&lt;b&gt;Detta ställer in upptäckning av röstaktivitet att använda Signal till Buller kvot.&lt;/b&gt;&lt;br /&gt;I detta läge analyseras ingången för något som liknar en ren signal och klarhet, vilket används för att växla upptäckning av röstaktivitet.</translation>
+        <translation>&lt;b&gt;Detta ställer in upptäckning av röstaktivitet att använda Signal-till-Buller-kvot.&lt;/b&gt;&lt;br /&gt;I detta läge analyseras ingången för något som liknar en ren signal och klarhet, vilket används för att växla upptäckning av röstaktivitet.</translation>
     </message>
     <message>
         <location/>
@@ -969,7 +991,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>Signal values below this count as silence</source>
-        <translation>Signalvärden under detta räknas som tysthet</translation>
+        <translation>Signalvärden under detta räknas som tystnad</translation>
     </message>
     <message>
         <location/>
@@ -1029,12 +1051,12 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>Displays an always on top window with a push to talk button in it</source>
-        <translation>Visa alltid ett alltid-överst-fönster med en tryck-för-att-prata-knapp</translation>
+        <translation>Visa alltid ett alltid-överst-fönster med en tryck-för-att-tala-knapp</translation>
     </message>
     <message>
         <location/>
         <source>Display push to talk window</source>
-        <translation>Visa tryck-för-att-prata-fönster</translation>
+        <translation>Visa tryck-för-att-tala-fönster</translation>
     </message>
     <message>
         <location/>
@@ -1074,12 +1096,12 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>Time the microphone stays open after the PTT key is released</source>
-        <translation>Tiden som mikrofonen är igång efter att tryck-för-att-prata-knappen släppts</translation>
+        <translation>Tiden som mikrofonen är igång efter att tryck-för-att-tala-knappen släppts</translation>
     </message>
     <message>
-        <location filename="AudioInput.cpp" line="+529"/>
+        <location filename="AudioInput.cpp" line="+513"/>
         <source>Server maximum network bandwidth is only %1 kbit/s. Audio quality auto-adjusted to %2 kbit/s (%3 ms)</source>
-        <translation>Serverns maximala nätverkskapacitet är bara %1 kbit/s. Ljudkvalitén autojusterades till %2 kbit/s (%3 ms)</translation>
+        <translation>Serverns maximala nätverkskapacitet är bara %1 kbit/s. Ljudkvaliteten justerades till %2 kbit/s (%3 ms)</translation>
     </message>
     <message>
         <location filename="AudioInput.ui"/>
@@ -1116,11 +1138,26 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
         <source>after</source>
         <translation>efter</translation>
     </message>
+    <message>
+        <location/>
+        <source>Echo Cancellation</source>
+        <translation>Ekoavbrytning</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Mixed echo cancellation</source>
+        <translation>Blandad ekavbrutning</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Multichannel echo cancellation</source>
+        <translation>Ekoavbrutning för multikanal</translation>
+    </message>
 </context>
 <context>
     <name>AudioInputDialog</name>
     <message>
-        <location filename="AudioConfigDialog.cpp" line="+75"/>
+        <location filename="AudioConfigDialog.cpp" line="+80"/>
         <source>Continuous</source>
         <translation>Kontinuerligt</translation>
     </message>
@@ -1210,12 +1247,12 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>Output device for audio</source>
-        <translation>Utångsenhet för ljud</translation>
+        <translation>Utgångsenhet för ljud</translation>
     </message>
     <message>
         <location/>
         <source>&lt;b&gt;This is the output device to use for audio.&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Detta är utgångsehneten att använda för ljud.&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Detta är utgångsenheten att använda för ljud.&lt;/b&gt;</translation>
     </message>
     <message>
         <location/>
@@ -1280,7 +1317,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>Output Delay</source>
-        <translation>Utgångsdröjning</translation>
+        <translation>Utgångsfördröjning</translation>
     </message>
     <message>
         <location/>
@@ -1316,7 +1353,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>Checking this indicates that you don&apos;t have speakers connected, just headphones. This is important, as speakers are usually in front of you, while headphones are directly to your left/right.</source>
-        <translation>Markering av detta ökar att du inte har högtalare anslutna, endast hörlurar. Detta är viktigt, då högtalare oftast är framför dig medan hörlurar är direkt på höger/vänster sidorna.</translation>
+        <translation>Markering av detta ökar att du inte har högtalare anslutna, endast hörlurar. Detta är viktigt, då högtalare oftast är framför dig medan hörlurar är direkt på höger/vänster-sidorna.</translation>
     </message>
     <message>
         <location/>
@@ -1361,7 +1398,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>Delay Variance</source>
-        <translation>Fördröj motsättning</translation>
+        <translation>Fördröjnings-motsättning</translation>
     </message>
     <message>
         <location/>
@@ -1372,7 +1409,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
         <location/>
         <source>&lt;b&gt;This sets the packet latency variance for loopback testing.&lt;/b&gt;&lt;br /&gt;Most audio paths contain some variable latency. This allows you to set that variance for loopback mode testing. For example, if you set this to 15ms, this will emulate a network with 20-35ms ping latency or one with 80-95ms latency. Most domestic net connections have a variance of about 5ms.</source>
         <oldsource>&lt;b&gt;This sets the packet latency variance for loopback testing.&lt;/b&gt;&lt;br /&gt;Most audio paths contain some variable latency. This allows you set that variance for loopback mode testing. For example, if you set this to 15ms, this will emulate a network with 20-35ms ping latency or one with 80-95ms latency. Most domestic net connections have a variance of about 5ms.</oldsource>
-        <translation>&lt;b&gt;Detta ställer in paketlatensen för tillbakalop testning.&lt;/b&gt;&lt;br /&gt;De felsta ljudsökvägar innehåller viss motsättslatens. Detta tillåter dig att ställa in motsättningen för läget tillbakalop. T.ex. om du ställer in detta till 15ms, kommer detta emulera ett nätverk med 20-35ms latens eller ett med 80-95ms latens. De flesta stora nätverksanslutningar har en motsättning vid ungefär 5ms.</translation>
+        <translation>&lt;b&gt;Detta ställer in paketlatensen för tillbakalop-testning.&lt;/b&gt;&lt;br /&gt;De felsta ljudsökvägar innehåller viss motsättslatens. Detta tillåter dig att ställa in motsättningen för läget tillbakalop. T.ex. om du ställer in detta till 15ms, kommer detta emulera ett nätverk med 20-35ms latens eller ett med 80-95ms latens. De flesta stora nätverksanslutningar har en motsättning vid ungefär 5ms.</translation>
     </message>
     <message>
         <location/>
@@ -1387,7 +1424,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>&lt;b&gt;This sets the packet loss for loopback mode.&lt;/b&gt;&lt;br /&gt;This will be the ratio of packets lost. Unless your outgoing bandwidth is peaked or there&apos;s something wrong with your network connection, this will be 0%</source>
-        <translation>&lt;b&gt;Detta ställer in paketförluster för läget tillbakalop.&lt;/b&gt;&lt;br /&gt;Detta kommer att bli kvoten av paketförluster, såvida din utgående bandbredd är toppad eller att någonting är fel med din nätverksanslutning, kommer detta bli 0%</translation>
+        <translation>&lt;b&gt;Detta ställer in paketförluster för läget tillbakalop.&lt;/b&gt;&lt;br /&gt;Detta kommer att bli kvoten av paketförluster. Om inte din utgående bandbredd är toppad eller att någonting är fel med din internetanslutning, kommer detta bli 0%</translation>
     </message>
     <message>
         <location/>
@@ -1417,32 +1454,32 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>If checked Mumble lowers the volume of other applications while other users talk</source>
-        <translation>Vid markering sänker Mumble volymen för andra program då användare pratar</translation>
+        <translation>Vid markering sänker Mumble volymen för andra program när andra användare talar</translation>
     </message>
     <message>
         <location/>
         <source>&lt;b&gt;Attenuate applications while other users talk&lt;/b&gt;&lt;br /&gt;Mumble supports decreasing the volume of other applications during incoming and/or outgoing speech. This makes mumble activate the feature while other users talk to you.</source>
-        <translation>&lt;b&gt;Dämpa program då andra användare pratar&lt;/b&gt;&lt;br /&gt;Mumble stödjer sänkning av volymen för andra program vid inkommande och/eller utgående tal. Detta gör att Mumble aktiverar funktionen då andra användare pratar med dig.</translation>
+        <translation>&lt;b&gt;Dämpa program då andra användare talar&lt;/b&gt;&lt;br /&gt;Mumble stödjer sänkning av volymen för andra program vid inkommande och/eller utgående tal. Detta gör att Mumble aktiverar funktionen då andra användare talar med dig.</translation>
     </message>
     <message>
         <location/>
         <source>while other users talk</source>
-        <translation>när andra pratar</translation>
+        <translation>när andra talar</translation>
     </message>
     <message>
         <location/>
         <source>If checked Mumble lowers the volume of other applications while you talk</source>
-        <translation>Vid markering sänker Mumble volymen för andra program då du pratar</translation>
+        <translation>Vid markering sänker Mumble volymen för andra program när du talar</translation>
     </message>
     <message>
         <location/>
         <source>&lt;b&gt;Attenuate applications while you talk&lt;/b&gt;&lt;br /&gt;Mumble supports decreasing the volume of other applications during incoming and/or outgoing speech. This makes mumble activate the feature while you talk.</source>
-        <translation>&lt;b&gt;Dämpa program då du pratar&lt;/b&gt;&lt;br /&gt;Mumble stödjer sänkning av volymen för andra program vid inkommande och/eller utgående tal. Detta gör att volymen för andra program vid inkommande och/eller utgående tal. Detta för att Mumble aktiverar funktionen då du pratar.</translation>
+        <translation>&lt;b&gt;Dämpa program när du talar&lt;/b&gt;&lt;br /&gt;Mumble stödjer sänkning av volymen för andra program vid inkommande och/eller utgående tal. Detta gör att volymen för andra program vid inkommande och/eller utgående tal. Detta för att Mumble aktiverar funktionen då du talar.</translation>
     </message>
     <message>
         <location/>
         <source>while you talk</source>
-        <translation>när du pratar</translation>
+        <translation>när du talar</translation>
     </message>
     <message>
         <location/>
@@ -1459,11 +1496,66 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
         <source>Exclusive</source>
         <translation>Exklusiv</translation>
     </message>
+    <message>
+        <location/>
+        <source>Priority Speaker</source>
+        <translation>Prioriterad talare</translation>
+    </message>
+    <message>
+        <location/>
+        <source>If checked Mumble lowers the volume of other users while you talk if you have the &quot;Priority Speaker&quot; status.</source>
+        <translation>Vid markering sänker Mumble volymen för övriga användare medan du talar om du har &quot;Prioriterad talare&quot; som status.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Attenuate other users while talking as Priority Speaker.&lt;/b&gt;&lt;br /&gt;Mumble supports decreasing the volume of other users while you talk as the &lt;i&gt;Priority Speaker&lt;/i&gt; to avoid getting disturbed. Checking this checkbox will enable this feature.</source>
+        <translation>&lt;b&gt;Dämpa andra spelare när du talar som Prioriterad talare.&lt;/b&gt;&lt;br /&gt;Mumble stödjer minskning av volym för andra spelare medan du talar som &lt;i&gt;Prioriterad talare&lt;/i&gt;, för att undvika att du blir störd. Markera för att aktivera funktionen. </translation>
+    </message>
+    <message>
+        <location/>
+        <source>Attenuate other users while talking as Priority Speaker.</source>
+        <translation>Dämpa andra användare medan du talar som Prioriterad talare.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Advanced Attenuation Options</source>
+        <translation>Avancerade dämpningsinställningar</translation>
+    </message>
+    <message>
+        <location/>
+        <source>If checked, Mumble will only attenuate applications that are using the same output source as Mumble</source>
+        <translation>Vid markering kommer Mumble endast att dämpa program som använder sig av samma utgångskälla som Mumble.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Attenuate only applications using the same output as Mumble&lt;/b&gt;&lt;br /&gt;If checked, applications that use a different output than Mumble will not be attenuated.</source>
+        <translation>&lt;b&gt;Dämpa endast program som använder samma utgångskälla som Mumble.&lt;/b&gt;&lt;br /&gt;Vid markering kommer program som använder en annan utgångskälla än Mumble inte att bli dämpat.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Only attenuate applications using the same output device</source>
+        <translation>Dämpa endast program som använder samma utgångskälla.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>If checked, PulseAudio loopback modules will be attenuated</source>
+        <translation>Vid markering kommer PulsAudio returkopploingsmoduler att bli dämpade.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Attenuate PulseAudio loopback modules&lt;/b&gt;&lt;br /&gt;If loopback modules are linked to Mumble&apos;s output device/sink, they will also be attenuated.</source>
+        <translation>&lt;b&gt;Dämpa PulsAudio returkopplingsmoduler&lt;/b&gt;&lt;br /&gt;Om returkopplingsmoduler är länkade till Mumble&apos;s utgångsenhet kommer även dessa att bli dämpade.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Attenuate PulseAudio loopback modules</source>
+        <translation>Dämpa PulseAudio returkopplingsmoduler</translation>
+    </message>
 </context>
 <context>
     <name>AudioOutputDialog</name>
     <message>
-        <location filename="AudioConfigDialog.cpp" line="+135"/>
+        <location filename="AudioConfigDialog.cpp" line="+137"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
@@ -1483,7 +1575,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
         <translation>Ljudutgång</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+123"/>
         <location line="+19"/>
         <location line="+8"/>
         <source>%1 ms</source>
@@ -1508,7 +1600,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
 <context>
     <name>AudioOutputSample</name>
     <message>
-        <location filename="AudioOutputSample.cpp" line="+211"/>
+        <location filename="AudioOutputSample.cpp" line="+185"/>
         <source>Choose sound file</source>
         <translation>Välj ljudfil</translation>
     </message>
@@ -1526,7 +1618,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
 <context>
     <name>AudioStats</name>
     <message>
-        <location filename="AudioStats.cpp" line="+387"/>
+        <location filename="AudioStats.cpp" line="+363"/>
         <source>&gt;1000 ms</source>
         <oldsource>&gt;1000ms</oldsource>
         <translation>&gt;1000 ms</translation>
@@ -1554,7 +1646,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This shows the peak power in the last frame (20 ms), and is the same measurement as you would usually find displayed as &quot;input power&quot;. Please disregard this and look at &lt;b&gt;Microphone power&lt;/b&gt; instead, which is much more steady and disregards outliers.</source>
-        <translation>Detta visar den högsta kraften i den senaste rutan (20 ms) och är samma mätning som du skulle hittat under &quot;ingångskraft&quot;. Ignorera detta och tilla på &lt;b&gt;mikrofonkraft&lt;/b&gt; iställer, vilket är mycket jämnare och bortser från avvikelser.</translation>
+        <translation>Detta visar den högsta kraften i den senaste rutan (20 ms) och är samma mätning som du skulle hittat under &quot;ingångskraft&quot;. Ignorera detta och titta på &lt;b&gt;mikrofonkraft&lt;/b&gt; istället, vilket är mycket jämnare och bortser från avvikelser.</translation>
     </message>
     <message>
         <location/>
@@ -1564,7 +1656,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This shows the peak power of the speakers in the last frame (20 ms). Unless you are using a multi-channel sampling method (such as ASIO) with speaker channels configured, this will be 0. If you have such a setup configured, and this still shows 0 while you&apos;re playing audio from other programs, your setup is not working.</source>
-        <oldsource>This shows the peak power in the last frame (20 ms) of the speakers. Unless you are using a multi-channel sampling method (such as ASIO) with speaker channels configured, this will be 0. If you have such a setup configured, and this still shows 0 while you&apos;re playing audio from other programs, your setup is not working.</oldsource>
+        <oldsource>This shows the peak power in the last frame (20 ms) of the speakers. Unless you are using a multi-channel sampling method (such as ASIO) with speaker channels configured, this will be 0. If you have such a setup configured, and this still shows 0 while you're playing audio from other programs, your setup is not working.</oldsource>
         <translation>Detta visar den högsta kraften för högtalarna i den senaste rutan (20 ms). Såvida du inte använder en samplingsmetod för multikanal (t.ex. ASIO) med högtalarkanaler konfigurerade, kommer detta blir 0. Om du har en sådan uppsättning konfigurerad kommer detta visas som 0 då du spelar ljud från andra program, fungerar inte din uppsättning.</translation>
     </message>
     <message>
@@ -1575,7 +1667,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This shows the peak power in the last frame (20 ms) after all processing. Ideally, this should be -96 dB when you&apos;re not talking. In reality, a sound studio should see -60 dB, and you should hopefully see somewhere around -20 dB. When you are talking, this should rise to somewhere between -5 and -10 dB.&lt;br /&gt;If you are using echo cancellation, and this rises to more than -15 dB when you&apos;re not talking, your setup is not working, and you&apos;ll annoy other users with echoes.</source>
-        <translation>Detta visar den högsta kraften den senaste rutan (20 ms) efter alla procedurer. I bästa fall ska detta vara -96 dB när du inte pratar. I verkligeheten är ett ljud -60 dB, men du borde se någonting vid ungefär -20 dB. När du pratar ska detta höjas till någonting mellan -5 och 10 dB.&lt;br /&gt;Om du använder ekoborttagning och detta ökar till mer än -15 dB när du inte pratar, är din uppsättning felaktig och du kommer att störa andra användare med ekon.</translation>
+        <translation>Detta visar den högsta kraften den senaste rutan (20 ms) efter alla procedurer. I bästa fall ska detta vara -96 dB när du inte talar. I verkligeheten är ett ljud -60 dB, men du borde se någonting vid ungefär -20 dB. När du talar ska detta höjas till någonting mellan -5 och -10 dB.&lt;br /&gt;Om du använder ekoborttagning och detta ökar till mer än -15 dB när du inte talar, är din uppsättning felaktig och du kommer att störa andra användare med ekon.</translation>
     </message>
     <message>
         <location/>
@@ -1590,27 +1682,27 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>How close the current input level is to ideal</source>
-        <translation>Hur nära den nuvarande ingångsnivån är idiellt</translation>
+        <translation>Hur nära den nuvarande ingångsnivån är till idealisk</translation>
     </message>
     <message>
         <location/>
         <source>This shows how close your current input volume is to the ideal. To adjust your microphone level, open whatever program you use to adjust the recording volume, and look at the value here while talking.&lt;br /&gt;&lt;b&gt;Talk loud, as you would when you&apos;re upset over getting fragged by a noob.&lt;/b&gt;&lt;br /&gt;Adjust the volume until this value is close to 100%, but make sure it doesn&apos;t go above. If it does go above, you are likely to get clipping in parts of your speech, which will degrade sound quality.</source>
-        <translation>Detta visar hur nära din nuvarande ingångsvolym är till iidiellt. För att justera din mikrofonnivå, öppna ett program som du använder för att justera inspelningsvolymen och leta efter värdet här medan du pratar.&lt;br /&gt;&lt;b&gt;Tala högt, som om att du vore upprörd för att du sköts av en liten n00big P12:a.&lt;/b&gt;&lt;br /&gt;Justera volymen tills detta värda är nära 100%, men se till att det inte för över det. Om det går över, kommer du säkerligen att få klippningar i ditt tal, som kommer att försämra ljudkvaliteten.</translation>
+        <translation>Detta visar hur nära din nuvarande ingångsvolym är till idealisk. För att justera din mikrofonnivå, öppna ett program som du använder för att justera inspelningsvolymen och leta efter värdet här medan du talar.&lt;br /&gt;&lt;b&gt;Tala högt, som om att du vore upprörd för att du sköts av en liten n00big P12:a.&lt;/b&gt;&lt;br /&gt;Justera volymen tills detta värda är nära 100%, men se till att det inte för över det. Om det går över, kommer du säkerligen att få klippningar i ditt tal, som kommer att försämra ljudkvaliteten.</translation>
     </message>
     <message>
         <location/>
         <source>Signal-To-Noise ratio</source>
-        <translation>Signal-till-Buller kvot</translation>
+        <translation>Signal-till-Buller-kvot</translation>
     </message>
     <message>
         <location/>
         <source>Signal-To-Noise ratio from the microphone</source>
-        <translation>Signal-till-Buller kvot från mikrofon</translation>
+        <translation>Signal-till-Buller-kvot från mikrofon</translation>
     </message>
     <message>
         <location/>
         <source>This is the Signal-To-Noise Ratio (SNR) of the microphone in the last frame (20 ms). It shows how much clearer the voice is compared to the noise.&lt;br /&gt;If this value is below 1.0, there&apos;s more noise than voice in the signal, and so quality is reduced.&lt;br /&gt;There is no upper limit to this value, but don&apos;t expect to see much above 40-50 without a sound studio.</source>
-        <translation>Detta är Signal-till-Buller kvoten (STR) för mikrofonen i den senaste rutan (20 ms). Det visas hur mycket klarare rösten är jämfört med bullret.&lt;br /&gt;Om detta värde är under 1.0, finns det mer buller än ljudet i signalen och kvaliteten har minskat.&lt;br /&gt;Det finns ingen begränsning på hur högt detta värde kan vara, men förvänta dig inte att se mer än 40-50 utan en ljudstudio.</translation>
+        <translation>Detta är Signal-till-Buller-kvoten (STR) för mikrofonen i den senaste rutan (20 ms). Det visas hur mycket klarare rösten är jämfört med bullret.&lt;br /&gt;Om detta värde är under 1.0, finns det mer buller än ljudet i signalen och kvaliteten har minskat.&lt;br /&gt;Det finns ingen begränsning på hur högt detta värde kan vara, men förvänta dig inte att se mer än 40-50 utan en ljudstudio.</translation>
     </message>
     <message>
         <location/>
@@ -1625,7 +1717,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This is the probability that the last frame (20 ms) was speech and not environment noise.&lt;br /&gt;Voice activity transmission depends on this being right. The trick with this is that the middle of a sentence is always detected as speech; the problem is the pauses between words and the start of speech. It&apos;s hard to distinguish a sigh from a word starting with &apos;h&apos;.&lt;br /&gt;If this is in bold font, it means Mumble is currently transmitting (if you&apos;re connected).</source>
-        <translation>Detta är förmodligen den senaste rutan (20 ms) som var tal och inte miljlöbuller.&lt;br /&gt;Överföring av ljudaktivitet beror på detta att det är rätt. Tricket md detta är att mitten av en mening alltid upptäcks som tal. Problemet är pauserna mellan ord och början av talet. Det är svårt att skilja en suck från ett ord som börjar med &quot;h&quot;.&lt;br /&gt;Om detta är med fet stil betyder det att Mumble överför för närvarande (om du är ansluten).</translation>
+        <translation>Detta är förmodligen den senaste rutan (20 ms) som var tal och inte miljöbuller.&lt;br /&gt;Överföring av ljudaktivitet beror på detta att det är rätt. Tricket md detta är att mitten av en mening alltid upptäcks som tal. Problemet är pauserna mellan ord och början av talet. Det är svårt att skilja en suck från ett ord som börjar med &quot;h&quot;.&lt;br /&gt;Om detta är med fet stil betyder det att Mumble överför för närvarande (om du är ansluten).</translation>
     </message>
     <message>
         <location/>
@@ -1645,12 +1737,12 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>DoublePush interval</source>
-        <translation>Dubbelklicks intervall</translation>
+        <translation>Dubbelklicks-intervall</translation>
     </message>
     <message>
         <location/>
         <source>Time between last two Push-To-Talk presses</source>
-        <translation>Tid mellen de senaste två Tryck-för-att-Tala aktiviteterna</translation>
+        <translation>Tid mellan de senaste två Tryck-för-att-Tala-aktiviteterna</translation>
     </message>
     <message>
         <location/>
@@ -1680,7 +1772,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This shows the power spectrum of the current input signal (red line) and the current noise estimate (filled blue).&lt;br /&gt;All amplitudes are multiplied by 30 to show the interesting parts (how much more signal than noise is present in each waveband).&lt;br /&gt;This is probably only of interest if you&apos;re trying to fine-tune noise conditions on your microphone. Under good conditions, there should be just a tiny flutter of blue at the bottom. If the blue is more than halfway up on the graph, you have a seriously noisy environment.</source>
-        <translation>Detta visar kraftspektrumet för den nuvarande ingångssignalen (röd) och de nuvarande bulleruppskattningen (fylls blå).&lt;br /&gt;Alla amplituder multipliceras med 30 för att visa de intressanta delarna (hur mycket mer signal än buller som presenteras i varje våg).&lt;br /&gt;Deta är intressant om du försöker att finjustera bulleförutsättningen på din mikrofon. Under goda förutsättningar skall det endast vara en liten mängd blått vid botten. Om det blåa är mer än halvvägs upp i grafen, har du en dålig bulleromgivning.</translation>
+        <translation>Detta visar kraftspektrumet för den nuvarande ingångssignalen (röd) och de nuvarande bulleruppskattningen (fylls blå).&lt;br /&gt;Alla amplituder multipliceras med 30 för att visa de intressanta delarna (hur mycket mer signal än buller som presenteras i varje våg).&lt;br /&gt;Detta är intressant om du försöker att finjustera bullerförutsättningen på din mikrofon. Under goda förutsättningar ska det endast vara en liten mängd blått vid botten. Om det blåa är mer än halvvägs upp i grafen, har du en dålig bulleromgivning.</translation>
     </message>
     <message>
         <location/>
@@ -1695,7 +1787,7 @@ Innehåller listan med ärvda medlemmar av den nuvarande kanalen. Avmarkera &lt;
     <message>
         <location/>
         <source>This shows the weights of the echo canceller, with time increasing downwards and frequency increasing to the right.&lt;br /&gt;Ideally, this should be black, indicating no echo exists at all. More commonly, you&apos;ll have one or more horizontal stripes of bluish color representing time delayed echo. You should be able to see the weights updated in real time.&lt;br /&gt;Please note that as long as you have nothing to echo off, you won&apos;t see much useful data here. Play some music and things should stabilize. &lt;br /&gt;You can choose to view the real or imaginary parts of the frequency-domain weights, or alternately the computed modulus and phase. The most useful of these will likely be modulus, which is the amplitude of the echo, and shows you how much of the outgoing signal is being removed at that time step. The other viewing modes are mostly useful to people who want to tune the echo cancellation algorithms.&lt;br /&gt;Please note: If the entire image fluctuates massively while in modulus mode, the echo canceller fails to find any correlation whatsoever between the two input sources (speakers and microphone). Either you have a very long delay on the echo, or one of the input sources is configured wrong.</source>
-        <translation>Detta visar vikterna för ekoavbrytaren, med tiden ökande nedåt och frekvensen ökande till höger.&lt;br /&gt;Helst ska detta vara svart, vilket visar att det inte finns något eko alls. Vanligtvis, har du en eller flera horisontella linjer som representerar tidfördröjda ekon. Du borde se hur vikterna uppdateras i realtid.&lt;br /&gt;Kom ihåg att så länge du har något att ta bort eko ifrån, kommer du inte se någon användbar data här. Spela lite musik så kommer saker att stabiliseras. &lt;br /&gt;Du kan välja mellan att välja riktida eller tänkta delar av frekvensdomänens vikter, eller alternativt beräknade moduler och faser. Det mest användbara av dessa kommer säkerligen vara moduler, som är amplituden för ekot och visar hur mycket av den utgående signalen som tas bort just då. De andra visningslägena fär mest användbara för människor som vill ställa in ekoavbrytnings algoritmer.&lt;br /&gt;Kom ihåg att om hela bilden fluktuerar massivt i modulläget misslyckas ekoavbrytaren att hitta ett växelförhållande mellan ingångskällorna (högtalare och mikrofon). Antingen har du en hög latens för ekot, eller så är en av ingångskällorna felkonfigurerade.</translation>
+        <translation>Detta visar vikterna för ekoavbrytaren, med tiden ökande nedåt och frekvensen ökande till höger.&lt;br /&gt;Helst ska detta vara svart, vilket visar att det inte finns något eko alls. Vanligtvis, har du en eller flera horisontella linjer som representerar tidfördröjda ekon. Du borde se hur vikterna uppdateras i realtid.&lt;br /&gt;Kom ihåg att så länge du har något att ta bort eko ifrån, kommer du inte se någon användbar data här. Spela lite musik så kommer saker att stabiliseras. &lt;br /&gt;Du kan välja mellan att välja riktida eller tänkta delar av frekvensdomänens vikter, eller alternativt beräknade moduler och faser. Det mest användbara av dessa kommer säkerligen vara moduler, som är amplituden för ekot och visar hur mycket av den utgående signalen som tas bort just då. De andra visningslägena fär mest användbara för människor som vill ställa in ekoavbrytnings-algoritmer.&lt;br /&gt;Kom ihåg att om hela bilden fluktuerar massivt i modulläget misslyckas ekoavbrytaren att hitta ett växelförhållande mellan ingångskällorna (högtalare och mikrofon). Antingen har du en hög latens för ekot, eller så är en av ingångskällorna felkonfigurerade.</translation>
     </message>
     <message>
         <location/>
@@ -1859,7 +1951,7 @@ Kom ihåg att du kommer höra ditt eget ljud lokalt så länge konfigurationsgui
     <message>
         <location/>
         <source>&lt;p&gt;
-To keep latency to an absolute minimum, it&apos;s important to buffer as little audio as possible on the soundcard. However, many soundcards report that they require a much smaller buffer than what they can actually work with, so the only way to set this value is to try and fail.
+To keep latency to an absolute minimum, it's important to buffer as little audio as possible on the soundcard. However, many soundcards report that they require a much smaller buffer than what they can actually work with, so the only way to set this value is to try and fail.
 &lt;/p&gt;
 &lt;p&gt;
 You should hear a voice sample. Change the slider below to the lowest value which gives &lt;b&gt;no&lt;/b&gt; interruptions or jitter in the sound. Please note that local echo is disabled during this test.
@@ -1886,7 +1978,7 @@ Du kommer att höra ett rösttest. Ställ in inställningen nedan till det lägs
     <message>
         <location/>
         <source>&lt;p&gt;
-Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there&apos;s an option to enable a &quot;Microphone boost&quot; make sure it&apos;s checked.
+Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there's an option to enable a &quot;Microphone boost&quot; make sure it's checked.
 &lt;/p&gt;
 &lt;p&gt;
 Speak loudly, as when you are annoyed or excited. Decrease the volume in the sound control panel until the bar below stays as high as possible in the blue and green but &lt;b&gt;not&lt;/b&gt; the red zone while you speak.
@@ -1896,7 +1988,7 @@ Speak loudly, as when you are annoyed or excited. Decrease the volume in the sou
 Öppna din kontrollpanel för ljud och gå till inspelningsinställningar. Se till att mikrofonen är vald som aktiv ingång, med högsta inspelningsvolym. Om det finns ett alternativ för att aktivera &quot;Mikrofonförstärkning&quot;, se till att det är markerat.
 &lt;/p&gt;
 &lt;p&gt;
-Prata högljutt, som om att du är irriterad eller nyfiken. Sänk volymen i kontrollpanelen för ljud tills baren under stannar så högt som möjligt i den gröna och blåa, men &lt;b&gt;inte&lt;/b&gt; i det röda området medan du pratar.
+Tala högljutt, som om att du är irriterad eller nyfiken. Sänk volymen i kontrollpanelen för ljud tills baren under stannar så högt som möjligt i den gröna och blåa, men &lt;b&gt;inte&lt;/b&gt; i det röda området medan du talar.
 &lt;/p&gt;
 </translation>
     </message>
@@ -1930,7 +2022,7 @@ Grafen visar positionen för &lt;font color=&quot;red&quot;&gt;dig&lt;/font&gt;,
     <message>
         <location/>
         <source>Use headphones instead of speakers</source>
-        <translation>Använd hörlurer istället för högtalare</translation>
+        <translation>Använd hörlurar istället för högtalare</translation>
     </message>
     <message>
         <location/>
@@ -1938,11 +2030,11 @@ Grafen visar positionen för &lt;font color=&quot;red&quot;&gt;dig&lt;/font&gt;,
 Congratulations. You should now be ready to enjoy a richer sound experience with Mumble.
 &lt;/p&gt;
 &lt;p&gt;
-Mumble is under continuous development, and the development team wants to focus on the features that benefit the most users. To this end, Mumble supports submitting anonymous statistics about your configuration to the developers. These statistics are essential for future development, and also make sure the features you use aren&apos;t deprecated.
+Mumble is under continuous development, and the development team wants to focus on the features that benefit the most users. To this end, Mumble supports submitting anonymous statistics about your configuration to the developers. These statistics are essential for future development, and also make sure the features you use aren't deprecated.
 &lt;/p&gt;
 </source>
         <translation>&lt;p&gt;
-Mumble är under utveckling och utvecklingslaget vill fokusera på funktionerna som flest användare vill ha. I slutändan stödjer Mumble inskickning av anonym statistik om din konfiguration till utvecklarna. Denna statistik är nödvändig för framtid utveckling, samt att se till att funtionerna du använder inte föråldras.
+Mumble är under utveckling och utvecklingslaget vill fokusera på funktionerna som flest användare vill ha. I slutändan stödjer Mumble inskickning av anonym statistik om din konfiguration till utvecklarna. Denna statistik är nödvändig för framtida utveckling, samt för att se till så att funtionerna du använder inte föråldras.
 &lt;/p&gt;
 </translation>
     </message>
@@ -1969,7 +2061,7 @@ Mumble är under utveckling och utvecklingslaget vill fokusera på funktionerna 
     <message>
         <location/>
         <source>Now talk softly, as you would when talking late at night and you don&apos;t want to disturb anyone. Adjust the slider below so that the bar moves into green when you talk, but stays blue while you&apos;re silent.</source>
-        <translation>Prata lugnt, som om du pratar mitt i natten och inte vill störa någon. Justera inställningen nedan så att baren flyttas till grönt när du pratar, men förblir blå när du är tyst.</translation>
+        <translation>Tala lugnt, som om du talar mitt i natten och inte vill störa någon. Justera inställningen nedan så att baren flyttas till grönt när du talar, men förblir blå när du är tyst.</translation>
     </message>
     <message>
         <location/>
@@ -1979,12 +2071,12 @@ Mumble är under utveckling och utvecklingslaget vill fokusera på funktionerna 
     <message>
         <location/>
         <source>Letting Mumble figure out when you&apos;re talking and when you&apos;re silent.</source>
-        <translation>Låt Mumble räkna ut när du pratar och när du är tyst.</translation>
+        <translation>Låt Mumble räkna ut när du talar och när du är tyst.</translation>
     </message>
     <message>
         <location/>
         <source>This will help Mumble figure out when you are talking. The first step is selecting which data value to use.</source>
-        <translation>Detta hjälper Mumble att räkna ut när du pratar. Det första steget väljer vilket datavärde att använda.</translation>
+        <translation>Detta hjälper Mumble att räkna ut när du talar. Det första steget är att välja vilket datavärde som ska användas.</translation>
     </message>
     <message>
         <location/>
@@ -1994,13 +2086,13 @@ Mumble är under utveckling och utvecklingslaget vill fokusera på funktionerna 
     <message>
         <location/>
         <source>Signal-To-Noise ratio</source>
-        <translation>Signal-till-Buller kvot</translation>
+        <translation>Signal-till-Buller-kvot</translation>
     </message>
     <message>
         <location/>
         <source>Next you need to adjust the following slider. The first few utterances you say should end up in the green area (definitive speech). While talking, you should stay inside the yellow (might be speech) and when you&apos;re not talking, everything should be in the red (definitively not speech).</source>
-        <oldsource>Next you need to adjust the following two sliders. The first few utterances you say should end up in the green area (definitive speech). While talking, you should stay inside the yellow (might be speech) and when you&apos;re not talking, everything should be in the red (definitively not speech).</oldsource>
-        <translation>Nu behöver du justera följande inställning. De första få yttranden du säger bör hamna i det gröa området (slutgiltigt tal). Vid tal, bör du stanna inom den gula (kan vara tal), så när du inte pratar skall allt vara rött (definitivt inte tal).</translation>
+        <oldsource>Next you need to adjust the following two sliders. The first few utterances you say should end up in the green area (definitive speech). While talking, you should stay inside the yellow (might be speech) and when you're not talking, everything should be in the red (definitively not speech).</oldsource>
+        <translation>Nu behöver du justera följande inställning. De första få yttranden du säger bör hamna i det gröna området (slutgiltigt tal). Vid tal, bör du stanna inom den gula (kan vara tal), så när du inte talar ska allt vara rött (definitivt inte tal).</translation>
     </message>
     <message>
         <location/>
@@ -2063,19 +2155,19 @@ Mumble är under utveckling och utvecklingslaget vill fokusera på funktionerna 
         <translation>Avaktivera Text-till-Tal och använd ljud istället.</translation>
     </message>
     <message>
-        <location filename="AudioWizard.cpp" line="+309"/>
+        <location filename="AudioWizard.cpp" line="+291"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
     <message>
         <location filename="AudioWizard.ui"/>
         <source>Enables attenuation of other applications while users talk to you</source>
-        <translation>Aktiverar dämpning av andra program när användare pratar med dig</translation>
+        <translation>Aktiverar dämpning av andra program när användare talar med dig</translation>
     </message>
     <message>
         <location/>
         <source>Attenuate applications while other users talk</source>
-        <translation>Dämpa program när andra användare pratar</translation>
+        <translation>Dämpa program när andra användare talar</translation>
     </message>
     <message>
         <location/>
@@ -2095,7 +2187,7 @@ Mumble är under utveckling och utvecklingslaget vill fokusera på funktionerna 
     <message>
         <location/>
         <source>Enables attenuation of other applications while users talk to you. This means that as soon someone starts to speak to you in Mumble, the sound of all other applications (like audio players) will get attenuated so you can hear them more clearly.</source>
-        <translation>Aktiverar dämpning av andra program när användare pratar med dig. Detta betyder att så snart någon börjar prata i Mumble, kommer ljudet för andra program (som musikspelare) att dämpas så att du kan höra Mumble bättre.</translation>
+        <translation>Aktiverar dämpning av andra program när användare talar med dig. Detta betyder att så snart någon börjar tala i Mumble, kommer ljudet för andra program (som musikspelare) att dämpas så att du kan höra Mumble bättre.</translation>
     </message>
     <message>
         <location/>
@@ -2110,19 +2202,19 @@ Mumble är under utveckling och utvecklingslaget vill fokusera på funktionerna 
     <message>
         <location/>
         <source>Keep custom Text-To-Speech settings.</source>
-        <translation>Behåll anpassade Text-till-Tal inställningar.</translation>
+        <translation>Behåll anpassade Text-till-Tal-inställningar.</translation>
     </message>
     <message>
         <location/>
         <source>&lt;p&gt;
-Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there&apos;s an option to enable a &quot;Microphone boost&quot; make sure it&apos;s checked.
+Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there's an option to enable a &quot;Microphone boost&quot; make sure it's checked.
 &lt;/p&gt;
 &lt;p&gt;
 Speak loudly, as when you are annoyed or excited. Decrease the volume in the sound control panel until the bar below stays as high as possible in the striped and the empty but &lt;b&gt;not&lt;/b&gt; the crisscrossed zone while you speak.
 &lt;/p&gt;
 </source>
         <oldsource>&lt;p&gt;
-Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there&apos;s an option to enable a &quot;Microphone boost&quot; make sure it&apos;s checked.
+Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there's an option to enable a &quot;Microphone boost&quot; make sure it's checked.
 &lt;/p&gt;
 &lt;p&gt;
 Speak loudly, as when you are annoyed or excited. Decrease the volume in the sound control panel until the bar below stays as high as possible in the striped and the empty but &lt;b&gt;not&lt;/b&gt; the criss-crossed zone while you speak.
@@ -2133,7 +2225,7 @@ Speak loudly, as when you are annoyed or excited. Decrease the volume in the sou
 Öppna din kontrollpanel och gå till inspelningsinställningarna. Var säker på att mikrofonen är vald som aktiv ingång med högsta inspelningsvolym. Om det finns ett alternativ för att aktivera &quot;Mikrofonförstärkning&quot;, se till att det är markerat.
 &lt;/p&gt;
 &lt;p&gt;
-Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpanelen för ljud tills baren stannar så högt som möjligt i randig och tom men &lt;b&gt;inte&lt;/b&gt; i det genomkorsade området när du pratar.
+Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpanelen för ljud tills baren stannar så högt som möjligt i randig och tom men &lt;b&gt;inte&lt;/b&gt; i det genomkorsade området när du talar.
 &lt;/p&gt;
 </translation>
     </message>
@@ -2141,18 +2233,18 @@ Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpa
         <location/>
         <source>Now talk softly, as you would when talking late at night and you don&apos;t want to disturb anyone. Adjust the slider below so that the bar moves into empty zone when you talk, but stays in the striped one while you&apos;re silent.</source>
         <comment>For high contrast mode</comment>
-        <translation>Prata lugnt, som om du skulle prata mitt i natten och inte vill störa någon. Justera inställningen nedan så att baren flyttas till det tomma området när du pratar, men i det randiga när du är tyst.</translation>
+        <translation>Tala lugnt, som om du skulle prata mitt i natten och inte vill störa någon. Justera inställningen nedan så att baren flyttas till det tomma området när du talar, men i det randiga när du är tyst.</translation>
     </message>
     <message>
         <location/>
         <source>Next you need to adjust the following slider. The first few utterances you say should end up in the empty area (definitive speech). While talking, you should stay inside the striped (might be speech) and when you&apos;re not talking, everything should be in the crisscrossed (definitively not speech).</source>
         <comment>For high contrast mode</comment>
-        <translation>Nu behöver du justera följande inställning. De första yttranden du säger borde hamna i det tomma området (slutgiltigt tal). Vid tal borde du stanna inom det randiga (kan vara tal) och när du inte pratar ska allt vara i det genomkorsade (definitivt inte tal).</translation>
+        <translation>Nu behöver du justera följande inställning. De första yttranden du säger borde hamna i det tomma området (slutgiltigt tal). Vid tal borde du stanna inom det randiga (kan vara tal) och när du inte talar ska allt vara i det genomkorsade (definitivt inte tal).</translation>
     </message>
     <message>
         <location/>
         <source>In this configuration Mumble will use a &lt;b&gt;low amount of bandwidth&lt;/b&gt;. This will inevitably result in high latency and poor quality. Choose this only if your connection cannot handle the other settings. (16kbit/s, 60ms per packet)</source>
-        <translation>Vid denna konfiguration komemr Mumble använda en &lt;b&gt;låg mängd bandbredd&lt;/b&gt;. Detta kommer oundvikligen resultera i hög latens och dålig ljudkvalitet. Används endast den här konfigurationen om din anslutning ej klarar andra inställningar. (16kbit/s, 60ms per paket)</translation>
+        <translation>Vid denna konfiguration kommer Mumble använda en &lt;b&gt;låg mängd bandbredd&lt;/b&gt;. Detta kommer oundvikligen resultera i hög latens och dålig ljudkvalitet. Används endast den här konfigurationen om din anslutning ej klarar andra inställningar. (16kbit/s, 60ms per paket)</translation>
     </message>
     <message>
         <location/>
@@ -2162,7 +2254,7 @@ Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpa
     <message>
         <location/>
         <source>This configuration is only recommended for use in setups where bandwidth is not an issue, like a LAN. It provides the lowest latency supported by Mumble and &lt;b&gt;high quality&lt;/b&gt;. (72kbit/s, 10ms per packet)</source>
-        <translation>Denna konfiguration är endast rekommenderad för användning där bandbreddskapacitet inte är ett problem, som på et lokalt nätverk. Konfigurationen ger den lägsta latensen som stöds av Mumble och &lt;b&gt;hög ljudkvalitet&lt;/b&gt;. (72kbit/s, 10ms per paket)</translation>
+        <translation>Denna konfiguration är endast rekommenderad för användning där bandbreddskapacitet inte är ett problem, som på ett lokalt nätverk. Konfigurationen ger den lägsta latensen som stöds av Mumble och &lt;b&gt;hög ljudkvalitet&lt;/b&gt;. (72kbit/s, 10ms per paket)</translation>
     </message>
 </context>
 <context>
@@ -2222,36 +2314,146 @@ Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpa
         <source>&amp;Remove</source>
         <translation>&amp;Ta bort</translation>
     </message>
+    <message>
+        <location/>
+        <source>Ban List</source>
+        <translation>Bannlista</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Search field</source>
+        <translation>Sökfält</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This is the search field. Use it to find bans that have this username set in the username field.</source>
+        <translation>Detta är sökfältet. Använd det för att hitta bannlysta användare som använder smeknamnet.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Who are you looking for?</source>
+        <translation>Vem letar du efter?</translation>
+    </message>
+    <message>
+        <location/>
+        <source>No nickname</source>
+        <translation>Inget användarnamn</translation>
+    </message>
+    <message>
+        <location/>
+        <source>IP address</source>
+        <translation>IP-adress</translation>
+    </message>
+    <message>
+        <location/>
+        <source>No IP address</source>
+        <translation>Ingen IP-adress</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Reason for the ban</source>
+        <translation>Orsak för bannlysning</translation>
+    </message>
+    <message>
+        <location/>
+        <source>No reason</source>
+        <translation>Ingen orsak</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Ban end date</source>
+        <translation>Slutdatum för bannlysning</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Ban end date. If you set the same date for start and end, the ban will be permanent (it will not expire).</source>
+        <translation>Slutdatum för bannlysning. Om du sätter samma datum som start och slut så blir bannen permanent (gäller för alltid).</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Certificate hash</source>
+        <translation>Certifikat-hash</translation>
+    </message>
+    <message>
+        <location/>
+        <source>No certificate hash</source>
+        <translation>Ingen certificat-hash</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Banned users</source>
+        <translation>Bannlysta användare</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This is a list with banned users.</source>
+        <translation>Det här är en lista med bannlysta användare.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Use this button if you want to add a new ban.</source>
+        <translation>Använd den här knappen om du vill lägga till en ny bannlysning.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Use this button if you want to update ban information.</source>
+        <translation>Använd den här knappen om du vill uppdatera informationen för bannlysningen.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Use this button if you want to remove user from the ban list.</source>
+        <translation>Använd den här knappen om du vill ta bort en användare från bannlistan.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Clear all fields</source>
+        <translation>Rensa alla fält</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This button clears all fields. Use it if you want to add a new ban.</source>
+        <translation>Den här knappen rensar alla fält. Använd den om du vill lägga till en ny bannlysning.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Clear</source>
+        <translation>Rensa</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="BanEditor.cpp" line="+177"/>
+        <source>Ban List - %n Ban(s)</source>
+        <translation><numerusform>Bannlista - %n Bannlysning(ar)</numerusform><numerusform>Bannlista - %n Bannlysning(ar)</numerusform></translation>
+    </message>
 </context>
 <context>
     <name>CertView</name>
     <message>
-        <location filename="Cert.cpp" line="+53"/>
+        <location filename="Cert.cpp" line="+26"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Email</source>
         <translation>E-post</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Issuer</source>
         <translation>Utfärdare</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Expiry Date</source>
         <translation>Utgångsdatum</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+43"/>
         <source>(none)</source>
         <translation>(ingen)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+19"/>
         <source>Self-signed</source>
         <translation>Självsignerat</translation>
     </message>
@@ -2259,29 +2461,29 @@ Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpa
 <context>
     <name>CertWizard</name>
     <message>
-        <location line="+90"/>
-        <source>Resolving domain %1.</source>
-        <translation>Leter efter domän %1.</translation>
-    </message>
-    <message>
-        <location line="+6"/>
+        <location line="+85"/>
         <source>Unable to validate email.&lt;br /&gt;Enter a valid (or blank) email to continue.</source>
         <translation>Kunde inte verifiera e-post.&lt;br /&gt;Ange en giltig (eller blank) e-post för att fortsätta.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+7"/>
         <source>There was an error generating your certificate.&lt;br /&gt;Please try again.</source>
         <translation>Det blev ett fel vid generering av ditt certifikat.&lt;br /&gt;Försök igen.</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Your certificate and key could not be exported to PKCS#12 format. There might be an error in your certificate.</source>
-        <translation>Ditt certifikat och nyckel kunde inte exporteras till PKCS#12 formatet. Det kan finnas ett fel i ditt certifikat.</translation>
+        <translation>Ditt certifikat och nyckel kunde inte exporteras till PKCS#12-formatet. Det kan finnas ett fel i ditt certifikat.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>The file could not be opened for writing. Please use another file.</source>
         <translation>Filen kunde inte öppnas för skrivning. Använd en annan fil.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The file&apos;s permissions could not be set. No certificate and key has been written. Please use another file.</source>
+        <translation>Filens behörigheter kunde inte verkställas. Ingen nyckel eller något certifikat har skrivits. Skicka en annan fil.</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2291,7 +2493,7 @@ Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpa
     <message>
         <location line="+7"/>
         <source>The file could not be opened for reading. Please use another file.</source>
-        <translation>Filen kunde inte öppnas förläsning. Använd en annan fil.</translation>
+        <translation>Filen kunde inte öppnas för läsning. Använd en annan fil.</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2304,7 +2506,7 @@ Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpa
         <translation>Filen innehöll inte ett giltigt certifikat och nyckel. Använd en annan fil.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+16"/>
         <source>Select file to export certificate to</source>
         <translation>Välj fil att exportera certifikat till</translation>
     </message>
@@ -2314,17 +2516,17 @@ Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpa
         <translation>Välj fil att importera certifikat från</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <source>Unable to resolve domain.</source>
-        <translation>Kunde inte hitta domän.</translation>
+        <location line="+34"/>
+        <source>Unable to import. Missing password or incompatible file type.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+60"/>
         <source>Mumble User</source>
         <translation>Mumbleanvändare</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="+454"/>
+        <location filename="main.cpp" line="+501"/>
         <source>&lt;b&gt;Certificate Expiry:&lt;/b&gt; Your certificate is about to expire. You need to renew it, or you will no longer be able to connect to servers you are registered on.</source>
         <translation>&lt;b&gt;Certifikatutgång:&lt;/b&gt; Ditt certifikat håller på att gå ut. Du måste förnya det, annars kan du inte längre ansluta till servrar du är registrerad på.</translation>
     </message>
@@ -2492,14 +2694,14 @@ Tala högt, som om du är irriterad eller upphetsad. Minska volymen i kontrollpa
         <source>&lt;p&gt;You already have a certificate stored in Mumble, and you are about to replace it.&lt;/p&gt;
 &lt;p&gt;If you are upgrading to a certificate issued to you by a trusted CA and the email addresses match your current certificate, this is completely safe, and servers you connect to will automatically recognize the strong certificate for your email address.
 &lt;/p&gt;
-&lt;p&gt;If this is not the case, you will no longer be recognized by any server you previously have authenticated with. If you haven&apos;t been registered on any server yet, this is nothing to worry about.
+&lt;p&gt;If this is not the case, you will no longer be recognized by any server you previously have authenticated with. If you haven't been registered on any server yet, this is nothing to worry about.
 &lt;/p&gt;
 &lt;p&gt;
 Are you sure you wish to replace your certificate?
 &lt;/p&gt;
 </source>
         <translation>&lt;p&gt;Du har redan ett certifikat lagrat i Mumble, som du nu försöker att ersätta.&lt;/p&gt;
-&lt;p&gt;Om du uppgraderar till ett certifikat utfärdat till dig av ett pålitligt CA och e-postadresserna matchar ditt nuvarande certifikat är det fullt säkert att byta. Servrar du automatiskt ansluter till kommer att känna igen det starka certifikatet för din e-postadress.
+&lt;p&gt;Om du uppgraderar till ett certifikat utfärdat till dig av ett pålitligt CA och e-postadresserna matchar ditt nuvarande certifikat är det fullt säkert att byta. Servrar du automatiskt ansluter till kommer att känna igen det starka certifikatet med din e-postadress.
 &lt;/p&gt;
 &lt;p&gt;Om så inte är fallet, kommer du inte längre att kännas igen av någon server du tidigare varit autentiserad till. Om du inte varit registrerad på någon server än, är detta inget att oroa sig för.
 &lt;/p&gt;
@@ -2606,7 +2808,7 @@ Are you sure you wish to replace your certificate?
     <message>
         <location/>
         <source>Certificate-based authentication is ready for use</source>
-        <translation>Certifikatbaserad autentisiering är redo att användas</translation>
+        <translation>Certifikatbaserad autentisering är redo att användas</translation>
     </message>
     <message>
         <location/>
@@ -2620,7 +2822,7 @@ Are you sure you wish to replace your certificate?
     </message>
     <message>
         <location/>
-        <source>&lt;p&gt;Mumble can use certificates to authenticate with servers. Using certificates avoids passwords, meaning you don&apos;t need to disclose any password to the remote site. It also enables very easy user registration.&lt;/p&gt;&lt;p&gt;While Mumble can work without certificates, the majority of servers will expect you to have one.&lt;/p&gt;
+        <source>&lt;p&gt;Mumble can use certificates to authenticate with servers. Using certificates avoids passwords, meaning you don't need to disclose any password to the remote site. It also enables very easy user registration.&lt;/p&gt;&lt;p&gt;While Mumble can work without certificates, the majority of servers will expect you to have one.&lt;/p&gt;
 &lt;p&gt;
 It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://mumble.info/certificate.php&quot;&gt;create a trusted certificate&lt;/a&gt;.
 &lt;/p&gt;
@@ -2635,14 +2837,14 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
         <location/>
         <source>&lt;p&gt;If you ever lose your current certificate, which will happen if your computer suffers a hardware failure or you reinstall your machine, you will no longer be able to authenticate to any server you are registered on. It is therefore &lt;b&gt;mandatory&lt;/b&gt; that you make a backup of your certificate. We strongly recommend you store this backup on removable storage, such as a USB flash drive.&lt;/p&gt;
 &lt;p&gt;Note that this file will not be encrypted, and if anyone gains access to it, they will be able to impersonate you, so take good care of it.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Om du någonsin förlorar ditt nuvarande certifikat, som kommer att hända om din hårdvara går sönder eller du installerar om din dator kommer du ej längre att kunna autentisera till någon server du varit registrerad på. Det är därför &lt;b&gt;obligatoriskt&lt;/b&gt; att du skapar en säkerhetskopia av dina certifikat. Vi rekommenderar starkt att du lagrar denna säkerhetskopia på borttagningsbar lagring, såsom ett USB minne.&lt;/p&gt;
+        <translation>&lt;p&gt;Om du någonsin förlorar ditt nuvarande certifikat, som kommer att hända om din hårdvara går sönder eller du installerar om din dator kommer du ej längre att kunna autentisera till någon server du varit registrerad på. Det är därför &lt;b&gt;obligatoriskt&lt;/b&gt; att du skapar en säkerhetskopia av dina certifikat. Vi rekommenderar starkt att du lagrar denna säkerhetskopia på borttagningsbar lagring, såsom ett USB-minne.&lt;/p&gt;
 &lt;p&gt;Kom ihåg att den här filen inte kommer att krypteras, så om någon får tillgång till den kommer de kunna identifiera dig. Ta därför väl hand om det.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
     <name>ChanACL</name>
     <message>
-        <location filename="../ACL.cpp" line="+230"/>
+        <location filename="../ACL.cpp" line="+205"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
@@ -2659,7 +2861,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location line="+2"/>
         <source>Speak</source>
-        <translation>Prata</translation>
+        <translation>Tala</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -2704,12 +2906,12 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location line="+3"/>
         <source>This represents the permission to speak in a channel. Users without this privilege will be suppressed by the server (seen as muted), and will be unable to speak until they are unmuted by someone with the appropriate privileges.</source>
-        <translation>Detta motsvarar behörigheten för att prata i en kanal. Användare utan denna bbehörighet kommer att tystas av servern (visas som avaktiverad mikrofon) och kommer inte att kunna prata tills deras mikrofon aktiveras av någon med behörigheter att göra det.</translation>
+        <translation>Detta motsvarar behörigheten för att tala i en kanal. Användare utan denna behörighet kommer att tystas av servern (visas som avaktiverad mikrofon) och kommer inte att kunna tala tills deras mikrofon aktiveras av någon med behörigheter att göra det.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>This represents the permission to whisper to this channel from the outside. This works exactly like the &lt;i&gt;speak&lt;/i&gt; privilege, but applies to packets spoken with the Whisper key held down. This may be used to broadcast to a hierarchy of channels without linking.</source>
-        <translation>Detta motsvarar behörigheten för att viska till den här kanalen från utsidan. Detta fungerar precis som &lt;i&gt;prata&lt;/i&gt; behörigheten, men verkställs till paket med Viska-knappen nedtryckt. Detta kan användas för att skicka till flera kanaler utan länkning.</translation>
+        <translation>Detta motsvarar behörigheten för att viska till den här kanalen från utsidan. Detta fungerar precis som &lt;i&gt;tala&lt;/i&gt; behörigheten, men verkställs till paket med Viska-knappen nedtryckt. Detta kan användas för att skicka till flera kanaler utan länkning.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -2734,7 +2936,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location line="+3"/>
         <source>This represents the permission to link channels. Users in linked channels hear each other, as long as the speaking user has the &lt;i&gt;speak&lt;/i&gt; privilege in the channel of the listener. You need the link privilege in both channels to create a link, but just in either channel to remove it.</source>
-        <translation>Detta motsvarar behörigheten för att länka kanaler. Användare i länkade kanaler kan höra varandra sålänge användaren som pratar har behörigheten &quot;Prata&quot; i kanalen med lyssnare. Du behöver behörigheten för att länka i båda kanalerna för att skapa en länk, men endast i en kanal för att ta bort den.</translation>
+        <translation>Detta motsvarar behörigheten för att länka kanaler. Användare i länkade kanaler kan höra varandra sålänge användaren som talar har behörigheten &quot;Tala&quot; i kanalen med lyssnare. Du behöver behörigheten för att länka i båda kanalerna för att skapa en länk, men endast i en kanal för att ta bort den.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -2794,7 +2996,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location line="+2"/>
         <source>Register Self</source>
-        <translation>Registrera dig</translation>
+        <translation>Registrera sig</translation>
     </message>
     <message>
         <location line="-28"/>
@@ -2805,7 +3007,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
 <context>
     <name>ChatbarTextEdit</name>
     <message>
-        <location filename="CustomElements.cpp" line="+108"/>
+        <location filename="CustomElements.cpp" line="+82"/>
         <source>Paste and &amp;Send</source>
         <oldsource>Paste and send</oldsource>
         <translation>Klistra in och &amp;skicka</translation>
@@ -2819,7 +3021,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
 <context>
     <name>ClientUser</name>
     <message>
-        <location filename="ClientUser.cpp" line="+134"/>
+        <location filename="ClientUser.cpp" line="+110"/>
         <source>Friend</source>
         <translation>Vän</translation>
     </message>
@@ -2831,7 +3033,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location line="+2"/>
         <source>Priority speaker</source>
-        <translation>Prioritetstalare</translation>
+        <translation>Prioriterad talare</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2861,18 +3063,18 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location line="+2"/>
         <source>Muted (self)</source>
-        <translation>Mikrofon avaktiverad (egen)</translation>
+        <translation>Mikrofon avaktiverad (användare)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Deafened (self)</source>
-        <translation>Ljud avaktiverat (eget)</translation>
+        <translation>Ljud avaktiverat (användare)</translation>
     </message>
 </context>
 <context>
     <name>ConfigDialog</name>
     <message>
-        <location filename="ConfigDialog.cpp" line="+55"/>
+        <location filename="ConfigDialog.cpp" line="+30"/>
         <source>Accept changes</source>
         <translation>Acceptera ändringar</translation>
     </message>
@@ -2925,7 +3127,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location filename="ConfigDialog.ui"/>
         <source>Mumble Configuration</source>
-        <translation>Mumble konfiguration</translation>
+        <translation>Mumble-konfiguration</translation>
     </message>
     <message>
         <location/>
@@ -2936,24 +3138,24 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
 <context>
     <name>ConnectDialog</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="+906"/>
+        <location filename="ConnectDialog.cpp" line="+1020"/>
         <source>Connecting to %1</source>
-        <translation>Ansluten till %1</translation>
+        <translation>Ansluter till %1</translation>
     </message>
     <message>
-        <location line="-515"/>
-        <location line="+515"/>
+        <location line="-624"/>
+        <location line="+624"/>
         <source>Enter username</source>
         <translation>Ange användarnamn</translation>
     </message>
     <message>
-        <location line="-515"/>
+        <location line="-624"/>
         <source>Adding host %1</source>
         <translation>Lägger till värd %1</translation>
     </message>
     <message>
         <location filename="ConnectDialog.ui"/>
-        <location filename="ConnectDialog.cpp" line="+61"/>
+        <location filename="ConnectDialog.cpp" line="+76"/>
         <source>Servername</source>
         <translation>Servernamn</translation>
     </message>
@@ -2975,7 +3177,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location line="+1"/>
         <source>Addresses</source>
-        <translation>Adresser</translation>
+        <translation>Adress</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2985,7 +3187,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     <message>
         <location line="+3"/>
         <source>Packet loss</source>
-        <translation>Paketförlust</translation>
+        <translation>Paketförluster</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3014,18 +3216,18 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
         <translation>%1 kbit/s</translation>
     </message>
     <message>
-        <location line="+293"/>
+        <location line="+350"/>
         <source>&amp;Connect</source>
         <translation>&amp;Anslut</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+76"/>
         <source>&amp;Filters</source>
-        <translation>&amp;Filtrer</translation>
+        <translation>&amp;Filter</translation>
     </message>
     <message>
         <location filename="ConnectDialog.ui"/>
-        <location filename="ConnectDialog.cpp" line="-338"/>
+        <location filename="ConnectDialog.cpp" line="-425"/>
         <source>Users</source>
         <translation>Användare</translation>
     </message>
@@ -3035,7 +3237,7 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
         <translation>Version</translation>
     </message>
     <message>
-        <location line="+1015"/>
+        <location line="+1145"/>
         <source>Failed to fetch server list</source>
         <translation>Serverlistan kunde inte hämtas</translation>
     </message>
@@ -3096,20 +3298,20 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
     </message>
     <message>
         <location/>
-        <location filename="ConnectDialog.cpp" line="-716"/>
+        <location filename="ConnectDialog.cpp" line="-788"/>
         <source>&amp;Edit...</source>
         <translation>&amp;Ändra...</translation>
     </message>
     <message>
         <location/>
-        <location filename="ConnectDialog.cpp" line="-6"/>
+        <location filename="ConnectDialog.cpp" line="-7"/>
         <source>&amp;Add New...</source>
         <translation>&amp;Lägg till ny...</translation>
     </message>
     <message>
         <location/>
         <source>Add to &amp;Favorites</source>
-        <translation>Lägg till &amp;Favoriter</translation>
+        <translation>Lägg till i &amp;Favoriter</translation>
     </message>
     <message>
         <location/>
@@ -3160,9 +3362,9 @@ Det är &lt;b&gt;starkt&lt;/b&gt; rekommenderat att du &lt;a href=&quot;http://m
         <source>&lt;b&gt;Address&lt;/b&gt;&lt;br/&gt;
 Internet address of the server. This can be a normal hostname, an IPv4/IPv6 address or a Bonjour service identifier. Bonjour service identifiers have to be prefixed with a &apos;@&apos; to be recognized by Mumble.</source>
         <oldsource>&lt;b&gt;Address&lt;/b&gt;&lt;/br&gt;
-Internet address of the server. This can be a normal hostname, an ipv4/6 address or a bonjour service identifier. Bonjour service identifiers have to be prefixed with a &apos;@&apos; to be recognized by Mumble.</oldsource>
-        <translation>&lt;b&gt;Adresser&lt;/b&gt;&lt;br/&gt;
-Internetadress för servern. Detta kan vara ett normalt värdnamn, en IPv4/IPv6-adress eller en Bonjour-service. Bonjour identifierare måste ha ett &apos;@&apos; före sig för att kännas igen av Mumble.</translation>
+Internet address of the server. This can be a normal hostname, an ipv4/6 address or a bonjour service identifier. Bonjour service identifiers have to be prefixed with a '@' to be recognized by Mumble.</oldsource>
+        <translation>&lt;b&gt;Adress&lt;/b&gt;&lt;br/&gt;
+Internetadress för servern. Detta kan vara ett normalt värdnamn, en IPv4/IPv6-adress eller en Bonjour-identitet. Bonjour-identiteter måste ha ett &apos;@&apos; före sig för att kännas igen av Mumble.</translation>
     </message>
     <message>
         <location/>
@@ -3201,10 +3403,15 @@ Användarnamnet skickas till servern. Var medveten om att servern kan införa be
     <message>
         <location/>
         <source>Label</source>
-        <translation>Etikett</translation>
+        <translation>Namn</translation>
     </message>
     <message>
-        <location/>
+        <location filename="ConnectDialog.cpp" line="-126"/>
+        <source>Add Server</source>
+        <translation>Lägg till server</translation>
+    </message>
+    <message>
+        <location filename="ConnectDialogEdit.ui"/>
         <source>Password</source>
         <translation>Lösenord</translation>
     </message>
@@ -3226,22 +3433,42 @@ Lösenordet som kommer att skickas till servern vid anslutning. Lösenordet beh�
         <translation>Visa lösenord</translation>
     </message>
     <message>
-        <location filename="ConnectDialog.cpp" line="-75"/>
-        <source>Add Server</source>
-        <translation>Lägg till server</translation>
-    </message>
-    <message>
-        <location filename="ConnectDialogEdit.ui"/>
+        <location/>
         <source>&lt;b&gt;Label&lt;/b&gt;&lt;br/&gt;
 Label of the server. This is what the server will be named like in your server list and can be chosen freely.</source>
-        <translation>&lt;b&gt;Etikett&lt;/b&gt;&lt;br/&gt;
-Serverns etikett. Detta är det servern kommer att kallas i din serverlista, som du väljer själv.</translation>
+        <translation>&lt;b&gt;Namn&lt;/b&gt;&lt;br/&gt;
+Serverns namn. Detta är vad servern kommer att kallas i din serverlista, som du väljer själv.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Local server label</source>
+        <translation>Lokal server namn</translation>
+    </message>
+    <message>
+        <location/>
+        <source>127.0.0.1</source>
+        <translation>127.0.0.1</translation>
+    </message>
+    <message>
+        <location/>
+        <source>64738</source>
+        <translation>64738</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Your username</source>
+        <translation>Ditt användarnamn</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Your password</source>
+        <translation>Ditt lösenord</translation>
     </message>
 </context>
 <context>
     <name>CoreAudioSystem</name>
     <message>
-        <location filename="CoreAudio.cpp" line="+87"/>
+        <location filename="CoreAudio.cpp" line="+64"/>
         <source>Default Device</source>
         <translation>Standardenhet</translation>
     </message>
@@ -3249,14 +3476,14 @@ Serverns etikett. Detta är det servern kommer att kallas i din serverlista, som
 <context>
     <name>CrashReporter</name>
     <message>
-        <location filename="CrashReporter.cpp" line="+40"/>
+        <location filename="CrashReporter.cpp" line="+15"/>
         <source>Mumble Crash Report</source>
         <translation>Mumble Kraschrapport</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;&lt;b&gt;We&apos;re terribly sorry, but it seems Mumble has crashed. Do you want to send a crash report to the Mumble developers?&lt;/b&gt;&lt;/p&gt;&lt;p&gt;The crash report contains a partial copy of Mumble&apos;s memory at the time it crashed, and will help the developers fix the problem.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Vi är mycket ledsna, men det verkar som om att Mumble har kraschat. Vill du skicka en kraschrapport till utvecklarna av Mumble?&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Kraschrapporten innehåller en mindre kopia av minnet från kraschen och kommer att hjälpa utvecklarna att lösa problemet.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;&lt;b&gt;Vi är mycket ledsna, men det verkar som att Mumble har kraschat. Vill du skicka en kraschrapport till utvecklarna av Mumble?&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Kraschrapporten innehåller en mindre kopia av minnet från kraschen och kommer att hjälpa utvecklarna att lösa problemet.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -3319,9 +3546,9 @@ Serverns etikett. Detta är det servern kommer att kallas i din serverlista, som
 <context>
     <name>DXAudioInput</name>
     <message>
-        <location filename="DirectSound.cpp" line="+173"/>
+        <location filename="DirectSound.cpp" line="+151"/>
         <source>Default DirectSound Voice Input</source>
-        <translation>Standard ljudingång för DirectSound</translation>
+        <translation>Standard-ljudingång för DirectSound</translation>
     </message>
     <message>
         <location line="+451"/>
@@ -3365,7 +3592,7 @@ Serverns etikett. Detta är det servern kommer att kallas i din serverlista, som
 <context>
     <name>Database</name>
     <message>
-        <location filename="Database.cpp" line="+89"/>
+        <location filename="Database.cpp" line="+92"/>
         <source>Mumble failed to initialize a database in any
 of the possible locations.</source>
         <translation>Mumble kunde inte initiera en databas i någon
@@ -3374,14 +3601,22 @@ av dessa möjliga platser.</translation>
     <message>
         <location line="+7"/>
         <source>The database &apos;%1&apos; is read-only. Mumble cannot store server settings (i.e. SSL certificates) until you fix this problem.</source>
-        <oldsource>The database &apos;%1&apos; is read-only. Mumble can not store server settings (ie. SSL certificates) until you fix this problem.</oldsource>
-        <translation>Databasen &apos;%1&apos; är skrivskyddad. Mumble kan inte lagra serverinställningar (t.ex. SSL certifikat) tills du fixat detta problem.</translation>
+        <oldsource>The database '%1' is read-only. Mumble can not store server settings (ie. SSL certificates) until you fix this problem.</oldsource>
+        <translation>Databasen &apos;%1&apos; är skrivskyddad. Mumble kan inte lagra serverinställningar (t.ex. SSL certifikat) förrän du fixat detta problem.</translation>
+    </message>
+</context>
+<context>
+    <name>DeveloperConsole</name>
+    <message>
+        <location filename="DeveloperConsole.cpp" line="+31"/>
+        <source>Developer Console</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DockTitleBar</name>
     <message>
-        <location filename="CustomElements.cpp" line="+180"/>
+        <location filename="CustomElements.cpp" line="+189"/>
         <source>Drag here</source>
         <translation>Dra här</translation>
     </message>
@@ -3472,7 +3707,12 @@ av dessa möjliga platser.</translation>
 <context>
     <name>GlobalShortcutConfig</name>
     <message>
-        <location filename="GlobalShortcut.cpp" line="+721"/>
+        <location filename="GlobalShortcut.cpp" line="+540"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble can currently only use mouse buttons and keyboard modifier keys (Alt, Ctrl, Cmd, etc.) for global shortcuts.&lt;/p&gt;&lt;p&gt;If you want more flexibility, you can add Mumble as a trusted accessibility program in the Security &amp; Privacy section of your Mac&apos;s System Preferences.&lt;/p&gt;&lt;p&gt;In the Security &amp; Privacy preference pane, change to the Privacy tab. Then choose Accessibility (near the bottom) in the list to the left. Finally, add Mumble to the list of trusted accessibility programs.&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble kan för närvarande bara använda musknappar och vissa tangenter (Alt, Ctrl, Cmd, osv.) för globala genvägar. &lt;/p&gt;&lt;p&gt;Om du vill ha bättre flexibilitet, kan du lägga till Mumble som säkert tillgänglighetsprogram i Säkerhet &amp; Sekretess inställningspanelen i dina Mac&apos;s Systeminställningar.&lt;/p&lt;&gt;&lt;p&gt;I Säkerhet &amp; Sekretess inställningspanelen, byt till Sektretess fliken. Efteråt välj tillgänglighet (nästan längst ner) i listan till vänster. Slutligen, lägg till Mumble i listan över betrodda tillgänglighetsprogram.&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+115"/>
         <source>Shortcuts</source>
         <translation>Genvägar</translation>
     </message>
@@ -3485,7 +3725,7 @@ av dessa möjliga platser.</translation>
         <location line="+1"/>
         <source>&lt;b&gt;This is the global shortcut key combination.&lt;/b&gt;&lt;br /&gt;Click this field and then press the desired key/button combo to rebind. Double-click to clear.</source>
         <oldsource>&lt;b&gt;This is the global shortcut key combination.&lt;/b&gt;&lt;br /&gt;Double-click this field and then the desired key/button combo to rebind.</oldsource>
-        <translation>&lt;b&gt;Detta är den globala genvägs knappkombinationen.&lt;/b&gt;&lt;br /&gt;Klicka på detta fält och tryck på knappen/knappkombinationen att binda. Dubbelklicka för att rensa.</translation>
+        <translation>&lt;b&gt;Detta är den globala genvägs-knappkombinationen.&lt;/b&gt;&lt;br /&gt;Klicka på detta fält och tryck på knappen/knappkombinationen att binda. Dubbelklicka för att rensa.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -3495,7 +3735,7 @@ av dessa möjliga platser.</translation>
     <message>
         <location line="+1"/>
         <source>&lt;b&gt;This hides the button presses from other applications.&lt;/b&gt;&lt;br /&gt;Enabling this will hide the button (or the last button of a multi-button combo) from other applications. Note that not all buttons can be suppressed.</source>
-        <translation>&lt;b&gt;Detta förhindrar knappar från anvdra program.&lt;/b&gt;&lt;br /&gt;Vid aktivering av detta kommer knappen att blockeras (åtminstone den senaste knappen från en kombination) från andra program. Kom ihåg att alla knappar inte kan blockeras.</translation>
+        <translation>&lt;b&gt;Detta förhindrar knapptryck från andra program.&lt;/b&gt;&lt;br /&gt;Vid aktivering av detta kommer knappen att blockeras (åtminstone den senaste knappen från en kombination) från andra program. Kom ihåg att alla knappar inte kan blockeras.</translation>
     </message>
 </context>
 <context>
@@ -3584,7 +3824,7 @@ av dessa möjliga platser.</translation>
 <context>
     <name>GlobalShortcutX</name>
     <message>
-        <location filename="GlobalShortcut_unix.cpp" line="+339"/>
+        <location filename="GlobalShortcut_unix.cpp" line="+354"/>
         <source>Mouse %1</source>
         <translation>Mus %1</translation>
     </message>
@@ -3592,7 +3832,7 @@ av dessa möjliga platser.</translation>
 <context>
     <name>LCD</name>
     <message>
-        <location filename="LCD.cpp" line="+282"/>
+        <location filename="LCD.cpp" line="+271"/>
         <source>Not connected</source>
         <translation>Ej ansluten</translation>
     </message>
@@ -3600,7 +3840,7 @@ av dessa möjliga platser.</translation>
 <context>
     <name>LCDConfig</name>
     <message>
-        <location line="-160"/>
+        <location line="-175"/>
         <source>Enable this device</source>
         <translation>Aktivera den här enheten</translation>
     </message>
@@ -3635,7 +3875,7 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation>&lt;p&gt;Här är listan med tillgängliga LCD-enheterpå din dator. Enheter listas enligt namn,men inkluderar även storleken på skärmen. Mumble stödjer utskrift till flera LCD-enheter samtidigt.&lt;/p&gt;
 &lt;h3&gt;Storlek:&lt;/h3&gt;
 &lt;p&gt;
-Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för grafiska LCD:er), eller med tecken (för LCDer med tecken).&lt;/p&gt;
+Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för grafiska LCD:er), eller med tecken (för LCD:er med tecken).&lt;/p&gt;
 &lt;h3&gt;Aktiverat:&lt;/h3&gt;
 &lt;p&gt;Detta beslutar om Mumble ska skrivas till en särskild LCD-enhet.&lt;/p&gt;</translation>
     </message>
@@ -3665,7 +3905,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
 &lt;p&gt;If too many people are speaking at once, the User View will split itself into columns. You can use this option to pick a compromise between number of users shown on the LCD, and width of user names.&lt;/p&gt;
 </source>
         <translation>&lt;p&gt;Detta alternativ beslutar den lägsta kolumnbredd i användarvyn.&lt;/p&gt;
-&lt;p&gt;Om för många människor pratar samtidigt kommer användarvyn dela sig själv till kolumner. Du kan använda detta alternativ för att välja en kompromiss mellan antalet användare som visas på LCD samt bredd för användarnamn.&lt;/p&gt;
+&lt;p&gt;Om för många människor talar samtidiga kommer användarvyn dela sig själv till kolumner. Du kan använda detta alternativ för att välja en kompromiss mellan antalet användare som visas på LCD samt bredd för användarnamn.&lt;/p&gt;
 </translation>
     </message>
     <message>
@@ -3682,7 +3922,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
 <context>
     <name>Log</name>
     <message>
-        <location filename="Log.cpp" line="+200"/>
+        <location filename="Log.cpp" line="+216"/>
         <source>Debug</source>
         <translation>Felsök</translation>
     </message>
@@ -3712,12 +3952,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Server frånkopplad</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>You self-muted/deafened</source>
-        <translation>Du avaktiverade din mikrofon/ditt ljud</translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+7"/>
         <source>Other self-muted/deafened</source>
         <translation>Någon avaktiverade sin mikrofon/sitt ljud</translation>
     </message>
@@ -3757,7 +3992,12 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Användare utslängd</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+1"/>
+        <source>You self-muted</source>
+        <translation>Du avaktiverade din mikrofon</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>User muted (you)</source>
         <translation>Mikrofon avaktiverad (du)</translation>
     </message>
@@ -3774,7 +4014,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location line="+1"/>
         <source>User Joined Channel</source>
-        <translation>Användare gick med i kanlen</translation>
+        <translation>Användare gick med i kanalen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3782,17 +4022,47 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Användare lämnade kanalen</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>You self-unmuted</source>
+        <translation>Du aktiverade din mikrofon</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>You self-deafened</source>
+        <translation>Du avaktiverade ditt ljud</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>You self-undeafened</source>
+        <translation>Du aktiverade ditt ljud</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>User renamed</source>
+        <translation>Användare omdöpt</translation>
+    </message>
+    <message>
         <location line="+59"/>
         <source>the server</source>
         <translation>servern</translation>
     </message>
     <message>
-        <location line="+117"/>
-        <source>[[ Text object too large to display ]]</source>
-        <translation>[[ Textobjekt för stort för att visa ]]</translation>
+        <location line="+119"/>
+        <source>[[ No valid image ]]</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+13"/>
+        <source>[[ Invalid size ]]</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>[[ Text object too large to display ]]</source>
+        <translation>[[ Textobjekt för stort för att visas ]]</translation>
+    </message>
+    <message>
+        <location line="+46"/>
         <source>[Date changed to %1]
 </source>
         <translation>[Datum ändrad till %1]
@@ -3827,22 +4097,22 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
 <context>
     <name>LogConfig</name>
     <message>
-        <location line="-440"/>
+        <location line="-504"/>
         <source>Toggle console for %1 events</source>
         <translation>Växla konsoll för %1 händelser</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Toggle pop-up notifications for %1 events</source>
-        <translation>Växla pop-up notifieringar för %1 händelser</translation>
+        <translation>Växla pop-up-notifieringar för %1 händelser</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+10"/>
         <source>Toggle Text-To-Speech for %1 events</source>
         <translation>Växla Text-till-Tal för %1 händelsesr</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-9"/>
         <source>Click here to toggle sound notification for %1 events</source>
         <translation>Klicka här för att växla ljudnotifieringar för %1 händelser</translation>
     </message>
@@ -3854,27 +4124,27 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location line="+2"/>
         <source>Click here to toggle console output for %1 events.&lt;br /&gt;If checked, this option makes Mumble output all %1 events in its message log.</source>
-        <translation>Klicka här för att växla konsoll utgång för %1 händelser.&lt;br /&gt;Vid markering kommer Mumble att ge ut alla %1 händelser i loggen.</translation>
+        <translation>Klicka här för att växla konsoll-utgång för %1 händelser.&lt;br /&gt;Vid markering kommer Mumble att ge ut alla %1 händelser i loggen.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Click here to toggle pop-up notifications for %1 events.&lt;br /&gt;If checked, a notification pop-up will be created by Mumble for every %1 event.</source>
         <oldsource>Click here to toggle pop-up notifications for %1 events.&lt;br /&gt;If checked, a notification pop-up will be created by mumble for every %1 event.</oldsource>
-        <translation>Klicka här för att växla pop-up notifieringar för %1 händelser.&lt;br /&gt;Vid markering kommer en notifierings pop-up skapas av Mumble för varje %1 händelse.</translation>
+        <translation>Klicka här för att växla pop-up-notifieringar för %1 händelser.&lt;br /&gt;Vid markering kommer en notifierings-pop-up skapas av Mumble för varje %1 händelse.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+2"/>
         <source>Path to sound file used for sound notifications in the case of %1 events.&lt;br /&gt;Single click to play&lt;br /&gt;Double-click to change&lt;br /&gt;Ensure that sound notifications for these events are enabled or this field will not have any effect.</source>
         <translation>Sökväg till ljudfilen som används för ljudnotifieringar i fallet för %1 händelser.&lt;br /&gt;Ett klick för att spela&lt;br /&gt;Dubbelklick för att ändra&lt;br /&gt;Var säker på att ljudnotifieringar för dessa händelser är aktiverade annars kommer inte detta fält att ha någon betydelse.</translation>
     </message>
     <message>
-        <location line="-2"/>
+        <location line="+4"/>
         <source>Click here to toggle Text-To-Speech for %1 events.&lt;br /&gt;If checked, Mumble uses Text-To-Speech to read %1 events out loud to you. Text-To-Speech is also able to read the contents of the event which is not true for sound files. Text-To-Speech and sound files cannot be used at the same time.</source>
         <oldsource>Click here to toggle sound notification for %1 events.&lt;br /&gt;If checked, Mumble uses a soundfile predefined by you to indicate %1 events. Soundfiles and Text-To-Speech cannot be used at the same time.</oldsource>
         <translation>Klicka här för att växla Text-till-Tal för %1 händelser.&lt;br /&gt;Vid markering kommer Mumble att använda Text-till-Tal för att läsa %1 händelser högt för dig. Text-till-Tal kan också läsa innehåll för händelsen som det inte finns ljudfiler för. Text-till-Tal och ljudfiler kan inte användas tillsammans.</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-5"/>
         <source>Click here to toggle sound notification for %1 events.&lt;br /&gt;If checked, Mumble uses a sound file predefined by you to indicate %1 events. Sound files and Text-To-Speech cannot be used at the same time.</source>
         <oldsource>Path to soundfile used for sound notifications in the case of %1 events.&lt;br /&gt;Single click to play&lt;br /&gt;Doubleclick to change&lt;br /&gt;Be sure that sound notifications for these events are enabled or this field will not have any effect.</oldsource>
         <translation>Klicka här för att växla ljudnotifieringar för %1 händelser.&lt;br /&gt;Vid markering kommer Mumble att använda en ljudfil fördefinierad av dig för att indikera %1 händelser. Ljudfiler och Text-till-Tal kan inte användas tillsammans.</translation>
@@ -3927,7 +4197,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location/>
         <source>Volume of Text-To-Speech Engine</source>
-        <translation>Volym för Text-till-Tal motorn</translation>
+        <translation>Volym för Text-till-Tal-motorn</translation>
     </message>
     <message>
         <location/>
@@ -3942,12 +4212,12 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location/>
         <source>Message length threshold for Text-To-Speech Engine</source>
-        <translation>Längdtröskeln för meddelande till Text-till-Tal motorn</translation>
+        <translation>Längdtröskeln för meddelande till Text-till-Tal-motorn</translation>
     </message>
     <message>
         <location/>
         <source>&lt;b&gt;This is the length threshold used for the Text-To-Speech Engine.&lt;/b&gt;&lt;br /&gt;Messages longer than this limit will not be read aloud in their full length.</source>
-        <translation>&lt;b&gt;Detta är längden tröskel som används för Text-till-Tal motorn.&lt;/b&gt;&lt;br /&gt;Meddelanden längre är denna gräns, kommer inte att läsas högt.</translation>
+        <translation>&lt;b&gt;Detta är längden tröskel som används för Text-till-Tal-motorn.&lt;/b&gt;&lt;br /&gt;Meddelanden längre är denna gräns kommer inte att läsas högt.</translation>
     </message>
     <message>
         <location/>
@@ -3962,7 +4232,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location/>
         <source>If checked you will only hear whispers from users you added to your friend list.</source>
-        <translation>Vid markering kan du endast höra viskningar från användare du lagt till på din kompislista.</translation>
+        <translation>Vid markering kan du endast höra viskningar från användare du lagt till på din vänlista.</translation>
     </message>
     <message>
         <location/>
@@ -3997,24 +4267,24 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location/>
         <source> Lines</source>
-        <translation> rader</translation>
+        <translation> Rader</translation>
     </message>
 </context>
 <context>
     <name>LookConfig</name>
     <message>
-        <location filename="LookConfig.cpp" line="+55"/>
-        <location line="+11"/>
+        <location filename="LookConfig.cpp" line="+30"/>
         <source>System default</source>
         <translation>Systemstandard</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+21"/>
+        <location line="+49"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-48"/>
         <source>Only with users</source>
         <translation>Bara med användare</translation>
     </message>
@@ -4025,28 +4295,32 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     </message>
     <message>
         <location line="+2"/>
+        <location line="+4"/>
         <source>Ask</source>
         <translation>Fråga</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-3"/>
+        <location line="+4"/>
         <source>Do Nothing</source>
         <translation>Gör ingenting</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-3"/>
+        <location line="+4"/>
         <source>Move</source>
         <translation>Flytta</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>User Interface</source>
-        <translation>Användargränssnitt</translation>
+        <location line="+19"/>
+        <source>&lt;a href=&quot;%1&quot;&gt;Browse&lt;/a&gt;</source>
+        <extracomment>This link is located next to the theme heading in the ui config and opens the user theme directory</extracomment>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Bläddra&lt;/a&gt;</translation>
     </message>
     <message>
-        <location line="+133"/>
-        <source>Choose skin file</source>
-        <translation>Välj hud-fil</translation>
+        <location line="+7"/>
+        <source>User Interface</source>
+        <translation>Användargränssnitt</translation>
     </message>
     <message>
         <location filename="LookConfig.ui"/>
@@ -4096,7 +4370,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location/>
         <source>&lt;b&gt;This sets which language Mumble should use.&lt;/b&gt;&lt;br /&gt;You have to restart Mumble to use the new language.</source>
-        <translation>&lt;b&gt;Dett aställer in vilket språk Mumble ska använda.&lt;/b&gt;&lt;br /&gt;Du måste starta om Mumble för att använda det nya språket.</translation>
+        <translation>&lt;b&gt;Detta ställer in vilket språk Mumble ska använda.&lt;/b&gt;&lt;br /&gt;Du måste starta om Mumble för att använda det nya språket.</translation>
     </message>
     <message>
         <location/>
@@ -4138,36 +4412,6 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <source>This sets the behavior of channel drags; it can be used to prevent accidental dragging. &lt;i&gt;Move&lt;/i&gt; moves the channel without prompting. &lt;i&gt;Do Nothing&lt;/i&gt; does nothing and prints an error message. &lt;i&gt;Ask&lt;/i&gt; uses a message box to confirm if you really wanted to move the channel.</source>
         <oldsource>This sets the behavior of channel drags; it can be used to prevent accidental dragging. &lt;i&gt;Move Channel&lt;/i&gt; moves the channel without prompting. &lt;i&gt;Do Nothing&lt;/i&gt; does nothing and prints an error message. &lt;i&gt;Ask&lt;/i&gt; uses a message box to confirm if you really wanted to move the channel.</oldsource>
         <translation>Detta ställer in beteendet för kanaldragningar, vilket kan användas för att undvika oavsiktlig dragning. &lt;i&gt;Flytta&lt;/i&gt; flyttar kanalen utan att fråga. &lt;i&gt;Gör ingenting&lt;/i&gt; gör ingenting och visar ett felmeddelande. &lt;i&gt;Fråga&lt;/i&gt; använder en meddelanderuta för att bekräfta om du verkligen vill flytta kanalen.</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Style</source>
-        <translation>Stil</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Basic widget style</source>
-        <translation>Grundläggande stil för widget</translation>
-    </message>
-    <message>
-        <location/>
-        <source>&lt;b&gt;This sets the basic look and feel to use.&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Detta ställer in det grundläggande utseendet och känslan att använda.&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Skin</source>
-        <translation>Hud</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Skin file to use</source>
-        <translation>Hud-fil att använda</translation>
-    </message>
-    <message>
-        <location/>
-        <source>&lt;b&gt;This sets which skin Mumble should use.&lt;/b&gt;&lt;br /&gt;The skin is a style file applied on top of the basic widget style. If there are icons in the same directory as the style sheet, those will replace the default icons.</source>
-        <translation>&lt;b&gt;Detta ställer in vilken hud Mumble skall använda.&lt;/b&gt;&lt;br /&gt;Huden är en fil som verkställs ovan den grundläggande stilen. Om det finns ikoner i samma mapp som formatmallen, kommer dessa att ersätta standardikonerna.</translation>
     </message>
     <message>
         <location/>
@@ -4242,17 +4486,17 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location/>
         <source>Displays talking status in system tray</source>
-        <translation>Visar prat-status i aktivitetsfältet</translation>
+        <translation>Visar tal-status i aktivitetsfältet</translation>
     </message>
     <message>
         <location/>
         <source>Show talking status in tray icon</source>
-        <translation>Visa prat-status i ikonen i aktivitetsfältet</translation>
+        <translation>Visa tal-status i ikonen i aktivitetsfältet</translation>
     </message>
     <message>
         <location/>
         <source>This setting controls in which situations the application will stay always on top. If you select &lt;i&gt;Never&lt;/i&gt; the application will not stay on top. &lt;i&gt;Always&lt;/i&gt; will always keep the application on top. &lt;i&gt;In minimal view&lt;/i&gt; / &lt;i&gt;In normal view&lt;/i&gt; will only keep the application always on top when minimal view is activated / deactivated.</source>
-        <translation>Detta inställning kontrollerar i vilka situationer som prgrammet skall visas överst. Om du väljer &lt;i&gt;Aldrig&lt;/i&gt; kommer programmet inte att visas överst. &lt;i&gt;Alltid&lt;/i&gt; kommer alltid att visa programmet överst. &lt;i&gt;I minimal vy&lt;/i&gt; / &lt;i&gt;I normal vy&lt;/i&gt; kommer endast att behålla programmet överst om den minimala vyn är aktiverad / avaktiverad.</translation>
+        <translation>Denna inställning kontrollerar i vilka situationer som programmet ska visas överst. Om du väljer &lt;i&gt;Aldrig&lt;/i&gt; kommer programmet inte att visas överst. &lt;i&gt;Alltid&lt;/i&gt; kommer alltid att visa programmet överst. &lt;i&gt;I minimal vy&lt;/i&gt; / &lt;i&gt;I normal vy&lt;/i&gt; kommer endast att behålla programmet överst om den minimala vyn är aktiverad / avaktiverad.</translation>
     </message>
     <message>
         <location/>
@@ -4291,25 +4535,60 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     </message>
     <message>
         <location/>
-        <source>&amp;Browse...</source>
-        <translation>&amp;Bläddra...</translation>
+        <source>Use selected item as the chat bar target</source>
+        <translation>Använd valt objekt som mål för chattfält</translation>
     </message>
     <message>
         <location/>
-        <source>Use selected item as the chat bar target</source>
-        <translation>Använd valt objekt som mål för chattfält</translation>
+        <source>Filter automatically hides empty channels</source>
+        <translation>Filter gömmer automatiskt tomma kanaler</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Show transmit mode dropdown in toolbar</source>
+        <translation>Visa överföringsläge i verktygsfältet</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Theme</source>
+        <translation>Tema</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Theme to use to style the user interface</source>
+        <translation>Tema används för att anpassa utseendet av användargränssnittet.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Configures which theme the Mumble user interface should be styled with&lt;/b&gt;&lt;br /&gt;Mumble will pick up themes from certain directories and display them in this list. The one you select will be used to customize the visual appearance of Mumble. This includes colors, icons and more.</source>
+        <translation>&lt;b&gt;Konfigurerar vilket tema Mumble användargränssnittet ska vara utformad med&lt;b&gt;&lt;br /&gt;Mumble kommer att plocka teman från en vissa kataloger och visar dem i den här listan. Det du väljer kommer att användas för att anpassa utseendet av Mumble. Detta inkluderar färger, ikoner och mer.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>User Dragging</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>This changes the behavior when moving users.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>This sets the behavior of user drags; it can be used to prevent accidental dragging. &lt;i&gt;Move&lt;/i&gt; moves the user without prompting. &lt;i&gt;Do Nothing&lt;/i&gt; does nothing and prints an error message. &lt;i&gt;Ask&lt;/i&gt; uses a message box to confirm if you really wanted to move the user.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="MainWindow.cpp" line="+182"/>
-        <location line="+2131"/>
+        <location filename="MainWindow.cpp" line="+117"/>
+        <location line="+2669"/>
         <source>Root</source>
         <translation>Rot</translation>
     </message>
     <message>
-        <location line="-2079"/>
+        <location line="-2615"/>
         <source>Push-to-Talk</source>
         <comment>Global Shortcut</comment>
         <translation>Tryck-för-att-Tala</translation>
@@ -4324,7 +4603,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <location line="+1"/>
         <source>This configures the push-to-talk button, and as long as you hold this button down, you will transmit voice.</source>
         <comment>Global Shortcut</comment>
-        <translation>Detta konfigurerar tryck-för-att-tala knappen. Så länge du håller nere den här knappen kommer du överföra röst.</translation>
+        <translation>Detta konfigurerar tryck-för-att-tala-knappen. Så länge du håller nere den här knappen kommer du överföra röst.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -4351,7 +4630,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Gå med i kanal</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Toggle Overlay</source>
         <comment>Global Shortcut</comment>
         <translation>Växla i-spelet funktionen</translation>
@@ -4387,39 +4666,39 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     </message>
     <message>
         <location filename="MainWindow.cpp" line="+4"/>
-        <location line="+15"/>
-        <location line="+2230"/>
+        <location line="+159"/>
+        <location line="+2609"/>
         <source>Mumble -- %1</source>
         <translation>Mumble - %1</translation>
     </message>
     <message>
-        <location line="-2225"/>
+        <location line="-2737"/>
         <source>&amp;Window</source>
         <translation>&amp;Fönster</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location line="+135"/>
+        <location line="+186"/>
         <source>Minimize</source>
         <translation>Minimera</translation>
     </message>
     <message>
-        <location line="-135"/>
+        <location line="-186"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location line="+134"/>
+        <location line="+185"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>Mumble is currently connected to a server. Do you want to Close or Minimize it?</source>
-        <translation>Mumble är för närvarande ansluten till en server. Vill du stänga eller minimera?</translation>
+        <translation>Mumble är för närvarande anslutet till en server. Vill du stänga eller minimera?</translation>
     </message>
     <message>
-        <location line="-190"/>
+        <location line="-253"/>
         <source>Mute Self</source>
         <comment>Global Shortcut</comment>
         <translation>Avaktivera mikrofon</translation>
@@ -4455,32 +4734,32 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Detta kommer aktivera eller avaktivera ljudet. Om du har detta avaktiverat kommer du också avaktivera mikrofon.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+31"/>
         <source>Whisper/Shout</source>
         <oldsource>Whisper</oldsource>
-        <translation>Viska/Skrik</translation>
+        <translation>Viska/Skrika</translation>
     </message>
     <message>
-        <location line="+61"/>
-        <location line="+2271"/>
+        <location line="+79"/>
+        <location line="+2753"/>
         <source>&lt;center&gt;Not connected&lt;/center&gt;</source>
         <oldsource>Not connected</oldsource>
         <translation>&lt;center&gt;Ej ansluten&lt;/center&gt;</translation>
     </message>
     <message>
-        <location line="-1998"/>
+        <location line="-2318"/>
         <source>Clear</source>
         <translation>Rensa</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+72"/>
         <source>Opening URL %1</source>
         <translation>Öppnar URL %1</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>File does not exist</source>
-        <translation>Filen finns inte</translation>
+        <translation>Filen finns ej</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -4498,12 +4777,12 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>URL schemat kan inte användas av Mumble</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+26"/>
         <source>This version of Mumble can&apos;t handle URLs for Mumble version %1.%2.%3</source>
         <translation>Den här versionen av Mumble kan inte hantera URLer för Mumble version %1.%2.%3</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+36"/>
         <source>Connecting to %1</source>
         <translation>Ansluter till %1</translation>
     </message>
@@ -4513,8 +4792,8 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Ange användarnamn</translation>
     </message>
     <message>
-        <location line="+14"/>
-        <location line="+192"/>
+        <location line="+15"/>
+        <location line="+205"/>
         <source>Connecting to server %1.</source>
         <translation>Ansluter till servern %1.</translation>
     </message>
@@ -4524,41 +4803,87 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Återansluter.</translation>
     </message>
     <message>
-        <location line="+148"/>
-        <source>&lt;p&gt;No build information or OS version available.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Ingen bygginformation eller OS version tillgänglig.&lt;/p&gt;</translation>
+        <location line="+76"/>
+        <location line="+1498"/>
+        <source>Transmit Mode set to Continuous</source>
+        <translation>Överföringsläge inställt till Kontinuerligt</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-1398"/>
         <source>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+69"/>
         <source>&lt;h2&gt;Voice channel&lt;/h2&gt;&lt;p&gt;Encrypted with 128 bit OCB-AES128&lt;br /&gt;%1 ms average latency (%4 deviation)&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Ljudkanal&lt;/h2&gt;&lt;p&gt;Krypterad med 128 bitars OCB-AES128&lt;br /&gt;%1 ms genomsnittlig åtkomsttid (%4 deviation)&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;Ljudkanal&lt;/h2&gt;&lt;p&gt;Krypterad med 128 bitars OCB-AES128&lt;br /&gt;Genomsnittlig fördröjning: %1 ms (%4 avvikelse)&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-104"/>
-        <location line="+354"/>
+        <location line="-179"/>
+        <location line="+448"/>
         <source>Register yourself as %1</source>
         <translation>Registrera dig som %1</translation>
     </message>
     <message>
-        <location line="-354"/>
-        <location line="+354"/>
+        <location line="-448"/>
+        <location line="+448"/>
         <source>&lt;p&gt;You are about to register yourself on this server. This action cannot be undone, and your username cannot be changed once this is done. You will forever be known as &apos;%1&apos; on this server.&lt;/p&gt;&lt;p&gt;Are you sure you want to register yourself?&lt;/p&gt;</source>
         <translation>&lt;p&gt;Du kommer registrera dig på den här servern. Denna åtgärd kan inte ångras. Ditt användarnamn kan inte heller ändras när detta är gjort. Du kommer vara känd som &quot;%1&quot; på den här servern.&lt;/p&gt;&lt;p&gt;Är du säker på att du vill registrera dig?&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="-343"/>
+        <source>&lt;h2&gt;Version&lt;/h2&gt;&lt;p&gt;Protocol %1&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;Version&lt;/h2&gt;&lt;p&gt;Protokoll %1.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;p&gt;No build information or OS version available&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Ingen versionsinformation eller OS version tillgänglig.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>The connection is encrypted and authenticated using %1 and uses %2 as the key exchange mechanism (%3)</source>
+        <translation>Anslutningen är krypterad och autentiserad med %1 och använder %2 som nyckelbytesmekanism (%3)</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>The connection is encrypted using %1, with %2 for message authentication and %3 as the key exchange mechanism (%4)</source>
+        <translation>Anslutningen är krypterad och använder %1, med %2 för meddelandeautentisering och %3 som nyckelbytesmekanism (%4)</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The connection is secured by the cipher suite that OpenSSL identifies as %1</source>
+        <translation>Anslutningen är säkrad med cipher suiten vilken OpenSSL identifierar som %1</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>&lt;p&gt;The connection provides perfect forward secrecy&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Anslutningen stödjer perfect forward secrecy&lt;/p&gt;</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>&lt;p&gt;The connection does not provide perfect forward secrecy&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Anslutningen stödjer inte perfect forward secrecy&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&lt;h2&gt;Control channel&lt;/h2&gt;&lt;p&gt;The connection uses %1&lt;/p&gt;%2%3&lt;p&gt;%4 ms average latency (%5 deviation)&lt;/p&gt;&lt;p&gt;Remote host %6 (port %7)&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;Kontrollkanal&lt;/h2&gt;&lt;p&gt;Anslutningen använder %1&lt;/p&gt;%2%3&lt;p&gt;Genomsnittlig fördröjning: %4ms (%5 avvikelse)&lt;/p&gt;&lt;p&gt;Fjärrvärd %6 (port %7)&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Voice channel is sent over control channel</source>
+        <translation>Ljudkanal skickas över kontrollkanal.</translation>
+    </message>
+    <message>
+        <location line="+273"/>
         <source>Register user %1</source>
         <translation>Registrera användare %1</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>&lt;p&gt;You are about to register %1 on the server. This action cannot be undone, the username cannot be changed, and as a registered user, %1 will have access to the server even if you change the server password.&lt;/p&gt;&lt;p&gt;From this point on, %1 will be authenticated with the certificate currently in use.&lt;/p&gt;&lt;p&gt;Are you sure you want to register %1?&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Du kommer registrera %1 på servern. Denna åtgärd kan inte ångras. Användarnamnet kan inte ändras. Som registrerad användare kommer %1 ha tillgång till servern även om du ändrar lösenordet.&lt;/p&gt;&lt;p&gt;Från och med nu kommer %1 att bli autentisierad med det certifikat som för närvarande används.&lt;/p&gt;&lt;p&gt;Är du säker på att du vill registrera %1?&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Du kommer registrera %1 på servern. Denna åtgärd kan inte ångras. Användarnamnet kan inte ändras. Som registrerad användare kommer %1 ha tillgång till servern även om du ändrar lösenordet.&lt;/p&gt;&lt;p&gt;Från och med nu kommer %1 att bli autentiserad med det certifikat som för närvarande används.&lt;/p&gt;&lt;p&gt;Är du säker på att du vill registrera %1?&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -4568,7 +4893,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location line="+19"/>
         <source>Banning user %1</source>
-        <translation>Bannlyser %1</translation>
+        <translation>Bannlyser användare %1</translation>
     </message>
     <message>
         <location line="+61"/>
@@ -4576,66 +4901,74 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Visa kommentar på %1</translation>
     </message>
     <message>
-        <location line="+52"/>
-        <location line="+237"/>
+        <location line="+76"/>
+        <location line="+270"/>
+        <location line="+612"/>
         <source>Message to channel %1</source>
         <translation>Meddelande till kanalen %1</translation>
     </message>
     <message>
-        <location line="+544"/>
+        <location line="+65"/>
         <source>Connected.</source>
         <translation>Ansluten.</translation>
     </message>
     <message>
-        <location line="+159"/>
-        <source>SSL Version mismatch</source>
-        <translation>SSL version matchar inte</translation>
+        <location line="+112"/>
+        <source>&lt;li&gt;Expected certificate digest (SHA-1):	%1&lt;/li&gt;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+2"/>
+        <source>Server presented a certificate which failed verification.</source>
+        <translation>Servern använder ett certifikat som inte kan verifieras.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;p&gt;%1&lt;/p&gt;&lt;ul&gt;%2&lt;/ul&gt;&lt;p&gt;The specific errors with this certificate are:&lt;/p&gt;&lt;ol&gt;%3&lt;/ol&gt;&lt;p&gt;Do you wish to accept this certificate anyway?&lt;br /&gt;(It will also be stored so you won&apos;t be asked this again.)&lt;/p&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>SSL Version mismatch</source>
+        <translation>SSL-version matchar inte</translation>
+    </message>
+    <message>
+        <location line="+132"/>
         <source>&lt;center&gt;Type message to channel &apos;%1&apos; here&lt;/center&gt;</source>
-        <oldsource>Type message to channel &apos;%1&apos; here</oldsource>
+        <oldsource>Type message to channel '%1' here</oldsource>
         <translation>&lt;center&gt;Skicka ett meddelande till kanalen &quot;%1&quot; här&lt;/center&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;center&gt;Type message to user &apos;%1&apos; here&lt;/center&gt;</source>
-        <oldsource>Type message to user &apos;%1&apos; here</oldsource>
+        <oldsource>Type message to user '%1' here</oldsource>
         <translation>&lt;center&gt;Skriv ett meddelande till användaren &quot;%1&quot; här&lt;/center&gt;</translation>
     </message>
     <message>
-        <location line="+105"/>
+        <location line="+101"/>
         <source>Choose image file</source>
         <translation>Välj bildfil</translation>
     </message>
     <message>
-        <location line="+0"/>
-        <source>Images (*.png *.jpg *.jpeg *.svg)</source>
-        <translation>Bilder (*.png *.jpg *.jpeg *.svg)</translation>
-    </message>
-    <message>
         <location line="+7"/>
         <location line="+17"/>
+        <location line="+9"/>
         <source>Failed to load image</source>
         <translation>Kunde inte ladda bild</translation>
     </message>
     <message>
-        <location line="-17"/>
+        <location line="-26"/>
         <source>Could not open file for reading.</source>
         <translation>Kunde inte öppna fil för läsning.</translation>
     </message>
     <message>
         <location line="+17"/>
+        <location line="+9"/>
         <source>Image format not recognized.</source>
         <translation>Bildformatet stöds ej.</translation>
     </message>
     <message>
-        <location line="-1651"/>
-        <source>Voice channel is sent over control channel.</source>
-        <translation>Röstkanal skickas över kontrollkanal.</translation>
-    </message>
-    <message>
-        <location line="-899"/>
+        <location line="-3056"/>
         <source>&amp;User</source>
         <translation>&amp;Användare</translation>
     </message>
@@ -4645,10 +4978,17 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>&amp;Kanal</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+59"/>
+        <location line="+26"/>
+        <source>Use in conjunction with Whisper to.</source>
+        <comment>Global Shortcut</comment>
+        <translation>Används tillsammans med Viska till.</translation>
+    </message>
+    <message>
+        <location line="-21"/>
         <source>This will switch the states of the in-game overlay.</source>
         <comment>Global Shortcut</comment>
-        <translation>Detta kommer ändra i-spelet läget.</translation>
+        <translation>Detta kommer ändra i-spelet-läget.</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -4657,24 +4997,95 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Länka kanal</translation>
     </message>
     <message>
-        <location line="+688"/>
+        <location line="+4"/>
+        <source>Cycle Transmit Mode</source>
+        <comment>Global Shortcut</comment>
+        <translation>Växla överföringsläge</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Send Text Message</source>
+        <comment>Global Shortcut</comment>
+        <translation>Skicka textmeddelande</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Send Clipboard Text Message</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This will send your Clipboard content to the channel you are currently in.</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+88"/>
+        <source>Continuous</source>
+        <translation>Kontinuerligt</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Voice Activity</source>
+        <translation>Ljudaktivitet</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Push-to-Talk</source>
+        <translation>Tryck-för-att-Tala</translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>Mumble - Minimal View -- %1</source>
+        <translation>Mumble - Minimal Vy -- %1</translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>Cancel</source>
+        <translation>Avbryt</translation>
+    </message>
+    <message>
+        <location line="+291"/>
+        <source>Save Image As...</source>
+        <translation>Spara bilden som...</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Save Image File</source>
+        <translation>Spara bildfilen</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Could not save image: %1</source>
+        <translation>Kunde inte spara bilden: %1</translation>
+    </message>
+    <message>
+        <location line="+401"/>
         <source>Change your comment</source>
         <translation>Ändra din kommentar</translation>
     </message>
     <message>
-        <location line="+105"/>
-        <source>&lt;h2&gt;Version&lt;/h2&gt;&lt;p&gt;Protocol %1.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Version&lt;/h2&gt;&lt;p&gt;Protokoll %1.&lt;/p&gt;</translation>
+        <location line="+41"/>
+        <location line="+1485"/>
+        <source>Transmit Mode set to Voice Activity</source>
+        <translation>Överföringsläge inställt till Ljudaktivitet</translation>
     </message>
     <message>
-        <location line="+14"/>
-        <source>&lt;h2&gt;Control channel&lt;/h2&gt;&lt;p&gt;Encrypted with %1 bit %2&lt;br /&gt;%3 ms average latency (%4 deviation)&lt;/p&gt;&lt;p&gt;Remote host %5 (port %6)&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Kontrollkanal&lt;/h2&gt;&lt;p&gt;Krypterad med %1 bitar %2&lt;br /&gt;%3 ms genomsnittlig åtkomsttid (%4 deviation)&lt;/p&gt;&lt;p&gt;Fjärrvärd %5 (port %6)&lt;/p&gt;</translation>
+        <location line="-1480"/>
+        <location line="+1484"/>
+        <source>Transmit Mode set to Push-to-Talk</source>
+        <translation>Överföringsläge inställt till Tryck-för-att-Tala</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="-1333"/>
+        <source>&lt;p&gt;Connected users: %1/%2&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Anslutna användare: %1/%2&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>UDP Statistics</source>
-        <translation>UDP statistik</translation>
+        <translation>UDP-statistik</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -4714,16 +5125,16 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     <message>
         <location line="+2"/>
         <source>Mumble Server Information</source>
-        <translation>Mumble serverinformation</translation>
+        <translation>Mumble Server-information</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location line="+1330"/>
+        <location line="+1525"/>
         <source>&amp;View Certificate</source>
         <translation>&amp;Visa certifikat</translation>
     </message>
     <message>
-        <location line="-1055"/>
+        <location line="-1231"/>
         <location line="+19"/>
         <source>Enter reason</source>
         <translation>Ange anledning</translation>
@@ -4735,25 +5146,31 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     </message>
     <message>
         <location line="+12"/>
-        <location line="+79"/>
+        <location line="+103"/>
         <location line="+4"/>
-        <location line="+233"/>
+        <location line="+266"/>
+        <location line="+612"/>
         <source>To %1: %2</source>
         <translation>Till %1: %2</translation>
     </message>
     <message>
-        <location line="-316"/>
-        <location line="+83"/>
+        <location line="-985"/>
+        <location line="+107"/>
         <source>Message to %1</source>
         <translation>Meddelande till %1</translation>
     </message>
     <message>
-        <location line="-40"/>
+        <location line="-64"/>
         <source>Are you sure you want to reset the comment of user %1?</source>
         <translation>Är du säker på att du vill återställa kommentaren av användaren %1?</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+16"/>
+        <source>Are you sure you want to reset the avatar of user %1?</source>
+        <translation>Är du säker på att du vill återställa visningsbilden för användaren %1?</translation>
+    </message>
+    <message>
+        <location line="+232"/>
         <source>Are you sure you want to delete %1 and all its sub-channels?</source>
         <translation>Är du säker på att du vill ta bort %1 och alla dess underkanaler?</translation>
     </message>
@@ -4774,7 +5191,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Till %1 (Träd): %2</translation>
     </message>
     <message>
-        <location line="+149"/>
+        <location line="+175"/>
         <source>Unmuted and undeafened.</source>
         <translation>Ljud och mikrofon aktiverad.</translation>
     </message>
@@ -4804,32 +5221,37 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
         <translation>Ljud aktiverat.</translation>
     </message>
     <message>
-        <location line="+89"/>
+        <location line="+51"/>
+        <source>Restart Mumble?</source>
+        <translation>Starta om Mumble?</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Some settings will only apply after a restart of Mumble. Restart Mumble now?</source>
+        <translation>Några inställningar kommer endast att gälla efter en omstart av Mumble. Starta om Mumble nu?</translation>
+    </message>
+    <message>
+        <location line="+51"/>
         <source>About Qt</source>
         <translation>Om Qt</translation>
     </message>
     <message>
-        <location line="+389"/>
+        <location line="+464"/>
         <source>SSL Verification failed: %1</source>
-        <translation>SSL verifiering misslyckades: %1</translation>
+        <translation>SSL-verifiering misslyckades: %1</translation>
     </message>
     <message>
         <location line="+5"/>
+        <source>&lt;li&gt;Server certificate digest (SHA-1):	%1&lt;/li&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>&lt;b&gt;WARNING:&lt;/b&gt; The server presented a certificate that was different from the stored one.</source>
         <translation>&lt;b&gt;VARNING:&lt;/b&gt; Servern använder ett certifikat som inte är samma som det lagrade.</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Sever presented a certificate which failed verification.</source>
-        <translation>Servern använder ett certifikat som inte kan verifieras.</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>&lt;p&gt;%1.&lt;br /&gt;The specific errors with this certificate are: &lt;/p&gt;&lt;ol&gt;%2&lt;/ol&gt;&lt;p&gt;Do you wish to accept this certificate anyway?&lt;br /&gt;(It will also be stored so you won&apos;t be asked this again.)&lt;/p&gt;</source>
-        <translation>&lt;p&gt;%1.&lt;br /&gt;Detaljerad felinformation om detta certifikat är: &lt;/p&gt;&lt;ol&gt;%2&lt;/ol&gt;&lt;p&gt;Vill du acceptera detta certifikat ändå?&lt;br /&gt;(Det kommer även att lagras, så du kommer inte att bli tillfrågad igen.)&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <location line="+24"/>
+        <location line="+34"/>
         <source>This server is using an older encryption standard, and is no longer supported by modern versions of Mumble.</source>
         <translation>Den här servern använder en äldre krypteringsstandard och stöds ej längre av nyare versioner av Mumble.</translation>
     </message>
@@ -4845,6 +5267,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     </message>
     <message>
         <location line="+11"/>
+        <location filename="Messages.cpp" line="+70"/>
         <source>Invalid username</source>
         <translation>Ogiltigt användarnamn</translation>
     </message>
@@ -4855,6 +5278,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     </message>
     <message>
         <location line="+4"/>
+        <location filename="Messages.cpp" line="+3"/>
         <source>Username in use</source>
         <translation>Användarnamn finns redan</translation>
     </message>
@@ -4865,6 +5289,7 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
     </message>
     <message>
         <location line="+5"/>
+        <location filename="Messages.cpp" line="+3"/>
         <source>Wrong certificate or password</source>
         <translation>Felaktigt certifikat eller lösenord</translation>
     </message>
@@ -4874,11 +5299,12 @@ Detta fält beskriver storleken av en LCD-enhet. Storleken mäts i pixlar (för 
 certain this user is protected by a password please retry.
 Otherwise abort and check your certificate and username.</source>
         <translation>Felaktigt certifikat eller lösenord för registrerad användare. Om du är
-säker på att denna användaren skyddas av eller lösenord, försök igen.
+säker på att denna användaren skyddas av ett lösenord, försök igen.
 Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="Messages.cpp" line="+3"/>
         <source>Wrong password</source>
         <translation>Felaktigt lösenord</translation>
     </message>
@@ -4886,6 +5312,12 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <location line="+1"/>
         <source>Wrong server password for unregistered user account, please try again.</source>
         <translation>Felaktigt serverlösenord för oregistrerat användarkonto, försök igen.</translation>
+    </message>
+    <message>
+        <location line="-2222"/>
+        <location line="+2419"/>
+        <source>Images (*.png *.jpg *.jpeg)</source>
+        <translation>Bilder (*.png *.jpg *.jpeg)</translation>
     </message>
     <message>
         <location filename="MainWindow.ui"/>
@@ -4905,7 +5337,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
     <message>
         <location/>
         <source>This shows all recent activity. Connecting to servers, errors and information messages all show up here.&lt;br /&gt;To configure exactly which messages show up here, use the &lt;b&gt;Settings&lt;/b&gt; command from the menu.</source>
-        <translation>Detta visar all ny aktivitet. Anslutning till servrar, fel- och informationsmeddelanden visas här.&lt;br /&gt;För att konfigurera vilka meddelanden som skall visas här kan du använda &lt;b&gt;Inställningar&lt;/b&gt; kommandot från menyn.</translation>
+        <translation>Detta visar all ny aktivitet. Anslutning till servrar, fel- och informationsmeddelanden visas här.&lt;br /&gt;För att konfigurera vilka meddelanden som ska visas här kan du använda &lt;b&gt;Inställningar&lt;/b&gt; kommandot från menyn.</translation>
     </message>
     <message>
         <location/>
@@ -4951,21 +5383,6 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <location/>
         <source>Disconnects you from the server.</source>
         <translation>Kopplar ifrån dig från servern.</translation>
-    </message>
-    <message>
-        <location/>
-        <source>&amp;Ban lists</source>
-        <translation>&amp;Bannlistor</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Edit ban lists on server</source>
-        <translation>Ändra bannlistor på servern</translation>
-    </message>
-    <message>
-        <location/>
-        <source>This lets you edit the server-side IP ban lists.</source>
-        <translation>Detta låter dig ändra IP-bannlysningar på server-sidan.</translation>
     </message>
     <message>
         <location/>
@@ -5055,7 +5472,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
     <message>
         <location/>
         <source>This opens the Group and ACL dialog for the channel, to control permissions.</source>
-        <translation>Detta öppnar grupp och ACL dialogen för kanalen, för att kontrollera behörigheter.</translation>
+        <translation>Detta öppnar grupp- och ACL-dialogen för kanalen, för att kontrollera behörigheter.</translation>
     </message>
     <message>
         <location/>
@@ -5100,7 +5517,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
     <message>
         <location/>
         <source>Mute or unmute user on server. Unmuting a deafened user will also undeafen them.</source>
-        <translation>Tysta (aktivera/avaktivera mikrofon) användare på servern. Aktivera mikrofon för en användare kommer också aktivera ljud för dem.</translation>
+        <translation>Aktivera eller avaktivera mikrofon för en användare på servern. Om du aktiverar mikrofonen för en användare kommer ljudet också att aktiveras.</translation>
     </message>
     <message>
         <location/>
@@ -5120,7 +5537,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
     <message>
         <location/>
         <source>Deafen or undeafen user on server. Deafening a user will also mute them.</source>
-        <translation>Aktivera eller avaktivera ljudet för en användare på servern. Avaktivera ljudet för en användare, kommer också avaktivera mikrofonen för dem.</translation>
+        <translation>Aktivera eller avaktivera ljudet för en användare på servern. Om du avaktiverar ljudet för en användare, kommer också mikrofonen att avaktiveras.</translation>
     </message>
     <message>
         <location/>
@@ -5141,7 +5558,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <location/>
         <source>This links your current channel to the selected channel. If users in a channel have permission to speak in the other channel, users can now hear each other. This is a permanent link, and will last until manually unlinked or the server is restarted. Please see the shortcuts for push-to-link.</source>
         <oldsource>This links your current channel to the selected channel. If they have permission to speak in the other channel, users can now hear each other. This is a permanent link, and will last until manually unlinked or the server is restarted. Please see the shortcuts for push-to-link.</oldsource>
-        <translation>Detta länkar din nuvarande kanal till den valda kanalen. Om användare i en kanal har behörighet att prata i en annan kanal kan användare nu höra varandra. Detta är en permanent länk och kommer att pågå tills servern startats om, eller tills den är borttagen manuellt. Se genvägar för Tryck-för-att-Länka.</translation>
+        <translation>Detta länkar din nuvarande kanal till den valda kanalen. Om användare i en kanal har behörighet att tala i en annan kanal kan användare nu höra varandra. Detta är en permanent länk och kommer att pågå tills servern startats om, eller tills den är borttagen manuellt. Se genvägar för Tryck-för-att-Länka.</translation>
     </message>
     <message>
         <location/>
@@ -5182,7 +5599,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
     <message>
         <location/>
         <source>This will reset the audio preprocessor, including noise cancellation, automatic gain and voice activity detection. If something suddenly worsens the audio environment (like dropping the microphone) and it was temporary, use this to avoid having to wait for the preprocessor to readjust.</source>
-        <translation>Detta kommer återställa förprocessen inkluderande bulleravbrytning, automatisk förstärkning och upptäckning av röstaktivitet. Om någoting plötsligt förvärras i ljudmiljön (t.ex. att en mikrofon tappas) och det var tillfälligt kan du använda detta för att undvika att vänta på förprocessen att återjusteras.</translation>
+        <translation>Detta kommer återställa förprocessen inkluderande bulleravbrytning, automatisk förstärkning och upptäckning av röstaktivitet. Om någonting plötsligt förvärras i ljudmiljön (t.ex. att en mikrofon tappas) och det var tillfälligt kan du använda detta för att undvika att vänta på förprocessen att återjusteras.</translation>
     </message>
     <message>
         <location/>
@@ -5227,7 +5644,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
     <message>
         <location/>
         <source>Enable or disable the text-to-speech engine. Only messages enabled for TTS in the Configuration dialog will actually be spoken.</source>
-        <translation>Aktivera eller avaktivera text-till-tal motorn. Endast meddelande aktiverade för TTS i konfigurationsdialogen kommer talas.</translation>
+        <translation>Aktivera eller avaktivera text-till-tal-motorn. Endast meddelande aktiverade för TTS i konfigurationsdialogen kommer talas.</translation>
     </message>
     <message>
         <location/>
@@ -5407,12 +5824,12 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
     <message>
         <location/>
         <source>Removes a user from your friends.</source>
-        <translation>Tar bort en vän från din kompislista.</translation>
+        <translation>Tar bort en vän från din vänlista.</translation>
     </message>
     <message>
         <location/>
         <source>This will remove a user from your friends list.</source>
-        <translation>Detta kommer att ta bort en användare från din kompislista.</translation>
+        <translation>Detta kommer att ta bort en användare från din vänlista.</translation>
     </message>
     <message>
         <location/>
@@ -5470,7 +5887,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>Detta kommer växla minimalt läge när loggfönstret och menyn är gömd.</translation>
     </message>
     <message>
-        <location filename="Messages.cpp" line="+362"/>
+        <location filename="Messages.cpp" line="+330"/>
         <source>You muted and deafened %1.</source>
         <translation>Du avaktiverade mikrofon och ljud för %1.</translation>
     </message>
@@ -5520,28 +5937,33 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>%1 flyttades till %2 av %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+17"/>
         <source>%1 moved in from %2 by %3.</source>
         <translation>%1 flyttades in från %2 av %3.</translation>
     </message>
     <message>
-        <location line="-161"/>
+        <location line="-200"/>
         <source>%1 is now muted and deafened.</source>
         <translation>%1 har avaktiverat sin mikrofon och sitt ljud.</translation>
     </message>
     <message>
-        <location line="-189"/>
-        <location line="+48"/>
+        <location line="-218"/>
+        <source>Your account information can not be verified currently. Please try again later</source>
+        <translation>Din kontoinformation kan inte verifieras just nu. Var god försök igen senare</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <location line="+55"/>
         <source>Welcome message: %1</source>
         <translation>Välkomstmeddelande: %1</translation>
     </message>
     <message>
-        <location line="-15"/>
+        <location line="-17"/>
         <source>Mumble: %1</source>
         <translation>Mumble: %1</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+42"/>
         <source>You were denied %1 privileges in %2.</source>
         <translation>Du nekades behörigheten &quot;%1&quot; i %2.</translation>
     </message>
@@ -5566,7 +5988,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>Nekad: Textmeddelande för långt.</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+22"/>
         <source>Denied: Operation not permitted in temporary channel.</source>
         <translation>Nekad: Åtgärden tillåts inte i temporär kanal.</translation>
     </message>
@@ -5606,7 +6028,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>Åtkomst nekad.</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+40"/>
         <source>%1 connected.</source>
         <translation>%1 anslöt till servern.</translation>
     </message>
@@ -5641,6 +6063,56 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>%1 slutade spela in.</translation>
     </message>
     <message>
+        <location line="+10"/>
+        <source>You revoked your priority speaker status.</source>
+        <translation>Du upphävde din prioriterad talare status.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>You assumed priority speaker status.</source>
+        <translation>Du tilldelades prioriterad talare status.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>%1 revoked your priority speaker status.</source>
+        <translation>%1 upphävde din prioriterad talare status.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 gave you priority speaker status.</source>
+        <translation>%1 gav dig prioriterad talare status.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>You revoked priority speaker status for %1.</source>
+        <translation>Du upphävde prioriterad talare status för %1.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>You gave priority speaker status to %1.</source>
+        <translation>Du gav prioriterad talare status till %1.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>%1 revoked own priority speaker status.</source>
+        <translation>%1 upphävde egen prioriterad talare status.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 assumed priority speaker status.</source>
+        <translation>%1 tilldelades prioriterad talade status.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>%1 revoked priority speaker status for %2.</source>
+        <translation>%1 upphävde prioriterad talare status för %2.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 gave priority speaker status to %2.</source>
+        <translation>%1 gav prioriterad talare status till %2.</translation>
+    </message>
+    <message>
         <location line="+21"/>
         <source>You were unmuted and undeafened by %1.</source>
         <translation>%1 aktiverade mikrofon och ljud för dig.</translation>
@@ -5672,17 +6144,27 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>Du avtystades av %1.</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+83"/>
+        <source>You moved %1 to %2.</source>
+        <translation>Du flyttade %1 till %2.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>%1 is recording</source>
         <translation>%1 spelar in</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+10"/>
+        <source>%1 renamed to %2 by %3.</source>
+        <translation>%1 namnbyte till %2 av %3</translation>
+    </message>
+    <message>
+        <location line="+51"/>
         <source>%1 disconnected.</source>
         <translation>%1 lämnade servern.</translation>
     </message>
     <message>
-        <location line="+92"/>
+        <location line="+115"/>
         <location line="+1"/>
         <source>Server</source>
         <comment>message from</comment>
@@ -5697,6 +6179,11 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <location line="+2"/>
         <source>(Channel) </source>
         <translation>(Kanal) </translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>(Private) </source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
@@ -5729,7 +6216,7 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>Servern efterfrågar avaktivering av Tryck-för-att-Tala-funktionen.</translation>
     </message>
     <message>
-        <location line="-474"/>
+        <location line="-517"/>
         <source>You were unmuted by %1.</source>
         <translation>Din mikrofon aktiverades av %1.</translation>
     </message>
@@ -5764,18 +6251,18 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>%2 aktiverade mikrofon för %1.</translation>
     </message>
     <message>
-        <location line="+377"/>
+        <location line="+420"/>
         <source>Unable to find matching CELT codecs with other clients. You will not be able to talk to all users.</source>
-        <translation>Kunde inte hitta liknande CELT-kodekar med andra klienter. Du kan inte prata med alla användare.</translation>
+        <translation>Kunde inte hitta liknande CELT-kodekar med andra klienter. Du kan inte tala med alla användare.</translation>
     </message>
     <message>
-        <location line="-443"/>
+        <location line="-486"/>
         <source>You were muted and deafened by %1.</source>
         <oldsource>You were deafened by %1.</oldsource>
         <translation>Din mikrofon och ljud avaktiverades av %1.</translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+176"/>
         <source>You were kicked from the server by %1: %2.</source>
         <translation>Du slängdes ut från servern av %1: %2.</translation>
     </message>
@@ -5795,32 +6282,47 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>%3 slängdes ut och blev bannlyst från servern av %1: %2.</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-79"/>
         <source>You were moved to %1 by %2.</source>
         <translation>Du flyttades till %1 av %2.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+20"/>
         <source>%1 entered channel.</source>
         <translation>%1 gick med i kanalen.</translation>
     </message>
     <message>
-        <location line="-358"/>
+        <location line="-409"/>
         <source>Server connection rejected: %1.</source>
         <translation>Serveranslutning avbröts: %1.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+158"/>
         <source>Denied: %1.</source>
         <translation>Nekad: %1.</translation>
     </message>
     <message>
-        <location line="+364"/>
+        <location line="+269"/>
+        <source>%1 renamed to %2.</source>
+        <translation>%1 omdöpt till %2</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>%1 left channel and disconnected.</source>
+        <translation>%1 lämnade kanalen och servern.</translation>
+    </message>
+    <message>
+        <location line="+129"/>
         <source>Message from %1</source>
         <translation>Meddelande från %1</translation>
     </message>
     <message>
-        <location filename="UserModel.cpp" line="+1390"/>
+        <location filename="UserModel.cpp" line="+1377"/>
+        <source>You have User Dragging set to &quot;Do Nothing&quot; so the user wasn&apos;t moved.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>You have Channel Dragging set to &quot;Do Nothing&quot; so the channel wasn&apos;t moved.</source>
         <translation>Du har kanaldragning inställd på &quot;Gör ingenting&quot; så kanalen flyttades inte.</translation>
     </message>
@@ -5830,7 +6332,16 @@ Om inte, avbryt och kontrollera ditt certifikat eller användarnamn.</translatio
         <translation>Okänd kanaldragnings läge i Användarmodell::dropMimeData.</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="-271"/>
+        <location filename="main.cpp" line="-345"/>
+        <source>Remote controlling Mumble:
+
+</source>
+        <translation>Fjärrstyra Mumble:
+
+</translation>
+    </message>
+    <message>
+        <location line="-24"/>
         <source>Usage: mumble [options] [&lt;url&gt;]
 
 &lt;url&gt; specifies a URL to connect to after startup instead of showing
@@ -5846,36 +6357,62 @@ Valid options are:
                 Allow multiple instances of the client to be started.
   -n, --noidentity
                 Suppress loading of identity files (i.e., certificates.)
+  --license
+                Show the Mumble license.
+  --authors
+                Show the Mumble authors.
+  --third-party-licenses
+                Show licenses for third-party software used by Mumble.
+
 </source>
-        <translation>Användning: mumble [alternativ] [&lt;url&gt;]
-
-&lt;url&gt; anger en URL at ansluta till efter uppstart, istället för att visa
-anslutningsfönstret och har följande parametrar:
-mumble://[&lt;användarnamn&gt;[:&lt;lösenord&gt;]@]&lt;värd&gt;[:&lt;port&gt;][/&lt;kanal&gt;[/&lt;underkanal&gt;...]][?version=&lt;x.y.z&gt;]
-
-Versionsparametern måste ställas in till
-rätt klientversion. För närvarande är standard 1.2.0.
-
-Följande alternativ är giltiga:
-  -h, --help    Visar den här hjälptexter och avslutar.
-  -m, --multiple
-                Tillåter flera instanser att köras samtidigt.
-  -n, --noidentity
-                Ladda inte identitetsfiler (ex. certifikat)
-</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+28"/>
+        <source>Usage: mumble rpc &lt;action&gt; [options]
+
+It is possible to remote control a running instance of Mumble by using
+the 'mumble rpc' command.
+
+Valid actions are:
+  mute
+                Mute self
+  unmute
+                Unmute self
+  togglemute
+                Toggle self-mute status
+  deaf
+                Deafen self
+  undeaf
+                Undeafen self
+  toggledeaf
+                Toggle self-deafen stauts
+
+</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+28"/>
         <source>Invocation</source>
         <translation>Anropande</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+25"/>
+        <source>Error: No RPC command specified</source>
+        <translation>Fel: Inget PRC kommando specificerat</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>RPC</source>
+        <translation>RPC</translation>
+    </message>
+    <message>
+        <location line="+221"/>
         <source>Welcome to Mumble.</source>
         <translation>Välkommen till Mumble.</translation>
     </message>
     <message>
-        <location line="+73"/>
+        <location line="+76"/>
         <source>Skipping version check in debug mode.</source>
         <translation>Hoppar över kontroll av uppdatering i felsökningsläge.</translation>
     </message>
@@ -6012,7 +6549,7 @@ Följande alternativ är giltiga:
     <message>
         <location/>
         <source>Priority Speaker</source>
-        <translation>Prioritetstalare</translation>
+        <translation>Prioriterad talare</translation>
     </message>
     <message>
         <location/>
@@ -6039,11 +6576,210 @@ Följande alternativ är giltiga:
         <source>Silently drops all text messages from the user.</source>
         <translation>Blockerar tyst alla textmeddelanden från användaren.</translation>
     </message>
+    <message>
+        <location/>
+        <source>&amp;Ban list</source>
+        <translation>&amp;Bannlista</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Edit ban list on server</source>
+        <translation>Redigera bannlistan på servern</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This lets you edit the server-side IP ban list.</source>
+        <translation>Detta låter dig redigera listan över bannlysta IP-adresser på servern.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&amp;Filter on/off</source>
+        <translation>&amp;Filter på/av</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Toggle the channel filter (Ctrl+F)</source>
+        <translation>Växla kanalfilter (Ctrl+F)</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Enable or disable the filtering of select channels.
+By default all empty channels will be filtered.
+You can mark additional channels for filtering from
+the channel&apos;s context menu.</source>
+        <translation>Aktivera eller inaktivera filtreringen för valda kanaler.
+Som standard är alla tomma kanaler filtrerade.
+Du kan markera ytterligare kanaler för filtrering från
+kanalens innehållsmeny.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Ctrl+F</source>
+        <translation>Ctrl+F</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&amp;Hide Channel when Filtering</source>
+        <translation>&amp;Göm kanalen vid filtrering</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Reset &amp;Avatar</source>
+        <translation>Återställ &amp;Visningsbild</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Reset the avatar of the selected user.</source>
+        <translation>Återställ visningsbild för den valda användaren.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Local Volume Adjustment</source>
+        <translation>Lokal volymjustering</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Locally adjust the user&apos;s speech volume.</source>
+        <translation>Lokal justering av användarens talvolym</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Opens a dialog with a volume slider. Use this on other users in the same room.</source>
+        <translation>Öppnar ett fönster med en volymkontroll. Använd den på andra användare i samma kanal.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&amp;Developer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>&amp;Hide Mumble</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Hides the main Mumble window.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Hides the main Mumble window. Restore by clicking on the tray icon or starting Mumble again.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Developer &amp;Console</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Show the Developer Console</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Shows the Mumble Developer Console, where Mumble&apos;s log output can be inspected.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Manual</name>
+    <message>
+        <location filename="ManualPlugin.ui"/>
+        <source>Manual Mumble Positional Audio</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>X</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Y</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Z</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>m</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Heading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Azimuth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Elevation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>°</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Meta data</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Context</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Identity</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Set</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>State</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Linked</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Activated</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Unhinge</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>NetworkConfig</name>
     <message>
-        <location filename="NetworkConfig.cpp" line="+56"/>
+        <location filename="NetworkConfig.cpp" line="+29"/>
         <source>Network</source>
         <translation>Nätverk</translation>
     </message>
@@ -6066,7 +6802,7 @@ Följande alternativ är giltiga:
     <message>
         <location/>
         <source>&lt;b&gt;Enable TCP compatibility mode&lt;/b&gt;.&lt;br /&gt;This will make Mumble use only TCP when communicating with the server. This will increase overhead and cause lost packets to produce noticeable pauses in communication, so this should only be used if you are unable to use the default (which uses UDP for voice and TCP for control).</source>
-        <translation>&lt;b&gt;Aktiver kompatibilitetsläge för TCP&lt;/b&gt;.&lt;br /&gt;Detta kommer att göra så att Mumble endast använder TCP vid kommunikation med servern. Detta kommer att öka och orsaka borttappade paket för att producera märkbara pauser i kommunikationen, så detta bör bara användas om du inte kan använda standarden (som använder UDP för röst och TCP för kontroll).</translation>
+        <translation>&lt;b&gt;Aktivera kompatibilitetsläge för TCP&lt;/b&gt;.&lt;br /&gt;Detta kommer att göra så att Mumble endast använder TCP vid kommunikation med servern. Detta kommer att öka och orsaka borttappade paket för att producera märkbara pauser i kommunikationen, så detta bör bara användas om du inte kan använda standarden (som använder UDP för röst och TCP för kontroll).</translation>
     </message>
     <message>
         <location/>
@@ -6106,12 +6842,12 @@ Följande alternativ är giltiga:
     <message>
         <location/>
         <source>HTTP(S) proxy</source>
-        <translation>HTTP(S) proxy</translation>
+        <translation>HTTP(S)-proxy</translation>
     </message>
     <message>
         <location/>
         <source>SOCKS5 proxy</source>
-        <translation>SOCKS5 proxy</translation>
+        <translation>SOCKS5-proxy</translation>
     </message>
     <message>
         <location/>
@@ -6126,7 +6862,7 @@ Följande alternativ är giltiga:
     <message>
         <location/>
         <source>Force TCP mode</source>
-        <translation>Tvinga TCP läge</translation>
+        <translation>Tvinga TCP-läge</translation>
     </message>
     <message>
         <location/>
@@ -6233,7 +6969,7 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
     <message>
         <location/>
         <source>Disable image download</source>
-        <translation>Aktivera nedladdning av bilder</translation>
+        <translation>Avaktivera nedladdning av bilder</translation>
     </message>
     <message>
         <location/>
@@ -6248,7 +6984,7 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
     <message>
         <location/>
         <source>This will check for new releases of Mumble every time you start the program, and notify you if one is available.</source>
-        <translation>Detta kommer att leta efter nya utsälpp av Mumble varje gång du startar programmet, och notifiera dig om det finns tillgängligt.</translation>
+        <translation>Detta kommer att leta efter nya utsläpp av Mumble varje gång du startar programmet, och notifiera dig om det finns tillgängligt.</translation>
     </message>
     <message>
         <location/>
@@ -6263,7 +6999,7 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
     <message>
         <location/>
         <source>This will check for new releases of plugins every time you start the program, and download them automatically.</source>
-        <translation>Detta kommer att leta efter nya utsälpp av insticksmoduler varje gång du startar programmet och ladda ner dem automatiskt.</translation>
+        <translation>Detta kommer att leta efter nya utsläpp av insticksmoduler varje gång du startar programmet och ladda ner dem automatiskt.</translation>
     </message>
     <message>
         <location/>
@@ -6299,8 +7035,8 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
 <context>
     <name>Overlay</name>
     <message>
-        <location filename="OverlayEditorScene.cpp" line="+119"/>
-        <location filename="OverlayUser.cpp" line="+153"/>
+        <location filename="OverlayEditorScene.cpp" line="+97"/>
+        <location filename="OverlayUser.cpp" line="+129"/>
         <source>Silent</source>
         <translation>Tyst</translation>
     </message>
@@ -6308,7 +7044,7 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
         <location line="+3"/>
         <location filename="OverlayUser.cpp" line="+3"/>
         <source>Talking</source>
-        <translation>Pratar</translation>
+        <translation>Talar</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -6329,7 +7065,7 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
         <translation>Kanal</translation>
     </message>
     <message>
-        <location filename="Overlay.cpp" line="+104"/>
+        <location filename="Overlay.cpp" line="+91"/>
         <source>Failed to create communication with overlay at %2: %1. No overlay will be available.</source>
         <translation>Kunde inte skapa kommunikation med överlag på %2: %1. Inget överlag kommer att vara tillgängligt.</translation>
     </message>
@@ -6337,7 +7073,7 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
 <context>
     <name>OverlayClient</name>
     <message>
-        <location filename="OverlayUserGroup.cpp" line="+97"/>
+        <location filename="OverlayUserGroup.cpp" line="+76"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
@@ -6349,7 +7085,7 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
     <message>
         <location line="+5"/>
         <source>Talking and recently active</source>
-        <translation>Pratar och nyligen aktiv</translation>
+        <translation>Talar och nyligen aktiv</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -6409,13 +7145,13 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
     <message>
         <location line="+1"/>
         <source>Amount of seconds users remain active after talking:</source>
-        <translation>Antalet sekunder användare förblir aktiva efter prat:</translation>
+        <translation>Antalet sekunder användare förblir aktiva efter tal:</translation>
     </message>
 </context>
 <context>
     <name>OverlayConfig</name>
     <message>
-        <location filename="OverlayConfig.cpp" line="+80"/>
+        <location filename="OverlayConfig.cpp" line="+74"/>
         <source>To move the users, drag the little red dot.</source>
         <translation>Drag i den lilla röda punkten för att flytta användare.</translation>
     </message>
@@ -6432,12 +7168,12 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
         <translation>Högerklicka på en användare för att få fler alternativ.</translation>
     </message>
     <message>
-        <location line="+223"/>
+        <location line="+278"/>
         <source>Overlay</source>
         <translation>Överlag</translation>
     </message>
     <message>
-        <location line="+75"/>
+        <location line="+85"/>
         <source>Choose executable</source>
         <translation>Välj körbar fil</translation>
     </message>
@@ -6447,7 +7183,7 @@ Förhindrar att klienten laddar ner bilder inbäddade i chattmeddelanden med img
         <translation>Välj program</translation>
     </message>
     <message>
-        <location line="+87"/>
+        <location line="+95"/>
         <source>Load Overlay Presets</source>
         <translation>Ladda förinställningar till överlag</translation>
     </message>
@@ -6554,14 +7290,14 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
     <message>
         <location/>
         <source>Show FPS counter</source>
-        <translation>Visa FPS räknare</translation>
+        <translation>Visa FPS-räknare</translation>
     </message>
     <message>
         <location/>
         <source>Load an overlay preset from file</source>
         <translation>Ladda förinställningar för överlag från en fil</translation>
     </message>
-    <message utf8="true">
+    <message>
         <location/>
         <source>Load…</source>
         <translation>Ladda...</translation>
@@ -6571,15 +7307,10 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
         <source>Save your overlay settings to file</source>
         <translation>Spara dina inställningar för överlag till en fil</translation>
     </message>
-    <message utf8="true">
+    <message>
         <location/>
         <source>Save…</source>
         <translation>Spara...</translation>
-    </message>
-    <message>
-        <location/>
-        <source>FPS Display</source>
-        <translation>FPS</translation>
     </message>
     <message>
         <location/>
@@ -6626,6 +7357,21 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
         <source>Show the overlay only in</source>
         <translation>Visa endast överlaget i</translation>
     </message>
+    <message>
+        <location/>
+        <source>FPS and Clock Display</source>
+        <translation>Visning av FPS och klocka</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Display a clock in the overlay showing the current local time (system time).</source>
+        <translation>Visar en klocka i överlaget som visar den aktuella systemtiden.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Show Clock</source>
+        <translation>Visa klocka</translation>
+    </message>
 </context>
 <context>
     <name>OverlayEditor</name>
@@ -6637,7 +7383,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
     <message>
         <location/>
         <source>User is not talking</source>
-        <translation>Användaren pratar inte</translation>
+        <translation>Användaren talar inte</translation>
     </message>
     <message>
         <location/>
@@ -6647,12 +7393,12 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
     <message>
         <location/>
         <source>User is talking in your channel or a linked channel</source>
-        <translation>Användaren pratar i din kanal eller i en länkad kanal</translation>
+        <translation>Användaren talar i din kanal eller i en länkad kanal</translation>
     </message>
     <message>
         <location/>
         <source>Talking</source>
-        <translation>Pratar</translation>
+        <translation>Talar</translation>
     </message>
     <message>
         <location/>
@@ -6866,32 +7612,20 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
     </message>
 </context>
 <context>
-    <name>OverlayPrivateWin</name>
-    <message>
-        <location filename="Overlay_win.cpp" line="+55"/>
-        <source>Failed to load overlay library. This means either that:
-- the library (mumble_ol.dll) wasn&apos;t found in the directory you ran Mumble from
-- you&apos;re on an OS earlier than WinXP SP2</source>
-        <translation>Kunde inte ladda överlags bibliotek. Detta betyder att:
-- biblioteket (mumble_ol.dll)inte kunde hittas i mappen du körde Mumble ifrån
-- du använder ett OS äldre än WinXP SP2</translation>
-    </message>
-</context>
-<context>
     <name>PluginConfig</name>
     <message>
         <location filename="Plugins.ui"/>
-        <location filename="Plugins.cpp" line="+78"/>
+        <location filename="Plugins.cpp" line="+73"/>
         <source>Plugins</source>
         <translation>Insticksmoduler</translation>
     </message>
     <message>
-        <location filename="Plugins.cpp" line="+56"/>
+        <location filename="Plugins.cpp" line="+58"/>
         <source>Plugin has no configure function.</source>
         <translation>Insticksmodulen har ingen konfigurationsfunktion.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+19"/>
         <source>Plugin has no about function.</source>
         <translation>Insticksmodulen har ingen om-funktion.</translation>
     </message>
@@ -6979,12 +7713,12 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>Plugins</name>
     <message>
-        <location filename="Plugins.cpp" line="+327"/>
+        <location filename="Plugins.cpp" line="+440"/>
         <source>Skipping plugin update in debug mode.</source>
         <translation>Hoppar över uppdatering för insticksmoduler i felsökningsläge.</translation>
     </message>
     <message>
-        <location line="+150"/>
+        <location line="+168"/>
         <location line="+6"/>
         <source>Downloaded new or updated plugin to %1.</source>
         <translation>Laddade ner ny/uppdaterad insticksmodul till %1.</translation>
@@ -6995,12 +7729,12 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
         <translation>Kude inte installera ny insticksmodul till %1.</translation>
     </message>
     <message>
-        <location line="-257"/>
+        <location line="-344"/>
         <source>%1 lost link.</source>
         <translation>%1 förlorade länk.</translation>
     </message>
     <message>
-        <location line="+74"/>
+        <location line="+123"/>
         <source>%1 linked.</source>
         <translation>%1 länkad.</translation>
     </message>
@@ -7008,7 +7742,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>PortAudioSystem</name>
     <message>
-        <location filename="PAAudio.cpp" line="+275"/>
+        <location filename="PAAudio.cpp" line="+280"/>
         <source>Default Device</source>
         <translation>Standardenhet</translation>
     </message>
@@ -7016,7 +7750,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>PulseAudioSystem</name>
     <message>
-        <location filename="PulseAudio.cpp" line="+756"/>
+        <location filename="PulseAudio.cpp" line="+792"/>
         <source>Default Input</source>
         <translation>Standardingång</translation>
     </message>
@@ -7027,9 +7761,22 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
     </message>
 </context>
 <context>
+    <name>QApplication</name>
+    <message>
+        <location filename="main.cpp" line="+123"/>
+        <source>Failed to restart mumble</source>
+        <translation>Omstart av Mumble misslyckades</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Mumble failed to restart itself. Please restart it manually.</source>
+        <translation>Mumble misslyckades att starta om själv. Vänligen starta om manuellt.</translation>
+    </message>
+</context>
+<context>
     <name>RichTextEditor</name>
     <message>
-        <location filename="RichTextEditor.cpp" line="+244"/>
+        <location filename="RichTextEditor.cpp" line="+234"/>
         <source>Failed to load image</source>
         <translation>Kunde inte ladda ladda bild</translation>
     </message>
@@ -7130,7 +7877,12 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>ServerHandler</name>
     <message>
-        <location filename="ServerHandler.cpp" line="+447"/>
+        <location filename="ServerHandler.cpp" line="+397"/>
+        <source>Server is not responding to TCP pings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+84"/>
         <source>UDP packets cannot be sent to or received from the server. Switching to TCP mode.</source>
         <translation>UDP-paket kan inte skickas till ellet tas emot från servern. Byter till TCP-läge.</translation>
     </message>
@@ -7150,7 +7902,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
         <translation>UDP-paket kan skickas till och tas emot från servern. Byter tillbaka till UDP-läge.</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+39"/>
         <source>Connection timed out</source>
         <translation>Anslutningstiden överskreds</translation>
     </message>
@@ -7158,9 +7910,9 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>ServerView</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="-611"/>
+        <location filename="ConnectDialog.cpp" line="-646"/>
         <source>Favorite</source>
-        <translation>Favorit</translation>
+        <translation>Favoriter</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -7168,12 +7920,12 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
         <translation>LAN</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source>Public Internet</source>
         <translation>Publikt internet</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>Africa</source>
         <translation>Afrika</translation>
     </message>
@@ -7206,7 +7958,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>ShortcutActionWidget</name>
     <message>
-        <location filename="GlobalShortcut.cpp" line="-558"/>
+        <location filename="GlobalShortcut.cpp" line="-602"/>
         <source>Unassigned</source>
         <translation>Otilldelad</translation>
     </message>
@@ -7214,7 +7966,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>ShortcutDelegate</name>
     <message>
-        <location line="+370"/>
+        <location line="+376"/>
         <source>On</source>
         <translation>På</translation>
     </message>
@@ -7237,7 +7989,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>ShortcutKeyWidget</name>
     <message>
-        <location line="-444"/>
+        <location line="-450"/>
         <source>Press Shortcut</source>
         <translation>Tryck på en eller flera knappar att använda som genväg</translation>
     </message>
@@ -7274,7 +8026,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
         <translation>...</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+41"/>
         <source>, </source>
         <translation>, </translation>
     </message>
@@ -7314,7 +8066,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>ShortcutToggleWidget</name>
     <message>
-        <location line="-268"/>
+        <location line="-271"/>
         <source>Off</source>
         <translation>Av</translation>
     </message>
@@ -7332,7 +8084,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>TextMessage</name>
     <message>
-        <location filename="TextMessage.h" line="+45"/>
+        <location filename="TextMessage.h" line="+20"/>
         <source>Enter text</source>
         <translation>Ange text</translation>
     </message>
@@ -7350,7 +8102,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
 <context>
     <name>Tokens</name>
     <message>
-        <location filename="Tokens.cpp" line="+72"/>
+        <location filename="Tokens.cpp" line="+42"/>
         <source>Empty Token</source>
         <translation>Tom token</translation>
     </message>
@@ -7368,7 +8120,7 @@ Tryck på knappen nedan för att uppgradera dessa filer till de senaste versione
         <location/>
         <source>&lt;b&gt;This is an editable list of access tokens on the connected server.&lt;/b&gt;
 &lt;br /&gt;
-An access token is a text string, which can be used as a password for very simple access management on channels. Mumble will remember the tokens you&apos;ve used and resend them to the server next time you reconnect, so you don&apos;t have to enter these every time.
+An access token is a text string, which can be used as a password for very simple access management on channels. Mumble will remember the tokens you've used and resend them to the server next time you reconnect, so you don't have to enter these every time.
 </source>
         <translation>&lt;b&gt;Detta är en redigerbar lista med tokens på den anslutna servern.&lt;/b&gt;
 &lt;br /&gt;
@@ -7405,14 +8157,50 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     </message>
     <message>
         <location/>
-        <location filename="UserEdit.cpp" line="+99"/>
+        <location filename="UserEdit.cpp" line="+103"/>
         <source>Remove</source>
         <translation>Ta bort</translation>
     </message>
     <message>
-        <location filename="UserEdit.cpp" line="-5"/>
+        <location/>
+        <location filename="UserEdit.cpp" line="-7"/>
         <source>Rename</source>
         <translation>Byt namn</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Who are you looking for?</source>
+        <translation>Vem letar du efter?</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Days</source>
+        <translation>Dagar</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Weeks</source>
+        <translation>Veckor</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Months</source>
+        <translation>Månader</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Years</source>
+        <translation>År</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Inactive for</source>
+        <translation>Inaktiv i</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="UserEdit.cpp" line="-68"/>
+        <source>Registered users: %n account(s)</source>
+        <translation><numerusform>Registrerade användare: %n konto(n)</numerusform><numerusform>Registrerade användare: %n konto(n)</numerusform></translation>
     </message>
 </context>
 <context>
@@ -7485,7 +8273,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     <message>
         <location/>
         <source>UDP Network statistics</source>
-        <translation>UDP nätverksstatistik</translation>
+        <translation>UDP-nätverksstatistik</translation>
     </message>
     <message>
         <location/>
@@ -7505,7 +8293,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     <message>
         <location/>
         <source>Resync</source>
-        <translation>Omsynkroniserat</translation>
+        <translation>Omsynkronisera</translation>
     </message>
     <message>
         <location/>
@@ -7523,7 +8311,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>Anslutningstid</translation>
     </message>
     <message>
-        <location filename="UserInformation.cpp" line="+99"/>
+        <location filename="UserInformation.cpp" line="+83"/>
         <source>%1w</source>
         <translation>%1v</translation>
     </message>
@@ -7548,7 +8336,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>%1s</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+33"/>
         <location line="+39"/>
         <source>, </source>
         <translation>, </translation>
@@ -7571,12 +8359,12 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>Stöds inte</translation>
     </message>
     <message>
-        <location line="-119"/>
+        <location line="-123"/>
         <source>Not Reported</source>
         <translation>Inte rapporterad</translation>
     </message>
     <message>
-        <location line="+160"/>
+        <location line="+164"/>
         <source>%1 online (%2 idle)</source>
         <translation>%1 tillgänglig (%2 inaktiv)</translation>
     </message>
@@ -7609,16 +8397,77 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     </message>
 </context>
 <context>
+    <name>UserListModel</name>
+    <message>
+        <location filename="UserListModel.cpp" line="+58"/>
+        <source>Nick</source>
+        <translation>Smeknamn</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Inactive days</source>
+        <translation>Inaktiv i (dagar)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Last channel</source>
+        <translation>Senaste kanal</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Last seen: %1</source>
+        <translation>Senast sedd: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Never</source>
+        <translation>Aldrig</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Channel id: %1</source>
+        <translation>Kanal-ID: %1</translation>
+    </message>
+</context>
+<context>
+    <name>UserLocalVolumeDialog</name>
+    <message>
+        <location filename="UserLocalVolumeDialog.ui"/>
+        <source>Local volume for other users</source>
+        <translation>Lokal volym för andra användare</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Adjust the volume of other users locally&lt;/b&gt;&lt;br /&gt;Mumble supports adjusting the volume of other users locally.</source>
+        <translation>&lt;b&gt;Anpassar volymen av andra användare lokalt.&lt;/b&gt;&lt;br /&gt;Mumble stödjer justering av volymen lokalt för andra användare.</translation>
+    </message>
+    <message>
+        <location filename="UserLocalVolumeDialog.cpp" line="+53"/>
+        <source>Adjusting local volume for %1</source>
+        <translation>Anpassa lokal volym för %1</translation>
+    </message>
+    <message>
+        <location filename="UserLocalVolumeDialog.ui"/>
+        <source> dB</source>
+        <translation>dB</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the slider or the text box to change the volume of the user.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Attention!&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Increasing the volume of a user too much can permanently damage your hearing. It may also increase the background noise of the user.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Använd reglaget eller textboxen för att ändra volymen på användaren.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;OBS!&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Höja volymen av en användare för mycket kan permanent skada din hörsel. Det kanske även höjer bakgrundljudet från användaren.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+</context>
+<context>
     <name>UserModel</name>
     <message>
-        <location filename="UserModel.cpp" line="-806"/>
+        <location filename="UserModel.cpp" line="-830"/>
         <source>This is a user connected to the server. The icon to the left of the user indicates whether or not they are talking:</source>
-        <translation>Detta är en användare som är ansluten till servern. Ikonen till vänster om användaren visar om de pratar eller ej:</translation>
+        <translation>Detta är en användare som är ansluten till servern. Ikonen till vänster visar om användaren talar eller ej:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Talking to your channel.</source>
-        <translation>Pratar till din kanal.</translation>
+        <translation>Talar till din kanal.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7634,7 +8483,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     <message>
         <location line="+1"/>
         <source>Not talking.</source>
-        <translation>Pratar inte.</translation>
+        <translation>Talar inte.</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -7649,22 +8498,22 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     <message>
         <location line="+1"/>
         <source>A channel that is linked with your channel. Linked channels can talk to each other.</source>
-        <translation>En kanal som är länkad till din kanal. Länkade kanaler kan prata med varandra.</translation>
+        <translation>En kanal som är länkad till din kanal. Länkade kanaler kan tala med varandra.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>A channel on the server that you are not linked to.</source>
-        <translation>En kanal på servenr som du inte är länkad till.</translation>
+        <translation>En kanal på servern som du inte är länkad till.</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>This shows the flags the user has on the server, if any:</source>
-        <translation>Detta visar flaggorna användaren har på servern, om så är fallet:</translation>
+        <translation>Detta visar flaggorna användaren har på servern, om det finns några:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>On your friend list</source>
-        <translation>På din kompislista</translation>
+        <translation>På din vänlista</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7674,7 +8523,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     <message>
         <location line="+1"/>
         <source>Muted (manually muted by self)</source>
-        <translation>Mikrofon avaktiverad (manuellt)</translation>
+        <translation>Mikrofon avaktiverad (manuellt av dig)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7694,12 +8543,12 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     <message>
         <location line="+2"/>
         <source>Deafened (by self)</source>
-        <translation>Ljud avativerat (av dig)</translation>
+        <translation>Ljud avaktiverat (av dig)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Deafened (by admin)</source>
-        <translation>Ljud avativerat (av administratör)</translation>
+        <translation>Ljud avaktiverat (av administratör)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7717,9 +8566,9 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>Ignorera textmeddelanden</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>This shows the flags the channel has, if any:</source>
-        <translation>Detta visar flaggorna en kanal har, om så är fallet:</translation>
+        <translation>Detta visar flaggorna en kanal har, om det finns några:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7732,6 +8581,11 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>Kanalen har en kommentar, som du redan sett. (klicka för att visa)</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Channel will be hidden when filtering is enabled</source>
+        <translation>Kanalen kommer att vara gömd när filtrering är aktiverat.</translation>
+    </message>
+    <message>
         <location line="+18"/>
         <source>Name</source>
         <translation>Namn</translation>
@@ -7742,21 +8596,26 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>Flaggor</translation>
     </message>
     <message>
-        <location line="+721"/>
+        <location line="+722"/>
+        <source>Are you sure you want to drag this user?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>Are you sure you want to drag this channel?</source>
         <translation>Är du säker på att du vill dra den här kanalen?</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+94"/>
         <location line="+20"/>
         <source>Cannot perform this movement automatically, please reset the numeric sorting indicators or adjust it manually.</source>
-        <translation>Kan inte utföra den här flyttningen automatiskt, återställ den numeriska sorteringen eller gör det manuellt.</translation>
+        <translation>Kan inte utföra den här förflyttningen automatiskt. Återställ den numeriska sorteringen eller gör det manuellt.</translation>
     </message>
 </context>
 <context>
     <name>VersionCheck</name>
     <message>
-        <location filename="VersionCheck.cpp" line="+128"/>
+        <location filename="VersionCheck.cpp" line="+118"/>
         <source>Upgrade Mumble</source>
         <translation>Uppgradera Mumble</translation>
     </message>
@@ -7795,7 +8654,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
 <context>
     <name>ViewCert</name>
     <message>
-        <location filename="ViewCert.cpp" line="+43"/>
+        <location filename="ViewCert.cpp" line="+57"/>
         <source>Certificate Chain Details</source>
         <translation>Certifikatdetaljer</translation>
     </message>
@@ -7805,52 +8664,47 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>Certifikatkedja</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+9"/>
         <source>Certificate details</source>
         <translation>Certifikatdetaljer</translation>
     </message>
     <message>
-        <location line="+28"/>
-        <location line="+28"/>
-        <source>Common Name: %1</source>
-        <translation>Allmänt namn: %1</translation>
+        <location line="+36"/>
+        <location line="+40"/>
+        <source>Common Name</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-27"/>
-        <location line="+28"/>
-        <source>Organization: %1</source>
-        <translation>Organisation: %1</translation>
+        <location line="-39"/>
+        <location line="+40"/>
+        <source>Organization</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-27"/>
-        <source>Subunit: %1</source>
-        <translation>Underenhet: %1</translation>
+        <location line="-39"/>
+        <source>Subunit</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+28"/>
-        <source>Country: %1</source>
-        <translation>Land: %1</translation>
+        <location line="+40"/>
+        <source>Country</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-27"/>
-        <location line="+28"/>
-        <source>Locality: %1</source>
-        <translation>Ort: %1</translation>
+        <location line="-39"/>
+        <location line="+40"/>
+        <source>Locality</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-27"/>
-        <location line="+28"/>
-        <source>State: %1</source>
-        <translation>Län/stat: %1</translation>
+        <location line="-39"/>
+        <location line="+40"/>
+        <source>State</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-27"/>
+        <location line="-39"/>
         <source>Valid from: %1</source>
         <translation>Giltigt från: %1</translation>
     </message>
@@ -7867,7 +8721,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     <message>
         <location line="+1"/>
         <source>Public Key: %1 bits %2</source>
-        <translation>Allmän nyckel: %1 bitar %2</translation>
+        <translation>Publik nyckel: %1 bitar %2</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -7885,7 +8739,12 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>Klassificering (SHA-1): %1</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
+        <source>Digest (SHA-256): %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>Email: %1</source>
         <translation>E-post: %1</translation>
     </message>
@@ -7901,29 +8760,24 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     </message>
     <message>
         <location line="+3"/>
-        <source>Unit Name: %1</source>
-        <translation>Enhetsnamn: %1</translation>
+        <source>Unit Name</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>VoiceRecorder</name>
     <message>
-        <location filename="VoiceRecorder.cpp" line="+186"/>
-        <source>Invalid sample rate given to recorder</source>
-        <translation>Ogiltig hastighet given till inspelare</translation>
-    </message>
-    <message>
-        <location line="+98"/>
+        <location filename="VoiceRecorder.cpp" line="+262"/>
         <source>Recorder failed to create directory &apos;%1&apos;</source>
         <translation>Inspelare kunde inte skapa mappen &quot;%1&quot;</translation>
     </message>
     <message>
         <location line="+14"/>
-        <source>Recorder failed to open file &apos;%s&apos;</source>
-        <translation>Inspelare kunde inte öppna filen &quot;%s&quot;</translation>
+        <source>Recorder failed to open file &apos;%1&apos;</source>
+        <translation>Inspelaren kunde inte öppna filen &apos;%1&apos;</translation>
     </message>
     <message>
-        <location line="+109"/>
+        <location line="+166"/>
         <source>.wav - Uncompressed</source>
         <translation>.wav - Okomprimerad</translation>
     </message>
@@ -7947,12 +8801,11 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     <name>VoiceRecorderDialog</name>
     <message>
         <location filename="VoiceRecorderDialog.ui"/>
-        <location filename="VoiceRecorderDialog.cpp" line="+101"/>
-        <location line="+33"/>
+        <location filename="VoiceRecorderDialog.cpp" line="+108"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+9"/>
-        <location line="+136"/>
+        <location line="+141"/>
         <source>Recorder</source>
         <translation>Inspelare</translation>
     </message>
@@ -7973,6 +8826,7 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
     </message>
     <message>
         <location/>
+        <location filename="VoiceRecorderDialog.cpp" line="-21"/>
         <source>S&amp;top</source>
         <translation>S&amp;toppa</translation>
     </message>
@@ -8012,45 +8866,50 @@ En token är en textsträng, som kan användas som ett lösenord för enkel till
         <translation>&amp;Bläddra...</translation>
     </message>
     <message>
-        <location filename="VoiceRecorderDialog.cpp" line="-195"/>
-        <source>Closing the recorder will stop your current recording. Do you really want to close the recorder?</source>
-        <translation>Stängning av inspelaren kommer att avsluta din nuvarande inspelning. Vill du verkligen stänga inspelaren?</translation>
-    </message>
-    <message>
-        <location line="-31"/>
+        <location filename="VoiceRecorderDialog.cpp" line="-210"/>
         <source>Valid variables are:</source>
         <translation>Giltiga variabler är:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Inserts the user&apos;s name</source>
-        <translation>Lägg till användarens namn</translation>
+        <translation>Lägger till användarens namn</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Inserts the current date</source>
-        <translation>Lägg till dagens datum</translation>
+        <translation>Lägger till dagens datum</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Inserts the current time</source>
-        <translation>Lägg till den nuvarande tiden</translation>
+        <translation>Lägger till den nuvarande tiden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Inserts the hostname</source>
-        <translation>Lägg till värdnamnet</translation>
+        <translation>Lägger till värdnamnet</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+26"/>
+        <source>Recorder still running</source>
+        <translation>Inspelning pågår fortfarande</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Closing the recorder without stopping it will discard unwritten audio. Do you really want to close the recorder?</source>
+        <translation>Att stänga inspelaren utan att stoppa resulterar i osparad ljudfil. Vill du verkligen stänga inspelaren?</translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Unable to start recording. Not connected to a server.</source>
-        <translation>Kunde inte starta inspelning. Ej ansluten till en server.</translation>
+        <translation>Kunde inte starta inspelning. Ej ansluten till server.</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>The server you are currently connected to is version 1.2.2 or older. For privacy reasons, recording on servers of versions older than 1.2.3 is not possible.
 Please contact your server administrator for further information.</source>
-        <translation>Servern du är ansluten till använder version 1.2.2 eller äldre. För privata anledningar kan inspelningar på servrar med versioner äldre än 1.2.3 inte göras.
+        <translation>Servern du är ansluten till använder version 1.2.2 eller äldre. Av integritetsskäl kan inspelningar på servrar med versioner äldre än 1.2.3 inte göras.
 Kontakta din serveradministratör för mer information.</translation>
     </message>
     <message>
@@ -8064,7 +8923,12 @@ Kontakta din serveradministratör för mer information.</translation>
         <translation>Välj ett annat inspelningsformat.</translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+73"/>
+        <source>Stopping</source>
+        <translation>Stoppar</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <source>Select target directory</source>
         <translation>Välj målmapp</translation>
     </message>
@@ -8077,7 +8941,7 @@ Kontakta din serveradministratör för mer information.</translation>
 <context>
     <name>WASAPISystem</name>
     <message>
-        <location filename="WASAPI.cpp" line="+184"/>
+        <location filename="WASAPI.cpp" line="+226"/>
         <source>Default Device</source>
         <translation>Standardenhet</translation>
     </message>

@@ -1,44 +1,23 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2010-2011, Mikkel Krautz <mikkel@krautz.dk>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 #import <ScriptingBridge/ScriptingBridge.h>
+#import <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
-#include "Overlay.h"
+#include "OverlayConfig.h"
+#include "OverlayClient.h"
 #include "Global.h"
 #include "MainWindow.h"
 
 extern "C" {
 #include <xar/xar.h>
 }
+
+// Ignore deprecation warnings for the whole file, for now.
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 static NSString *MumbleOverlayLoaderBundle = @"/Library/ScriptingAdditions/MumbleOverlay.osax";
 static NSString *MumbleOverlayLoaderBundleIdentifier = @"net.sourceforge.mumble.OverlayScriptingAddition";
@@ -97,12 +76,24 @@ static NSString *MumbleOverlayLoaderBundleIdentifier = @"net.sourceforge.mumble.
 
 		QString qsBundleIdentifier = QString::fromUtf8([bundleId UTF8String]);
 
-		if (g.s.os.bUseWhitelist) {
-			if (g.s.os.qslWhitelist.contains(qsBundleIdentifier))
+		switch (g.s.os.oemOverlayExcludeMode) {
+			case OverlaySettings::LauncherFilterExclusionMode: {
+				qWarning("Overlay_macx: launcher filter mode not implemented on macOS, allowing everything");
 				overlayEnabled = YES;
-		} else {
-			if (! g.s.os.qslBlacklist.contains(qsBundleIdentifier))
-				overlayEnabled = YES;
+				break;
+			}
+			case OverlaySettings::WhitelistExclusionMode: {
+				if (g.s.os.qslWhitelist.contains(qsBundleIdentifier)) {
+					overlayEnabled = YES;
+				}
+				break;
+			}
+			case OverlaySettings::BlacklistExclusionMode: {
+				if (! g.s.os.qslBlacklist.contains(qsBundleIdentifier)) {
+					overlayEnabled = YES;
+				}
+				break;
+			}
 		}
 
 		if (overlayEnabled) {
@@ -208,10 +199,12 @@ void OverlayClient::updateMouse() {
 			}
 		}
 
+#if QT_VERSION < 0x050000
 		if (cgimg) {
 			pm = QPixmap::fromMacCGImageRef(cgimg);
 			qmCursors.insert(csShape, pm);
 		}
+#endif
 	}
 
 	NSPoint p = [cursor hotSpot];
@@ -339,8 +332,8 @@ bool OverlayConfig::needsUpgrade() {
 }
 
 static bool authExec(AuthorizationRef ref, const char **argv) {
-	OSStatus err;
-	int pid, status;
+	OSStatus err = noErr;
+	int pid = 0, status = 0;
 
 	err = AuthorizationExecuteWithPrivileges(ref, argv[0], kAuthorizationFlagDefaults, const_cast<char * const *>(&argv[1]), NULL);
 	if (err == errAuthorizationSuccess) {
@@ -358,7 +351,6 @@ static bool authExec(AuthorizationRef ref, const char **argv) {
 
 bool OverlayConfig::installFiles() {
 	bool ret = false;
-	OSStatus err;
 
 	QString path = installerPath();
 	if (path.isEmpty()) {

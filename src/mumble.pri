@@ -1,26 +1,40 @@
-include(../compiler.pri)
+# Copyright 2005-2017 The Mumble Developers. All rights reserved.
+# Use of this source code is governed by a BSD-style license
+# that can be found in the LICENSE file at the root of the
+# Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-VERSION		= 1.0.0
-DIST		= mumble.pri Message.h PacketDataStream.h CryptState.h Timer.h Version.h OSInfo.h SSL.h Mumble.proto
+include(../qmake/compiler.pri)
+include(../qmake/qt.pri)
+include(../qmake/rcc.pri)
+include(../qmake/pkgconfig.pri)
+
+VERSION		= 1.3.0
+DIST		= mumble.pri Message.h PacketDataStream.h CryptState.h Timer.h Version.h OSInfo.h SSL.h
 CONFIG		+= qt thread debug_and_release warn_on
 DEFINES		*= MUMBLE_VERSION_STRING=$$VERSION
-INCLUDEPATH	+= $$PWD .
+INCLUDEPATH	+= $$PWD . ../mumble_proto
 VPATH		+= $$PWD
-HEADERS		*= ACL.h Channel.h CryptState.h Connection.h Group.h User.h Net.h OSInfo.h Timer.h SSL.h Version.h
-SOURCES 	*= ACL.cpp Group.cpp Channel.cpp Connection.cpp User.cpp Timer.cpp CryptState.cpp OSInfo.cpp Net.cpp SSL.cpp Version.cpp
-PROTOBUF	*= ../Mumble.proto
+HEADERS		*= ACL.h Channel.h CryptState.h Connection.h Group.h HTMLFilter.h User.h Net.h OSInfo.h Timer.h SSL.h Version.h SSLCipherInfo.h SSLCipherInfoTable.h licenses.h License.h LogEmitter.h CryptographicHash.h CryptographicRandom.h PasswordGenerator.h ByteSwap.h HostAddress.cpp Ban.h EnvUtils.h UnresolvedServerAddress.h ServerAddress.h ServerResolver.h ServerResolverRecord.h
+SOURCES 	*= ACL.cpp Group.cpp Channel.cpp Connection.cpp HTMLFilter.cpp User.cpp Timer.cpp CryptState.cpp OSInfo.cpp SSL.cpp Version.cpp SSLCipherInfo.cpp License.cpp LogEmitter.cpp CryptographicHash.cpp CryptographicRandom.cpp PasswordGenerator.cpp HostAddress.cpp Ban.cpp EnvUtils.cpp UnresolvedServerAddress.cpp ServerAddress.cpp ServerResolver_qt5.cpp ServerResolverRecord.cpp
+LIBS		*= -lmumble_proto
 
-pbh.output = ${QMAKE_FILE_BASE}.pb.h
-pbh.depends = ${QMAKE_FILE_BASE}.pb.cc
-pbh.commands = $$escape_expand(\\n)
-pbh.input = PROTOBUF
-pbh.CONFIG *= no_link explicit_dependencies target_predeps
+equals(QT_MAJOR_VERSION, 4) {
+	CONFIG *= no-srv
+}
 
-pb.output = ${QMAKE_FILE_BASE}.pb.cc
-pb.commands = protoc --cpp_out=. -I. -I.. ${QMAKE_FILE_NAME}
-pb.input = PROTOBUF
-pb.CONFIG *= no_link explicit_dependencies
-pb.variable_out = SOURCES
+CONFIG(no-srv) {
+	DEFINES += USE_NO_SRV
+	SOURCES -= ServerResolver_qt5.cpp
+	SOURCES *= ServerResolver_nosrv.cpp
+}
+
+# Add arc4random_uniform
+INCLUDEPATH *= ../../3rdparty/arc4random-src
+SOURCES *= ../../3rdparty/arc4random-src/arc4random_uniform.cpp
+
+# Note: Protobuf generates into its own directory so we can mark it as a
+#       system include folder for unix. Otherwise the generated code creates
+#       a lot of spurious warnings in ours.
 
 CONFIG(packaged) {
 	MUMDEFVER = $$find(DEFINES, "MUMBLE_VERSION=")
@@ -29,46 +43,45 @@ CONFIG(packaged) {
 	}
 }
 
-win32 {
-	INCLUDEPATH *= "$$PROTOBUF_PATH/vsprojects/include" "$$PROTOBUF_PATH/src"
-	CONFIG(debug, debug|release) {
-		QMAKE_LIBDIR *= "$$PROTOBUF_PATH/vsprojects/Debug"
-	} else {
-		QMAKE_LIBDIR *= "$$PROTOBUF_PATH/vsprojects/Release"
-	}
-	INCLUDEPATH *= "$$OPENSSL_PATH/include"
-	QMAKE_LIBDIR *= "$$OPENSSL_PATH/lib"
+# Add OpenSSL dependency
+include(../qmake/openssl.pri)
 
-	LIBS *= -llibprotobuf -lcrypt32 -lws2_32 -llibeay32
+# Add protobuf dependency
+include(../qmake/protobuf.pri)
+
+win32-msvc* {
+	LIBS *= -lcrypt32 -lws2_32
 	LIBS *= -ldelayimp -lQwave -delayload:Qwave.DLL
 }
 
-unix {
-	UNAME=$$system(uname -s)
+win32-g++ {
+	LIBS *= -lprotobuf -lcrypt32 -lws2_32
+	LIBS *= -ldelayimp -lqwave -delayload:qwave.dll
+}
 
+unix {
 	CONFIG(static) {
 		PKG_CONFIG = pkg-config --static
 	}
 
-	CONFIG *= link_pkgconfig
-	LIBS *= -lprotobuf
-
-	contains(UNAME, FreeBSD) {
-		LIBS *= -lcrypto
-	} else {
-		PKGCONFIG *= openssl
-	}
+	QMAKE_CFLAGS *= "-I../mumble_proto" "-isystem ../mumble_proto"
+	QMAKE_CXXFLAGS *= "-I../mumble_proto" "-isystem ../mumble_proto"
 }
 
-QMAKE_EXTRA_COMPILERS *= pb pbh
+# Make Q_DECL_OVERRIDE and Q_DECL_FINAL no-ops
+# for Qt 4.
+isEqual(QT_MAJOR_VERSION, 4) {
+	DEFINES *= Q_DECL_OVERRIDE=
+	DEFINES *= Q_DECL_FINAL=
+}
 
 CONFIG(debug, debug|release) {
   CONFIG += console
-  QMAKE_LIBDIR += ../../debug
+  QMAKE_LIBDIR = ../../debug $$QMAKE_LIBDIR
   DESTDIR	= ../../debug
 }
 
 CONFIG(release, debug|release) {
-  QMAKE_LIBDIR += ../../release
+  QMAKE_LIBDIR = ../../release $$QMAKE_LIBDIR
   DESTDIR	= ../../release
 }

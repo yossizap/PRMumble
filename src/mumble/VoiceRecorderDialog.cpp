@@ -1,33 +1,7 @@
-/* Copyright (C) 2010-2011, Stefan Hacker <dd0t@users.sourceforge.net>
-   Copyright (C) 2010-2011, Benjamin Jemlich <pcgod@users.sourceforge.net>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-	 this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-	 this list of conditions and the following disclaimer in the documentation
-	 and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-	 contributors may be used to endorse or promote products derived from this
-	 software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -38,7 +12,7 @@
 #include "ServerHandler.h"
 #include "VoiceRecorder.h"
 
-VoiceRecorderDialog::VoiceRecorderDialog(QWidget *p = NULL) : QDialog(p), qtTimer(new QTimer(this)) {
+VoiceRecorderDialog::VoiceRecorderDialog(QWidget *p) : QDialog(p), qtTimer(new QTimer(this)) {
 	qtTimer->setObjectName(QLatin1String("qtTimer"));
 	qtTimer->setInterval(200);
 	setupUi(this);
@@ -101,8 +75,8 @@ void VoiceRecorderDialog::closeEvent(QCloseEvent *evt) {
 		VoiceRecorderPtr recorder(g.sh->recorder);
 		if (recorder && recorder->isRunning()) {
 			int ret = QMessageBox::warning(this,
-			                               tr("Recorder"),
-			                               tr("Closing the recorder will stop your current recording. Do you really want to close the recorder?"),
+			                               tr("Recorder still running"),
+			                               tr("Closing the recorder without stopping it will discard unwritten audio. Do you really want to close the recorder?"),
 			                               QMessageBox::Yes | QMessageBox::No,
 			                               QMessageBox::No);
 
@@ -111,7 +85,7 @@ void VoiceRecorderDialog::closeEvent(QCloseEvent *evt) {
 				return;
 			}
 
-			recorder->stop();
+			recorder->stop(true);
 		}
 	}
 
@@ -195,19 +169,19 @@ void VoiceRecorderDialog::on_qpbStart_clicked() {
 	g.sh->announceRecordingState(true);
 
 	// Create the recorder
-	g.sh->recorder.reset(new VoiceRecorder(this));
+	VoiceRecorder::Config config;
+	config.sampleRate = ao->getMixerFreq();
+	config.fileName = dir.absoluteFilePath(basename + QLatin1Char('.') + suffix);
+	config.mixDownMode = qrbDownmix->isChecked();
+	config.recordingFormat = static_cast<VoiceRecorderFormat::Format>(ifm);
+
+	g.sh->recorder.reset(new VoiceRecorder(this, config));
 	VoiceRecorderPtr recorder(g.sh->recorder);
 
 	// Wire it up
 	connect(&*recorder, SIGNAL(recording_started()), this, SLOT(onRecorderStarted()));
 	connect(&*recorder, SIGNAL(recording_stopped()), this, SLOT(onRecorderStopped()));
 	connect(&*recorder, SIGNAL(error(int, QString)), this, SLOT(onRecorderError(int, QString)));
-
-	// Configure it
-	recorder->setSampleRate(ao->getMixerFreq());
-	recorder->setFileName(dir.absoluteFilePath(basename + QLatin1Char('.') + suffix));
-	recorder->setMixDown(qrbDownmix->isChecked());
-	recorder->setFormat(static_cast<VoiceRecorderFormat::Format>(ifm));
 
 	recorder->start();
 
@@ -229,7 +203,13 @@ void VoiceRecorderDialog::on_qpbStop_clicked() {
 		return;
 	}
 
+	// Stop clock and recording
+	qtTimer->stop();
 	recorder->stop();
+	
+	// Disable stop botton to indicate we reacted
+	qpbStop->setDisabled(true);
+	qpbStop->setText(tr("Stopping"));
 }
 
 void VoiceRecorderDialog::on_qtTimer_timeout() {
@@ -249,10 +229,8 @@ void VoiceRecorderDialog::on_qtTimer_timeout() {
 		return;
 	}
 
-	QTime t, n;
-	n = t.addMSecs(recorder->getElapsedTime() / 1000);
-
-	qlTime->setText(n.toString(QLatin1String("hh:mm:ss")));
+	const QTime elapsedTime = QTime(0,0).addMSecs(static_cast<int>(recorder->getElapsedTime() / 1000));
+	qlTime->setText(elapsedTime.toString());
 }
 
 void VoiceRecorderDialog::on_qpbTargetDirectoryBrowse_clicked() {
@@ -277,6 +255,7 @@ void VoiceRecorderDialog::reset(bool resettimer) {
 
 	qpbStart->setEnabled(true);
 	qpbStop->setDisabled(true);
+	qpbStop->setText(tr("S&top"));
 
 	qgbMode->setEnabled(true);
 	qgbOutput->setEnabled(true);

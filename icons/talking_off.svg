@@ -10,14 +10,14 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg3095"
+   id="svg3085"
    version="1.1"
    inkscape:version="0.48.4 r9939"
    width="14"
    height="14"
-   sodipodi:docname="talking_off.png">
+   sodipodi:docname="talking_alt.png">
   <metadata
-     id="metadata3101">
+     id="metadata3091">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -29,7 +29,7 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs3099" />
+     id="defs3089" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -41,7 +41,7 @@
      inkscape:pageshadow="2"
      inkscape:window-width="640"
      inkscape:window-height="480"
-     id="namedview3097"
+     id="namedview3087"
      showgrid="false"
      inkscape:zoom="16.857143"
      inkscape:cx="7"
@@ -49,16 +49,16 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg3095" />
+     inkscape:current-layer="svg3085" />
   <image
      width="14"
      height="14"
-     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABHNCSVQICAgIfAhkiAAAAGJJREFU
-KJG9kksOgDAIRB+Gs3KnnrZu1NQ4BVayadLJywwfG2OQ1AQMICJewtGAphJ34OO0KwWWEICLKCW0
-OloCyD6z4bQc/wP9euWuFu3Tv4vP1jpU1O21VGALzoZzwzL2Cb7LECFvS503AAAAAElFTkSuQmCC
-
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABHNCSVQICAgIfAhkiAAAAHdJREFU
+KJGdkkEOwCAIBEfjW+VN+Fl7EQ4VjO0mxgSdRcwWVeWgCZSoXt+VLkIXAZi2B2ZsIMBQNSh6AUDZ
+wBsIoL2fkkAOmKpdzoBkTlpmn8gNws+50deOPmcDGIcQrLMtBHUVfR1MJqcZu0gGW9c8OTdw+Rvy
+B23aL4bQnlqKAAAAAElFTkSuQmCC
 "
-     id="image3103"
+     id="image3093"
      x="0"
      y="0" />
 </svg>

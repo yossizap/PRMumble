@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>533</width>
-    <height>676</height>
+    <width>569</width>
+    <height>730</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <property name="title">
       <string>Interface</string>
      </property>
-     <layout class="QGridLayout">
+     <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="qliSystem">
         <property name="text">
@@ -31,7 +31,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="qcbSystem">
+       <widget class="MUComboBox" name="qcbSystem">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -73,7 +73,7 @@
        </widget>
       </item>
       <item row="0" column="4">
-       <widget class="QComboBox" name="qcbDevice">
+       <widget class="MUComboBox" name="qcbDevice">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -87,15 +87,41 @@
          <string>&lt;b&gt;This is the input device to use for audio.&lt;/b&gt;</string>
         </property>
         <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+         <enum>MUComboBox::AdjustToMinimumContentsLength</enum>
         </property>
         <property name="minimumContentsLength">
          <number>16</number>
         </property>
        </widget>
       </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="qcbExclusive">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>27</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Exclusive mode</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;b&gt;This opens the device in exclusive mode.&lt;/b&gt;&lt;br /&gt;No other application will be able to use the device.</string>
+        </property>
+        <property name="text">
+         <string>Exclusive</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="qliEcho">
+        <property name="text">
+         <string>Echo Cancellation</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="4">
-       <widget class="QComboBox" name="qcbEcho">
+       <widget class="MUComboBox" name="qcbEcho">
         <property name="toolTip">
          <string>Cancel echo from speakers</string>
         </property>
@@ -109,34 +135,14 @@
         </item>
         <item>
          <property name="text">
-          <string>Mixed</string>
+          <string>Mixed echo cancellation</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Multichannel</string>
+          <string>Multichannel echo cancellation</string>
          </property>
         </item>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="qliEcho">
-        <property name="text">
-         <string>Echo</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="qcbExclusive">
-        <property name="toolTip">
-         <string>Exclusive mode</string>
-        </property>
-        <property name="whatsThis">
-         <string>&lt;b&gt;This opens the device in exclusive mode.&lt;/b&gt;&lt;br /&gt;No other application will be able to use the device.</string>
-        </property>
-        <property name="text">
-         <string>Exclusive</string>
-        </property>
        </widget>
       </item>
      </layout>
@@ -165,7 +171,7 @@
        </widget>
       </item>
       <item row="0" column="1" colspan="2">
-       <widget class="QComboBox" name="qcbTransmit">
+       <widget class="MUComboBox" name="qcbTransmit">
         <property name="toolTip">
          <string>When to transmit your speech</string>
         </property>
@@ -783,6 +789,16 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="4">
+       <widget class="QCheckBox" name="qcbUndoIdleAction">
+        <property name="toolTip">
+         <string>The idle action will be reversed upon any key or mouse button input</string>
+        </property>
+        <property name="text">
+         <string>Undo Idle action upon activity</string>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="4">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -812,7 +828,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="qcbIdleAction">
+         <widget class="MUComboBox" name="qcbIdleAction">
           <item>
            <property name="text">
             <string>nothing</string>
@@ -876,6 +892,11 @@
    <extends>QWidget</extends>
    <header>AudioStats.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MUComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/MUComboBox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -1,48 +1,21 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Ignore old-style casts for the whole file.
+// We can't use push/pop. They were implemented in GCC 4.6,
+// but we still build with GCC 4.2 for the legacy OS X Universal
+// build.
+#if defined(__GNUC__)
+# pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 
 #include "mumble_pch.hpp"
 
 #include "Cert.h"
 
 #include "Global.h"
-
-#if OPENSSL_VERSION_NUMBER < 0x0090800fL
-/* In OpenSSL version 0.9.8, some functions dealing with output buffers
-   had the const specifier added to their buffers. This hack mostly
-   applies to the OS X port, where we rely on the vendor-provided
-   OpenSSL libraries. */
-#define SSL_OUTBUF(x) const_cast<unsigned char **>(x)
-#else
-#define SSL_OUTBUF(x) x
-#endif
 
 #define SSL_STRING(x) QString::fromLatin1(x).toUtf8().data()
 
@@ -51,28 +24,31 @@ CertView::CertView(QWidget *p) : QGroupBox(p) {
 	QLabel *l;
 
 	l = new QLabel(tr("Name"));
-	grid->addWidget(l, 0, 0, 1, 1, Qt::AlignRight);
+	grid->addWidget(l, 0, 0, 1, 1, Qt::AlignLeft);
 
 	qlSubjectName = new QLabel();
+	qlSubjectName->setTextFormat(Qt::PlainText);
 	qlSubjectName->setWordWrap(true);
 	grid->addWidget(qlSubjectName, 0, 1, 1, 1);
 
 	l = new QLabel(tr("Email"));
-	grid->addWidget(l, 1, 0, 1, 1, Qt::AlignRight);
+	grid->addWidget(l, 1, 0, 1, 1, Qt::AlignLeft);
 
 	qlSubjectEmail = new QLabel();
+	qlSubjectEmail->setTextFormat(Qt::PlainText);
 	qlSubjectEmail->setWordWrap(true);
 	grid->addWidget(qlSubjectEmail, 1, 1, 1, 1);
 
 	l = new QLabel(tr("Issuer"));
-	grid->addWidget(l, 2, 0, 1, 1, Qt::AlignRight);
+	grid->addWidget(l, 2, 0, 1, 1, Qt::AlignLeft);
 
 	qlIssuerName = new QLabel();
+	qlIssuerName->setTextFormat(Qt::PlainText);
 	qlIssuerName->setWordWrap(true);
 	grid->addWidget(qlIssuerName, 2, 1, 1, 1);
 
 	l = new QLabel(tr("Expiry Date"));
-	grid->addWidget(l, 3, 0, 1, 1, Qt::AlignRight);
+	grid->addWidget(l, 3, 0, 1, 1, Qt::AlignLeft);
 
 	qlExpiry = new QLabel();
 	qlExpiry->setWordWrap(true);
@@ -92,9 +68,18 @@ void CertView::setCert(const QList<QSslCertificate> &cert) {
 	} else {
 		QSslCertificate qscCert = qlCert.at(0);
 
-		QStringList emails(qscCert.alternateSubjectNames().values(QSsl::EmailEntry));
+#if QT_VERSION >= 0x050000
+		const QStringList &names = qscCert.subjectInfo(QSslCertificate::CommonName);
+		QString name;
+		if (names.count() > 0) {
+			name = names.at(0);
+		}
 
+		QStringList emails = qscCert.subjectAlternativeNames().values(QSsl::EmailEntry);
+#else
 		const QString &name = qscCert.subjectInfo(QSslCertificate::CommonName);
+		QStringList emails(qscCert.alternateSubjectNames().values(QSsl::EmailEntry));
+#endif
 
 		QString tmpName = name;
 		tmpName = tmpName.replace(QLatin1String("\\x"), QLatin1String("%"));
@@ -103,20 +88,28 @@ void CertView::setCert(const QList<QSslCertificate> &cert) {
 		qlSubjectName->setText(tmpName);
 
 		if (emails.count() > 0)
-			qlSubjectEmail->setText(emails.join(QLatin1String("<br />")));
+			qlSubjectEmail->setText(emails.join(QLatin1String("\n")));
 		else
 			qlSubjectEmail->setText(tr("(none)"));
 
 		if (qscCert.expiryDate() <= QDateTime::currentDateTime())
-			qlExpiry->setText(QString::fromLatin1("<font color=\"red\"><b>%1</b></font>").arg(qscCert.expiryDate().toString(Qt::SystemLocaleDate)));
+			qlExpiry->setText(QString::fromLatin1("<font color=\"red\"><b>%1</b></font>").arg(Qt::escape(qscCert.expiryDate().toString(Qt::SystemLocaleDate))));
 		else
 			qlExpiry->setText(qscCert.expiryDate().toString(Qt::SystemLocaleDate));
 
 		if (qlCert.count() > 1)
 			qscCert = qlCert.last();
 
-		const QString &issuer = qscCert.issuerInfo(QSslCertificate::CommonName);
-		qlIssuerName->setText((issuer == name) ? tr("Self-signed") : issuer);
+#if QT_VERSION >= 0x050000
+		const QStringList &issuerNames = qscCert.issuerInfo(QSslCertificate::CommonName);
+		QString issuerName;
+		if (issuerNames.count() > 0) {
+			issuerName = issuerNames.at(0);
+		}
+#else
+		const QString &issuerName = qscCert.issuerInfo(QSslCertificate::CommonName);
+#endif
+		qlIssuerName->setText((issuerName == name) ? tr("Self-signed") : issuerName);
 	}
 }
 
@@ -125,11 +118,9 @@ CertWizard::CertWizard(QWidget *p) : QWizard(p) {
 
 	setOption(QWizard::NoCancelButton, false);
 
-	bValidDomain = true;
-	bPendingDns = false;
-
 	qwpExport->setCommitPage(true);
 	qwpExport->setComplete(false);
+	qlPasswordNotice->setVisible(false);
 }
 
 int CertWizard::nextId() const {
@@ -201,24 +192,14 @@ void CertWizard::initializePage(int id) {
 
 bool CertWizard::validateCurrentPage() {
 	if (currentPage() == qwpNew) {
-		if (! bValidDomain) {
-			QRegExp ereg(QLatin1String("(.+)@(.+)"), Qt::CaseInsensitive, QRegExp::RegExp2);
-			if (ereg.exactMatch(qleEmail->text())) {
-				const QString &domain = ereg.cap(2);
-				if (! domain.isEmpty()) {
-					qlError->setText(tr("Resolving domain %1.").arg(domain));
-					bPendingDns = true;
-					iLookupId = QHostInfo::lookupHost(domain, this, SLOT(lookedUp(QHostInfo)));
-				} else
-					bValidDomain = true;
-			} else
-				qlError->setText(tr("Unable to validate email.<br />Enter a valid (or blank) email to continue."));
-			if (! bValidDomain) {
-				qwpNew->setComplete(false);
-				return false;
-			}
+		QRegExp ereg(QLatin1String("(^$)|((.+)@(.+))"), Qt::CaseInsensitive, QRegExp::RegExp2);
+		if (!ereg.exactMatch(qleEmail->text())) {
+			qlError->setText(tr("Unable to validate email.<br />Enter a valid (or blank) email to continue."));
+			qwpNew->setComplete(false);
+			return false;
 		} else {
 			kpNew = generateNewCert(qleName->text(), qleEmail->text());
+			
 			if (! validateCert(kpNew)) {
 				qlError->setText(tr("There was an error generating your certificate.<br />Please try again."));
 				return false;
@@ -234,6 +215,10 @@ bool CertWizard::validateCurrentPage() {
 		QFile f(qleExportFile->text());
 		if (! f.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered)) {
 			QToolTip::showText(qleExportFile->mapToGlobal(QPoint(0,0)), tr("The file could not be opened for writing. Please use another file."), qleExportFile);
+			return false;
+		}
+		if (! f.setPermissions(QFile::ReadOwner | QFile::WriteOwner)) {
+			QToolTip::showText(qleExportFile->mapToGlobal(QPoint(0,0)), tr("The file's permissions could not be set. No certificate and key has been written. Please use another file."), qleExportFile);
 			return false;
 		}
 		qint64 written = f.write(qba);
@@ -268,13 +253,7 @@ bool CertWizard::validateCurrentPage() {
 	return QWizard::validateCurrentPage();
 }
 
-void CertWizard::on_qleEmail_textChanged(const QString &email) {
-	bValidDomain = email.isEmpty();
-	if (bPendingDns) {
-		qlError->setText(QString());
-		QHostInfo::abortHostLookup(iLookupId);
-		bPendingDns = false;
-	}
+void CertWizard::on_qleEmail_textChanged(const QString &) {
 	qwpNew->setComplete(true);
 }
 
@@ -327,6 +306,8 @@ void CertWizard::on_qleImportFile_textChanged(const QString &text) {
 		qlePassword->clear();
 		qlePassword->setEnabled(false);
 		qlPassword->setEnabled(false);
+		qlPasswordNotice->clear();
+		qlPasswordNotice->setVisible(false);
 		qwpImport->setComplete(false);
 		return;
 	}
@@ -340,17 +321,23 @@ void CertWizard::on_qleImportFile_textChanged(const QString &text) {
 		if (validateCert(imp)) {
 			qlePassword->setEnabled(false);
 			qlPassword->setEnabled(false);
+			qlPasswordNotice->clear();
+			qlPasswordNotice->setVisible(false);
 			cvImport->setCert(imp.first);
 			qwpImport->setComplete(true);
 			return;
 		} else {
 			qlePassword->setEnabled(true);
 			qlPassword->setEnabled(true);
+			qlPasswordNotice->setText(tr("Unable to import. Missing password or incompatible file type."));
+			qlPasswordNotice->setVisible(true);
 		}
 	} else {
 		qlePassword->clear();
 		qlePassword->setEnabled(false);
 		qlPassword->setEnabled(false);
+		qlPasswordNotice->clear();
+		qlPasswordNotice->setVisible(false);
 	}
 	cvImport->setCert(QList<QSslCertificate>());
 	qwpImport->setComplete(false);
@@ -362,20 +349,6 @@ void CertWizard::on_qlePassword_textChanged(const QString &) {
 
 void CertWizard::on_qlIntroText_linkActivated(const QString &url) {
 	QDesktopServices::openUrl(QUrl(url));
-}
-
-void CertWizard::lookedUp(QHostInfo info) {
-	bPendingDns = false;
-	if (info.error() == QHostInfo::NoError) {
-		bValidDomain = true;
-		qlError->setText(QString());
-		qwpNew->setComplete(true);
-		next();
-	} else {
-		bValidDomain = false;
-		qlError->setText(tr("Unable to resolve domain."));
-		qwpNew->setComplete(false);
-	}
 }
 
 static int add_ext(X509 * crt, int nid, char *value) {
@@ -541,11 +514,11 @@ QByteArray CertWizard::exportCert(const Settings::KeyPair &kp) {
 	QByteArray qba;
 
 	p = reinterpret_cast<const unsigned char *>(key.constData());
-	pkey = d2i_AutoPrivateKey(NULL, SSL_OUTBUF(&p), key.length());
+	pkey = d2i_AutoPrivateKey(NULL, &p, key.length());
 
 	if (pkey) {
 		p = reinterpret_cast<const unsigned char *>(crt.constData());
-		x509 = d2i_X509(NULL, SSL_OUTBUF(&p), crt.length());
+		x509 = d2i_X509(NULL, &p, crt.length());
 
 		if (x509 && X509_check_private_key(x509, pkey)) {
 			X509_keyid_set1(x509, NULL, 0);
@@ -560,33 +533,18 @@ QByteArray CertWizard::exportCert(const Settings::KeyPair &kp) {
 				crt = cert.toDer();
 				p = reinterpret_cast<const unsigned char *>(crt.constData());
 
-				c = d2i_X509(NULL, SSL_OUTBUF(&p), crt.length());
+				c = d2i_X509(NULL, &p, crt.length());
 				if (c)
 					sk_X509_push(certs, c);
 			}
 
-			int nid = -1;
-#if OPENSSL_VERSION_NUMBER < 0x0090800fL
-			/* OpenSSL versions prior to 0.9.8 doesn't allow passing -1 for the
-			 * nid_key and nid_cert parameters. Passing -1 means that no encryption
-			 * should be used.
-			 *
-			 * For 0.9.7 compatibility, we pass 0, which makes OpenSSL choose the best
-			 * fit encryption scheme itself. Since we use an empty passphrase, it doesn't
-			 * really matter. */
-			nid = 0;
-#endif
-
-			pkcs = PKCS12_create(SSL_STRING(""), SSL_STRING("Mumble Identity"), pkey, x509, certs, nid, nid, 0, 0, 0);
-
+			pkcs = PKCS12_create(SSL_STRING(""), SSL_STRING("Mumble Identity"), pkey, x509, certs, -1, -1, 0, 0, 0);
 			if (pkcs) {
 				long size;
 				mem = BIO_new(BIO_s_mem());
 				i2d_PKCS12_bio(mem, pkcs);
 				Q_UNUSED(BIO_flush(mem));
-
 				size = BIO_get_mem_data(mem, &data);
-
 				qba = QByteArray(data, static_cast<int>(size));
 			}
 		}

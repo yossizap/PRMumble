@@ -1,33 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2009-2011, Stefan Hacker <dd0t@users.sourceforge.net>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -220,7 +194,7 @@ UserModel::UserModel(QObject *p) : QAbstractItemModel(p) {
 	qiTalkingOn=QIcon(QLatin1String("skin:talking_on.svg"));
 	qiTalkingShout=QIcon(QLatin1String("skin:talking_alt.svg"));
 	qiTalkingWhisper=QIcon(QLatin1String("skin:talking_whisper.svg"));
-	qiPrioritySpeaker=QIcon(QLatin1String("skin:actions/audio-input-microphone.svg"));
+	qiPrioritySpeaker=QIcon(QLatin1String("skin:priority_speaker.svg"));
 	qiRecording=QIcon(QLatin1String("skin:actions/media-record.svg"));
 	qiMutedSelf=QIcon(QLatin1String("skin:muted_self.svg"));
 	qiMutedServer=QIcon(QLatin1String("skin:muted_server.svg"));
@@ -236,6 +210,7 @@ UserModel::UserModel(QObject *p) : QAbstractItemModel(p) {
 	qiFriend=QIcon(QLatin1String("skin:emblems/emblem-favorite.svg"));
 	qiComment=QIcon(QLatin1String("skin:comment.svg"));
 	qiCommentSeen=QIcon(QLatin1String("skin:comment_seen.svg"));
+	qiFilter=QIcon(QLatin1String("skin:filter.svg"));
 
 	ModelItem::bUsersTop = g.s.bUserTop;
 
@@ -313,12 +288,12 @@ QModelIndex UserModel::parent(const QModelIndex &idx) const {
 
 	ModelItem *item = static_cast<ModelItem *>(idx.internalPointer());
 
-	ModelItem *pitem = (item) ? item->parent : NULL;
+	ModelItem *parent_item = (item) ? item->parent : NULL;
 
-	if (! pitem)
+	if (! parent_item)
 		return QModelIndex();
 
-	return createIndex(pitem->rowOfSelf(), 0, pitem);
+	return createIndex(parent_item->rowOfSelf(), 0, parent_item);
 }
 
 int UserModel::rowCount(const QModelIndex &p) const {
@@ -440,6 +415,7 @@ QVariant UserModel::data(const QModelIndex &idx, int role) const {
 					}
 					return qiChannel;
 				}
+				break;
 			case Qt::DisplayRole:
 				if (idx.column() == 0) {
 					if (! g.s.bShowUserCount || item->iUsers == 0)
@@ -449,6 +425,10 @@ QVariant UserModel::data(const QModelIndex &idx, int role) const {
 				}
 				if (! c->qbaDescHash.isEmpty())
 					l << (item->bCommentSeen ? qiCommentSeen : qiComment);
+
+				if (c->bFiltered)
+					l << (qiFilter);
+
 				return l;
 			case Qt::FontRole:
 				if (g.uiSession) {
@@ -520,11 +500,15 @@ QVariant UserModel::otherRoles(const QModelIndex &idx, int role) const {
 									qb.open(QIODevice::ReadOnly);
 									QImageReader qir(&qb, p->qbaTextureFormat);
 									QSize sz = qir.size();
-									if (sz.width() > 128) {
-										int targ = sz.width() / ((sz.width()+127)/ 128);
-										qsImage = QString::fromLatin1("<img src=\"memoryblob://avatar/%1/texture.%2\" width=\"%3\" />").arg(p->uiSession).arg(QString::fromLatin1(p->qbaTextureFormat).toLower()).arg(targ);
-									} else if (sz.width() > 0) {
-										qsImage = QString::fromLatin1("<img src=\"memoryblob://avatar/%1/texture.%2\" />").arg(p->uiSession).arg(QString::fromLatin1(p->qbaTextureFormat).toLower());
+									if (sz.width() > 0) {
+										qsImage = QString::fromLatin1("<img src=\"data:;base64,");
+										qsImage.append(QString::fromLatin1(p->qbaTexture.toBase64().toPercentEncoding()));
+										if (sz.width() > 128) {
+											int targ = sz.width() / ((sz.width()+127)/ 128);
+											qsImage.append(QString::fromLatin1("\" width=\"%1\" />").arg(targ));
+										} else {
+											qsImage.append(QString::fromLatin1("\" />"));
+										}
 									}
 								}
 							}
@@ -584,10 +568,10 @@ QVariant UserModel::otherRoles(const QModelIndex &idx, int role) const {
 					if (isUser)
 						return QString::fromLatin1("%1"
 						                           "<table>"
-						                           "<tr><td><img src=\"skin:talking_on.svg\" width=64 /></td><td valign=\"middle\">%2</td></tr>"
-						                           "<tr><td><img src=\"skin:talking_alt.svg\" width=64 /></td><td valign=\"middle\">%3</td></tr>"
-						                           "<tr><td><img src=\"skin:talking_whisper.svg\" width=64 /></td><td valign=\"middle\">%4</td></tr>"
-						                           "<tr><td><img src=\"skin:talking_off.svg\" width=64 /></td><td valign=\"middle\">%5</td></tr>"
+						                           "<tr><td><img src=\"skin:talking_on.svg\" height=64 /></td><td valign=\"middle\">%2</td></tr>"
+						                           "<tr><td><img src=\"skin:talking_alt.svg\" height=64 /></td><td valign=\"middle\">%3</td></tr>"
+						                           "<tr><td><img src=\"skin:talking_whisper.svg\" height=64 /></td><td valign=\"middle\">%4</td></tr>"
+						                           "<tr><td><img src=\"skin:talking_off.svg\" height=64 /></td><td valign=\"middle\">%5</td></tr>"
 						                           "</table>").arg(tr("This is a user connected to the server. The icon to the left of the user indicates whether or not they are talking:"),
 						                                           tr("Talking to your channel."),
 						                                           tr("Shouting directly to your channel."),
@@ -597,9 +581,9 @@ QVariant UserModel::otherRoles(const QModelIndex &idx, int role) const {
 					else
 						return QString::fromLatin1("%1"
 						                           "<table>"
-						                           "<tr><td><img src=\"skin:channel_active.svg\" width=64 /></td><td valign=\"middle\">%2</td></tr>"
-						                           "<tr><td><img src=\"skin:channel_linked.svg\" width=64 /></td><td valign=\"middle\">%3</td></tr>"
-						                           "<tr><td><img src=\"skin:channel.svg\" width=64 /></td><td valign=\"middle\">%4</td></tr>"
+						                           "<tr><td><img src=\"skin:channel_active.svg\" height=64 /></td><td valign=\"middle\">%2</td></tr>"
+						                           "<tr><td><img src=\"skin:channel_linked.svg\" height=64 /></td><td valign=\"middle\">%3</td></tr>"
+						                           "<tr><td><img src=\"skin:channel.svg\" height=64 /></td><td valign=\"middle\">%4</td></tr>"
 						                           "</table>").arg(tr("This is a channel on the server. The icon indicates the state of the channel:"),
 						                                           tr("Your current channel."),
 						                                           tr("A channel that is linked with your channel. Linked channels can talk to each other."),
@@ -609,17 +593,17 @@ QVariant UserModel::otherRoles(const QModelIndex &idx, int role) const {
 					if (isUser)
 						return QString::fromLatin1("%1"
 						                           "<table>"
-						                           "<tr><td><img src=\"skin:emblems/emblem-favorite.svg\" width=64 /></td><td valign=\"middle\">%2</td></tr>"
-						                           "<tr><td><img src=\"skin:authenticated.svg\" width=64 /></td><td valign=\"middle\">%3</td></tr>"
-						                           "<tr><td><img src=\"skin:muted_self.svg\" width=64 /></td><td valign=\"middle\">%4</td></tr>"
-						                           "<tr><td><img src=\"skin:muted_server.svg\" width=64 /></td><td valign=\"middle\">%5</td></tr>"
-						                           "<tr><td><img src=\"skin:muted_suppressed.svg\" width=64 /></td><td valign=\"middle\">%6</td></tr>"
-						                           "<tr><td><img src=\"skin:muted_local.svg\" width=64 /></td><td valign=\"middle\">%7</td></tr>"
-						                           "<tr><td><img src=\"skin:deafened_self.svg\" width=64 /></td><td valign=\"middle\">%8</td></tr>"
-						                           "<tr><td><img src=\"skin:deafened_server.svg\" width=64 /></td><td valign=\"middle\">%9</td></tr>"
-						                           "<tr><td><img src=\"skin:comment.svg\" width=64 /></td><td valign=\"middle\">%10</td></tr>"
-						                           "<tr><td><img src=\"skin:comment_seen.svg\" width=64 /></td><td valign=\"middle\">%11</td></tr>"
-						                           "<tr><td><img src=\"skin:status/text-missing.svg\" width=64 /></td><td valign=\"middle\">%12</td></tr>"
+						                           "<tr><td><img src=\"skin:emblems/emblem-favorite.svg\" height=64 /></td><td valign=\"middle\">%2</td></tr>"
+						                           "<tr><td><img src=\"skin:authenticated.svg\" height=64 /></td><td valign=\"middle\">%3</td></tr>"
+						                           "<tr><td><img src=\"skin:muted_self.svg\" height=64 /></td><td valign=\"middle\">%4</td></tr>"
+						                           "<tr><td><img src=\"skin:muted_server.svg\" height=64 /></td><td valign=\"middle\">%5</td></tr>"
+						                           "<tr><td><img src=\"skin:muted_suppressed.svg\" height=64 /></td><td valign=\"middle\">%6</td></tr>"
+						                           "<tr><td><img src=\"skin:muted_local.svg\" height=64 /></td><td valign=\"middle\">%7</td></tr>"
+						                           "<tr><td><img src=\"skin:deafened_self.svg\" height=64 /></td><td valign=\"middle\">%8</td></tr>"
+						                           "<tr><td><img src=\"skin:deafened_server.svg\" height=64 /></td><td valign=\"middle\">%9</td></tr>"
+						                           "<tr><td><img src=\"skin:comment.svg\" height=64 /></td><td valign=\"middle\">%10</td></tr>"
+						                           "<tr><td><img src=\"skin:comment_seen.svg\" height=64 /></td><td valign=\"middle\">%11</td></tr>"
+						                           "<tr><td><img src=\"skin:status/text-missing.svg\" height=64 /></td><td valign=\"middle\">%12</td></tr>"
 						                           "</table>").arg(tr("This shows the flags the user has on the server, if any:"),
 						                                           tr("On your friend list"),
 						                                           tr("Authenticated user"),
@@ -628,20 +612,22 @@ QVariant UserModel::otherRoles(const QModelIndex &idx, int role) const {
 						                                           tr("Muted (not allowed to speak in current channel)"),
 						                                           tr("Muted (muted by you, only on your machine)")
 						                                          ).arg(
-						           tr("Deafened (by self)"),
-						           tr("Deafened (by admin)"),
-						           tr("User has a new comment set (click to show)"),
-						           tr("User has a comment set, which you've already seen. (click to show)"),
-						           tr("Ignoring Text Messages")
-						       );
+						                                           tr("Deafened (by self)"),
+						                                           tr("Deafened (by admin)"),
+						                                           tr("User has a new comment set (click to show)"),
+						                                           tr("User has a comment set, which you've already seen. (click to show)"),
+						                                           tr("Ignoring Text Messages")
+						);
 					else
 						return QString::fromLatin1("%1"
 						                           "<table>"
-						                           "<tr><td><img src=\"skin:comment.svg\" width=64 /></td><td valign=\"middle\">%10</td></tr>"
-						                           "<tr><td><img src=\"skin:comment_seen.svg\" width=64 /></td><td valign=\"middle\">%11</td></tr>"
+						                           "<tr><td><img src=\"skin:comment.svg\" height=64 /></td><td valign=\"middle\">%10</td></tr>"
+						                           "<tr><td><img src=\"skin:comment_seen.svg\" height=64 /></td><td valign=\"middle\">%11</td></tr>"
+						                           "<tr><td><img src=\"skin:filter.svg\" height=64 /></td><td valign=\"middle\">%12</td></tr>"
 						                           "</table>").arg(tr("This shows the flags the channel has, if any:"),
 						                                           tr("Channel has a new comment set (click to show)"),
-						                                           tr("Channel has a comment set, which you've already seen. (click to show)")
+						                                           tr("Channel has a comment set, which you've already seen. (click to show)"),
+						                                           tr("Channel will be hidden when filtering is enabled")
 						                                          );
 
 			}
@@ -844,9 +830,10 @@ ClientUser *UserModel::addUser(unsigned int id, const QString &name) {
 
 	ModelItem *item = new ModelItem(p);
 
-	connect(p, SIGNAL(talkingChanged()), this, SLOT(userTalkingChanged()));
-	connect(p, SIGNAL(muteDeafChanged()), this, SLOT(userMuteDeafChanged()));
-	connect(p, SIGNAL(positionChanged()), this, SLOT(userPositionChanged()));
+	connect(p, SIGNAL(talkingStateChanged()), this, SLOT(userStateChanged()));
+	connect(p, SIGNAL(muteDeafStateChanged()), this, SLOT(userStateChanged()));
+	connect(p, SIGNAL(prioritySpeakerStateChanged()), this, SLOT(userStateChanged()));
+	connect(p, SIGNAL(recordingStateChanged()), this, SLOT(userStateChanged()));
 
 	Channel *c = Channel::get(0);
 	ModelItem *citem = ModelItem::c_qhChannels.value(c);
@@ -898,10 +885,6 @@ void UserModel::removeUser(ClientUser *p) {
 		collapseEmpty(c);
 
 	updateOverlay();
-
-#ifdef REPORT_JITTER
-	g.mw->uUsage.addJitter(p);
-#endif
 
 	delete p;
 	delete item;
@@ -1293,31 +1276,29 @@ Channel *UserModel::getSubChannel(Channel *p, int idx) const {
 	return NULL;
 }
 
-void UserModel::userPositionChanged() {
-	ClientUser *p=static_cast<ClientUser *>(sender());
-	if (!p)
+void UserModel::userStateChanged() {
+	ClientUser *user = qobject_cast<ClientUser *>(sender());
+	if (user == NULL)
 		return;
 		
 	//qWarning() << "User position changed, updating overlay...";
 	
-	QModelIndex idx = index(p);
+	const QModelIndex idx = index(user);
 	emit dataChanged(idx, idx);
-	updateOverlay();
-}
-
-void UserModel::userTalkingChanged() {
-	ClientUser *p=static_cast<ClientUser *>(sender());
-	if (!p)
-		return;
 	
-	/*QModelIndex idx = index(p);
-	emit dataChanged(idx, idx);*/
 	updateOverlay();
 }
 
-void UserModel::userMuteDeafChanged() {
-	ClientUser *p=static_cast<ClientUser *>(sender());
-	QModelIndex idx = index(p);
+void UserModel::toggleChannelFiltered(Channel *c) {
+	QModelIndex idx;
+	if(c) {
+		c->bFiltered = !c->bFiltered;
+
+		ServerHandlerPtr sh = g.sh;
+		Database::setChannelFiltered(sh->qbaDigest, c->iId, c->bFiltered);
+		idx = index(c);
+	}
+
 	emit dataChanged(idx, idx);
 
 	updateOverlay();
@@ -1387,6 +1368,21 @@ bool UserModel::dropMimeData(const QMimeData *md, Qt::DropAction, int row, int c
 
 	if (! isChannel) {
 		// User dropped somewhere
+		int ret;
+		switch (g.s.ceUserDrag) {
+			case Settings::Ask:
+				ret=QMessageBox::question(g.mw, QLatin1String("Mumble"), tr("Are you sure you want to drag this user?"), QMessageBox::Yes, QMessageBox::No);
+
+				if (ret == QMessageBox::No)
+					return false;
+				break;
+			case Settings::DoNothing:
+				g.l->log(Log::Information, MainWindow::tr("You have User Dragging set to \"Do Nothing\" so the user wasn't moved."));
+				return false;
+				break;
+			case Settings::Move:
+				break;
+		}
 		MumbleProto::UserState mpus;
 		mpus.set_session(uiSession);
 		mpus.set_channel_id(c->iId);
@@ -1409,6 +1405,7 @@ bool UserModel::dropMimeData(const QMimeData *md, Qt::DropAction, int row, int c
 				break;
 			default:
 				g.l->log(Log::CriticalError, MainWindow::tr("Unknown Channel Drag mode in UserModel::dropMimeData."));
+				return false;
 				break;
 		}
 

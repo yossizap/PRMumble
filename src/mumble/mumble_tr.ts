@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
     <name>ACLEditor</name>
     <message>
-        <location filename="ACLEditor.cpp" line="+105"/>
+        <location filename="ACLEditor.cpp" line="+101"/>
         <source>Deny</source>
         <translation>Reddet</translation>
     </message>
@@ -24,23 +22,34 @@
         <translation>%1 iznini reddet</translation>
     </message>
     <message>
-        <location line="-62"/>
+        <location line="-84"/>
         <source>Mumble - Add channel</source>
         <translation>Mumble - Kanal ekle</translation>
     </message>
     <message>
-        <location line="+22"/>
-        <location line="+165"/>
+        <location line="+11"/>
+        <location line="+50"/>
+        <source>Default server value</source>
+        <translation>Varsayılan sunucu değeri</translation>
+    </message>
+    <message>
+        <location line="-28"/>
+        <location line="+176"/>
         <source>Failed: Invalid channel</source>
         <translation>Başarısız: Geçersiz kanal</translation>
     </message>
     <message>
-        <location line="-153"/>
+        <location line="-164"/>
         <source>Mumble - Edit %1</source>
         <translation>Mumble - %1&apos;i düzenle</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+2"/>
+        <source>ID: %1</source>
+        <translation>Kimlik: %1</translation>
+    </message>
+    <message>
+        <location line="+46"/>
         <source>This grants the %1 privilege. If a privilege is both allowed and denied, it is denied.&lt;br /&gt;%2</source>
         <translation>Bu, %1 iznini verir. Eğer bir izin hem verilir hem de reddedilirse, reddedilmiş sayılır.&lt;br /&gt;%2</translation>
     </message>
@@ -103,6 +112,8 @@
         <location/>
         <source>&lt;b&gt;Position&lt;/b&gt;&lt;br/&gt;
 This value enables you to change the way Mumble arranges the channels in the tree. A channel with a higher &lt;i&gt;Position&lt;/i&gt; value will always be placed below one with a lower value and the other way around. If the &lt;i&gt;Position&lt;/i&gt; value of two channels is equal they will get sorted alphabetically by their name.</source>
+        <oldsource>&lt;b&gt;Position&lt;/b&gt;&lt;br/&gt;
+This value enables you to change the way mumble arranges the channels in the tree. A channel with a higher &lt;i&gt;Position&lt;/i&gt; value will always be placed below one with a lower value and the other way around. If the &lt;i&gt;Position&lt;/i&gt; value of two channels is equal they will get sorted alphabetically by their name.</oldsource>
         <translation>&lt;b&gt;Konum&lt;/b&gt;&lt;br /&gt;
 Bu değer Mumble&apos;ın kanalları kanal ağacında düzenleme şeklini değiştirmenize imkân sağlar. Daha büyük bir &lt;i&gt;Konum&lt;/i&gt; değeri olan bir kanal daha küçük değeri olan bir kanalın altında görüntülenecektir. &lt;i&gt;Konum&lt;/i&gt; değeri eşit olan iki kanal isimlerine göre alfabetik olarak sıralanacaktır.</translation>
     </message>
@@ -284,6 +295,7 @@ Bu değer Mumble&apos;ın kanalları kanal ağacında düzenleme şeklini deği�
     <message>
         <location/>
         <source>Entry should apply to this channel.</source>
+        <oldsource>Entry should apply to this channel</oldsource>
         <translation>Bu kanala unsurun uygulanmasını sağlar.</translation>
     </message>
     <message>
@@ -473,11 +485,33 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
         <source>This shows all the entries active on this channel. Entries inherited from parent channels will be shown in italics.&lt;br /&gt;ACLs are evaluated top to bottom, meaning priority increases as you move down the list.</source>
         <translation>Bu kanalda etkin tüm unsurları gösterir. Üst kanallardan alınan unsurlar italik olarak gösterilecektir.&lt;br /&gt;EKL&apos;ler yukarıdan aşağıya değerlendirilirler, ki bu önceliğin listede aşağıya inildikçe artacağı anlamına gelir.</translation>
     </message>
+    <message>
+        <location/>
+        <source>ID of the channel.</source>
+        <translation>Kanalın kimliği.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Maximum Users</source>
+        <translation>Azami Kullanıcı Sayısı</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Maximum number of users allowed in the channel</source>
+        <translation>Kanalda müsaade edilen azami kullanıcı sayısı</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Maximum Users&lt;/b&gt;&lt;br /&gt;
+This value allows you to set the maximum number of users allowed in the channel. If the value is above zero, only that number of users will be allowed to enter the channel. If the value is zero, the maximum number of users in the channel is given by the server&apos;s default limit.</source>
+        <translation>&lt;b&gt;Azami Kullanıcı Sayısı&lt;/b&gt;&lt;br /&gt;
+Bu değer kanalda izin verilen azami kullanıcı sayısını ayarlamanıza izin verir. Eğer değer sıfırdan yüksekse sadece o sayıdaki kullanıcı kanala girebilecektir. Eğer değer sıfırsa kanaldaki azami kullanıcı sayısı sunucunun varsayılan sınırı tarafından belirlenir.</translation>
+    </message>
 </context>
 <context>
     <name>ALSAAudioInput</name>
     <message>
-        <location filename="ALSAAudio.cpp" line="+174"/>
+        <location filename="ALSAAudio.cpp" line="+149"/>
         <source>Default ALSA Card</source>
         <translation>Varsayılan ALSA Kartı</translation>
     </message>
@@ -495,7 +529,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
         <translation>Varsayılan ALSA kartı</translation>
     </message>
     <message>
-        <location line="+325"/>
+        <location line="+328"/>
         <source>Opening chosen ALSA Output failed: %1</source>
         <translation>Seçilen ALSA Çıktısı başarısız oldu: %1</translation>
     </message>
@@ -503,13 +537,14 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
 <context>
     <name>ASIOConfig</name>
     <message>
-        <location filename="ASIOInput.cpp" line="+225"/>
+        <location filename="ASIOInput.cpp" line="+208"/>
         <source>%1 (version %2)</source>
         <translation>%1 (sürüm %2)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>%1 -&gt; %2 samples buffer, with %3 sample resolution (%4 preferred) at %5 Hz</source>
+        <oldsource>%1 -&gt; %2 samples buffer, with %3 sample resolution (%4 preferred) at %5Hz</oldsource>
         <translation>%1 -&gt; %2 örnek tamponu, %5 Hz frekansında %3 örnekleme çözünürlüğü ile (%4 önerilir)</translation>
     </message>
     <message>
@@ -656,17 +691,17 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="About.cpp" line="+40"/>
+        <location filename="About.cpp" line="+15"/>
         <source>About Mumble</source>
         <translation>Mumble Hakkında</translation>
     </message>
     <message>
-        <location line="+30"/>
-        <source>&lt;h3&gt;Mumble (%1)&lt;/h3&gt;&lt;p&gt;Copyright %3 Thorvald Natvig&lt;br /&gt;slicer@users.sourceforge.net&lt;/p&gt;&lt;p&gt;&lt;b&gt;A voice-chat utility for gamers&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;tt&gt;&lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;&lt;/tt&gt;&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Mumble (%1)&lt;/h3&gt;&lt;p&gt;Telif hakkı %3 Thorvald Natvig&lt;br /&gt;slicer@users.sourceforge.net&lt;/p&gt;&lt;p&gt;&lt;b&gt;Oyuncular için ses ile sohbet etme aracı&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;tt&gt;&lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;&lt;/tt&gt;&lt;/p&gt;</translation>
+        <location line="+34"/>
+        <source>&lt;h3&gt;Mumble (%1)&lt;/h3&gt;&lt;p&gt;%3&lt;/p&gt;&lt;p&gt;&lt;b&gt;A voice-chat utility for gamers&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;tt&gt;&lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;&lt;/tt&gt;&lt;/p&gt;</source>
+        <translation>&lt;h3&gt;Mumble (%1)&lt;/h3&gt;&lt;p&gt;%3&lt;/p&gt;&lt;p&gt;&lt;b&gt;Oyuncular için sesle sohbet etme aracı&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;tt&gt;&lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;&lt;/tt&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+12"/>
         <source>&amp;About Mumble</source>
         <translation>Mumble &amp;Hakkında</translation>
     </message>
@@ -674,6 +709,11 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
         <location line="+1"/>
         <source>&amp;License</source>
         <translation>&amp;Lisans</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>A&amp;uthors</source>
+        <translation>G&amp;eliştiriciler</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -940,21 +980,6 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
     </message>
     <message>
         <location/>
-        <source>Mixed</source>
-        <translation>Karışık</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Multichannel</source>
-        <translation>Çoklu kanal</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Echo</source>
-        <translation>Eko</translation>
-    </message>
-    <message>
-        <location/>
         <source>&lt;b&gt;This sets speech detection to use Signal to Noise ratio.&lt;/b&gt;&lt;br /&gt;In this mode, the input is analyzed for something resembling a clear signal, and the clarity of that signal is used to trigger speech detection.</source>
         <translation>&lt;b&gt;Konuşma tespitinin Sinyal / Gürültü oranını kullanmasını sağlar.&lt;/b&gt;&lt;br /&gt;Bu kipte, girdi net bir sinyale benzeyen bir şey bulmak için analiz edilir, ve sinyalin netliği konuşma tespiti için kullanılır.</translation>
     </message>
@@ -1074,7 +1099,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
         <translation>Bas ve Konuş tuşunun bırakılmasının ardından mikrofonun açık kalma süresi</translation>
     </message>
     <message>
-        <location filename="AudioInput.cpp" line="+529"/>
+        <location filename="AudioInput.cpp" line="+513"/>
         <source>Server maximum network bandwidth is only %1 kbit/s. Audio quality auto-adjusted to %2 kbit/s (%3 ms)</source>
         <translation>Sunucun azami ses bant genişliği sadece şudur: %1 kbit/s. Ses kalitesi otomatik olarak şuna ayarlanmıştır: %2 kbit/s (%3 ms)</translation>
     </message>
@@ -1113,11 +1138,26 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
         <source>after</source>
         <translation>geçtikten sonra</translation>
     </message>
+    <message>
+        <location/>
+        <source>Echo Cancellation</source>
+        <translation>Yankı İptali</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Mixed echo cancellation</source>
+        <translation>Karışık yankı iptali</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Multichannel echo cancellation</source>
+        <translation>Çoklu kanal yankı iptali</translation>
+    </message>
 </context>
 <context>
     <name>AudioInputDialog</name>
     <message>
-        <location filename="AudioConfigDialog.cpp" line="+75"/>
+        <location filename="AudioConfigDialog.cpp" line="+80"/>
         <source>Continuous</source>
         <translation>Devamlı</translation>
     </message>
@@ -1196,6 +1236,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
     <message>
         <location/>
         <source>&lt;b&gt;This is the output method to use for audio.&lt;/b&gt;&lt;br /&gt;Most likely you want to use DirectSound.</source>
+        <oldsource>&lt;b&gt;This is the input method to use for audio.&lt;/b&gt;&lt;br /&gt;Most likely you want to use DirectSound.</oldsource>
         <translation>&lt;b&gt;Ses için kullanılacak çıktı metodu.&lt;/b&gt;&lt;br /&gt;Muhtemelen DirectSound&apos;u kullanmak isteyeceksiniz.</translation>
     </message>
     <message>
@@ -1286,6 +1327,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
     <message>
         <location/>
         <source>The connected &quot;speakers&quot; are actually headphones</source>
+        <oldsource>The connected &quot;speakers&quot; are actually headphones.</oldsource>
         <translation>Bağlı &quot;hoparlörler&quot; aslında kulaklıktır</translation>
     </message>
     <message>
@@ -1366,6 +1408,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
     <message>
         <location/>
         <source>&lt;b&gt;This sets the packet latency variance for loopback testing.&lt;/b&gt;&lt;br /&gt;Most audio paths contain some variable latency. This allows you to set that variance for loopback mode testing. For example, if you set this to 15ms, this will emulate a network with 20-35ms ping latency or one with 80-95ms latency. Most domestic net connections have a variance of about 5ms.</source>
+        <oldsource>&lt;b&gt;This sets the packet latency variance for loopback testing.&lt;/b&gt;&lt;br /&gt;Most audio paths contain some variable latency. This allows you set that variance for loopback mode testing. For example, if you set this to 15ms, this will emulate a network with 20-35ms ping latency or one with 80-95ms latency. Most domestic net connections have a variance of about 5ms.</oldsource>
         <translation>&lt;b&gt;Geri döngü testi için paket gecikmesinde değişkenliği (latency variance) ayarlar.&lt;/b&gt;&lt;br /&gt;Ses yollarının çoğu değişik gecikme içerir. Bu seçenek bu değişmeleri geri döngü kipinde testler için belirtmenize izin verir. Mesela 15ms değerini seçerseniz, bu, 20-35ms ping gecikmesi ya da 80-95ms gecikme olan şebekeleri taklit eder. Kişisel İnternet bağlantılarının çoğu 5ms civarı bir değişme içerirler. </translation>
     </message>
     <message>
@@ -1453,11 +1496,66 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
         <source>Exclusive</source>
         <translation>Ayrıcalıklı</translation>
     </message>
+    <message>
+        <location/>
+        <source>Priority Speaker</source>
+        <translation>Öncelikli Konuşmacı</translation>
+    </message>
+    <message>
+        <location/>
+        <source>If checked Mumble lowers the volume of other users while you talk if you have the &quot;Priority Speaker&quot; status.</source>
+        <translation>&quot;Öncelikli Konuşmacı&quot;  olarak işaretlendiğinizde, siz konuşurken Mumble diğer kullanıcıların sesini kısar.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Attenuate other users while talking as Priority Speaker.&lt;/b&gt;&lt;br /&gt;Mumble supports decreasing the volume of other users while you talk as the &lt;i&gt;Priority Speaker&lt;/i&gt; to avoid getting disturbed. Checking this checkbox will enable this feature.</source>
+        <translation>&lt;b&gt;Öncelikli Konuşmacı olarak konuşurken diğer kullanıcıların sesini azalt.&lt;/b&gt;&lt;br /&gt;Mumble &lt;i&gt;Öncelikli Konuşmacı&lt;/i&gt; olarak konuşurken rahatsız edilmemeniz için, diğer kullanıcıların sesini kısabilir. Onay kutusunu işaretlemeniz bu özelliği açacaktır.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Attenuate other users while talking as Priority Speaker.</source>
+        <translation>Öncelikli Konuşmacı iken diğer kullanıcıları sesini azalt.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Advanced Attenuation Options</source>
+        <translation>Gelişmiş Ses Kısma Seçenekleri</translation>
+    </message>
+    <message>
+        <location/>
+        <source>If checked, Mumble will only attenuate applications that are using the same output source as Mumble</source>
+        <translation>Seçiliyse, Mumble sadece kendisiyle aynı çıktı kaynağını kullanan uygulamaların sesini kısacaktır.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Attenuate only applications using the same output as Mumble&lt;/b&gt;&lt;br /&gt;If checked, applications that use a different output than Mumble will not be attenuated.</source>
+        <translation>&lt;b&gt;Sadece Mumble ile aynı çıktıyı kullanan uygulamaların sesini kıs&lt;/b&gt;&lt;br /&gt;Seçiliyse, Mumble&apos;dan başka çıktı kullanan uygulamaların sesi kısılmayacaktır.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Only attenuate applications using the same output device</source>
+        <translation>Sadece aynı çıktı cihazını kullanan uygulamaların sesini kıs</translation>
+    </message>
+    <message>
+        <location/>
+        <source>If checked, PulseAudio loopback modules will be attenuated</source>
+        <translation>Seçiliyse, PulseAudio geri döngü öbeklerinin sesi kısılacaktır</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Attenuate PulseAudio loopback modules&lt;/b&gt;&lt;br /&gt;If loopback modules are linked to Mumble&apos;s output device/sink, they will also be attenuated.</source>
+        <translation>&lt;b&gt;PulseAudio geri döngü öbeklerinin sesini kıs&lt;/b&gt;&lt;br /&gt;Eğer geri döngü öbekleri Mumble&apos;ın çıktı cihazına bağlı iseler, onların da sesi kısılacaktır.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Attenuate PulseAudio loopback modules</source>
+        <translation>PulseAudio geri döngü öbeklerinin sesini kıs</translation>
+    </message>
 </context>
 <context>
     <name>AudioOutputDialog</name>
     <message>
-        <location filename="AudioConfigDialog.cpp" line="+135"/>
+        <location filename="AudioConfigDialog.cpp" line="+137"/>
         <source>None</source>
         <translation>Hiçbiri</translation>
     </message>
@@ -1477,7 +1575,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
         <translation>Ses Çıktısı</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+123"/>
         <location line="+19"/>
         <location line="+8"/>
         <source>%1 ms</source>
@@ -1502,7 +1600,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
 <context>
     <name>AudioOutputSample</name>
     <message>
-        <location filename="AudioOutputSample.cpp" line="+211"/>
+        <location filename="AudioOutputSample.cpp" line="+185"/>
         <source>Choose sound file</source>
         <translation>Ses dosyası seçiniz</translation>
     </message>
@@ -1520,8 +1618,9 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
 <context>
     <name>AudioStats</name>
     <message>
-        <location filename="AudioStats.cpp" line="+387"/>
+        <location filename="AudioStats.cpp" line="+363"/>
         <source>&gt;1000 ms</source>
+        <oldsource>&gt;1000ms</oldsource>
         <translation>&gt;1000 ms</translation>
     </message>
     <message>
@@ -1557,6 +1656,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
     <message>
         <location/>
         <source>This shows the peak power of the speakers in the last frame (20 ms). Unless you are using a multi-channel sampling method (such as ASIO) with speaker channels configured, this will be 0. If you have such a setup configured, and this still shows 0 while you&apos;re playing audio from other programs, your setup is not working.</source>
+        <oldsource>This shows the peak power in the last frame (20 ms) of the speakers. Unless you are using a multi-channel sampling method (such as ASIO) with speaker channels configured, this will be 0. If you have such a setup configured, and this still shows 0 while you're playing audio from other programs, your setup is not working.</oldsource>
         <translation>Son çerçevede (20 ms) hoparlörlerin azami seviyesini gösterir. Hoparlör kanalları yapılandırılmış çoklu-kanal örnekleme metodu kullanmıyorsanız bu 0 olacaktır. Eğer böyle bir düzenek yapılandırdıysanız ve başka uygulamalarda ses çalındığında bu değer hâlâ sıfırı gösteriyorsa, düzeneğiniz çalışmıyor demektir.</translation>
     </message>
     <message>
@@ -1815,6 +1915,7 @@ Güncel kanal tarafından alınmış üyelerin listesini içerir. Üst kanallard
     <message>
         <location/>
         <source>Allows positioning of sound</source>
+        <oldsource>Allows positioning of sound.</oldsource>
         <translation>Sesin konumsal olarak işlenmesini etkinleştirir</translation>
     </message>
     <message>
@@ -1850,7 +1951,7 @@ Lütfen bu sihirbaz etkin olduğu sürece, dinleyebilmeniz için sesin yerel dö
     <message>
         <location/>
         <source>&lt;p&gt;
-To keep latency to an absolute minimum, it&apos;s important to buffer as little audio as possible on the soundcard. However, many soundcards report that they require a much smaller buffer than what they can actually work with, so the only way to set this value is to try and fail.
+To keep latency to an absolute minimum, it's important to buffer as little audio as possible on the soundcard. However, many soundcards report that they require a much smaller buffer than what they can actually work with, so the only way to set this value is to try and fail.
 &lt;/p&gt;
 &lt;p&gt;
 You should hear a voice sample. Change the slider below to the lowest value which gives &lt;b&gt;no&lt;/b&gt; interruptions or jitter in the sound. Please note that local echo is disabled during this test.
@@ -1877,7 +1978,7 @@ Bir ses örneği duymalısınız. Aşağıdaki göstergeci, &lt;b&gt;hiçbir&lt;
     <message>
         <location/>
         <source>&lt;p&gt;
-Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there&apos;s an option to enable a &quot;Microphone boost&quot; make sure it&apos;s checked.
+Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there's an option to enable a &quot;Microphone boost&quot; make sure it's checked.
 &lt;/p&gt;
 &lt;p&gt;
 Speak loudly, as when you are annoyed or excited. Decrease the volume in the sound control panel until the bar below stays as high as possible in the blue and green but &lt;b&gt;not&lt;/b&gt; the red zone while you speak.
@@ -1911,7 +2012,7 @@ The graph below shows the position of &lt;font color=&quot;red&quot;&gt;you&lt;/
 &lt;/p&gt;
 </source>
         <translation>&lt;p&gt;
-Mumble bazı oyunlar için konumsal sesi destekler ve diğer kullanıcıların seslerini oyunda bulundukları yere uygun olarak konumlayar. Bulundukları yere göre, konuşanların seslerinin hacmi, diğer kullanıcılara göre yön ve mesafeyi taklit edecek şekilde değiştirilecektir. Bu tip konumlama işletim sisteminizde hoparlör yapılandırmanızın doğru olmasına dayanır, dolayısıyla bu burada denenecektir.
+Mumble bazı oyunlar için konumsal sesi destekler ve diğer kullanıcıların seslerini oyunda bulundukları yere uygun olarak konumlar. Bulundukları yere göre, konuşanların seslerinin hacmi, diğer kullanıcılara göre yön ve mesafeyi taklit edecek şekilde değiştirilecektir. Bu tip konumlama işletim sisteminizde hoparlör yapılandırmanızın doğru olmasına dayanır, dolayısıyla bu burada denenecektir.
 &lt;/p&gt;
 &lt;p&gt;
 Aşağıdaki grafik kuşbaşı görünüşle &lt;font color=&quot;red&quot;&gt;sizi&lt;/font&gt;, &lt;font color=&quot;yellow&quot;&gt;hoparlörlerinizi&lt;/font&gt; ve &lt;font color=&quot;green&quot;&gt;hareket hâlinde bir ses kaynağı&lt;/font&gt; gösterir. Sesi kanallarda hareket hâlinde olarak duymanız gerekir.
@@ -1929,7 +2030,7 @@ Aşağıdaki grafik kuşbaşı görünüşle &lt;font color=&quot;red&quot;&gt;s
 Congratulations. You should now be ready to enjoy a richer sound experience with Mumble.
 &lt;/p&gt;
 &lt;p&gt;
-Mumble is under continuous development, and the development team wants to focus on the features that benefit the most users. To this end, Mumble supports submitting anonymous statistics about your configuration to the developers. These statistics are essential for future development, and also make sure the features you use aren&apos;t deprecated.
+Mumble is under continuous development, and the development team wants to focus on the features that benefit the most users. To this end, Mumble supports submitting anonymous statistics about your configuration to the developers. These statistics are essential for future development, and also make sure the features you use aren't deprecated.
 &lt;/p&gt;
 </source>
         <translation>&lt;p&gt;
@@ -1992,6 +2093,7 @@ Tebrikler. Artık Mumble ile daha zengin bir ses deneyimi yaşayabileceksiniz.
     <message>
         <location/>
         <source>Next you need to adjust the following slider. The first few utterances you say should end up in the green area (definitive speech). While talking, you should stay inside the yellow (might be speech) and when you&apos;re not talking, everything should be in the red (definitively not speech).</source>
+        <oldsource>Next you need to adjust the following two sliders. The first few utterances you say should end up in the green area (definitive speech). While talking, you should stay inside the yellow (might be speech) and when you're not talking, everything should be in the red (definitively not speech).</oldsource>
         <translation>Şimdi aşağıdaki göstergeyi ayarlamanız gerekiyor. Söyleyeceğiniz ilk heceler yeşil alanda olmalıdır (mutlak konuşma). Konuştuğunuz sırada sarı alanda kalmanız gerekir (muhtemel konuşma) ve konuşmadığınızda, her şey kırmızı alanda olmalıdır (kesin olarak konuşma değil).</translation>
     </message>
     <message>
@@ -2055,7 +2157,7 @@ Tebrikler. Artık Mumble ile daha zengin bir ses deneyimi yaşayabileceksiniz.
         <translation>Konuşma sentezini devre dışı bırak ve yerine sesleri kullan.</translation>
     </message>
     <message>
-        <location filename="AudioWizard.cpp" line="+309"/>
+        <location filename="AudioWizard.cpp" line="+291"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
@@ -2107,12 +2209,19 @@ Tebrikler. Artık Mumble ile daha zengin bir ses deneyimi yaşayabileceksiniz.
     <message>
         <location/>
         <source>&lt;p&gt;
-Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there&apos;s an option to enable a &quot;Microphone boost&quot; make sure it&apos;s checked.
+Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there's an option to enable a &quot;Microphone boost&quot; make sure it's checked.
 &lt;/p&gt;
 &lt;p&gt;
 Speak loudly, as when you are annoyed or excited. Decrease the volume in the sound control panel until the bar below stays as high as possible in the striped and the empty but &lt;b&gt;not&lt;/b&gt; the crisscrossed zone while you speak.
 &lt;/p&gt;
 </source>
+        <oldsource>&lt;p&gt;
+Open your sound control panel and go to the recording settings. Make sure the microphone is selected as active input with maximum recording volume. If there's an option to enable a &quot;Microphone boost&quot; make sure it's checked.
+&lt;/p&gt;
+&lt;p&gt;
+Speak loudly, as when you are annoyed or excited. Decrease the volume in the sound control panel until the bar below stays as high as possible in the striped and the empty but &lt;b&gt;not&lt;/b&gt; the criss-crossed zone while you speak.
+&lt;/p&gt;
+</oldsource>
         <comment>For high contrast mode</comment>
         <translation>&lt;p&gt;
 Ses kontrol panelini açıp kayıt ayarlarına gidiniz. Mikrofonun azami hacimde etkin girdi olarak seçildiğinden emin olunuz. Eğer &quot;Mikrofon güçlendirme&quot; ya da &quot;boost&quot; gibi bir seçenek varsa seçildiğinden emin olunuz.
@@ -2207,36 +2316,146 @@ Sinirli ya da coştuğunuz zamanlardaki gibi yüksek sesle konuşunuz. Kontrol p
         <source>&amp;Remove</source>
         <translation>&amp;Kaldır</translation>
     </message>
+    <message>
+        <location/>
+        <source>Ban List</source>
+        <translation>Yasaklı Listesi</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Search field</source>
+        <translation>Arama alanı</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This is the search field. Use it to find bans that have this username set in the username field.</source>
+        <translation>Burası arama alanı. Kullanıcı adı alanında adını yazdığınız yasaklı kullanıcıları bulmak için kullanın.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Who are you looking for?</source>
+        <translation>Kimi arıyordunuz?</translation>
+    </message>
+    <message>
+        <location/>
+        <source>No nickname</source>
+        <translation>Rumuz yok</translation>
+    </message>
+    <message>
+        <location/>
+        <source>IP address</source>
+        <translation>IP adres</translation>
+    </message>
+    <message>
+        <location/>
+        <source>No IP address</source>
+        <translation>IP adres yok</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Reason for the ban</source>
+        <translation>Yasaklanma sebebi</translation>
+    </message>
+    <message>
+        <location/>
+        <source>No reason</source>
+        <translation>Sebep yok</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Ban end date</source>
+        <translation>Yasak bitiş tarihi</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Ban end date. If you set the same date for start and end, the ban will be permanent (it will not expire).</source>
+        <translation>Yasak bitiş tarihi. Başlangıç ve bitiş için aynı tarihi ayarlarsanız yasak kalıcı olacaktır (Süresiz).</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Certificate hash</source>
+        <translation>Sertifika hash değeri</translation>
+    </message>
+    <message>
+        <location/>
+        <source>No certificate hash</source>
+        <translation>Sertifika hash değeri yok</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Banned users</source>
+        <translation>Yasaklı kullanıcılar</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This is a list with banned users.</source>
+        <translation>Yasaklı kullanıcı listesi.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Use this button if you want to add a new ban.</source>
+        <translation>Yeni yasaklı kullanıcı eklemek istiyorsanız bu düğmeyi kullanın.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Use this button if you want to update ban information.</source>
+        <translation>Yasaklama bilgisini güncellemek için bu düğmeyi kullanın.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Use this button if you want to remove user from the ban list.</source>
+        <translation>Kullanıcıyı yasaklı listesinden kaldırmak için bu düğmeyi kullanın.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Clear all fields</source>
+        <translation>Tüm alanları temizle</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This button clears all fields. Use it if you want to add a new ban.</source>
+        <translation>Bu düğme tüm alanları temizler. Yeni yasaklı kullanıcı eklemek istediğinizde kullanın.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Clear</source>
+        <translation>Temiz</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="BanEditor.cpp" line="+177"/>
+        <source>Ban List - %n Ban(s)</source>
+        <translation><numerusform>Yasaklama listesi - %n yasaklama</numerusform><numerusform>Yasaklama listesi - %n yasaklama</numerusform></translation>
+    </message>
 </context>
 <context>
     <name>CertView</name>
     <message>
-        <location filename="Cert.cpp" line="+53"/>
+        <location filename="Cert.cpp" line="+26"/>
         <source>Name</source>
         <translation>İsim</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Email</source>
         <translation>E-posta</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Issuer</source>
         <translation>Oluşturan</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Expiry Date</source>
         <translation>Sona Erme Tarihi</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+43"/>
         <source>(none)</source>
         <translation>(boş)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+19"/>
         <source>Self-signed</source>
         <translation>Kendisi imzalamış</translation>
     </message>
@@ -2244,17 +2463,12 @@ Sinirli ya da coştuğunuz zamanlardaki gibi yüksek sesle konuşunuz. Kontrol p
 <context>
     <name>CertWizard</name>
     <message>
-        <location line="+90"/>
-        <source>Resolving domain %1.</source>
-        <translation>%1 alanı çözülüyor.</translation>
-    </message>
-    <message>
-        <location line="+6"/>
+        <location line="+85"/>
         <source>Unable to validate email.&lt;br /&gt;Enter a valid (or blank) email to continue.</source>
         <translation>E-posta doğrulanamadı.&lt;br /&gt;Devam etmek için geçerli (ya da boş) bir e-posta giriniz.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+7"/>
         <source>There was an error generating your certificate.&lt;br /&gt;Please try again.</source>
         <translation>Sertifikanızın oluşturulması sırasında bir hata meydana geldi.&lt;br /&gt;Lütfen tekrar deneyiniz.</translation>
     </message>
@@ -2267,6 +2481,11 @@ Sinirli ya da coştuğunuz zamanlardaki gibi yüksek sesle konuşunuz. Kontrol p
         <location line="+5"/>
         <source>The file could not be opened for writing. Please use another file.</source>
         <translation>Dosya yazmak için açılamadı. Lütfen başka bir dosya kullanın.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The file&apos;s permissions could not be set. No certificate and key has been written. Please use another file.</source>
+        <translation>Dosyanın izinleri ayarlanamadı. Hiçbir sertifika ve anahtar yazılmadı. Başka bir dosya kullanınız.</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2289,7 +2508,7 @@ Sinirli ya da coştuğunuz zamanlardaki gibi yüksek sesle konuşunuz. Kontrol p
         <translation>Dosya hiçbir geçerli sertifika ve anahtar içermiyor. Lütfen başka bir dosya kullanın.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+16"/>
         <source>Select file to export certificate to</source>
         <translation>Sertifika dışa aktarmak için dosya seç</translation>
     </message>
@@ -2299,17 +2518,17 @@ Sinirli ya da coştuğunuz zamanlardaki gibi yüksek sesle konuşunuz. Kontrol p
         <translation>Sertifika içe aktarmak için dosya seç</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <source>Unable to resolve domain.</source>
-        <translation>Alan çözülemedi.</translation>
+        <location line="+34"/>
+        <source>Unable to import. Missing password or incompatible file type.</source>
+        <translation>İçe aktarım yapılamıyor. Eksik parola ya da uyumsuz dosya türü.</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+60"/>
         <source>Mumble User</source>
         <translation>Mumble Kullanıcısı</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="+454"/>
+        <location filename="main.cpp" line="+501"/>
         <source>&lt;b&gt;Certificate Expiry:&lt;/b&gt; Your certificate is about to expire. You need to renew it, or you will no longer be able to connect to servers you are registered on.</source>
         <translation>&lt;b&gt;Sertifika Ömrü:&lt;/b&gt; Sertifikanızın süresi dolmak üzere ve yenilemeniz lazım, aksi takdirde oturumunuz bulunan sunuculara bağlanamayacaksınız.</translation>
     </message>
@@ -2399,6 +2618,7 @@ Sinirli ya da coştuğunuz zamanlardaki gibi yüksek sesle konuşunuz. Kontrol p
     <message>
         <location/>
         <source>&lt;p&gt;Mumble can import certificates stored in PKCS #12 format. This is the format used when exporting a key from Mumble, and also when exporting keys from Firefox, Internet Explorer, Opera etc.&lt;/p&gt;&lt;p&gt;If the file is password protected, you will need the password to import the certificate.&lt;/p&gt;</source>
+        <oldsource>&lt;p&gt;Mumble can import certificates stored in PKCS #12 format. This is the format used when exporting a key from Mumble, and also when exporting keys from FireFox, Internet Explorer, Opera etc.&lt;/p&gt;&lt;p&gt;If the file is password protected, you will need the password to import the certificate.&lt;/p&gt;</oldsource>
         <translation>&lt;p&gt;Mumble PKCS #12 biçiminde saklanan sertifikaları içe aktarabilir. Bu, Mumble, Firefox, Internet Explorer, Opera vb. tarafından anahtar dışa aktarımında kullanılan biçimdir.&lt;/p&gt;&lt;p&gt;Dosya parola ile korunmuşsa, sertifikayı içe aktarabilmek için bu parolaya ihtiyacınız olacaktır.&lt;/p&gt;</translation>
     </message>
     <message>
@@ -2476,7 +2696,7 @@ Sinirli ya da coştuğunuz zamanlardaki gibi yüksek sesle konuşunuz. Kontrol p
         <source>&lt;p&gt;You already have a certificate stored in Mumble, and you are about to replace it.&lt;/p&gt;
 &lt;p&gt;If you are upgrading to a certificate issued to you by a trusted CA and the email addresses match your current certificate, this is completely safe, and servers you connect to will automatically recognize the strong certificate for your email address.
 &lt;/p&gt;
-&lt;p&gt;If this is not the case, you will no longer be recognized by any server you previously have authenticated with. If you haven&apos;t been registered on any server yet, this is nothing to worry about.
+&lt;p&gt;If this is not the case, you will no longer be recognized by any server you previously have authenticated with. If you haven't been registered on any server yet, this is nothing to worry about.
 &lt;/p&gt;
 &lt;p&gt;
 Are you sure you wish to replace your certificate?
@@ -2605,7 +2825,7 @@ Sertifikanızı değiştirmek istediğinize emin misiniz?
     </message>
     <message>
         <location/>
-        <source>&lt;p&gt;Mumble can use certificates to authenticate with servers. Using certificates avoids passwords, meaning you don&apos;t need to disclose any password to the remote site. It also enables very easy user registration.&lt;/p&gt;&lt;p&gt;While Mumble can work without certificates, the majority of servers will expect you to have one.&lt;/p&gt;
+        <source>&lt;p&gt;Mumble can use certificates to authenticate with servers. Using certificates avoids passwords, meaning you don't need to disclose any password to the remote site. It also enables very easy user registration.&lt;/p&gt;&lt;p&gt;While Mumble can work without certificates, the majority of servers will expect you to have one.&lt;/p&gt;
 &lt;p&gt;
 It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://mumble.info/certificate.php&quot;&gt;create a trusted certificate&lt;/a&gt;.
 &lt;/p&gt;
@@ -2627,7 +2847,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
 <context>
     <name>ChanACL</name>
     <message>
-        <location filename="../ACL.cpp" line="+230"/>
+        <location filename="../ACL.cpp" line="+205"/>
         <source>None</source>
         <translation>Boş</translation>
     </message>
@@ -2790,7 +3010,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
 <context>
     <name>ChatbarTextEdit</name>
     <message>
-        <location filename="CustomElements.cpp" line="+108"/>
+        <location filename="CustomElements.cpp" line="+82"/>
         <source>Paste and &amp;Send</source>
         <oldsource>Paste and send</oldsource>
         <translation>Yapıştır ve &amp;yolla</translation>
@@ -2804,7 +3024,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
 <context>
     <name>ClientUser</name>
     <message>
-        <location filename="ClientUser.cpp" line="+134"/>
+        <location filename="ClientUser.cpp" line="+110"/>
         <source>Friend</source>
         <translation>Arkadaş</translation>
     </message>
@@ -2857,7 +3077,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
 <context>
     <name>ConfigDialog</name>
     <message>
-        <location filename="ConfigDialog.cpp" line="+55"/>
+        <location filename="ConfigDialog.cpp" line="+30"/>
         <source>Accept changes</source>
         <translation>Değişiklikleri kabul et</translation>
     </message>
@@ -2904,6 +3124,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
     <message>
         <location line="+1"/>
         <source>This button will restore the defaults for the settings on the current page. Other pages will not be changed.&lt;br /&gt;To restore all settings to their defaults, you will have to use this button on every page.</source>
+        <oldsource>This button will restore the settings for the current page only to their defaults. Other pages will not be changed.&lt;br /&gt;To restore all settings to their defaults, you will have to use this button on every page.</oldsource>
         <translation>Bu buton şu andaki sayfa için varsayılan değerleri kuracaktır. Diğer sayfalar değişime uğramayacaktır.&lt;br /&gt;Tüm ayarları varsayılan değerlerine geri almak için bu butonu her sayfada kullanmanız gerekir.</translation>
     </message>
     <message>
@@ -2920,24 +3141,24 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
 <context>
     <name>ConnectDialog</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="+906"/>
+        <location filename="ConnectDialog.cpp" line="+1020"/>
         <source>Connecting to %1</source>
         <translation>%1 adresine bağlanılıyor</translation>
     </message>
     <message>
-        <location line="-515"/>
-        <location line="+515"/>
+        <location line="-624"/>
+        <location line="+624"/>
         <source>Enter username</source>
         <translation>Kullanıcı ismi giriniz</translation>
     </message>
     <message>
-        <location line="-515"/>
+        <location line="-624"/>
         <source>Adding host %1</source>
         <translation>%1 ekleniyor</translation>
     </message>
     <message>
         <location filename="ConnectDialog.ui"/>
-        <location filename="ConnectDialog.cpp" line="+61"/>
+        <location filename="ConnectDialog.cpp" line="+76"/>
         <source>Servername</source>
         <translation>Sunucu ismi</translation>
     </message>
@@ -2998,18 +3219,18 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
         <translation>%1 kbit/s</translation>
     </message>
     <message>
-        <location line="+293"/>
+        <location line="+350"/>
         <source>&amp;Connect</source>
         <translation>&amp;Bağlan</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+76"/>
         <source>&amp;Filters</source>
         <translation>&amp;Filtreler</translation>
     </message>
     <message>
         <location filename="ConnectDialog.ui"/>
-        <location filename="ConnectDialog.cpp" line="-338"/>
+        <location filename="ConnectDialog.cpp" line="-425"/>
         <source>Users</source>
         <translation>Kullanıcılar</translation>
     </message>
@@ -3019,7 +3240,7 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
         <translation>Sürüm</translation>
     </message>
     <message>
-        <location line="+1015"/>
+        <location line="+1145"/>
         <source>Failed to fetch server list</source>
         <translation>Sucunu listesi alımı başarısız oldu</translation>
     </message>
@@ -3080,13 +3301,13 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
     </message>
     <message>
         <location/>
-        <location filename="ConnectDialog.cpp" line="-716"/>
+        <location filename="ConnectDialog.cpp" line="-788"/>
         <source>&amp;Edit...</source>
         <translation>&amp;Düzenle...</translation>
     </message>
     <message>
         <location/>
-        <location filename="ConnectDialog.cpp" line="-6"/>
+        <location filename="ConnectDialog.cpp" line="-7"/>
         <source>&amp;Add New...</source>
         <translation>&amp;Yeni Ekle...</translation>
     </message>
@@ -3136,12 +3357,15 @@ It is &lt;b&gt;strongly&lt;/b&gt; recommended that you &lt;a href=&quot;http://m
     <message>
         <location/>
         <source>Internet address of the server.</source>
+        <oldsource>Internet address of the server. </oldsource>
         <translation>Sunucunun İnternet adresi.</translation>
     </message>
     <message>
         <location/>
         <source>&lt;b&gt;Address&lt;/b&gt;&lt;br/&gt;
 Internet address of the server. This can be a normal hostname, an IPv4/IPv6 address or a Bonjour service identifier. Bonjour service identifiers have to be prefixed with a &apos;@&apos; to be recognized by Mumble.</source>
+        <oldsource>&lt;b&gt;Address&lt;/b&gt;&lt;/br&gt;
+Internet address of the server. This can be a normal hostname, an ipv4/6 address or a bonjour service identifier. Bonjour service identifiers have to be prefixed with a '@' to be recognized by Mumble.</oldsource>
         <translation>&lt;b&gt;Adres&lt;/b&gt;&lt;br/&gt;
 Sunucunun İnternet adresi. Bu normal bir bilgisayar ismi, bir İPv4/İPv6 adresi ya da bir Bonjour servis tanımlayıcısı olabilir. Bonjour servis tanımlayıcılarına Mumbe tarafından tanınmaları için &apos;@&apos; öneki konulmalıdır.</translation>
     </message>
@@ -3185,7 +3409,7 @@ Sunucuya yollanacak kullanıcı ismi. Sunucunun kullanıcı isimlerine sınırla
         <translation>Etiket</translation>
     </message>
     <message>
-        <location filename="ConnectDialog.cpp" line="-75"/>
+        <location filename="ConnectDialog.cpp" line="-126"/>
         <source>Add Server</source>
         <translation>Sunucu Ekle</translation>
     </message>
@@ -3218,11 +3442,36 @@ Label of the server. This is what the server will be named like in your server l
         <translation>&lt;b&gt;Etiket&lt;/b&gt;&lt;br/&gt;
 Sunucunun etiketi. Bu, sunucu listenizde sunucunun ismidir ve istediğinizi seçebilirsiniz.</translation>
     </message>
+    <message>
+        <location/>
+        <source>Local server label</source>
+        <translation>Yerel sunucu etiketi</translation>
+    </message>
+    <message>
+        <location/>
+        <source>127.0.0.1</source>
+        <translation>127.0.0.1</translation>
+    </message>
+    <message>
+        <location/>
+        <source>64738</source>
+        <translation>64738</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Your username</source>
+        <translation>Kullanıcı isminiz</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Your password</source>
+        <translation>Parolanız</translation>
+    </message>
 </context>
 <context>
     <name>CoreAudioSystem</name>
     <message>
-        <location filename="CoreAudio.cpp" line="+87"/>
+        <location filename="CoreAudio.cpp" line="+64"/>
         <source>Default Device</source>
         <translation>Varsayılan cihaz</translation>
     </message>
@@ -3230,7 +3479,7 @@ Sunucunun etiketi. Bu, sunucu listenizde sunucunun ismidir ve istediğinizi seç
 <context>
     <name>CrashReporter</name>
     <message>
-        <location filename="CrashReporter.cpp" line="+40"/>
+        <location filename="CrashReporter.cpp" line="+15"/>
         <source>Mumble Crash Report</source>
         <translation>Mumble Çökme Raporu</translation>
     </message>
@@ -3247,6 +3496,7 @@ Sunucunun etiketi. Bu, sunucu listenizde sunucunun ismidir ve istediğinizi seç
     <message>
         <location line="+9"/>
         <source>Please describe briefly, in English, what you were doing at the time of the crash</source>
+        <oldsource>Please briefly describe what you were doing at the time of the crash</oldsource>
         <translation>Lütfen çökme sırasında ne yapmakta olduğunuzu kısaca ve İngilizce olarak belirtiniz</translation>
     </message>
     <message>
@@ -3299,7 +3549,7 @@ Sunucunun etiketi. Bu, sunucu listenizde sunucunun ismidir ve istediğinizi seç
 <context>
     <name>DXAudioInput</name>
     <message>
-        <location filename="DirectSound.cpp" line="+173"/>
+        <location filename="DirectSound.cpp" line="+151"/>
         <source>Default DirectSound Voice Input</source>
         <translation>Varsayılan DirectSound Ses Girişi</translation>
     </message>
@@ -3345,7 +3595,7 @@ Sunucunun etiketi. Bu, sunucu listenizde sunucunun ismidir ve istediğinizi seç
 <context>
     <name>Database</name>
     <message>
-        <location filename="Database.cpp" line="+89"/>
+        <location filename="Database.cpp" line="+92"/>
         <source>Mumble failed to initialize a database in any
 of the possible locations.</source>
         <translation>Mumble mümkün yerlerin hiçbirinde
@@ -3354,13 +3604,22 @@ veritabanını başlatamadı.</translation>
     <message>
         <location line="+7"/>
         <source>The database &apos;%1&apos; is read-only. Mumble cannot store server settings (i.e. SSL certificates) until you fix this problem.</source>
+        <oldsource>The database '%1' is read-only. Mumble can not store server settings (ie. SSL certificates) until you fix this problem.</oldsource>
         <translation>&apos;%1&apos; veritabanı sadece okunabilir. Mumble SSL sertifikaları gibi sunucu ayarlarını bu problem çözülene dek saklayamaz.</translation>
+    </message>
+</context>
+<context>
+    <name>DeveloperConsole</name>
+    <message>
+        <location filename="DeveloperConsole.cpp" line="+31"/>
+        <source>Developer Console</source>
+        <translation>Geliştirici Konsolü</translation>
     </message>
 </context>
 <context>
     <name>DockTitleBar</name>
     <message>
-        <location filename="CustomElements.cpp" line="+180"/>
+        <location filename="CustomElements.cpp" line="+189"/>
         <source>Drag here</source>
         <translation>Buradan sürükle</translation>
     </message>
@@ -3429,11 +3688,6 @@ veritabanını başlatamadı.</translation>
     </message>
     <message>
         <location/>
-        <source>Enable Global Shortcuts</source>
-        <translation>Genel Kısayolları Etkinleştir</translation>
-    </message>
-    <message>
-        <location/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble can currently only use mouse buttons and keyboard modifier keys (Alt, Ctrl, Cmd, etc.) for global shortcuts.&lt;/p&gt;&lt;p&gt;If you want more flexibility, you can enable &lt;span style=&quot; font-style:italic;&quot;&gt;Access for assistive devices&lt;/span&gt; in the system&apos;s Accessibility preferences. However, please note that this change also potentially allows malicious programs to read what is typed on your keyboard.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble, genel kısayollar için şu anda sadece fare düğmelerini ve klavyenin birleştirici tuşlarını (Alt, Ctrl, Cmd vs.) kullanabilir.&lt;/p&gt;&lt;p&gt;Daha fazla esneklik istiyorsanız sisteminizin Yardımcı teknolojiler veya Erişilebilirlik tercihlerinde &lt;span style=&quot; font-style:italic;&quot;&gt;yardımcı cihazlar için erişimi&lt;/span&gt; etkinleştirebilirsiniz. Ancak bunun potansiyel olarak kötücül programların klavyenizde ne yazıldığını okumalarına imkân verebileceğini unutmayınız.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -3447,11 +3701,21 @@ veritabanını başlatamadı.</translation>
         <source>Skip</source>
         <translation>Atla</translation>
     </message>
+    <message>
+        <location/>
+        <source>Enable Global Shortcuts</source>
+        <translation>Genel Kısayolları Etkinleştir</translation>
+    </message>
 </context>
 <context>
     <name>GlobalShortcutConfig</name>
     <message>
-        <location filename="GlobalShortcut.cpp" line="+721"/>
+        <location filename="GlobalShortcut.cpp" line="+540"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble can currently only use mouse buttons and keyboard modifier keys (Alt, Ctrl, Cmd, etc.) for global shortcuts.&lt;/p&gt;&lt;p&gt;If you want more flexibility, you can add Mumble as a trusted accessibility program in the Security &amp; Privacy section of your Mac&apos;s System Preferences.&lt;/p&gt;&lt;p&gt;In the Security &amp; Privacy preference pane, change to the Privacy tab. Then choose Accessibility (near the bottom) in the list to the left. Finally, add Mumble to the list of trusted accessibility programs.&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Genel kısayollar için güncel olarak Mumble sadece fare düğmelerini ve klavyenin değiştirici düğmelerini (Alt, Ctrl, Cmd, vs.) kullanabilir.&lt;/p&gt;&lt;p&gt;Eğer daha fazla esneklik istiyorsanız Mac bilgisayarınızın Sistem Tercihlerinin Güvenlik ve Gizlilik bölümünde Mumble&apos;ı güvenilir erişilebilirlik programı olarak ekleyebilirsiniz. &lt;/p&gt;&lt;p&gt; Güvenlik ve Gizlilik panosunda Gizlilik semesine geçin. Ardından sol köşedeki listede Erişilebilirliği (alta yakın) seçin. Son olarak, Mumble&apos;ı güvenilir erişilebilirlik programlarına ekleyin.&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+115"/>
         <source>Shortcuts</source>
         <translation>Kısayollar</translation>
     </message>
@@ -3463,6 +3727,7 @@ veritabanını başlatamadı.</translation>
     <message>
         <location line="+1"/>
         <source>&lt;b&gt;This is the global shortcut key combination.&lt;/b&gt;&lt;br /&gt;Click this field and then press the desired key/button combo to rebind. Double-click to clear.</source>
+        <oldsource>&lt;b&gt;This is the global shortcut key combination.&lt;/b&gt;&lt;br /&gt;Double-click this field and then the desired key/button combo to rebind.</oldsource>
         <translation>&lt;b&gt;Bu, genel kısayol tuş kombinasyonudur.&lt;/b&gt;&lt;br /&gt;Bu alana tıklayıp istediğiniz tuş/butonlara basarak bağlama yapabilirsiniz. Temizlemek için çift tıklayınız.</translation>
     </message>
     <message>
@@ -3562,7 +3827,7 @@ veritabanını başlatamadı.</translation>
 <context>
     <name>GlobalShortcutX</name>
     <message>
-        <location filename="GlobalShortcut_unix.cpp" line="+339"/>
+        <location filename="GlobalShortcut_unix.cpp" line="+354"/>
         <source>Mouse %1</source>
         <translation>Fare %1</translation>
     </message>
@@ -3570,7 +3835,7 @@ veritabanını başlatamadı.</translation>
 <context>
     <name>LCD</name>
     <message>
-        <location filename="LCD.cpp" line="+282"/>
+        <location filename="LCD.cpp" line="+271"/>
         <source>Not connected</source>
         <translation>Çevrimdışı</translation>
     </message>
@@ -3578,7 +3843,7 @@ veritabanını başlatamadı.</translation>
 <context>
     <name>LCDConfig</name>
     <message>
-        <location line="-160"/>
+        <location line="-175"/>
         <source>Enable this device</source>
         <translation>Bu cihazı etkinleştir</translation>
     </message>
@@ -3660,7 +3925,7 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
 <context>
     <name>Log</name>
     <message>
-        <location filename="Log.cpp" line="+200"/>
+        <location filename="Log.cpp" line="+216"/>
         <source>Debug</source>
         <translation>Hata ayıklama</translation>
     </message>
@@ -3690,12 +3955,7 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Sunucu Bağlantı Dışı</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>You self-muted/deafened</source>
-        <translation>Kendinizi susturmuş/sağır yapmışsınız</translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+7"/>
         <source>Other self-muted/deafened</source>
         <translation>Başkası kendini susturmuş/sağır yapmış</translation>
     </message>
@@ -3735,7 +3995,12 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Kullanıcı kovuldu</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+1"/>
+        <source>You self-muted</source>
+        <translation>Kendinizi susturmuşsunuz</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>User muted (you)</source>
         <translation>Kullanıcı susturuldu (siz)</translation>
     </message>
@@ -3760,17 +4025,47 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Kullanıcı Kanaldan Çıktı</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>You self-unmuted</source>
+        <translation>Kendinizi susturmanızı kaldırdınız</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>You self-deafened</source>
+        <translation>Kendinizi sağır yapmışsınız</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>You self-undeafened</source>
+        <translation>Kendinizi sağır etmenizi kaldırdınız</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>User renamed</source>
+        <translation>Kullanıcı yeniden adlandırıldı</translation>
+    </message>
+    <message>
         <location line="+59"/>
         <source>the server</source>
         <translation>sunucu</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+119"/>
+        <source>[[ No valid image ]]</source>
+        <translation>[[ Geçerli resim yok ]]</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>[[ Invalid size ]]</source>
+        <translation>[[ Geçersiz boyut ]]</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>[[ Text object too large to display ]]</source>
         <translation>[[ Metin görüntülenebilecekten uzun ]]</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+46"/>
         <source>[Date changed to %1]
 </source>
         <translation>[Tarih şu değere değiştirildi: %1]
@@ -3805,7 +4100,7 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
 <context>
     <name>LogConfig</name>
     <message>
-        <location line="-440"/>
+        <location line="-504"/>
         <source>Toggle console for %1 events</source>
         <translation>%1 olayları için konsolu açıp kapat</translation>
     </message>
@@ -3815,12 +4110,12 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>%1 olayları için pop-up bildirimlerini açıp kapat</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+10"/>
         <source>Toggle Text-To-Speech for %1 events</source>
         <translation>%1 olayları için konuşma sentezini aç veya kapat</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-9"/>
         <source>Click here to toggle sound notification for %1 events</source>
         <translation>%1 olayları için sesli bildirimleri açıp kapat</translation>
     </message>
@@ -3837,21 +4132,24 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     <message>
         <location line="+1"/>
         <source>Click here to toggle pop-up notifications for %1 events.&lt;br /&gt;If checked, a notification pop-up will be created by Mumble for every %1 event.</source>
+        <oldsource>Click here to toggle pop-up notifications for %1 events.&lt;br /&gt;If checked, a notification pop-up will be created by mumble for every %1 event.</oldsource>
         <translation>%1 olaylarının pop-up bildirimlerini açıp kapatmak için buraya tıklayınız.&lt;br /&gt;Etkinleştirilirse, her %1 olayı için Mumble bir pop-up bildirimi oluşturur.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+2"/>
         <source>Path to sound file used for sound notifications in the case of %1 events.&lt;br /&gt;Single click to play&lt;br /&gt;Double-click to change&lt;br /&gt;Ensure that sound notifications for these events are enabled or this field will not have any effect.</source>
         <translation>%1 olaylarının ses bildirimleri için ses dosyalarına erişim yolu&lt;br /&gt;Çalmak için tıklayın&lt;br /&gt;Değiştirmek için çift tıklayın&lt;br /&gt;Bu olaylar için sesli bildirimlerin etkinleştirildiğinden emin olunuz, aksi takdirde bu alanın hiçbir etkisi olmaz.</translation>
     </message>
     <message>
-        <location line="-2"/>
+        <location line="+4"/>
         <source>Click here to toggle Text-To-Speech for %1 events.&lt;br /&gt;If checked, Mumble uses Text-To-Speech to read %1 events out loud to you. Text-To-Speech is also able to read the contents of the event which is not true for sound files. Text-To-Speech and sound files cannot be used at the same time.</source>
+        <oldsource>Click here to toggle sound notification for %1 events.&lt;br /&gt;If checked, Mumble uses a soundfile predefined by you to indicate %1 events. Soundfiles and Text-To-Speech cannot be used at the same time.</oldsource>
         <translation>%1 olayları için konuşma sentezini açık kapamak için buraya tıklayınız.&lt;br /&gt;Etkinleştirilirse, Mumble %1 olaylarını yüksek sesle ve konuşma sentezi ile okur. Konuşma sentezi olayın içeriğini de okuyabilir ki ses dosyaları bunu yapamaz. Konuşma sentezi ve ses dosyaları aynı zamanda kullanılamaz.</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-5"/>
         <source>Click here to toggle sound notification for %1 events.&lt;br /&gt;If checked, Mumble uses a sound file predefined by you to indicate %1 events. Sound files and Text-To-Speech cannot be used at the same time.</source>
+        <oldsource>Path to soundfile used for sound notifications in the case of %1 events.&lt;br /&gt;Single click to play&lt;br /&gt;Doubleclick to change&lt;br /&gt;Be sure that sound notifications for these events are enabled or this field will not have any effect.</oldsource>
         <translation>%1 olayları için sesli bildirimleri açıp kapamak için buraya tıklayınız.&lt;br /&gt;Etkinleştirilirse, Mumble seçtiğiniz ses dosyasını %1 olaylarını belirtmek için çalar. Ses dosyaları ve konuşma sentezi aynı zamanda kullanılamaz.</translation>
     </message>
     <message>
@@ -3978,18 +4276,18 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
 <context>
     <name>LookConfig</name>
     <message>
-        <location filename="LookConfig.cpp" line="+55"/>
-        <location line="+11"/>
+        <location filename="LookConfig.cpp" line="+30"/>
         <source>System default</source>
         <translation>Varsayılan</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+21"/>
+        <location line="+49"/>
         <source>None</source>
         <translation>Hiçbiri</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-48"/>
         <source>Only with users</source>
         <translation>Sadece kullanıcı bulunan</translation>
     </message>
@@ -4000,28 +4298,32 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     </message>
     <message>
         <location line="+2"/>
+        <location line="+4"/>
         <source>Ask</source>
         <translation>Sor</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-3"/>
+        <location line="+4"/>
         <source>Do Nothing</source>
         <translation>Hiçbir şey yapma</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-3"/>
+        <location line="+4"/>
         <source>Move</source>
         <translation>Taşı</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>User Interface</source>
-        <translation>Kullanıcı arayüzü</translation>
+        <location line="+19"/>
+        <source>&lt;a href=&quot;%1&quot;&gt;Browse&lt;/a&gt;</source>
+        <extracomment>This link is located next to the theme heading in the ui config and opens the user theme directory</extracomment>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Tara&lt;/a&gt;</translation>
     </message>
     <message>
-        <location line="+133"/>
-        <source>Choose skin file</source>
-        <translation>Tema dosyası seçiniz</translation>
+        <location line="+7"/>
+        <source>User Interface</source>
+        <translation>Kullanıcı arayüzü</translation>
     </message>
     <message>
         <location filename="LookConfig.ui"/>
@@ -4111,37 +4413,8 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     <message>
         <location/>
         <source>This sets the behavior of channel drags; it can be used to prevent accidental dragging. &lt;i&gt;Move&lt;/i&gt; moves the channel without prompting. &lt;i&gt;Do Nothing&lt;/i&gt; does nothing and prints an error message. &lt;i&gt;Ask&lt;/i&gt; uses a message box to confirm if you really wanted to move the channel.</source>
+        <oldsource>This sets the behavior of channel drags; it can be used to prevent accidental dragging. &lt;i&gt;Move Channel&lt;/i&gt; moves the channel without prompting. &lt;i&gt;Do Nothing&lt;/i&gt; does nothing and prints an error message. &lt;i&gt;Ask&lt;/i&gt; uses a message box to confirm if you really wanted to move the channel.</oldsource>
         <translation>İstenmeyen kaydırmaların önüne geçmek için kaydırma davranışını belirler. &lt;i&gt;Kaydır&lt;/i&gt; kanalları hiçbir teyit istemeden kaydırır. &lt;i&gt;Hiçbir şey yapma&lt;/i&gt; hiçbir faaliyette bulunmaz ve bir hata mesajı gösterir. &lt;i&gt;Sor&lt;/i&gt; kanalı gerçekten kaydırmak isteyip istemediğinizi sorar.</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Style</source>
-        <translation>Biçim</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Basic widget style</source>
-        <translation>Temel widget tarzı</translation>
-    </message>
-    <message>
-        <location/>
-        <source>&lt;b&gt;This sets the basic look and feel to use.&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Temel görüntüyü seçer.&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Skin</source>
-        <translation>Tema</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Skin file to use</source>
-        <translation>Kullanılacak tema dosyası</translation>
-    </message>
-    <message>
-        <location/>
-        <source>&lt;b&gt;This sets which skin Mumble should use.&lt;/b&gt;&lt;br /&gt;The skin is a style file applied on top of the basic widget style. If there are icons in the same directory as the style sheet, those will replace the default icons.</source>
-        <translation>&lt;b&gt;Mumble&apos;ın kullanacağı temayı belirler.&lt;/b&gt;&lt;br /&gt;Tema dosyası temel widget biçiminin üstüne uygulanır. Eğer biçim sayfasının bulunduğu dizinde ikonlar da barsa, bu ikonlar varsayılanların yerini alır.</translation>
     </message>
     <message>
         <location/>
@@ -4265,25 +4538,60 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     </message>
     <message>
         <location/>
-        <source>&amp;Browse...</source>
-        <translation>&amp;Tara...</translation>
+        <source>Use selected item as the chat bar target</source>
+        <translation>Seçilen unsuru sohbet çubuğunun hedefi olarak kullan</translation>
     </message>
     <message>
         <location/>
-        <source>Use selected item as the chat bar target</source>
-        <translation>Seçilen unsuru sohbet çubuğunun hedefi olarak kullan</translation>
+        <source>Filter automatically hides empty channels</source>
+        <translation>Filtre boş kanalları gizleyecektir.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Show transmit mode dropdown in toolbar</source>
+        <translation>Aktarma kipi menüsünü araç çubuğunda göster</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Theme</source>
+        <translation>Tema</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Theme to use to style the user interface</source>
+        <translation>Kullanıcı arayüzünü biçemlendirecek tema</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Configures which theme the Mumble user interface should be styled with&lt;/b&gt;&lt;br /&gt;Mumble will pick up themes from certain directories and display them in this list. The one you select will be used to customize the visual appearance of Mumble. This includes colors, icons and more.</source>
+        <translation>&lt;b&gt;Mumble kullanıcı arayüzünün hangi temayla biçemlendirileceğini yapılandır&lt;/b&gt;&lt;br /&gt;Mumble temaları bazı klasörlerden alıp bu listede gösterecektir. Seçtiğiniz tema Mumble&apos;ın görünümünü kişiselleştirmek için kullanılacaktır. Bu, renkleri, ikonları ve daha fazlasını içerir.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>User Dragging</source>
+        <translation>Kullanıcı Kaydırma</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This changes the behavior when moving users.</source>
+        <translation>Kullanıcıların kaydırılması sırasındaki davranışı değiştirir.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This sets the behavior of user drags; it can be used to prevent accidental dragging. &lt;i&gt;Move&lt;/i&gt; moves the user without prompting. &lt;i&gt;Do Nothing&lt;/i&gt; does nothing and prints an error message. &lt;i&gt;Ask&lt;/i&gt; uses a message box to confirm if you really wanted to move the user.</source>
+        <translation>Bu, kullanıcı kaydırılması sırasındaki davranışı belirler; istenmeyen kaydırmalara mani olmak için kullanılabilir. &lt;i&gt;Kaydır&lt;/i&gt; kullanıcıları hiçbir teyit istemeden kaydırır. &lt;i&gt;Hiçbir şey yapma&lt;/i&gt;  hiçbir faaliyette bulunmaz ve bir hata mesajı gösterir. &lt;i&gt;Sor&lt;/i&gt; kullanıcıyı hakikaten kaydırmak isteyip istemediğinizi sorar.</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="MainWindow.cpp" line="+182"/>
-        <location line="+2130"/>
+        <location filename="MainWindow.cpp" line="+117"/>
+        <location line="+2669"/>
         <source>Root</source>
         <translation>Kök</translation>
     </message>
     <message>
-        <location line="-2078"/>
+        <location line="-2615"/>
         <source>Push-to-Talk</source>
         <comment>Global Shortcut</comment>
         <translation>Bas-ve-Konuş</translation>
@@ -4325,7 +4633,7 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Kanala Katıl</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Toggle Overlay</source>
         <comment>Global Shortcut</comment>
         <translation>Yerpaylaşanı açıp kapat</translation>
@@ -4361,29 +4669,29 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     </message>
     <message>
         <location filename="MainWindow.cpp" line="+4"/>
-        <location line="+15"/>
-        <location line="+2229"/>
+        <location line="+159"/>
+        <location line="+2609"/>
         <source>Mumble -- %1</source>
         <translation>Mumble -- %1</translation>
     </message>
     <message>
-        <location line="-2225"/>
+        <location line="-2737"/>
         <source>&amp;Window</source>
         <translation>&amp;Pencere</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location line="+135"/>
+        <location line="+186"/>
         <source>Minimize</source>
         <translation>Küçült</translation>
     </message>
     <message>
-        <location line="-135"/>
+        <location line="-186"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location line="+134"/>
+        <location line="+185"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
@@ -4393,7 +4701,7 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Mumble hâlihazırda bir sunucuya bağlıdır. Kapatmak mı istiyorsunuz, küçültmek mi?</translation>
     </message>
     <message>
-        <location line="-189"/>
+        <location line="-253"/>
         <source>Mute Self</source>
         <comment>Global Shortcut</comment>
         <translation>Kendini Sustur</translation>
@@ -4429,23 +4737,25 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Kendinizi sağır etme durumunu ayarlar. Devre dışı bırakırsanız, kendinizi susturma durumunu da kaldırmış olursunuz.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+31"/>
         <source>Whisper/Shout</source>
+        <oldsource>Whisper</oldsource>
         <translation>Fısılda/Bağır</translation>
     </message>
     <message>
-        <location line="+60"/>
-        <location line="+2271"/>
+        <location line="+79"/>
+        <location line="+2753"/>
         <source>&lt;center&gt;Not connected&lt;/center&gt;</source>
+        <oldsource>Not connected</oldsource>
         <translation>&lt;center&gt;Çevrimdışı&lt;/center&gt;</translation>
     </message>
     <message>
-        <location line="-1998"/>
+        <location line="-2318"/>
         <source>Clear</source>
         <translation>Temizle</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+72"/>
         <source>Opening URL %1</source>
         <translation>%1 adresi açılıyor</translation>
     </message>
@@ -4470,12 +4780,12 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>URL düzeni &apos;mumble&apos; değil</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+26"/>
         <source>This version of Mumble can&apos;t handle URLs for Mumble version %1.%2.%3</source>
         <translation>Mumble&apos;ın bu sürümü %1.%2.%3 sayılı sürümün URL&apos;lerini işleyemez</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+36"/>
         <source>Connecting to %1</source>
         <translation>%1 adresine bağlanılıyor</translation>
     </message>
@@ -4485,8 +4795,8 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Kullanıcı ismi giriniz</translation>
     </message>
     <message>
-        <location line="+14"/>
-        <location line="+192"/>
+        <location line="+15"/>
+        <location line="+205"/>
         <source>Connecting to server %1.</source>
         <translation>%1 sunucusuna bağlanılıyor.</translation>
     </message>
@@ -4496,34 +4806,80 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Tekrar bağlanılıyor.</translation>
     </message>
     <message>
-        <location line="+148"/>
-        <source>&lt;p&gt;No build information or OS version available.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Yapım verileri ya da İS bilgisi bulunamadı.&lt;/p&gt;</translation>
+        <location line="+76"/>
+        <location line="+1498"/>
+        <source>Transmit Mode set to Continuous</source>
+        <translation>Aktarma Kipi Devamlı olarak ayarlandı</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-1398"/>
         <source>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+69"/>
         <source>&lt;h2&gt;Voice channel&lt;/h2&gt;&lt;p&gt;Encrypted with 128 bit OCB-AES128&lt;br /&gt;%1 ms average latency (%4 deviation)&lt;/p&gt;</source>
         <translation>&lt;h2&gt;Ses kanalı&lt;/h2&gt;&lt;p&gt;128 bit OCB-AES128 ile şifrelenmiştir&lt;br /&gt;%1 ms vasati gecikme (%4 sapma)&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-104"/>
-        <location line="+354"/>
+        <location line="-179"/>
+        <location line="+448"/>
         <source>Register yourself as %1</source>
         <translation>Kendinizi %1 olarak kaydedin</translation>
     </message>
     <message>
-        <location line="-354"/>
-        <location line="+354"/>
+        <location line="-448"/>
+        <location line="+448"/>
         <source>&lt;p&gt;You are about to register yourself on this server. This action cannot be undone, and your username cannot be changed once this is done. You will forever be known as &apos;%1&apos; on this server.&lt;/p&gt;&lt;p&gt;Are you sure you want to register yourself?&lt;/p&gt;</source>
         <translation>&lt;p&gt;Kendinizi bu sunucuda kaydetmek üzeresiniz. Bu faaliyet geriye alınamaz, ve tamamlandığında kullanıcı isminiz değiştirilemez. Bu sunucuda daima &apos;%1&apos; olarak tanınırsınız.&lt;/p&gt;&lt;p&gt;Kendinizi kaydetmek istediğinizden emin misiniz?&lt;/p&gt;</translation>
     </message>
     <message>
+        <location line="-343"/>
+        <source>&lt;h2&gt;Version&lt;/h2&gt;&lt;p&gt;Protocol %1&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;Sürüm&lt;/h2&gt;&lt;p&gt;Protokol %1&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;p&gt;No build information or OS version available&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Hiçbir derleme ya da işletim sistemi bilgisi mevcut değildir&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>The connection is encrypted and authenticated using %1 and uses %2 as the key exchange mechanism (%3)</source>
+        <translation>Bağlantı şifrelenmiştir, kimlik doğrulaması %1 kullanılarak yapılmıştır ve %2 anahtar alışveriş mekanizması olarak kullanılmıştır (%3)</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>The connection is encrypted using %1, with %2 for message authentication and %3 as the key exchange mechanism (%4)</source>
+        <translation>Bağlantı %1 kullanılarak şifrelenmiştir, %2 mesaj kimlik doğrulaması için ve %3 anahtar alışveriş mekanizması olarak kullanılmıştır (%4)</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The connection is secured by the cipher suite that OpenSSL identifies as %1</source>
+        <translation>Bağlantı, OpenSSL&apos;in %1 olarak tanımladığı şifreleme paketi ile güvence altına alınmıştır</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>&lt;p&gt;The connection provides perfect forward secrecy&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Bağlantı kusursuz iletme gizliliği (forward secrecy) sağlar&lt;/p&gt;</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>&lt;p&gt;The connection does not provide perfect forward secrecy&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Bağlantı kusursuz iletme gizliliği (forward secrecy) sağlamaz&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&lt;h2&gt;Control channel&lt;/h2&gt;&lt;p&gt;The connection uses %1&lt;/p&gt;%2%3&lt;p&gt;%4 ms average latency (%5 deviation)&lt;/p&gt;&lt;p&gt;Remote host %6 (port %7)&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;Kontrol kanalı&lt;/h2&gt;&lt;p&gt;Bağlantı şunu kullanır: %1&lt;/p&gt;%2%3&lt;p&gt;%4 ms vasati gecikme (%5 sapma)&lt;/p&gt;&lt;p&gt;Uzaktaki makine %6 (port %7)&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Voice channel is sent over control channel</source>
+        <translation>Ses kanalı kontrol kanalından gönderilmekte</translation>
+    </message>
+    <message>
+        <location line="+273"/>
         <source>Register user %1</source>
         <translation>%1 adlı kullanıcıyı kaydet</translation>
     </message>
@@ -4548,64 +4904,74 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>%1 adlı kullanıcının yorumuna bak</translation>
     </message>
     <message>
-        <location line="+52"/>
-        <location line="+237"/>
+        <location line="+76"/>
+        <location line="+270"/>
+        <location line="+612"/>
         <source>Message to channel %1</source>
         <translation>%1 adlı kanala mesaj</translation>
     </message>
     <message>
-        <location line="+544"/>
+        <location line="+65"/>
         <source>Connected.</source>
         <translation>Bağlandı.</translation>
     </message>
     <message>
-        <location line="+159"/>
+        <location line="+112"/>
+        <source>&lt;li&gt;Expected certificate digest (SHA-1):	%1&lt;/li&gt;</source>
+        <translation>&lt;li&gt;Beklenilen sertifika özeti (SHA-1):	%1&lt;/li&gt;</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Server presented a certificate which failed verification.</source>
+        <translation>Sunucu denetimi başarısız olan bir sertifika sundu.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;p&gt;%1&lt;/p&gt;&lt;ul&gt;%2&lt;/ul&gt;&lt;p&gt;The specific errors with this certificate are:&lt;/p&gt;&lt;ol&gt;%3&lt;/ol&gt;&lt;p&gt;Do you wish to accept this certificate anyway?&lt;br /&gt;(It will also be stored so you won&apos;t be asked this again.)&lt;/p&gt;</source>
+        <translation>&lt;p&gt;%1&lt;/p&gt;&lt;ul&gt;%2&lt;/ul&gt;&lt;p&gt;Bu sertifikayla ilgili hatalar şunlardır:&lt;/p&gt;&lt;ol&gt;%3&lt;/ol&gt;&lt;p&gt;Buna rağmen bu sertifikayı kabul etmek istiyor musunuz?&lt;br /&gt;(Sertifika saklanacaktır ve bu soru tekrar sorulmayacaktır.)&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+24"/>
         <source>SSL Version mismatch</source>
         <translation>SSL Sürüm uyumsuzluğu</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+132"/>
         <source>&lt;center&gt;Type message to channel &apos;%1&apos; here&lt;/center&gt;</source>
+        <oldsource>Type message to channel '%1' here</oldsource>
         <translation>&lt;center&gt;&apos;%1&apos; adlı kanala mesajı burada giriniz&lt;/center&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;center&gt;Type message to user &apos;%1&apos; here&lt;/center&gt;</source>
+        <oldsource>Type message to user '%1' here</oldsource>
         <translation>&lt;center&gt;&apos;%1&apos; adlı kullanıcıya mesajı burada giriniz&lt;/center&gt;</translation>
     </message>
     <message>
-        <location line="+105"/>
+        <location line="+101"/>
         <source>Choose image file</source>
         <translation>Görsel dosyası seçiniz</translation>
     </message>
     <message>
-        <location line="+0"/>
-        <source>Images (*.png *.jpg *.jpeg *.svg)</source>
-        <translation>Görseller (*.png *.jpg *.jpeg *.svg)</translation>
-    </message>
-    <message>
         <location line="+7"/>
         <location line="+17"/>
+        <location line="+9"/>
         <source>Failed to load image</source>
         <translation>Görsel dosyasının yüklenmesi başarısız oldu</translation>
     </message>
     <message>
-        <location line="-17"/>
+        <location line="-26"/>
         <source>Could not open file for reading.</source>
         <translation>Dosya okunmak için açılamadı.</translation>
     </message>
     <message>
         <location line="+17"/>
+        <location line="+9"/>
         <source>Image format not recognized.</source>
         <translation>Görsel biçimi tanınamadı.</translation>
     </message>
     <message>
-        <location line="-1651"/>
-        <source>Voice channel is sent over control channel.</source>
-        <translation>Ses kanalı kontrol kanalından gönderilmekte.</translation>
-    </message>
-    <message>
-        <location line="-898"/>
+        <location line="-3056"/>
         <source>&amp;User</source>
         <translation>K&amp;ullanıcı</translation>
     </message>
@@ -4615,7 +4981,14 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>&amp;Kanal</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+59"/>
+        <location line="+26"/>
+        <source>Use in conjunction with Whisper to.</source>
+        <comment>Global Shortcut</comment>
+        <translation>Fısıltı ile birlike kullanın.</translation>
+    </message>
+    <message>
+        <location line="-21"/>
         <source>This will switch the states of the in-game overlay.</source>
         <comment>Global Shortcut</comment>
         <translation>Bu, oyun içindeki yerpaylaşanın durumunu değiştirecektir.</translation>
@@ -4627,22 +5000,93 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Kanal Bağla</translation>
     </message>
     <message>
-        <location line="+687"/>
+        <location line="+4"/>
+        <source>Cycle Transmit Mode</source>
+        <comment>Global Shortcut</comment>
+        <translation>İletim moduna geç</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Send Text Message</source>
+        <comment>Global Shortcut</comment>
+        <translation>Metin Mesajı Gönder</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Send Clipboard Text Message</source>
+        <comment>Global Shortcut</comment>
+        <translation>Panodaki Metin Mesajını Gönder</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This will send your Clipboard content to the channel you are currently in.</source>
+        <comment>Global Shortcut</comment>
+        <translation>Bu, panodaki içeriğinizi şimdi bağlantıda bulunduğunuz kanala gönderecektir.</translation>
+    </message>
+    <message>
+        <location line="+88"/>
+        <source>Continuous</source>
+        <translation>Devamlı</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Voice Activity</source>
+        <translation>Ses Etkinliği</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Push-to-Talk</source>
+        <translation>Bas-ve-Konuş</translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>Mumble - Minimal View -- %1</source>
+        <translation>Mumble - Asgari Görünüm -- %1</translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <location line="+291"/>
+        <source>Save Image As...</source>
+        <translation>Resmi Farklı Kaydet...</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Save Image File</source>
+        <translation>Resim Dosyasını Kaydet</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Could not save image: %1</source>
+        <translation>Resim kaydedilemedi: %1</translation>
+    </message>
+    <message>
+        <location line="+401"/>
         <source>Change your comment</source>
         <translation>Yorumu değiştir</translation>
     </message>
     <message>
-        <location line="+105"/>
-        <source>&lt;h2&gt;Version&lt;/h2&gt;&lt;p&gt;Protocol %1.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Sürüm&lt;/h2&gt;&lt;p&gt;Protokol %1.&lt;/p&gt;</translation>
+        <location line="+41"/>
+        <location line="+1485"/>
+        <source>Transmit Mode set to Voice Activity</source>
+        <translation>Aktarma Kipi Ses Etkinliği olarak ayarlandı</translation>
     </message>
     <message>
-        <location line="+14"/>
-        <source>&lt;h2&gt;Control channel&lt;/h2&gt;&lt;p&gt;Encrypted with %1 bit %2&lt;br /&gt;%3 ms average latency (%4 deviation)&lt;/p&gt;&lt;p&gt;Remote host %5 (port %6)&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Kontrol kanalı&lt;/h2&gt;&lt;p&gt;%1 bit %2 ile şifrelenmiştir&lt;br /&gt;%3 ms vasati gecikme (%4 sapma)&lt;/p&gt;&lt;p&gt;Uzaktaki bilgisayar %5 (port %6)&lt;/p&gt;</translation>
+        <location line="-1480"/>
+        <location line="+1484"/>
+        <source>Transmit Mode set to Push-to-Talk</source>
+        <translation>Aktarma Kipi Bas-ve-Konuş olarak ayarlandı</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="-1333"/>
+        <source>&lt;p&gt;Connected users: %1/%2&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Çevrimiçi kullanıcılar: %1/%2&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>UDP Statistics</source>
         <translation>UDP İstatistikleri</translation>
     </message>
@@ -4688,12 +5132,12 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     </message>
     <message>
         <location line="+4"/>
-        <location line="+1330"/>
+        <location line="+1525"/>
         <source>&amp;View Certificate</source>
         <translation>&amp;Sertifika Görüntüle</translation>
     </message>
     <message>
-        <location line="-1055"/>
+        <location line="-1231"/>
         <location line="+19"/>
         <source>Enter reason</source>
         <translation>Sebep gir</translation>
@@ -4705,25 +5149,31 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     </message>
     <message>
         <location line="+12"/>
-        <location line="+79"/>
+        <location line="+103"/>
         <location line="+4"/>
-        <location line="+233"/>
+        <location line="+266"/>
+        <location line="+612"/>
         <source>To %1: %2</source>
         <translation>Şuna: %1: %2</translation>
     </message>
     <message>
-        <location line="-316"/>
-        <location line="+83"/>
+        <location line="-985"/>
+        <location line="+107"/>
         <source>Message to %1</source>
         <translation>%1 adlı kullanıcıya mesaj</translation>
     </message>
     <message>
-        <location line="-40"/>
+        <location line="-64"/>
         <source>Are you sure you want to reset the comment of user %1?</source>
         <translation>%1 adlı kullanıcının yorumunu sıfırlamak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+16"/>
+        <source>Are you sure you want to reset the avatar of user %1?</source>
+        <translation>%1 kullanıcısının havarisini sıfırlamak istediğinizden emin misiniz?</translation>
+    </message>
+    <message>
+        <location line="+232"/>
         <source>Are you sure you want to delete %1 and all its sub-channels?</source>
         <translation>%1 adlı kanalı ve tüm alt kanallarını silmek istediğinizden emin misiniz?</translation>
     </message>
@@ -4740,10 +5190,11 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     <message>
         <location line="+0"/>
         <source>To %1 (Tree): %2</source>
+        <oldsource>(Tree) %1: %2</oldsource>
         <translation>Şuna: %1 (Ağaç): %2</translation>
     </message>
     <message>
-        <location line="+149"/>
+        <location line="+175"/>
         <source>Unmuted and undeafened.</source>
         <translation>Susturulması ve sağırlığı kaldırıldı.</translation>
     </message>
@@ -4773,32 +5224,37 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
         <translation>Sağırlığı kaldırıldı.</translation>
     </message>
     <message>
-        <location line="+89"/>
+        <location line="+51"/>
+        <source>Restart Mumble?</source>
+        <translation>Mumble tekrar başlatılsın mı?</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Some settings will only apply after a restart of Mumble. Restart Mumble now?</source>
+        <translation>Bazı ayarlar Mumble&apos;ın tekrar başlatılmasından sonra uygulanacaktır. Şimdi yeniden başlatılsın mı?</translation>
+    </message>
+    <message>
+        <location line="+51"/>
         <source>About Qt</source>
         <translation>Qt Hakkında</translation>
     </message>
     <message>
-        <location line="+389"/>
+        <location line="+464"/>
         <source>SSL Verification failed: %1</source>
         <translation>SSL denetlemesi başarısız oldu: %1</translation>
     </message>
     <message>
         <location line="+5"/>
+        <source>&lt;li&gt;Server certificate digest (SHA-1):	%1&lt;/li&gt;</source>
+        <translation>&lt;li&gt;Sunucu sertifikası özeti (SHA-1):	%1&lt;/li&gt;</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>&lt;b&gt;WARNING:&lt;/b&gt; The server presented a certificate that was different from the stored one.</source>
         <translation>&lt;b&gt;UYARI:&lt;/b&gt; Sunucu sakladığımız sertifikadan değişik bir sertifika sundu.</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Sever presented a certificate which failed verification.</source>
-        <translation>Sunucu denetimi başarısız olan bir sertifika sundu.</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>&lt;p&gt;%1.&lt;br /&gt;The specific errors with this certificate are: &lt;/p&gt;&lt;ol&gt;%2&lt;/ol&gt;&lt;p&gt;Do you wish to accept this certificate anyway?&lt;br /&gt;(It will also be stored so you won&apos;t be asked this again.)&lt;/p&gt;</source>
-        <translation>&lt;p&gt;%1.&lt;br /&gt;Bu sertifikanın hataları şunlardır: &lt;/p&gt;&lt;ol&gt;%2&lt;/ol&gt;&lt;p&gt;Buna rağmen bu sertifikayı kabul etmek istiyor musunuz?&lt;br /&gt;(Sertifika saklanacaktır ve bu soru tekrar sorulmayacaktır.)&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <location line="+24"/>
+        <location line="+34"/>
         <source>This server is using an older encryption standard, and is no longer supported by modern versions of Mumble.</source>
         <translation>Bu sunucu Mumble&apos;ın modern sürümleri tarafından artık desteklenmeyen eski bir şifreleme standardı kullanmaktadır.</translation>
     </message>
@@ -4814,6 +5270,7 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     </message>
     <message>
         <location line="+11"/>
+        <location filename="Messages.cpp" line="+70"/>
         <source>Invalid username</source>
         <translation>Geçersiz kullanıcı ismi</translation>
     </message>
@@ -4824,6 +5281,7 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     </message>
     <message>
         <location line="+4"/>
+        <location filename="Messages.cpp" line="+3"/>
         <source>Username in use</source>
         <translation>İsim kullanılmakta</translation>
     </message>
@@ -4834,6 +5292,7 @@ Bu alan LCD cihazın boyutunu belirtir. Boyut ya piksel olarak (Grafik LCD ekran
     </message>
     <message>
         <location line="+5"/>
+        <location filename="Messages.cpp" line="+3"/>
         <source>Wrong certificate or password</source>
         <translation>Yanlış sertifika ya da parola</translation>
     </message>
@@ -4848,6 +5307,7 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="Messages.cpp" line="+3"/>
         <source>Wrong password</source>
         <translation>Yanlış parola</translation>
     </message>
@@ -4855,6 +5315,12 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <location line="+1"/>
         <source>Wrong server password for unregistered user account, please try again.</source>
         <translation>Kaydedilmemiş kullanıcı oturumu için yanlış sunucu parolası, tekrar deneyiniz.</translation>
+    </message>
+    <message>
+        <location line="-2222"/>
+        <location line="+2419"/>
+        <source>Images (*.png *.jpg *.jpeg)</source>
+        <translation>Resimler (*.png *.jpg *.jpeg)</translation>
     </message>
     <message>
         <location filename="MainWindow.ui"/>
@@ -4920,21 +5386,6 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <location/>
         <source>Disconnects you from the server.</source>
         <translation>Sunucuyla bağlantıyı keser.</translation>
-    </message>
-    <message>
-        <location/>
-        <source>&amp;Ban lists</source>
-        <translation>Ya&amp;saklama listeleri</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Edit ban lists on server</source>
-        <translation>Sunucudaki yasaklama listelerini düzenle</translation>
-    </message>
-    <message>
-        <location/>
-        <source>This lets you edit the server-side IP ban lists.</source>
-        <translation>Sunucu tarafında İP yasaklama listelerini düzenlemenize imkân sağlar.</translation>
     </message>
     <message>
         <location/>
@@ -5109,6 +5560,7 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
     <message>
         <location/>
         <source>This links your current channel to the selected channel. If users in a channel have permission to speak in the other channel, users can now hear each other. This is a permanent link, and will last until manually unlinked or the server is restarted. Please see the shortcuts for push-to-link.</source>
+        <oldsource>This links your current channel to the selected channel. If they have permission to speak in the other channel, users can now hear each other. This is a permanent link, and will last until manually unlinked or the server is restarted. Please see the shortcuts for push-to-link.</oldsource>
         <translation>Bu, güncel kanalınızı seçilen kanala bağlar. Kanallardan birinde kullanıcıların diğer kanalda konuşma izinleri varsa, bağlantıdan sonra birbirlerini duyabilirler. Bu daimi bir bağlantıdır ve sunucu tekrar başlatılmadığı ya da elle bağlantı kaldırılmadığı sürece silinmez. Bas-ve-bağla kısayollarına da bakınız.</translation>
     </message>
     <message>
@@ -5438,7 +5890,7 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>Kütük ve menü pencerelerinin saklandığı küçük görüntü kipini açıp kapatır.</translation>
     </message>
     <message>
-        <location filename="Messages.cpp" line="+362"/>
+        <location filename="Messages.cpp" line="+330"/>
         <source>You muted and deafened %1.</source>
         <translation>%1 adlı kullanıcıyı susturdunuz ve sağır ettiniz.</translation>
     </message>
@@ -5488,28 +5940,33 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>%1, %3 tarafından %2 kanalına taşındı.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+17"/>
         <source>%1 moved in from %2 by %3.</source>
         <translation>%1, %2 kanalından %3 tarafından getirildi.</translation>
     </message>
     <message>
-        <location line="-161"/>
+        <location line="-200"/>
         <source>%1 is now muted and deafened.</source>
         <translation>%1 artık susturuldu ve sağır edildi.</translation>
     </message>
     <message>
-        <location line="-189"/>
-        <location line="+48"/>
+        <location line="-218"/>
+        <source>Your account information can not be verified currently. Please try again later</source>
+        <translation>Şu anda hesap bilgileriniz doğrulanamıyor. Lütfen daha sonra tekrar deneyin</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <location line="+55"/>
         <source>Welcome message: %1</source>
         <translation>Hoş geldiniz mesajı: %1</translation>
     </message>
     <message>
-        <location line="-15"/>
+        <location line="-17"/>
         <source>Mumble: %1</source>
         <translation>Mumble: %1</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+42"/>
         <source>You were denied %1 privileges in %2.</source>
         <translation>%2 kanalında %1 izniniz reddedildi.</translation>
     </message>
@@ -5534,7 +5991,7 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>Reddedildi: Metin mesajı çok uzun.</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+22"/>
         <source>Denied: Operation not permitted in temporary channel.</source>
         <translation>Reddedildi: İşleme geçici kanallarda izin verilmez.</translation>
     </message>
@@ -5574,7 +6031,7 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>İzin reddedildi.</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+40"/>
         <source>%1 connected.</source>
         <translation>%1 bağlandı.</translation>
     </message>
@@ -5609,6 +6066,56 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>%1 kaydı durdurdu.</translation>
     </message>
     <message>
+        <location line="+10"/>
+        <source>You revoked your priority speaker status.</source>
+        <translation>Öncelikli konuşmacı durumunuzu iptal ettiniz.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>You assumed priority speaker status.</source>
+        <translation>Öncelikli konuşmacı durumu üstlendiniz.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>%1 revoked your priority speaker status.</source>
+        <translation>%1 öncelikli konuşmacı durumunuzu iptal etti.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 gave you priority speaker status.</source>
+        <translation>%1 size öncelikli konuşmacı durumunu verdi.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>You revoked priority speaker status for %1.</source>
+        <translation>%1 için öncelikli konuşmacı durumunu iptal ettiniz.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>You gave priority speaker status to %1.</source>
+        <translation>%1 kullanıcısına öncelikli konuşmacı durumu verdiniz.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>%1 revoked own priority speaker status.</source>
+        <translation>%1 kendi öncelikli konuşmacı durumunu iptal etti.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 assumed priority speaker status.</source>
+        <translation>%1 öncelikli konuşmacı durumu üstlendi.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>%1 revoked priority speaker status for %2.</source>
+        <translation>%1, %2 kullanıcısının öncelikli konuşmacı durumunu iptal etti.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 gave priority speaker status to %2.</source>
+        <translation>%1, %2 kullanıcısına öncelikli konuşmacı durumu verdi.</translation>
+    </message>
+    <message>
         <location line="+21"/>
         <source>You were unmuted and undeafened by %1.</source>
         <translation>Susturulmanız ve sağırlığınız %1 tarafından kaldırıldı.</translation>
@@ -5626,6 +6133,7 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
     <message>
         <location line="+6"/>
         <source>You were suppressed.</source>
+        <oldsource>You were suppressed by %1.</oldsource>
         <translation>Askıya alındınız.</translation>
     </message>
     <message>
@@ -5639,17 +6147,27 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>Askıya alınmanız  %1 tarafından kaldırıldı.</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+83"/>
+        <source>You moved %1 to %2.</source>
+        <translation>%1 unsurunu %2 konumuna taşıdınız.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>%1 is recording</source>
         <translation>%1 kayıt yapıyor</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+10"/>
+        <source>%1 renamed to %2 by %3.</source>
+        <translation>%1, %3 tarafından %2 olarak yeniden adlandırılmıştır.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
         <source>%1 disconnected.</source>
         <translation>%1 sunucudan çıktı.</translation>
     </message>
     <message>
-        <location line="+92"/>
+        <location line="+115"/>
         <location line="+1"/>
         <source>Server</source>
         <comment>message from</comment>
@@ -5664,6 +6182,11 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <location line="+2"/>
         <source>(Channel) </source>
         <translation>(Kanal) </translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>(Private) </source>
+        <translation>(Özel)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -5696,7 +6219,7 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>Sunucu Bas-ve-Konuşun devre dışı bırakılmasını talep ediyor.</translation>
     </message>
     <message>
-        <location line="-474"/>
+        <location line="-517"/>
         <source>You were unmuted by %1.</source>
         <translation>Susturulmanız %1 tarafından kaldırıldı.</translation>
     </message>
@@ -5731,17 +6254,18 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>%1 adlı kullanıcının susturulması %2 tarafından kaldırıldı.</translation>
     </message>
     <message>
-        <location line="+377"/>
+        <location line="+420"/>
         <source>Unable to find matching CELT codecs with other clients. You will not be able to talk to all users.</source>
         <translation>Diğer istemcilerle uyumlu CELT kodekleri bulunamadı. Diğer kullanıcılar ile konuşamayacaksınız.</translation>
     </message>
     <message>
-        <location line="-443"/>
+        <location line="-486"/>
         <source>You were muted and deafened by %1.</source>
+        <oldsource>You were deafened by %1.</oldsource>
         <translation>%1 tarafından susturuldunuz ve sağır edildiniz.</translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+176"/>
         <source>You were kicked from the server by %1: %2.</source>
         <translation>Sunucudan %1 tarafından kovuldunuz: %2.</translation>
     </message>
@@ -5761,32 +6285,47 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>%3 adlı kullanıcı %1 tarafından sunucudan kovuldu ve yasaklandı: %2.</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-79"/>
         <source>You were moved to %1 by %2.</source>
         <translation>%2 tarafından %1 kanalına taşındınız.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+20"/>
         <source>%1 entered channel.</source>
         <translation>%1 kanala katıldı.</translation>
     </message>
     <message>
-        <location line="-358"/>
+        <location line="-409"/>
         <source>Server connection rejected: %1.</source>
         <translation>Sunucu bağlantısı reddedildi: %1.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+158"/>
         <source>Denied: %1.</source>
         <translation>Reddedildi: %1.</translation>
     </message>
     <message>
-        <location line="+364"/>
+        <location line="+269"/>
+        <source>%1 renamed to %2.</source>
+        <translation>%1, %2 olarak yeniden adlandırıldı.</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>%1 left channel and disconnected.</source>
+        <translation>%1 kanaldan ayrıldı ve bağlantıyı kesti.</translation>
+    </message>
+    <message>
+        <location line="+129"/>
         <source>Message from %1</source>
         <translation>%1 tarafından mesaj</translation>
     </message>
     <message>
-        <location filename="UserModel.cpp" line="+1390"/>
+        <location filename="UserModel.cpp" line="+1377"/>
+        <source>You have User Dragging set to &quot;Do Nothing&quot; so the user wasn&apos;t moved.</source>
+        <translation>Kullanıcı Kaydırmayı &quot;Hiçbir Şey Yapma&quot; olarak ayarladığınızdan kullanıcı taşınmadı.</translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>You have Channel Dragging set to &quot;Do Nothing&quot; so the channel wasn&apos;t moved.</source>
         <translation>Kalan Kaydırmayı &quot;Hiçbir Şey Yapma&quot; olarak ayarladığınızdan kanal taşınmadı.</translation>
     </message>
@@ -5796,7 +6335,16 @@ deneyiniz. Yoksa iptal edip parolanızı kontrol ediniz.</translation>
         <translation>UserModel::dropMimeData&apos;da bilinmeyen Kanal Kaydırma kipi.</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="-271"/>
+        <location filename="main.cpp" line="-345"/>
+        <source>Remote controlling Mumble:
+
+</source>
+        <translation>Mumble&apos;ın uzaktan kontrolü:
+
+</translation>
+    </message>
+    <message>
+        <location line="-24"/>
         <source>Usage: mumble [options] [&lt;url&gt;]
 
 &lt;url&gt; specifies a URL to connect to after startup instead of showing
@@ -5812,36 +6360,104 @@ Valid options are:
                 Allow multiple instances of the client to be started.
   -n, --noidentity
                 Suppress loading of identity files (i.e., certificates.)
-</source>
-        <translation>Kullanım: mumble [seçenekler] [&lt;url&gt;]
+  --license
+                Show the Mumble license.
+  --authors
+                Show the Mumble authors.
+  --third-party-licenses
+                Show licenses for third-party software used by Mumble.
 
-&lt;url&gt; başlangıçtan sonra bağlantı penceresinin gösterilmesi yerine
-bağlanılacak bir URL belirtir ve şu şekilde kullanılır:
+</source>
+        <translation>Kullanım: mumble [seçenekler] [&lt;bağlantı&gt;]
+
+&lt;bağlantı&gt; başlangıçtan sonra bağlantı ekranı göstermek yerine
+bağlanılacak bir bağlantı belirtir ve şekli şudur:
 mumble://[&lt;kullanıcıismi&gt;[:&lt;parola&gt;]@]&lt;makine&gt;[:&lt;port&gt;][/&lt;kanal&gt;[/&lt;altkanal&gt;...]][?version=&lt;x.y.z&gt;]
 
-Doğru istemci sürümünün çağrılması için sürüm sorgu parametresinin
-ayarlanmış olması lazımdır. Güncel varsayılan değer şudur: 1.2.0.
+Sürüm sorgu parametresi doğru istemci sürümünü almak için
+ayarlanmalıdır. Güncel olarak 1.2.0 değeri varsayılır.
 
 Geçerli seçenekler şunlardır:
-  -h, --help    Bu yardım mesajını görüntüle ve çık.
-  -m, --multiple
-                Birden fazla istemci ortamının başlatılmasına izin ver.
- -n, --noidentity
-                Kimlik dosyalarının (mesela sertifikaların) yüklenmesini devre dışı bırak.
+-h, --help Bu yardımı göster ve çık.
+-m, --multiple
+İstemcinin birden çok örneklemesinin başaltımasına izin ver.
+-n, --noidentity
+Kimlik dosyalarının (yani sertifikaların) yüklenmesine mani ol.
+--license
+Mumble lisansını göster.
+--authors
+Mumble geliştiricilerini göster.
+--third-party-licenses
+Mumble tarafından kullanılan üçüncü taraf yazılım lisanslarını göster.
+
+
+
 </translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+28"/>
+        <source>Usage: mumble rpc &lt;action&gt; [options]
+
+It is possible to remote control a running instance of Mumble by using
+the 'mumble rpc' command.
+
+Valid actions are:
+  mute
+                Mute self
+  unmute
+                Unmute self
+  togglemute
+                Toggle self-mute status
+  deaf
+                Deafen self
+  undeaf
+                Undeafen self
+  toggledeaf
+                Toggle self-deafen stauts
+
+</source>
+        <translation>Kullanım: mumble rpc &lt;eylem&gt; [seçenekler]
+
+Mumble&apos;ın çalışmakta olan bir örneklemesini &apos;mumble rpc&apos; komutunu
+kullanarak uzaktan kontrol etmek mümkündür.
+
+Geçerli eylemler şunlardır:
+mute (sustur)
+Mute self (kendini sustur)
+unmute (susturmayı kaldır)
+Unmute self (kendini susturmayı kaldır)
+togglemute
+kendini susturma durumunu değiştir
+deaf (sağır et)
+Deafen self (kendini sağır et)
+undeaf (sağır etmeyi kaldır)
+Undeafen self (kendini sağır etmeyi kaldır)
+toggledeaf
+Kendini sağır etme durumunu değiştir
+</translation>
+    </message>
+    <message>
+        <location line="+28"/>
         <source>Invocation</source>
         <translation>Çağrı</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+25"/>
+        <source>Error: No RPC command specified</source>
+        <translation>Hata: Hiçbir RPC komutu belirtilmedi</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>RPC</source>
+        <translation>RPC</translation>
+    </message>
+    <message>
+        <location line="+221"/>
         <source>Welcome to Mumble.</source>
         <translation>Mumble&apos;a Hoş Geldiniz.</translation>
     </message>
     <message>
-        <location line="+73"/>
+        <location line="+76"/>
         <source>Skipping version check in debug mode.</source>
         <translation>Hata ayıklama kipinde sürüm denetlemesi atlandı.</translation>
     </message>
@@ -6005,11 +6621,211 @@ Geçerli seçenekler şunlardır:
         <source>Silently drops all text messages from the user.</source>
         <translation>Kullanıcının tüm metin mesajlarını sessiz sedasız görmezden gelir.</translation>
     </message>
+    <message>
+        <location/>
+        <source>&amp;Ban list</source>
+        <translation>&amp;Yasaklama listesi</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Edit ban list on server</source>
+        <translation>Sunucuda yasaklama listesini düzenle</translation>
+    </message>
+    <message>
+        <location/>
+        <source>This lets you edit the server-side IP ban list.</source>
+        <translation>Bu, sunucuda IP yasaklama listesini düzenlemenize izin verir.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&amp;Filter on/off</source>
+        <translation>&amp;Filtre Aç/Kapat</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Toggle the channel filter (Ctrl+F)</source>
+        <translation>Kanal filtresini değiştir  (Ctrl+F)</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Enable or disable the filtering of select channels.
+By default all empty channels will be filtered.
+You can mark additional channels for filtering from
+the channel&apos;s context menu.</source>
+        <translation>Seçtiğiniz kanalların filtrelenmesini etkinleştirin
+yada devre dışı bırakın.
+Varsayılan olarak boş kanallar filtrelenir.
+Kanalın içerik menüsünden filtrelenmesi için
+ilave kanallar ekleyebilirsiniz.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Ctrl+F</source>
+        <translation>Ctrl+F</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&amp;Hide Channel when Filtering</source>
+        <translation>&amp;Filtrelerken kanalı gizle</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Reset &amp;Avatar</source>
+        <translation>&amp;Havariyi Sıfırla</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Reset the avatar of the selected user.</source>
+        <translation>Seçilen kullanıcının havarisini sıfırla.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Local Volume Adjustment</source>
+        <translation>Yerel Ses Ayarı</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Locally adjust the user&apos;s speech volume.</source>
+        <translation>Kullanıcının konuşma ses seviyesini yerel olarak ayarla</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Opens a dialog with a volume slider. Use this on other users in the same room.</source>
+        <translation>Ses seviyesini belirleyen kaydırıcı içeren bir diyalog açar. Bunu, aynı odadaki diğer kullanıcılar üzerinde kullanın.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&amp;Developer</source>
+        <translation>&amp;Geliştirici</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&amp;Hide Mumble</source>
+        <translation>&amp;Mumble&apos;ı Sakla</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Hides the main Mumble window.</source>
+        <translation>Ana Mumble penceresini saklar.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Hides the main Mumble window. Restore by clicking on the tray icon or starting Mumble again.</source>
+        <translation> Ana Mumble penceresini saklar. Geri getirmek için sistem çekmecesi ikonuna tıklayın ya da Mumble&apos;ı tekrar başlatın.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Developer &amp;Console</source>
+        <translation>Geliştirici &amp;Konsolü</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Show the Developer Console</source>
+        <translation>Geliştirici Konsolünü Göster</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Shows the Mumble Developer Console, where Mumble&apos;s log output can be inspected.</source>
+        <translation>Mumble&apos;ın kütük çıktısının kontrol edilebileceği Mumble Geliştirici Konsolünü gösterir.</translation>
+    </message>
+</context>
+<context>
+    <name>Manual</name>
+    <message>
+        <location filename="ManualPlugin.ui"/>
+        <source>Manual Mumble Positional Audio</source>
+        <translation>Elle Mumble Konumsal Ses</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Position</source>
+        <translation>Konum</translation>
+    </message>
+    <message>
+        <location/>
+        <source>X</source>
+        <translation>X</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Y</source>
+        <translation>Y</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Z</source>
+        <translation>Z</translation>
+    </message>
+    <message>
+        <location/>
+        <source>m</source>
+        <translation>m</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Heading</source>
+        <translation>Yön</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Azimuth</source>
+        <translation>Azimut</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Elevation</source>
+        <translation>Yükseklik</translation>
+    </message>
+    <message>
+        <location/>
+        <source>°</source>
+        <translation>°</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Meta data</source>
+        <translation>Üst veriler</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Context</source>
+        <translation>Bağlam</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Identity</source>
+        <translation>Kimlik</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Set</source>
+        <translation>Ayarla</translation>
+    </message>
+    <message>
+        <location/>
+        <source>State</source>
+        <translation>Durum</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Linked</source>
+        <translation>Bağlı</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Activated</source>
+        <translation>Etkinleştirilmiş</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Unhinge</source>
+        <translation>Ayır</translation>
+    </message>
 </context>
 <context>
     <name>NetworkConfig</name>
     <message>
-        <location filename="NetworkConfig.cpp" line="+56"/>
+        <location filename="NetworkConfig.cpp" line="+29"/>
         <source>Network</source>
         <translation>Şebeke</translation>
     </message>
@@ -6026,6 +6842,7 @@ Geçerli seçenekler şunlardır:
     <message>
         <location/>
         <source>Use TCP compatibility mode</source>
+        <oldsource>Use TCP compatability mode</oldsource>
         <translation>TCP uyumluluk kipini kullan</translation>
     </message>
     <message>
@@ -6264,8 +7081,8 @@ Prevents the client from downloading images embedded into chat messages with the
 <context>
     <name>Overlay</name>
     <message>
-        <location filename="OverlayEditorScene.cpp" line="+119"/>
-        <location filename="OverlayUser.cpp" line="+153"/>
+        <location filename="OverlayEditorScene.cpp" line="+97"/>
+        <location filename="OverlayUser.cpp" line="+129"/>
         <source>Silent</source>
         <translation>Sessiz</translation>
     </message>
@@ -6294,7 +7111,7 @@ Prevents the client from downloading images embedded into chat messages with the
         <translation>Kanal</translation>
     </message>
     <message>
-        <location filename="Overlay.cpp" line="+104"/>
+        <location filename="Overlay.cpp" line="+91"/>
         <source>Failed to create communication with overlay at %2: %1. No overlay will be available.</source>
         <translation>%2: %1 konumunda yerpaylaşan ile bağlantı kurulamadı. Hiçbir yerpaylaşan kullanılamayacaktır.</translation>
     </message>
@@ -6302,7 +7119,7 @@ Prevents the client from downloading images embedded into chat messages with the
 <context>
     <name>OverlayClient</name>
     <message>
-        <location filename="OverlayUserGroup.cpp" line="+97"/>
+        <location filename="OverlayUserGroup.cpp" line="+76"/>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
@@ -6380,27 +7197,29 @@ Prevents the client from downloading images embedded into chat messages with the
 <context>
     <name>OverlayConfig</name>
     <message>
-        <location filename="OverlayConfig.cpp" line="+80"/>
+        <location filename="OverlayConfig.cpp" line="+74"/>
         <source>To move the users, drag the little red dot.</source>
         <translation>Kullanıcıları taşımak için küçük kırmızı noktayı kaydırın.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>To resize the users, mouse wheel over a user.</source>
+        <oldsource>To resize the users, mousewheel over a user.</oldsource>
         <translation>Kullanıcıları yeniden boyutlandırmak için bir kullanıcı üzerinde fare tekerleğini kullanın.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>For more options, right click a user.</source>
+        <oldsource>For more options, rightclick a user.</oldsource>
         <translation>Daha fazla bilgi için kullanıcıya sağ buton ile tıklayın.</translation>
     </message>
     <message>
-        <location line="+223"/>
+        <location line="+278"/>
         <source>Overlay</source>
         <translation>Yerpaylaşan</translation>
     </message>
     <message>
-        <location line="+75"/>
+        <location line="+85"/>
         <source>Choose executable</source>
         <translation>Çalıştırılabilir dosya seç</translation>
     </message>
@@ -6410,7 +7229,7 @@ Prevents the client from downloading images embedded into chat messages with the
         <translation>Uygulama seç</translation>
     </message>
     <message>
-        <location line="+87"/>
+        <location line="+95"/>
         <source>Load Overlay Presets</source>
         <translation>Yerpaylaşan ön ayarlarını yükle</translation>
     </message>
@@ -6443,6 +7262,7 @@ Prevents the client from downloading images embedded into chat messages with the
     <message>
         <location/>
         <source>This sets whether the overlay is enabled or not. This setting is only checked when applications are started, so make sure Mumble is running and this option is on before you start the application.&lt;br /&gt;Please note that if you start Mumble after starting the application, or if you disable the overlay while the application is running, there is no safe way to restart the overlay without also restarting the application.</source>
+        <oldsource>This sets whether the overlay is enabled or not. This setting is only checked when applications are started, so make sure Mumble is running and this option is on before you start the application.&lt;br /&gt;Please note that if you start the application after starting Mumble, or if you disable the overlay while running, there is no safe way to restart the overlay without also restarting the application.</oldsource>
         <translation>Bu ayar yerpaylaşanın etkinleştirilip etkinleştirilmeyeceğini belirler. Bu ayar sadece uygulamalar başlatıldığında denetlenir, dolayısıyla Mumble&apos;ın uygulamayı başlatmadan önce çalışmakta olduğundan emin olunuz.&lt;br /&gt;Uygulama çalışmakta iken yerpaylaşanı devre dışı bırakırsanız ya da Mumble&apos;ı uygulamadan sonra başlatırsanız, yerpaylaşanı güvenli olarak tekrar başlatmanın tek yolu uygulamayı tekrar başlatmaktır.</translation>
     </message>
     <message>
@@ -6523,7 +7343,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
         <source>Load an overlay preset from file</source>
         <translation>Dosyadan yerpaylaşan ön ayarı yükle</translation>
     </message>
-    <message utf8="true">
+    <message>
         <location/>
         <source>Load…</source>
         <translation>Yükle...</translation>
@@ -6533,15 +7353,10 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
         <source>Save your overlay settings to file</source>
         <translation>Yerpaylaşan ayarlarını dosyaya kaydet</translation>
     </message>
-    <message utf8="true">
+    <message>
         <location/>
         <source>Save…</source>
         <translation>Kaydet...</translation>
-    </message>
-    <message>
-        <location/>
-        <source>FPS Display</source>
-        <translation>FPS Görüntüsü</translation>
     </message>
     <message>
         <location/>
@@ -6587,6 +7402,21 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
         <location/>
         <source>Show the overlay only in</source>
         <translation>Yerpaylaşanı sadece şunlarda görüntüle:</translation>
+    </message>
+    <message>
+        <location/>
+        <source>FPS and Clock Display</source>
+        <translation>FPS ve Saat Göstergesi</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Display a clock in the overlay showing the current local time (system time).</source>
+        <translation>Yer kaplayanda güncel yerel zamanı (sistem vaktini) gösteren bir saat görüntüle.</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Show Clock</source>
+        <translation>Saati Göster</translation>
     </message>
 </context>
 <context>
@@ -6828,32 +7658,20 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
     </message>
 </context>
 <context>
-    <name>OverlayPrivateWin</name>
-    <message>
-        <location filename="Overlay_win.cpp" line="+55"/>
-        <source>Failed to load overlay library. This means either that:
-- the library (mumble_ol.dll) wasn&apos;t found in the directory you ran Mumble from
-- you&apos;re on an OS earlier than WinXP SP2</source>
-        <translation>Yerpaylaşan kütüphanesi yüklenemedi. Bunun nedeni aşağıdaki iki unsurdan biridir:
-- kütüphane (mumble_ol.dll) Mumble&apos;ı başlattığınız dizinde bulunamadı
-- Kullandığınız İS Windows XP SP2&apos;den daha eski</translation>
-    </message>
-</context>
-<context>
     <name>PluginConfig</name>
     <message>
         <location filename="Plugins.ui"/>
-        <location filename="Plugins.cpp" line="+78"/>
+        <location filename="Plugins.cpp" line="+73"/>
         <source>Plugins</source>
         <translation>Eklentiler</translation>
     </message>
     <message>
-        <location filename="Plugins.cpp" line="+56"/>
+        <location filename="Plugins.cpp" line="+58"/>
         <source>Plugin has no configure function.</source>
         <translation>Eklentinin herhangi bir yapılandırma işlevi yoktur.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+19"/>
         <source>Plugin has no about function.</source>
         <translation>Eklentinin herhangi bir hakkında işlevi yoktur.</translation>
     </message>
@@ -6941,12 +7759,12 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>Plugins</name>
     <message>
-        <location filename="Plugins.cpp" line="+327"/>
+        <location filename="Plugins.cpp" line="+440"/>
         <source>Skipping plugin update in debug mode.</source>
         <translation>Hata ayıklama kipinde eklenti güncellemesi atlanıyor.</translation>
     </message>
     <message>
-        <location line="+150"/>
+        <location line="+168"/>
         <location line="+6"/>
         <source>Downloaded new or updated plugin to %1.</source>
         <translation>Yeni ya da güncelleştirilmiş eklenti %1 konumuna indirildi.</translation>
@@ -6957,12 +7775,12 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
         <translation>Yeni eklenti %1 konumuna kurulamadı.</translation>
     </message>
     <message>
-        <location line="-257"/>
+        <location line="-344"/>
         <source>%1 lost link.</source>
         <translation>%1 bağlantı kaybetti.</translation>
     </message>
     <message>
-        <location line="+74"/>
+        <location line="+123"/>
         <source>%1 linked.</source>
         <translation>%1 bağlandı.</translation>
     </message>
@@ -6970,7 +7788,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>PortAudioSystem</name>
     <message>
-        <location filename="PAAudio.cpp" line="+275"/>
+        <location filename="PAAudio.cpp" line="+280"/>
         <source>Default Device</source>
         <translation>Varsayılan Cihaz</translation>
     </message>
@@ -6978,7 +7796,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>PulseAudioSystem</name>
     <message>
-        <location filename="PulseAudio.cpp" line="+756"/>
+        <location filename="PulseAudio.cpp" line="+792"/>
         <source>Default Input</source>
         <translation>Varsayılan Girdi</translation>
     </message>
@@ -6989,9 +7807,22 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
     </message>
 </context>
 <context>
+    <name>QApplication</name>
+    <message>
+        <location filename="main.cpp" line="+123"/>
+        <source>Failed to restart mumble</source>
+        <translation>Mumble&apos;ın tekrar başlatılması başarısız oldu</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Mumble failed to restart itself. Please restart it manually.</source>
+        <translation>Mumble kendini tekrar başlatamadı. Lütfen elle başlatınız.</translation>
+    </message>
+</context>
+<context>
     <name>RichTextEditor</name>
     <message>
-        <location filename="RichTextEditor.cpp" line="+244"/>
+        <location filename="RichTextEditor.cpp" line="+234"/>
         <source>Failed to load image</source>
         <translation>Resim yüklenemedi</translation>
     </message>
@@ -7092,7 +7923,12 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>ServerHandler</name>
     <message>
-        <location filename="ServerHandler.cpp" line="+447"/>
+        <location filename="ServerHandler.cpp" line="+397"/>
+        <source>Server is not responding to TCP pings</source>
+        <translation>Sunucu TCP pinglerine cevap vermemektedir</translation>
+    </message>
+    <message>
+        <location line="+84"/>
         <source>UDP packets cannot be sent to or received from the server. Switching to TCP mode.</source>
         <translation>Sunucuya UDP paketleri gönderilemiyor ya da ondan bu paketler alınamıyor. TCP kipine geçiliyor.</translation>
     </message>
@@ -7112,7 +7948,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
         <translation>UDP paketleri sunucuya gönderilebiliyor ve ondan alınabiliyor. UDP kipine dönüş yapılıyor.</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+39"/>
         <source>Connection timed out</source>
         <translation>Bağlantı zaman aşımına uğradı</translation>
     </message>
@@ -7120,7 +7956,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>ServerView</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="-611"/>
+        <location filename="ConnectDialog.cpp" line="-646"/>
         <source>Favorite</source>
         <translation>Favori</translation>
     </message>
@@ -7130,12 +7966,12 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
         <translation>Yerel ağ - LAN</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source>Public Internet</source>
         <translation>İnternet</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>Africa</source>
         <translation>Afrika</translation>
     </message>
@@ -7168,7 +8004,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>ShortcutActionWidget</name>
     <message>
-        <location filename="GlobalShortcut.cpp" line="-558"/>
+        <location filename="GlobalShortcut.cpp" line="-602"/>
         <source>Unassigned</source>
         <translation>Atanmamış</translation>
     </message>
@@ -7176,7 +8012,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>ShortcutDelegate</name>
     <message>
-        <location line="+370"/>
+        <location line="+376"/>
         <source>On</source>
         <translation>Açık</translation>
     </message>
@@ -7199,7 +8035,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>ShortcutKeyWidget</name>
     <message>
-        <location line="-444"/>
+        <location line="-450"/>
         <source>Press Shortcut</source>
         <translation>Bir kısayola basın</translation>
     </message>
@@ -7236,7 +8072,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
         <translation>...</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+41"/>
         <source>, </source>
         <translation>,</translation>
     </message>
@@ -7269,13 +8105,14 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
     <message>
         <location line="+3"/>
         <source>Empty</source>
+        <oldsource>&lt;Empty&gt;</oldsource>
         <translation>Boş</translation>
     </message>
 </context>
 <context>
     <name>ShortcutToggleWidget</name>
     <message>
-        <location line="-268"/>
+        <location line="-271"/>
         <source>Off</source>
         <translation>Kapalı</translation>
     </message>
@@ -7293,7 +8130,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>TextMessage</name>
     <message>
-        <location filename="TextMessage.h" line="+45"/>
+        <location filename="TextMessage.h" line="+20"/>
         <source>Enter text</source>
         <translation>Metin girin</translation>
     </message>
@@ -7311,7 +8148,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
 <context>
     <name>Tokens</name>
     <message>
-        <location filename="Tokens.cpp" line="+72"/>
+        <location filename="Tokens.cpp" line="+42"/>
         <source>Empty Token</source>
         <translation>Boş Jeton</translation>
     </message>
@@ -7329,7 +8166,7 @@ Bu dosyaları son sürümlerine güncellemek için aşağıdaki düğmeyi tıkla
         <location/>
         <source>&lt;b&gt;This is an editable list of access tokens on the connected server.&lt;/b&gt;
 &lt;br /&gt;
-An access token is a text string, which can be used as a password for very simple access management on channels. Mumble will remember the tokens you&apos;ve used and resend them to the server next time you reconnect, so you don&apos;t have to enter these every time.
+An access token is a text string, which can be used as a password for very simple access management on channels. Mumble will remember the tokens you've used and resend them to the server next time you reconnect, so you don't have to enter these every time.
 </source>
         <translation>&lt;b&gt;Bu, bağlanılan sunucudaki erişim jetonlarının düzenlenilebilir listesidir.&lt;/b&gt;
 &lt;br /&gt;
@@ -7366,14 +8203,50 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
     </message>
     <message>
         <location/>
-        <location filename="UserEdit.cpp" line="+99"/>
+        <location filename="UserEdit.cpp" line="+103"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="UserEdit.cpp" line="-5"/>
+        <location/>
+        <location filename="UserEdit.cpp" line="-7"/>
         <source>Rename</source>
         <translation>Yeniden isimlendir</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Who are you looking for?</source>
+        <translation>Kimi arıyordunuz?</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Days</source>
+        <translation>Gün</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Weeks</source>
+        <translation>Hafta</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Months</source>
+        <translation>Ay</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Years</source>
+        <translation>Yıl</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Inactive for</source>
+        <translation>Etkin olmadığı süre</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="UserEdit.cpp" line="-68"/>
+        <source>Registered users: %n account(s)</source>
+        <translation><numerusform>Kayıtlı kullanıcı: %n hesap</numerusform><numerusform>Kayıtlı kullanıcılar: %n hesap</numerusform></translation>
     </message>
 </context>
 <context>
@@ -7484,7 +8357,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>Bağlantı süresi</translation>
     </message>
     <message>
-        <location filename="UserInformation.cpp" line="+99"/>
+        <location filename="UserInformation.cpp" line="+83"/>
         <source>%1w</source>
         <translation>%1h</translation>
     </message>
@@ -7509,7 +8382,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>%1s</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+33"/>
         <location line="+39"/>
         <source>, </source>
         <translation>,</translation>
@@ -7518,6 +8391,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <location line="-13"/>
         <location line="+1"/>
         <source>%1 (%2)</source>
+        <oldsource>%1.%2.%3 (%4)</oldsource>
         <translation>%1 (%2)</translation>
     </message>
     <message>
@@ -7531,12 +8405,12 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>Desteksiz</translation>
     </message>
     <message>
-        <location line="-119"/>
+        <location line="-123"/>
         <source>Not Reported</source>
         <translation>Belirtilmemiş</translation>
     </message>
     <message>
-        <location line="+160"/>
+        <location line="+164"/>
         <source>%1 online (%2 idle)</source>
         <translation>%1 çevrimiçi (%2 aylak)</translation>
     </message>
@@ -7569,9 +8443,70 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
     </message>
 </context>
 <context>
+    <name>UserListModel</name>
+    <message>
+        <location filename="UserListModel.cpp" line="+58"/>
+        <source>Nick</source>
+        <translation>Rumuz</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Inactive days</source>
+        <translation>Etkin olmadığı gün</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Last channel</source>
+        <translation>Son kanal</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Last seen: %1</source>
+        <translation>Son görülme: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Never</source>
+        <translation>Hiçbir zaman</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Channel id: %1</source>
+        <translation>Kanal kimliği: %1</translation>
+    </message>
+</context>
+<context>
+    <name>UserLocalVolumeDialog</name>
+    <message>
+        <location filename="UserLocalVolumeDialog.ui"/>
+        <source>Local volume for other users</source>
+        <translation>Diğer kullanıcılar için yerel ses seviyesi</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;b&gt;Adjust the volume of other users locally&lt;/b&gt;&lt;br /&gt;Mumble supports adjusting the volume of other users locally.</source>
+        <translation>&lt;b&gt;Diğer kullanıcıların ses seviyesini yerel olarak ayarla&lt;/b&gt;&lt;br /&gt;Mumble, diğer kullanıcıların ses seviyesinin yerel olarak ayarlanmasını destekler.</translation>
+    </message>
+    <message>
+        <location filename="UserLocalVolumeDialog.cpp" line="+53"/>
+        <source>Adjusting local volume for %1</source>
+        <translation>%1 için yerel ses seviyesi ayarlanıyor</translation>
+    </message>
+    <message>
+        <location filename="UserLocalVolumeDialog.ui"/>
+        <source> dB</source>
+        <translation>dB</translation>
+    </message>
+    <message>
+        <location/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the slider or the text box to change the volume of the user.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Attention!&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Increasing the volume of a user too much can permanently damage your hearing. It may also increase the background noise of the user.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Kullanıcın ses seviyesini değiştirmek için sürgüyü ya da metin kutusunu kullanın. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Dikkat!&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Herhangi bir kullanıcının ses seviyesini fazla arttırmanız kalıcı işitme kaybına sebep olabilir. Aynı zamanda kullanıcının arka plan gürültüsünün artmasına yol açabilir.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+</context>
+<context>
     <name>UserModel</name>
     <message>
-        <location filename="UserModel.cpp" line="-806"/>
+        <location filename="UserModel.cpp" line="-830"/>
         <source>This is a user connected to the server. The icon to the left of the user indicates whether or not they are talking:</source>
         <translation>Bu, sunucuya bağlı bir kullanıcıdır. Solundaki ikon konuşup konuşmadığını belirtir:</translation>
     </message>
@@ -7583,6 +8518,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
     <message>
         <location line="+1"/>
         <source>Shouting directly to your channel.</source>
+        <oldsource>Whispering directly to your channel.</oldsource>
         <translation>Sizin kanalınıza doğrudan bağırıyor.</translation>
     </message>
     <message>
@@ -7676,7 +8612,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>Metin Mesajları Görmezden Geliniyor</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>This shows the flags the channel has, if any:</source>
         <translation>Bu, varsa kanalın taşıdığı bayrakları gösterir:</translation>
     </message>
@@ -7691,6 +8627,11 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>Kanalın zaten gördüğünüz yorumu var (görüntülemek için tıklayınız)</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Channel will be hidden when filtering is enabled</source>
+        <translation>Kanal filtre etkinleştirildiğinde gizlenecektir</translation>
+    </message>
+    <message>
         <location line="+18"/>
         <source>Name</source>
         <translation>İsim</translation>
@@ -7701,12 +8642,17 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>Bayraklar</translation>
     </message>
     <message>
-        <location line="+721"/>
+        <location line="+722"/>
+        <source>Are you sure you want to drag this user?</source>
+        <translation>Bu kullanıcıyı kaydırmak istediğinizden emin misiniz?</translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>Are you sure you want to drag this channel?</source>
         <translation>Bu kanalı kaydırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+94"/>
         <location line="+20"/>
         <source>Cannot perform this movement automatically, please reset the numeric sorting indicators or adjust it manually.</source>
         <translation>Bu işlem otomatik olarak yapılamaz, lütfen sayısal sıralama göstergelerini sıfırlayın ya da elle ayarlayın.</translation>
@@ -7715,7 +8661,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
 <context>
     <name>VersionCheck</name>
     <message>
-        <location filename="VersionCheck.cpp" line="+128"/>
+        <location filename="VersionCheck.cpp" line="+118"/>
         <source>Upgrade Mumble</source>
         <translation>Mumble&apos;ı güncelle</translation>
     </message>
@@ -7742,6 +8688,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
     <message>
         <location line="+14"/>
         <source>Failed to write new version to disk.</source>
+        <oldsource>Failed to write new version to disc.</oldsource>
         <translation>Yeni sürümün diske yazılması başarısız oldu.</translation>
     </message>
     <message>
@@ -7753,7 +8700,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
 <context>
     <name>ViewCert</name>
     <message>
-        <location filename="ViewCert.cpp" line="+43"/>
+        <location filename="ViewCert.cpp" line="+57"/>
         <source>Certificate Chain Details</source>
         <translation>Sertifika zinciri detayları</translation>
     </message>
@@ -7763,52 +8710,47 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>Sertifika zinciri</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>%1 %2</source>
-        <translation>%1 %2</translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+9"/>
         <source>Certificate details</source>
         <translation>Sertifika ayrıntıları</translation>
     </message>
     <message>
-        <location line="+28"/>
-        <location line="+28"/>
-        <source>Common Name: %1</source>
-        <translation>Yaygın İsmi: %1</translation>
+        <location line="+36"/>
+        <location line="+40"/>
+        <source>Common Name</source>
+        <translation>Yaygın İsmi</translation>
     </message>
     <message>
-        <location line="-27"/>
-        <location line="+28"/>
-        <source>Organization: %1</source>
-        <translation>Teşkilat: %1</translation>
+        <location line="-39"/>
+        <location line="+40"/>
+        <source>Organization</source>
+        <translation>Teşkilat</translation>
     </message>
     <message>
-        <location line="-27"/>
-        <source>Subunit: %1</source>
-        <translation>Alt birim: %1</translation>
+        <location line="-39"/>
+        <source>Subunit</source>
+        <translation>Alt birim</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+28"/>
-        <source>Country: %1</source>
-        <translation>Ülke: %1</translation>
+        <location line="+40"/>
+        <source>Country</source>
+        <translation>Ülke</translation>
     </message>
     <message>
-        <location line="-27"/>
-        <location line="+28"/>
-        <source>Locality: %1</source>
-        <translation>İl, konum: %1</translation>
+        <location line="-39"/>
+        <location line="+40"/>
+        <source>Locality</source>
+        <translation>İl, konum</translation>
     </message>
     <message>
-        <location line="-27"/>
-        <location line="+28"/>
-        <source>State: %1</source>
-        <translation>Eyalet: %1</translation>
+        <location line="-39"/>
+        <location line="+40"/>
+        <source>State</source>
+        <translation>Eyalet</translation>
     </message>
     <message>
-        <location line="-27"/>
+        <location line="-39"/>
         <source>Valid from: %1</source>
         <translation>Şu tarihten itibaren geçerli: %1</translation>
     </message>
@@ -7843,7 +8785,12 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>SHA-1 hash değeri: %1</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+2"/>
+        <source>Digest (SHA-256): %1</source>
+        <translation>Özet (SHA-256): %1</translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>Email: %1</source>
         <translation>E-posta: %1</translation>
     </message>
@@ -7859,29 +8806,24 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
     </message>
     <message>
         <location line="+3"/>
-        <source>Unit Name: %1</source>
-        <translation>Birim ismi: %1</translation>
+        <source>Unit Name</source>
+        <translation>Birim İsmi</translation>
     </message>
 </context>
 <context>
     <name>VoiceRecorder</name>
     <message>
-        <location filename="VoiceRecorder.cpp" line="+186"/>
-        <source>Invalid sample rate given to recorder</source>
-        <translation>Kaydediciye geçersiz örnekleme oranı verildi</translation>
-    </message>
-    <message>
-        <location line="+98"/>
+        <location filename="VoiceRecorder.cpp" line="+262"/>
         <source>Recorder failed to create directory &apos;%1&apos;</source>
         <translation>Kaydedici &apos;%1&apos; dizinini oluşturamadı</translation>
     </message>
     <message>
         <location line="+14"/>
-        <source>Recorder failed to open file &apos;%s&apos;</source>
-        <translation>Kaydedici &apos;%s&apos; dosyasını açamadı</translation>
+        <source>Recorder failed to open file &apos;%1&apos;</source>
+        <translation>Kaydedici &apos;%1&apos; dosyasını açamadı</translation>
     </message>
     <message>
-        <location line="+109"/>
+        <location line="+166"/>
         <source>.wav - Uncompressed</source>
         <translation>.wav - Sıkıştırılmamış</translation>
     </message>
@@ -7905,12 +8847,11 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
     <name>VoiceRecorderDialog</name>
     <message>
         <location filename="VoiceRecorderDialog.ui"/>
-        <location filename="VoiceRecorderDialog.cpp" line="+101"/>
-        <location line="+33"/>
+        <location filename="VoiceRecorderDialog.cpp" line="+108"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+9"/>
-        <location line="+136"/>
+        <location line="+141"/>
         <source>Recorder</source>
         <translation>Kaydedici</translation>
     </message>
@@ -7931,6 +8872,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
     </message>
     <message>
         <location/>
+        <location filename="VoiceRecorderDialog.cpp" line="-21"/>
         <source>S&amp;top</source>
         <translation>&amp;Dur</translation>
     </message>
@@ -7970,12 +8912,7 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>&amp;Tara...</translation>
     </message>
     <message>
-        <location filename="VoiceRecorderDialog.cpp" line="-195"/>
-        <source>Closing the recorder will stop your current recording. Do you really want to close the recorder?</source>
-        <translation>Kaydedici kapatmanız güncel kaydı durduracaktır. Kaydediciyi kapatmak istediğinize emin misiniz?</translation>
-    </message>
-    <message>
-        <location line="-31"/>
+        <location filename="VoiceRecorderDialog.cpp" line="-210"/>
         <source>Valid variables are:</source>
         <translation>Geçerli değişkenler şunlardır:</translation>
     </message>
@@ -8000,7 +8937,17 @@ Erişim jetonu bir metindir ve kanallara erişimin çok basit bir şekilde yöne
         <translation>Bilgisayar ismini ekler</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+26"/>
+        <source>Recorder still running</source>
+        <translation>Kaydedici halen çalışıyor</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Closing the recorder without stopping it will discard unwritten audio. Do you really want to close the recorder?</source>
+        <translation>Kaydediciyi durdurmadan kapatmak yazılmamış ses kaydını kaybetmenize sebep olur. Kaydediciyi kapatmak istiyor musunuz?</translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Unable to start recording. Not connected to a server.</source>
         <translation>Kaydetme başlatılamadı. Herhangi bir sunucuya bağlı değilsiniz.</translation>
     </message>
@@ -8022,7 +8969,12 @@ Daha fazla bilgi için sunucu yöneticisi ile irtibata geçiniz.</translation>
         <translation>Kaydetme biçimini seçiniz.</translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+73"/>
+        <source>Stopping</source>
+        <translation>Durduruluyor</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <source>Select target directory</source>
         <translation>Hedef dizini seçiniz</translation>
     </message>
@@ -8035,7 +8987,7 @@ Daha fazla bilgi için sunucu yöneticisi ile irtibata geçiniz.</translation>
 <context>
     <name>WASAPISystem</name>
     <message>
-        <location filename="WASAPI.cpp" line="+184"/>
+        <location filename="WASAPI.cpp" line="+226"/>
         <source>Default Device</source>
         <translation>Varsayılan cihaz</translation>
     </message>

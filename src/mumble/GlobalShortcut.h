@@ -1,43 +1,24 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
+#ifndef MUMBLE_MUMBLE_GLOBALSHORTCUT_H_
+#define MUMBLE_MUMBLE_GLOBALSHORTCUT_H_
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-
-#ifndef GLOBALSHORTCUT_H_
-#define GLOBALSHORTCUT_H_
-
+#include <QtCore/QtGlobal>
 #include <QtCore/QThread>
-#include <QtGui/QToolButton>
-#include <QtGui/QStyledItemDelegate>
+#if QT_VERSION >= 0x050000
+# include <QtWidgets/QToolButton>
+# include <QtWidgets/QStyledItemDelegate>
+#else
+# include <QtGui/QToolButton>
+# include <QtGui/QStyledItemDelegate>
+#endif
 
 #include "ConfigDialog.h"
 #include "Timer.h"
+#include "MUComboBox.h"
 
 #include "ui_GlobalShortcut.h"
 #include "ui_GlobalShortcutTarget.h"
@@ -58,17 +39,20 @@ class GlobalShortcut : public QObject {
 		QString qsWhatsThis;
 		QString name;
 		QVariant qvDefault;
-		bool bExpert;
 		int idx;
 
-		GlobalShortcut(QObject *parent, int index, QString qsName, bool expert = true, QVariant def = QVariant());
-		~GlobalShortcut();
+		GlobalShortcut(QObject *parent, int index, QString qsName, QVariant def = QVariant());
+		~GlobalShortcut() Q_DECL_OVERRIDE;
 
 		bool active() const {
 			return ! qlActive.isEmpty();
 		}
 };
 
+/**
+ * Widget used to define and key combination for a shortcut. Once it gains
+ * focus it will listen for a button combination until it looses focus.
+ */
 class ShortcutKeyWidget : public QLineEdit {
 	private:
 		Q_OBJECT
@@ -92,7 +76,13 @@ class ShortcutKeyWidget : public QLineEdit {
 		void keySet(bool, bool);
 };
 
-class ShortcutActionWidget : public QComboBox {
+/**
+ * Combo box widget used to define the kind of action a shortcut triggers. Then
+ * entries get auto-generated from the GlobalShortcutEngine::qmShortcuts store.
+ *
+ * @see GlobalShortcutEngine
+ */
+class ShortcutActionWidget : public MUComboBox {
 	private:
 		Q_OBJECT
 		Q_DISABLE_COPY(ShortcutActionWidget)
@@ -103,7 +93,7 @@ class ShortcutActionWidget : public QComboBox {
 		void setIndex(int);
 };
 
-class ShortcutToggleWidget : public QComboBox {
+class ShortcutToggleWidget : public MUComboBox {
 	private:
 		Q_OBJECT
 		Q_DISABLE_COPY(ShortcutToggleWidget)
@@ -114,6 +104,9 @@ class ShortcutToggleWidget : public QComboBox {
 		void setIndex(int);
 };
 
+/**
+ * Dialog which is used to select the targets of a targeted shortcut like Whisper.
+ */
 class ShortcutTargetDialog : public QDialog, public Ui::GlobalShortcutTarget {
 	private:
 		Q_OBJECT
@@ -125,7 +118,7 @@ class ShortcutTargetDialog : public QDialog, public Ui::GlobalShortcutTarget {
 		ShortcutTargetDialog(const ShortcutTarget &, QWidget *p = NULL);
 		ShortcutTarget target() const;
 	public slots:
-		void accept();
+		void accept() Q_DECL_OVERRIDE;
 		void on_qrbUsers_clicked();
 		void on_qrbChannel_clicked();
 		void on_qpbAdd_clicked();
@@ -140,6 +133,10 @@ enum ShortcutTargetTypes {
 	SHORTCUT_TARGET_PARENT_SUBCHANNEL = -12
 };
 
+/**
+ * Widget used to display and change a ShortcutTarget. The widget displays a textual representation
+ * of a ShortcutTarget and enable its editing with a ShortCutTargetDialog.
+ */
 class ShortcutTargetWidget : public QFrame {
 	private:
 		Q_OBJECT
@@ -158,15 +155,29 @@ class ShortcutTargetWidget : public QFrame {
 		void on_qtbEdit_clicked();
 };
 
+/**
+ * Used to get custom display and edit behaviour for the model used in GlobalShortcutConfig::qtwShortcuts.
+ * It registers custom handlers which link specific types to custom ShortcutXWidget editors and also
+ * provides a basic textual representation for them when they are not edited.
+ *
+ * @see GlobalShortcutConfig
+ * @see ShortcutKeyWidget
+ * @see ShortcutActionWidget
+ * @see ShortcutTargetWidget
+ */
 class ShortcutDelegate : public QStyledItemDelegate {
 		Q_OBJECT
 		Q_DISABLE_COPY(ShortcutDelegate)
 	public:
 		ShortcutDelegate(QObject *);
-		~ShortcutDelegate();
-		QString displayText(const QVariant &, const QLocale &) const;
+		~ShortcutDelegate() Q_DECL_OVERRIDE;
+		QString displayText(const QVariant &, const QLocale &) const Q_DECL_OVERRIDE;
 };
 
+/**
+ * Contains the Shortcut tab from the settings. This ConfigWidget provides
+ * the user with the interface to add/edit/delete global shortcuts in Mumble.
+ */
 class GlobalShortcutConfig : public ConfigWidget, public Ui::GlobalShortcut {
 		friend class ShortcutActionWidget;
 	private:
@@ -175,19 +186,17 @@ class GlobalShortcutConfig : public ConfigWidget, public Ui::GlobalShortcut {
 	protected:
 		QList<Shortcut> qlShortcuts;
 		QTreeWidgetItem *itemForShortcut(const Shortcut &) const;
-		bool bExpert;
 		bool showWarning() const;
-		bool eventFilter(QObject *, QEvent *);
+		bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
 	public:
 		GlobalShortcutConfig(Settings &st);
-		virtual QString title() const;
-		virtual QIcon icon() const;
+		virtual QString title() const Q_DECL_OVERRIDE;
+		virtual QIcon icon() const Q_DECL_OVERRIDE;
 	public slots:
-		void accept() const;
-		void save() const;
-		void load(const Settings &r);
+		void accept() const Q_DECL_OVERRIDE;
+		void save() const Q_DECL_OVERRIDE;
+		void load(const Settings &r) Q_DECL_OVERRIDE;
 		void reload();
-		bool expert(bool);
 		void commit();
 		void on_qcbEnableGlobalShortcuts_stateChanged(int);
 		void on_qpbAdd_clicked(bool);
@@ -204,6 +213,15 @@ struct ShortcutKey {
 	GlobalShortcut *gs;
 };
 
+/**
+ * Creates a background thread which handles global shortcut behaviour. This class inherits
+ * a system unspecific interface and basic functionality to the actually used native backend
+ * classes (GlobalShortcutPlatform).
+ *
+ * @see GlobalShortcutX
+ * @see GlobalShortcutMac
+ * @see GlobalShortcutWin
+ */
 class GlobalShortcutEngine : public QThread {
 	private:
 		Q_OBJECT
@@ -224,11 +242,11 @@ class GlobalShortcutEngine : public QThread {
 		QList<QList<ShortcutKey *> > qlShortcutList;
 
 		GlobalShortcutEngine(QObject *p = NULL);
-		~GlobalShortcutEngine();
+		~GlobalShortcutEngine() Q_DECL_OVERRIDE;
 		void resetMap();
 		void remap();
 		virtual void needRemap();
-		void run();
+		void run() Q_DECL_OVERRIDE;
 
 		bool handleButton(const QVariant &, bool);
 		static void add(GlobalShortcut *);

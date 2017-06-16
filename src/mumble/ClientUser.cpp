@@ -1,38 +1,12 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
 #include "ClientUser.h"
 
-#include "Plugins.h"
 #include "Channel.h"
 #include "Global.h"
 #include "AudioOutput.h"
@@ -51,6 +25,7 @@ ClientUser::ClientUser(QObject *p) : QObject(p),
 		fPowerMin(0.0f),
 		fPowerMax(0.0f),
 		fAverageAvailable(0.0f),
+		fLocalVolume(1.0f),
 		iFrames(0),
 		iSequence(0) {
 }
@@ -118,7 +93,7 @@ void ClientUser::remove(unsigned int uiSession) {
 			ao->removeBuffer(p);
 
 		if (p->tsState != Settings::Passive) {
-			QWriteLocker lock(&c_qrwlTalking);
+			QWriteLocker writeLock(&c_qrwlTalking);
 			c_qlTalking.removeAll(p);
 		}
 	}
@@ -156,8 +131,6 @@ QString ClientUser::getFlagsString() const {
 }
 
 void ClientUser::setTalking(Settings::TalkState ts) {
-	g.p->tsState = ts;
-	
 	if (tsState == ts)
 		return;
 
@@ -169,8 +142,7 @@ void ClientUser::setTalking(Settings::TalkState ts) {
 
 	tsState = ts;
 	tLastTalkStateChange.restart();
-
-	emit talkingChanged();
+	emit talkingStateChanged();
 
 	if (nstate && cChannel) {
 		QWriteLocker lock(&c_qrwlTalking);
@@ -187,63 +159,63 @@ void ClientUser::setMute(bool mute) {
 	bMute = mute;
 	if (! bMute)
 		bDeaf = false;
-	emit muteDeafChanged();
+	emit muteDeafStateChanged();
 }
 
 void ClientUser::setSuppress(bool suppress) {
 	if (bSuppress == suppress)
 		return;
 	bSuppress = suppress;
-	emit muteDeafChanged();
+	emit muteDeafStateChanged();
 }
 
 void ClientUser::setLocalIgnore(bool ignore) {
 	if (bLocalIgnore == ignore)
 		return;
 	bLocalIgnore = ignore;
-	emit muteDeafChanged();
+	emit muteDeafStateChanged();
 }
 
 void ClientUser::setLocalMute(bool mute) {
 	if (bLocalMute == mute)
 		return;
 	bLocalMute = mute;
-	emit muteDeafChanged();
+	emit muteDeafStateChanged();
 }
 
 void ClientUser::setDeaf(bool deaf) {
 	bDeaf = deaf;
 	if (bDeaf)
 		bMute = true;
-	emit muteDeafChanged();
+	emit muteDeafStateChanged();
 }
 
 void ClientUser::setSelfMute(bool mute) {
 	bSelfMute = mute;
 	if (! mute)
 		bSelfDeaf = false;
-	emit muteDeafChanged();
+	emit muteDeafStateChanged();
 }
 
 void ClientUser::setSelfDeaf(bool deaf) {
 	bSelfDeaf = deaf;
 	if (deaf)
 		bSelfMute = true;
-	emit muteDeafChanged();
+	emit muteDeafStateChanged();
 }
 
 void ClientUser::setPrioritySpeaker(bool priority) {
 	if (bPrioritySpeaker == priority)
 		return;
 	bPrioritySpeaker = priority;
-	emit muteDeafChanged();
+	emit prioritySpeakerStateChanged();
 }
 
 void ClientUser::setRecording(bool recording) {
 	if (bRecording == recording)
 		return;
 	bRecording = recording;
-	emit muteDeafChanged();
+	emit recordingStateChanged();
 }
 
 void ClientUser::setPosition(float x, float y, float z) {
@@ -320,11 +292,4 @@ bool ClientUser::isActive() {
 void Channel::addClientUser(ClientUser *p) {
 	addUser(p);
 	p->setParent(this);
-}
-
-QDataStream &operator<<(QDataStream &qds, const ClientUser::JitterRecord &jr) {
-	qds << static_cast<qint8>(qBound(-128, jr.iSequence, 127));
-	qds << static_cast<qint8>(qBound(-128, jr.iFrames, 127));
-	qds << static_cast<quint32>(qMin(4294967295ULL, jr.uiElapsed));
-	return qds;
 }

@@ -1,35 +1,10 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef CELTCODEC_H_
-#define CELTCODEC_H_
+#ifndef MUMBLE_MUMBLE_CELTCODEC_H_
+#define MUMBLE_MUMBLE_CELTCODEC_H_
 
 #include <stdint.h>
 #include <celt.h>
@@ -61,7 +36,7 @@ class CELTCodec {
 		void (__cdecl *celt_decoder_destroy)(CELTDecoder *st);
 		int (__cdecl *celt_decoder_ctl)(CELTDecoder * st, int request, ...);
 
-		CELTCodec(const QString &version);
+		CELTCodec(const QString &celt_version);
 		virtual ~CELTCodec();
 		bool isValid() const;
 		int bitstreamVersion() const;
@@ -86,11 +61,11 @@ class CELTCodec070 : public CELTCodec {
 		int (__cdecl *celt_decode)(CELTDecoder *st, const unsigned char *data, int len, celt_int16 *pcm);
 		const char *(__cdecl *celt_strerror)(int error);
 	public:
-		CELTCodec070(const QString &version);
-		virtual CELTEncoder *encoderCreate();
-		virtual CELTDecoder *decoderCreate();
-		virtual int encode(CELTEncoder *st, const celt_int16 *pcm, unsigned char *compressed, int nbCompressedBytes);
-		virtual int decode_float(CELTDecoder *st, const unsigned char *data, int len, float *pcm);
+		CELTCodec070(const QString &celt_version);
+		CELTEncoder *encoderCreate() Q_DECL_OVERRIDE;
+		CELTDecoder *decoderCreate() Q_DECL_OVERRIDE;
+		int encode(CELTEncoder *st, const celt_int16 *pcm, unsigned char *compressed, int nbCompressedBytes) Q_DECL_OVERRIDE;
+		int decode_float(CELTDecoder *st, const unsigned char *data, int len, float *pcm) Q_DECL_OVERRIDE;
 };
 
 class CELTCodec011 : public CELTCodec {
@@ -104,11 +79,11 @@ class CELTCodec011 : public CELTCodec {
 		int (__cdecl *celt_decode)(CELTDecoder *st, const unsigned char *data, int len, celt_int16 *pcm, int frame_size);
 		const char *(__cdecl *celt_strerror)(int error);
 	public:
-		CELTCodec011(const QString &version);
-		virtual CELTEncoder *encoderCreate();
-		virtual CELTDecoder *decoderCreate();
-		virtual int encode(CELTEncoder *st, const celt_int16 *pcm, unsigned char *compressed, int nbCompressedBytes);
-		virtual int decode_float(CELTDecoder *st, const unsigned char *data, int len, float *pcm);
+		CELTCodec011(const QString &celt_version);
+		CELTEncoder *encoderCreate() Q_DECL_OVERRIDE;
+		CELTDecoder *decoderCreate() Q_DECL_OVERRIDE;
+		int encode(CELTEncoder *st, const celt_int16 *pcm, unsigned char *compressed, int nbCompressedBytes) Q_DECL_OVERRIDE;
+		int decode_float(CELTDecoder *st, const unsigned char *data, int len, float *pcm) Q_DECL_OVERRIDE;
 };
 
 class CELTCodecSBCELT : public CELTCodec {
@@ -116,10 +91,10 @@ class CELTCodecSBCELT : public CELTCodec {
 		const CELTMode *cmSBCELTMode;
 	public:
 		CELTCodecSBCELT();
-		virtual CELTEncoder *encoderCreate();
-		virtual CELTDecoder *decoderCreate();
-		virtual int encode(CELTEncoder *st, const celt_int16 *pcm, unsigned char *compressed, int nbCompressedBytes);
-		virtual int decode_float(CELTDecoder *st, const unsigned char *data, int len, float *pcm);
+		CELTEncoder *encoderCreate() Q_DECL_OVERRIDE;
+		CELTDecoder *decoderCreate() Q_DECL_OVERRIDE;
+		int encode(CELTEncoder *st, const celt_int16 *pcm, unsigned char *compressed, int nbCompressedBytes) Q_DECL_OVERRIDE;
+		int decode_float(CELTDecoder *st, const unsigned char *data, int len, float *pcm) Q_DECL_OVERRIDE;
 };
 
 #endif  // CELTCODEC_H_

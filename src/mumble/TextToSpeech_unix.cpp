@@ -1,39 +1,18 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
 #include "TextToSpeech.h"
 
 #ifdef USE_SPEECHD
-#include <libspeechd.h>
+# ifdef USE_SPEECHD_PKGCONFIG
+#  include <speech-dispatcher/libspeechd.h>
+# else
+#  include <libspeechd.h>
+# endif
 #endif
 
 #include "Global.h"
@@ -42,6 +21,11 @@ class TextToSpeechPrivate {
 #ifdef USE_SPEECHD
 	protected:
 		SPDConnection *spd;
+		/// Used to store the requested volume of the TextToSpeech object
+		/// before speech-dispatcher has been initialized.
+		int volume;
+		bool initialized;
+		void ensureInitialized();
 #endif
 	public:
 		TextToSpeechPrivate();
@@ -52,15 +36,9 @@ class TextToSpeechPrivate {
 
 #ifdef USE_SPEECHD
 TextToSpeechPrivate::TextToSpeechPrivate() {
-	spd = spd_open("Mumble", NULL, NULL, SPD_MODE_THREADED);
-	if (! spd) {
-		qWarning("TextToSpeech: Failed to contact speech dispatcher.");
-	} else {
-		if (spd_set_punctuation(spd, SPD_PUNCT_NONE) != 0)
-			qWarning("TextToSpech: Failed to set punctuation mode.");
-		if (spd_set_spelling(spd, SPD_SPELL_ON) != 0)
-			qWarning("TextToSpeech: Failed to set spelling mode.");
-	}
+	initialized = false;
+	volume = -1;
+	spd = NULL;
 }
 
 TextToSpeechPrivate::~TextToSpeechPrivate() {
@@ -70,12 +48,57 @@ TextToSpeechPrivate::~TextToSpeechPrivate() {
 	}
 }
 
+void TextToSpeechPrivate::ensureInitialized() {
+	if (initialized) {
+		return;
+	}
+
+	spd = spd_open("Mumble", NULL, NULL, SPD_MODE_THREADED);
+	if (! spd) {
+		qWarning("TextToSpeech: Failed to contact speech dispatcher.");
+	} else {
+		QString lang;
+		if (!g.s.qsTTSLanguage.isEmpty()) {
+			lang = g.s.qsTTSLanguage;
+		} else if (!g.s.qsLanguage.isEmpty()) {
+			QLocale locale(g.s.qsLanguage);
+			lang = locale.bcp47Name();
+		} else {
+			QLocale systemLocale;
+			lang = systemLocale.bcp47Name();
+		}
+		if (!lang.isEmpty()) {
+			if (spd_set_language(spd, lang.toLocal8Bit().constData()) != 0) {
+				qWarning("TextToSpeech: Failed to set language.");
+			}
+		}
+
+		if (spd_set_punctuation(spd, SPD_PUNCT_NONE) != 0)
+			qWarning("TextToSpech: Failed to set punctuation mode.");
+		if (spd_set_spelling(spd, SPD_SPELL_ON) != 0)
+			qWarning("TextToSpeech: Failed to set spelling mode.");
+	}
+
+	initialized = true;
+
+	if (volume != -1) {
+		setVolume(volume);
+	}
+}
+
 void TextToSpeechPrivate::say(const QString &txt) {
+	ensureInitialized();
+
 	if (spd)
 		spd_say(spd, SPD_MESSAGE, txt.toUtf8());
 }
 
 void TextToSpeechPrivate::setVolume(int vol) {
+	if (!initialized) {
+		volume = vol;
+		return;
+	}
+
 	if (spd)
 		spd_set_volume(spd, vol * 2 - 100);
 }

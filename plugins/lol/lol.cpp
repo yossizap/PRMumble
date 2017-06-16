@@ -1,11 +1,16 @@
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
+
 /* Copyright (C) 2012, dark_skeleton (d-rez) <dark.skeleton@gmail.com>
    Copyright (C) 2005-2012, Thorvald Natvig <thorvald@natvig.com>
 
    All rights reserved.
- 
+
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
-   are met: 
+   are met:
 
    - Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
@@ -29,7 +34,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */ 
 
-#include "../mumble_plugin_win32.h"  
+#include "../mumble_plugin_win32_32bit.h"  
 
 /*
 	Arrays of bytes to find addresses accessed by respective functions so we don't have to blindly search for addresses after every update
@@ -52,17 +57,15 @@
 	PORT:					+0x1C (offset, not pointer!)
 */
 
-static BYTE *posptr;
-static BYTE *afrontptr;
-static BYTE *tmpptr;
+static procptr32_t posptr, afrontptr, tmpptr;
 
-static BYTE *posptr_ = (BYTE *)0x2F5E5F8;
-static BYTE *camptr = (BYTE *)0xB738E8;
-static BYTE *camfrontptr = camptr + 0x14;
-static BYTE *gameptr = (BYTE *)0xE22E90;
+static procptr32_t posptr_ = 0x2F5E5F8;
+static procptr32_t camptr = 0xB738E8;
+static procptr32_t camfrontptr = 0x14;
+static procptr32_t gameptr = 0xE22E90;
 
-static BYTE *hostipptr = (BYTE *)0xAF69D18;
-static BYTE *hostportptr = hostipptr + 0x1C;
+static procptr32_t hostipptr = 0xAF69D18;
+static procptr32_t hostportptr = hostipptr + 0x1C;
 
 static char prev_hostip[16]; // These should never change while the game is running, but just in case...
 static int prev_hostport;
@@ -78,17 +81,17 @@ static bool calcout(float *pos, float *cam, float *opos, float *ocam) {
 }
 
 static bool refreshPointers(void) {
-	posptr = afrontptr = tmpptr = NULL;
+	posptr = afrontptr = tmpptr = 0;
 	
 	// Avatar front vector pointer
-	tmpptr = peekProc<BYTE *>(gameptr);
+	tmpptr = peekProc<procptr32_t>(gameptr);
 	if (!tmpptr)
 		return false; // Something went wrong, unlink
 
 	afrontptr = tmpptr + 0x2acc;
 	
 	// Avatar position vector
-	tmpptr = peekProc<BYTE *>(posptr_);
+	tmpptr = peekProc<procptr32_t>(posptr_);
 	if (!tmpptr)
 		return false; // Something went wrong, unlink
 
@@ -107,7 +110,7 @@ static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, floa
 	bool ok;
 
 	// Player not in game (or something broke), unlink
-	if (!peekProc<BYTE *>(gameptr))
+	if (!peekProc<procptr32_t>(gameptr))
 		return false;
 
 	ok = peekProc(camfrontptr, camera_front, 12) &&
@@ -117,7 +120,7 @@ static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, floa
 		 peekProc(hostipptr, hostip) &&
 		 peekProc(hostportptr, &hostport, 4);
 
-	if (!ok) 
+	if (!ok)
 		return false;
 
 	// Ensure strings are zero terminated
@@ -193,10 +196,10 @@ static MumblePlugin2 lolplug2 = {
 	trylock
 };
 
-extern "C" __declspec(dllexport) MumblePlugin *getMumblePlugin() {
+extern "C" MUMBLE_PLUGIN_EXPORT MumblePlugin *getMumblePlugin() {
 	return &lolplug;
 }
 
-extern "C" __declspec(dllexport) MumblePlugin2 *getMumblePlugin2() {
+extern "C" MUMBLE_PLUGIN_EXPORT MumblePlugin2 *getMumblePlugin2() {
 	return &lolplug2;
 }

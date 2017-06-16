@@ -1,41 +1,11 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
 #include "PulseAudio.h"
-
-#include <sys/soundcard.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/ioctl.h>
 
 #include "Global.h"
 #include "MainWindow.h"
@@ -106,6 +76,7 @@ PulseAudioSystem::PulseAudioSystem() {
 	bAttenuating = false;
 	iRemainingOperations = 0;
 	bPulseIsGood = false;
+	iSinkId = -1;
 
 	pam = pa_threaded_mainloop_new();
 	pa_mainloop_api *api = pa_threaded_mainloop_get_api(pam);
@@ -116,7 +87,7 @@ PulseAudioSystem::PulseAudioSystem() {
 	pa_proplist_sets(proplist, PA_PROP_APPLICATION_NAME, "Mumble");
 	pa_proplist_sets(proplist, PA_PROP_APPLICATION_ID, "com.reality.PRMumble.PRMumble");
 	pa_proplist_sets(proplist, PA_PROP_APPLICATION_ICON_NAME, "mumble");
-	pa_proplist_sets(proplist, PA_PROP_MEDIA_ROLE, "phone");
+	pa_proplist_sets(proplist, PA_PROP_MEDIA_ROLE, "game");
 
 	pacContext = pa_context_new_with_proplist(api, NULL, proplist);
 	pa_proplist_free(proplist);
@@ -152,6 +123,28 @@ PulseAudioSystem::~PulseAudioSystem() {
 	pa_threaded_mainloop_free(pam);
 }
 
+QString PulseAudioSystem::outputDevice() const {
+	QString odev = g.s.qsPulseAudioOutput;
+	if (odev.isEmpty()) {
+		odev = qsDefaultOutput;
+	}
+	if (!qhOutput.contains(odev)) {
+		odev = qsDefaultOutput;
+	}
+	return odev;
+}
+
+QString PulseAudioSystem::inputDevice() const {
+	QString idev = g.s.qsPulseAudioInput;
+	if (idev.isEmpty()) {
+		idev = qsDefaultInput;
+	}
+	if (!qhInput.contains(idev)) {
+		idev = qsDefaultInput;
+	}
+	return idev;
+}
+
 void PulseAudioSystem::wakeup() {
 	pa_mainloop_api *api = pa_threaded_mainloop_get_api(pam);
 	api->defer_enable(pade, true);
@@ -183,7 +176,7 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 	PulseAudioOutput *pao = dynamic_cast<PulseAudioOutput *>(raw_ao);
 
 	if (raw_ao) {
-		QString odev = g.s.qsPulseAudioOutput.isEmpty() ? qsDefaultOutput : g.s.qsPulseAudioOutput;
+		QString odev = outputDevice();
 		pa_stream_state ost = pasOutput ? pa_stream_get_state(pasOutput) : PA_STREAM_TERMINATED;
 		bool do_stop = false;
 		bool do_start = false;
@@ -229,11 +222,13 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 		if (do_stop) {
 			qWarning("PulseAudio: Stopping output");
 			pa_stream_disconnect(pasOutput);
+			iSinkId = -1;
 		} else if (do_start) {
 			qWarning("PulseAudio: Starting output: %s", qPrintable(odev));
 			pa_buffer_attr buff;
 			const pa_sample_spec *pss = pa_stream_get_sample_spec(pasOutput);
-			const unsigned int iBlockLen = ((pao->iFrameSize * pss->rate) / SAMPLE_RATE) * pss->channels * ((pss->format == PA_SAMPLE_FLOAT32NE) ? sizeof(float) : sizeof(short));
+			const size_t sampleSize = (pss->format == PA_SAMPLE_FLOAT32NE) ? sizeof(float) : sizeof(short);
+			const unsigned int iBlockLen = ((pao->iFrameSize * pss->rate) / SAMPLE_RATE) * pss->channels * static_cast<unsigned int>(sampleSize);
 			buff.tlength = iBlockLen * (g.s.iOutputDelay+1);
 			buff.minreq = iBlockLen;
 			buff.maxlength = -1;
@@ -245,11 +240,12 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 			qsOutputCache = odev;
 
 			pa_stream_connect_playback(pasOutput, qPrintable(odev), &buff, PA_STREAM_ADJUST_LATENCY, NULL, NULL);
+			pa_context_get_sink_info_by_name(pacContext, qPrintable(odev), sink_info_callback, this);
 		}
 	}
 
 	if (raw_ai) {
-		QString idev = g.s.qsPulseAudioInput.isEmpty() ? qsDefaultInput : g.s.qsPulseAudioInput;
+		QString idev = inputDevice();
 		pa_stream_state ist = pasInput ? pa_stream_get_state(pasInput) : PA_STREAM_TERMINATED;
 		bool do_stop = false;
 		bool do_start = false;
@@ -293,7 +289,8 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 			qWarning("PulseAudio: Starting input %s",qPrintable(idev));
 			pa_buffer_attr buff;
 			const pa_sample_spec *pss = pa_stream_get_sample_spec(pasInput);
-			const unsigned int iBlockLen = ((pai->iFrameSize * pss->rate) / SAMPLE_RATE) * pss->channels * ((pss->format == PA_SAMPLE_FLOAT32NE) ? sizeof(float) : sizeof(short));
+			const size_t sampleSize = (pss->format == PA_SAMPLE_FLOAT32NE) ? sizeof(float) : sizeof(short);
+			const unsigned int iBlockLen = ((pai->iFrameSize * pss->rate) / SAMPLE_RATE) * pss->channels * static_cast<unsigned int>(sampleSize);
 			buff.tlength = iBlockLen;
 			buff.minreq = iBlockLen;
 			buff.maxlength = -1;
@@ -307,7 +304,7 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 	}
 
 	if (raw_ai) {
-		QString odev = g.s.qsPulseAudioOutput.isEmpty() ? qsDefaultOutput : g.s.qsPulseAudioOutput;
+		QString odev = outputDevice();
 		QString edev = qhEchoMap.value(odev);
 		pa_stream_state est = pasSpeaker ? pa_stream_get_state(pasSpeaker) : PA_STREAM_TERMINATED;
 		bool do_stop = false;
@@ -356,7 +353,8 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 			qWarning("PulseAudio: Starting echo: %s", qPrintable(edev));
 			pa_buffer_attr buff;
 			const pa_sample_spec *pss = pa_stream_get_sample_spec(pasSpeaker);
-			const unsigned int iBlockLen = ((pai->iFrameSize * pss->rate) / SAMPLE_RATE) * pss->channels * ((pss->format == PA_SAMPLE_FLOAT32NE) ? sizeof(float) : sizeof(short));
+			const size_t sampleSize = (pss->format == PA_SAMPLE_FLOAT32NE) ? sizeof(float) : sizeof(short);
+			const unsigned int iBlockLen = ((pai->iFrameSize * pss->rate) / SAMPLE_RATE) * pss->channels * static_cast<unsigned int>(sampleSize);
 			buff.tlength = iBlockLen;
 			buff.minreq = iBlockLen;
 			buff.maxlength = -1;
@@ -425,8 +423,7 @@ void PulseAudioSystem::source_callback(pa_context *, const pa_source_info *i, in
 	pas->qhSpecMap.insert(name, i->sample_spec);
 	pas->qhChanMap.insert(name, i->channel_map);
 
-	if (i->monitor_of_sink == PA_INVALID_INDEX)
-		pas->qhInput.insert(QLatin1String(i->name), QLatin1String(i->description));
+	pas->qhInput.insert(QLatin1String(i->name), QLatin1String(i->description));
 }
 
 void PulseAudioSystem::server_callback(pa_context *, const pa_server_info *i, void *userdata) {
@@ -438,6 +435,16 @@ void PulseAudioSystem::server_callback(pa_context *, const pa_server_info *i, vo
 	pas->bServerDone = true;
 	pas->wakeup();
 }
+
+void PulseAudioSystem::sink_info_callback(pa_context *, const pa_sink_info *i, int eol, void *userdata) {
+	PulseAudioSystem *pas = reinterpret_cast<PulseAudioSystem *>(userdata);
+	if (!i || eol) {
+		return;
+	}
+
+	pas->iSinkId = i->index;
+}
+
 
 void PulseAudioSystem::stream_callback(pa_stream *s, void *userdata) {
 	PulseAudioSystem *pas = reinterpret_cast<PulseAudioSystem *>(userdata);
@@ -455,13 +462,23 @@ void PulseAudioSystem::read_callback(pa_stream *s, size_t bytes, void *userdata)
 	PulseAudioSystem *pas = reinterpret_cast<PulseAudioSystem *>(userdata);
 
 	size_t length = bytes;
-	const void *data;
+	const void *data = NULL;
 	pa_stream_peek(s, &data, &length);
+	if (data == NULL && length > 0) {
+		qWarning("PulseAudio: pa_stream_peek reports no data at current read index.");
+	} else if (data == NULL && length == 0) {
+		qWarning("PulseAudio: pa_stream_peek reports empty memblockq.");
+	} else if (data == NULL || length == 0) {
+		qWarning("PulseAudio: invalid pa_stream_peek state encountered.");
+		return;
+	}
 
 	AudioInputPtr ai = g.ai;
 	PulseAudioInput *pai = dynamic_cast<PulseAudioInput *>(ai.get());
 	if (! pai) {
-		pa_stream_drop(s);
+		if (length > 0) {
+			pa_stream_drop(s);
+		}
 		pas->wakeup();
 		return;
 	}
@@ -474,27 +491,33 @@ void PulseAudioSystem::read_callback(pa_stream *s, size_t bytes, void *userdata)
 			pai->iMicFreq = pss->rate;
 			pai->iMicChannels = pss->channels;
 			if (pss->format == PA_SAMPLE_FLOAT32NE)
-				pai->eMicFormat = AudioInput::SampleFloat;
+				pai->eMicFormat = PulseAudioInput::SampleFloat;
 			else
-				pai->eMicFormat = AudioInput::SampleShort;
+				pai->eMicFormat = PulseAudioInput::SampleShort;
 			pai->initializeMixer();
 		}
-		pai->addMic(data, length / pai->iMicSampleSize);
+		if (data != NULL) {
+			pai->addMic(data, static_cast<unsigned int>(length) / pai->iMicSampleSize);
+		}
 	} else if (s == pas->pasSpeaker) {
 		if (!pa_sample_spec_equal(pss, &pai->pssEcho)) {
 			pai->pssEcho = *pss;
 			pai->iEchoFreq = pss->rate;
 			pai->iEchoChannels = pss->channels;
 			if (pss->format == PA_SAMPLE_FLOAT32NE)
-				pai->eEchoFormat = AudioInput::SampleFloat;
+				pai->eEchoFormat = PulseAudioInput::SampleFloat;
 			else
-				pai->eEchoFormat = AudioInput::SampleShort;
+				pai->eEchoFormat = PulseAudioInput::SampleShort;
 			pai->initializeMixer();
 		}
-		pai->addEcho(data, length / pai->iEchoSampleSize);
+		if (data != NULL) {
+			pai->addEcho(data, static_cast<unsigned int>(length) / pai->iEchoSampleSize);
+		}
 	}
 
-	pa_stream_drop(s);
+	if (length > 0) {
+		pa_stream_drop(s);
+	}
 }
 
 void PulseAudioSystem::write_callback(pa_stream *s, size_t bytes, void *userdata) {
@@ -520,9 +543,9 @@ void PulseAudioSystem::write_callback(pa_stream *s, size_t bytes, void *userdata
 		pao->pss = *pss;
 		pao->pcm = *pcm;
 		if (pss->format == PA_SAMPLE_FLOAT32NE)
-			pao->eSampleFormat = AudioOutput::SampleFloat;
+			pao->eSampleFormat = PulseAudioOutput::SampleFloat;
 		else
-			pao->eSampleFormat = AudioOutput::SampleShort;
+			pao->eSampleFormat = PulseAudioOutput::SampleShort;
 		pao->iMixerFreq = pss->rate;
 		pao->iChannels = pss->channels;
 		unsigned int chanmasks[pss->channels];
@@ -572,7 +595,7 @@ void PulseAudioSystem::write_callback(pa_stream *s, size_t bytes, void *userdata
 	}
 
 	const unsigned int iSampleSize = pao->iSampleSize;
-	const unsigned int samples = bytes / iSampleSize;
+	const unsigned int samples = static_cast<unsigned int>(bytes) / iSampleSize;
 	bool oldAttenuation = pas->bAttenuating;
 
 	// do we have some mixed output?
@@ -599,6 +622,19 @@ void PulseAudioSystem::volume_sink_input_list_callback(pa_context *c, const pa_s
 	PulseAudioSystem *pas = reinterpret_cast<PulseAudioSystem *>(userdata);
 
 	if (eol == 0) {
+		// If we're using the default of "enable attenuation on all ouputs" and output from an application is loopbacked,
+		// both the loopback and the application will be attenuated leading to double attenuation.
+		if (!g.s.bOnlyAttenuateSameOutput && pas->iSinkId > -1 && !strcmp(i->driver, "module-loopback.c")) {
+			return;
+		}
+		// If we're not attenuating different sinks and the input is not on this sink, don't attenuate. Or,
+		// if the input is a loopback module and connected to Mumble's sink, also ignore it (loopbacks are used to connect
+		// sinks). An attenuated loopback means an indirect application attenuation.
+		if (g.s.bOnlyAttenuateSameOutput && pas->iSinkId > -1) {
+			if (int(i->sink) != pas->iSinkId || (int(i->sink) == pas->iSinkId && !strcmp(i->driver, "module-loopback.c") && !g.s.bAttenuateLoopbacks)) {
+				return;
+			}
+		}
 		// ensure we're not attenuating ourselves!
 		if (strcmp(i->name, mumble_sink_input) != 0) {
 			// create a new entry
@@ -734,7 +770,7 @@ void PulseAudioSystem::stream_restore_read_callback(pa_context *c, const pa_ext_
 	}
 }
 
-void PulseAudioSystem::restore_volume_success_callback(pa_context *c, int success, void *userdata) {
+void PulseAudioSystem::restore_volume_success_callback(pa_context *, int, void *userdata) {
 	PulseAudioSystem *pas = reinterpret_cast<PulseAudioSystem *>(userdata);
 
 	pas->iRemainingOperations--;

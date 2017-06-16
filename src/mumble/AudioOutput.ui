@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
-    <height>544</height>
+    <width>546</width>
+    <height>669</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="qcbSystem">
+       <widget class="MUComboBox" name="qcbSystem">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -73,7 +73,7 @@
        </widget>
       </item>
       <item row="0" column="4">
-       <widget class="QComboBox" name="qcbDevice">
+       <widget class="MUComboBox" name="qcbDevice">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -87,15 +87,24 @@
          <string>&lt;b&gt;This is the output device to use for audio.&lt;/b&gt;</string>
         </property>
         <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+         <enum>MUComboBox::AdjustToMinimumContentsLength</enum>
         </property>
         <property name="minimumContentsLength">
          <number>16</number>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
+      <item row="1" column="1">
        <widget class="QCheckBox" name="qcbExclusive">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>27</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string>Exclusive mode, not recommended.</string>
         </property>
@@ -168,16 +177,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="qliVolume">
-        <property name="text">
-         <string>Volume</string>
-        </property>
-        <property name="buddy">
-         <cstring>qsVolume</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QSlider" name="qsVolume">
         <property name="toolTip">
@@ -197,6 +196,16 @@
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="qliVolume">
+        <property name="text">
+         <string>Volume</string>
+        </property>
+        <property name="buddy">
+         <cstring>qsVolume</cstring>
         </property>
        </widget>
       </item>
@@ -239,32 +248,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="qlDelay">
-        <property name="text">
-         <string notr="true">od</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="qliOtherVolume">
-        <property name="text">
-         <string>Attenuate applications by...</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-        <property name="buddy">
-         <cstring>qsOtherVolume</cstring>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="1">
        <widget class="QSlider" name="qsOtherVolume">
         <property name="toolTip">
@@ -285,8 +268,12 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="visible">
-         <bool>false</bool>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="qlDelay">
+        <property name="text">
+         <string notr="true">od</string>
         </property>
        </widget>
       </item>
@@ -295,8 +282,21 @@
         <property name="text">
          <string notr="true">at</string>
         </property>
-        <property name="visible">
-         <bool>false</bool>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="qliOtherVolume">
+        <property name="text">
+         <string>Attenuate applications by...</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <property name="buddy">
+         <cstring>qsOtherVolume</cstring>
         </property>
        </widget>
       </item>
@@ -313,9 +313,6 @@
           <property name="text">
            <string>while other users talk</string>
           </property>
-          <property name="visible">
-           <bool>false</bool>
-          </property>
          </widget>
         </item>
         <item>
@@ -329,12 +326,69 @@
           <property name="text">
            <string>while you talk</string>
           </property>
-          <property name="visible">
-           <bool>false</bool>
-          </property>
          </widget>
         </item>
        </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="qgbAdvancedAttenuation">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="title">
+      <string>Advanced Attenuation Options</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QCheckBox" name="qcbOnlyAttenuateSameOutput">
+        <property name="toolTip">
+         <string>If checked, Mumble will only attenuate applications that are using the same output source as Mumble</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;b&gt;Attenuate only applications using the same output as Mumble&lt;/b&gt;&lt;br /&gt;If checked, applications that use a different output than Mumble will not be attenuated.</string>
+        </property>
+        <property name="text">
+         <string>Only attenuate applications using the same output device</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="qcbAttenuateLoopbacks">
+        <property name="toolTip">
+         <string>If checked, PulseAudio loopback modules will be attenuated</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;b&gt;Attenuate PulseAudio loopback modules&lt;/b&gt;&lt;br /&gt;If loopback modules are linked to Mumble's output device/sink, they will also be attenuated.</string>
+        </property>
+        <property name="text">
+         <string>Attenuate PulseAudio loopback modules</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="qgbPrioritySpeaker">
+     <property name="title">
+      <string>Priority Speaker</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QCheckBox" name="qcbAttenuateUsersOnPrioritySpeak">
+        <property name="toolTip">
+         <string>If checked Mumble lowers the volume of other users while you talk if you have the &quot;Priority Speaker&quot; status.</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;b&gt;Attenuate other users while talking as Priority Speaker.&lt;/b&gt;&lt;br /&gt;Mumble supports decreasing the volume of other users while you talk as the &lt;i&gt;Priority Speaker&lt;/i&gt; to avoid getting disturbed. Checking this checkbox will enable this feature.</string>
+        </property>
+        <property name="text">
+         <string>Attenuate other users while talking as Priority Speaker.</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -369,9 +423,6 @@
         <property name="buddy">
          <cstring>qsMinDistance</cstring>
         </property>
-        <property name="visible">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item row="1" column="3">
@@ -394,12 +445,6 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="enabled">
-          <bool>false</bool>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item row="1" column="5">
@@ -413,9 +458,6 @@
         <property name="text">
          <string notr="true">md</string>
         </property>
-        <property name="visible">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item row="3" column="1">
@@ -425,9 +467,6 @@
         </property>
         <property name="buddy">
          <cstring>qsMaxDistance</cstring>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -448,12 +487,6 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="enabled">
-          <bool>false</bool>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item row="3" column="5">
@@ -467,9 +500,6 @@
         <property name="text">
          <string notr="true">md</string>
         </property>
-        <property name="visible">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item row="4" column="1">
@@ -479,9 +509,6 @@
         </property>
         <property name="buddy">
          <cstring>qsMaxDistVolume</cstring>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -499,12 +526,6 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="enabled">
-          <bool>false</bool>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item row="4" column="5">
@@ -518,9 +539,6 @@
         <property name="text">
          <string notr="true">mv</string>
         </property>
-        <property name="visible">
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -530,9 +548,6 @@
         </property>
         <property name="buddy">
          <cstring>qsMaxDistVolume</cstring>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -546,9 +561,6 @@
         </property>
         <property name="text">
          <string notr="true">bl</string>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -568,12 +580,6 @@
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="enabled">
-          <bool>false</bool>
-        </property>
-        <property name="visible">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -681,7 +687,7 @@
        </widget>
       </item>
       <item row="0" column="1" colspan="2">
-       <widget class="QComboBox" name="qcbLoopback">
+       <widget class="MUComboBox" name="qcbLoopback">
         <property name="toolTip">
          <string>Desired loopback mode</string>
         </property>
@@ -724,6 +730,13 @@
   <tabstop>qsPacketDelay</tabstop>
   <tabstop>qsPacketLoss</tabstop>
  </tabstops>
+ <customwidgets>
+  <customwidget>
+   <class>MUComboBox</class>
+   <extends>QComboBox</extends>
+   <header>widgets/MUComboBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

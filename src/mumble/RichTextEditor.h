@@ -1,37 +1,19 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
+#ifndef MUMBLE_MUMBLE_RICHTEXTEDITOR_H_
+#define MUMBLE_MUMBLE_RICHTEXTEDITOR_H_
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
+#include <QtCore/QtGlobal>
+#if QT_VERSION >= 0x050000
+# include <QtWidgets/QTextEdit>
+#else
+# include <QtGui/QTextEdit>
+#endif
 
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef RICHTEXTEDITOR_H_
-#define RICHTEXTEDITOR_H_
-
-#include <QtGui/QTextEdit>
+class LogDocument;
 
 class RichTextHtmlEdit : public QTextEdit {
 	private:
@@ -41,6 +23,8 @@ class RichTextHtmlEdit : public QTextEdit {
 		void insertFromMimeData(const QMimeData *source);
 	public:
 		RichTextHtmlEdit(QWidget *p);
+	private:
+		LogDocument *m_document;
 };
 
 #include "ui_RichTextEditor.h"
@@ -66,10 +50,14 @@ class RichTextEditor : public QTabWidget, Ui::RichTextEditor {
 		bool bReadOnly;
 		void richToPlain();
 		QColor qcColor;
+		bool eventFilter(QObject *obj, QEvent *event) Q_DECL_OVERRIDE;
 	public:
 		RichTextEditor(QWidget *p = NULL);
 		QString text();
 		bool isModified() const;
+	signals:
+		/// The accept signal is emitted when Ctrl-Enter is pressed inside the RichTextEditor.
+		void accept();
 	public slots:
 		void setText(const QString &text, bool readonly = false);
 		void updateColor(const QColor &);
@@ -87,6 +75,11 @@ class RichTextEditor : public QTabWidget, Ui::RichTextEditor {
 		void on_qteRichText_cursorPositionChanged();
 		void on_qteRichText_currentCharFormatChanged();
 		void onCurrentChanged(int);
+};
+
+class RichTextImage {
+	public:
+		static bool isValidImage(const QByteArray &buf, QByteArray &fmt);
 };
 
 #endif

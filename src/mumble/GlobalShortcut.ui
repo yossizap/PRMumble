@@ -14,15 +14,20 @@
    <item>
     <widget class="QWidget" name="qwWarningContainer" native="true">
      <layout class="QVBoxLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QWidget" name="qwMacWarning" native="true">
-        <property name="styleSheet">
-         <string notr="true">#qwMacWarning {
-  background-color: #FFFEDC;
-  border-radius: 5px;
-  border: 1px solid #B5B59E;
-}</string>
-        </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
           <widget class="QLabel" name="label">
@@ -200,6 +205,48 @@
          </spacer>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="qgbWindowsShortcutEngines">
+        <property name="whatsThis">
+         <string>&lt;b&gt;Additional Shortcut Engines&lt;/b&gt;&lt;br /&gt;This section allows you to configure the use of additional GlobalShortcut engines.</string>
+        </property>
+        <property name="title">
+         <string>Additional Shortcut Engines</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QCheckBox" name="qcbEnableWinHooks">
+           <property name="whatsThis">
+            <string>&lt;b&gt;Enable Windows hooks&lt;/b&gt;.&lt;br /&gt;This enables the Windows hooks shortcut engine. Using this engine allows Mumble to suppress keypresses and mouse clicks.</string>
+           </property>
+           <property name="text">
+            <string>Enable Windows hooks</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="qcbEnableGKey">
+           <property name="whatsThis">
+            <string>&lt;b&gt;Enable GKey&lt;/b&gt;.&lt;br /&gt;This setting enables support for the GKey shortcut engine, for &quot;G&quot;-keys found on Logitech keyboards.</string>
+           </property>
+           <property name="text">
+            <string>Enable GKey</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="qcbEnableXboxInput">
+           <property name="whatsThis">
+            <string>&lt;b&gt;Enable XInput&lt;/b&gt;&lt;br /&gt;This setting enables support for the XInput shortcut engine, for Xbox compatible controllers.</string>
+           </property>
+           <property name="text">
+            <string>Enable XInput</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </widget>

@@ -1,32 +1,7 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "mumble_pch.hpp"
 
@@ -40,6 +15,8 @@
 #include "Database.h"
 #include "Log.h"
 #include "Plugins.h"
+#include "LogEmitter.h"
+#include "DeveloperConsole.h"
 #include "Global.h"
 #include "LCD.h"
 #include "RealityData.h"
@@ -55,18 +32,23 @@
 #include "VersionCheck.h"
 #include "NetworkConfig.h"
 #include "CrashReporter.h"
-#include "FileEngine.h"
 #include "SocketRPC.h"
+#include "SSL.h"
+#include "MumbleApplication.h"
+#include "ApplicationPalette.h"
+#include "Themes.h"
+#include "UserLockFile.h"
+#include "License.h"
+#include "EnvUtils.h"
 
-#ifdef USE_STATIC
-// Keep in sync with mumble.pro QTPLUGIN list.
+#if defined(USE_STATIC_QT_PLUGINS) && QT_VERSION < 0x050000
 Q_IMPORT_PLUGIN(qtaccessiblewidgets)
 Q_IMPORT_PLUGIN(qico)
 Q_IMPORT_PLUGIN(qsvg)
 Q_IMPORT_PLUGIN(qsvgicon)
-#ifdef Q_OS_MAC
-Q_IMPORT_PLUGIN(qicnsicon)
-#endif
+# ifdef Q_OS_MAC
+   Q_IMPORT_PLUGIN(qicnsicon)
+# endif
 #endif
 
 #ifdef BOOST_NO_EXCEPTIONS
@@ -80,61 +62,16 @@ namespace boost {
 extern void os_init();
 extern char *os_lang;
 
-class QAppMumble : public QApplication {
-	public:
-		QUrl quLaunchURL;
-		QAppMumble(int &pargc, char **pargv) : QApplication(pargc, pargv) {}
-		void commitData(QSessionManager&);
-		bool event(QEvent *e);
 #ifdef Q_OS_WIN
-		bool winEventFilter(MSG *msg, long *result);
-#endif
-};
+// from os_win.cpp
+extern HWND mumble_mw_hwnd;
+#endif // Q_OS_WIN
 
-void QAppMumble::commitData(QSessionManager &) {
-	// Make sure the config is saved and supress the ask on quite message
-	if (g.mw) {
-		g.s.save();
-		g.mw->bSuppressAskOnQuit = true;
-	}
-}
-
-bool QAppMumble::event(QEvent *e) {
-	if (e->type() == QEvent::FileOpen) {
-		QFileOpenEvent *foe = static_cast<QFileOpenEvent *>(e);
-		if (! g.mw) {
-			this->quLaunchURL = foe->url();
-		} else {
-			g.mw->openUrl(foe->url());
-		}
-		return true;
-	}
-	return QApplication::event(e);
-}
-
-#ifdef Q_OS_WIN
-bool QAppMumble::winEventFilter(MSG *msg, long *result) {
-	if (QThread::currentThread() == thread()) {
-		if (Global::g_global_struct && g.ocIntercept) {
-			switch (msg->message) {
-				case WM_MOUSELEAVE:
-					*result = 0;
-					return true;
-				case WM_KEYDOWN:
-				case WM_KEYUP:
-				case WM_SYSKEYDOWN:
-				case WM_SYSKEYUP:
-					GlobalShortcutEngine::engine->prepareInput();
-				default:
-					break;
-			}
-		}
-	}
-	return QApplication::winEventFilter(msg, result);
-}
-#endif
-
+#if defined(Q_OS_WIN) && !defined(QT_NO_DEBUG)
+extern "C" __declspec(dllexport) int main(int argc, char **argv) {
+#else
 int main(int argc, char **argv) {
+#endif
 	int res = 0;
 
 	QT_REQUIRE_VERSION(argc, argv, "4.4.0");
@@ -143,7 +80,7 @@ int main(int argc, char **argv) {
 	SetDllDirectory(L"");
 #else
 #ifndef Q_OS_MAC
-	setenv("AVAHI_COMPAT_NOWARN", "1", 1);
+	EnvUtils::setenv(QLatin1String("AVAHI_COMPAT_NOWARN"), QLatin1String("1"));
 #endif
 #endif
 
@@ -159,12 +96,21 @@ int main(int argc, char **argv) {
 	newPal.setColor(QPalette::LinkVisited, "#3399cc");
 	a.setPalette(newPal);
 
+#if QT_VERSION >= 0x050100
+	a.setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+
+#if QT_VERSION >= 0x050000 && defined(Q_OS_WIN)
+	a.installNativeEventFilter(&a);
+#endif
+
+	MumbleSSL::initialize();
+
 	#ifdef USE_SBCELT
 	{
-		// For now, force Mumble to use sbcelt-helper from the same directory as the 'mumble' executable.
-		QDir d(a.applicationDirPath());
+		QDir d(a.applicationVersionRootPath());
 		QString helper = d.absoluteFilePath(QString::fromLatin1("sbcelt-helper"));
-		setenv("SBCELT_HELPER_BINARY", helper.toUtf8().constData(), 1);
+		EnvUtils::setenv(QLatin1String("SBCELT_HELPER_BINARY"), helper.toUtf8().constData());
 	}
 #endif
 
@@ -172,12 +118,16 @@ int main(int argc, char **argv) {
 
 	qsrand(QDateTime::currentDateTime().toTime_t());
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+	g.le = QSharedPointer<LogEmitter>(new LogEmitter());
+	g.c = new DeveloperConsole();
+
 	os_init();
-#endif
 
 	bool bAllowMultiple = false;
 	bool bStartMinimized = false;
+	bool suppressIdentity = false;
+	bool bRpcMode = false;
+	QString rpcCommand;
 	QUrl url;
 	if (a.arguments().count() > 1) {
 		QStringList args = a.arguments();
@@ -204,11 +154,49 @@ int main(int argc, char **argv) {
 					"                Starts PR Mumble minimized to the tray.\n"
 					"  -n, --noidentity\n"
 					"                Suppress loading of identity files (i.e., certificates.)\n"
-					);
+					"  --license\n"
+					"                Show the Mumble license.\n"
+					"  --authors\n"
+					"                Show the Mumble authors.\n"
+					"  --third-party-licenses\n"
+					"                Show licenses for third-party software used by Mumble.\n"
+					"\n"
+				);
+				QString rpcHelpBanner = MainWindow::tr(
+					"Remote controlling Mumble:\n"
+					"\n"
+				);
+				QString rpcHelpMessage = MainWindow::tr(
+					"Usage: mumble rpc <action> [options]\n"
+					"\n"
+					"It is possible to remote control a running instance of Mumble by using\n"
+					"the 'mumble rpc' command.\n"
+					"\n"
+					"Valid actions are:\n"
+					"  mute\n"
+					"                Mute self\n"
+					"  unmute\n"
+					"                Unmute self\n"
+					"  togglemute\n"
+					"                Toggle self-mute status\n"
+					"  deaf\n"
+					"                Deafen self\n"
+					"  undeaf\n"
+					"                Undeafen self\n"
+					"  toggledeaf\n"
+					"                Toggle self-deafen status\n"
+					"\n"
+				);
+
+				QString helpOutput = helpMessage + rpcHelpBanner + rpcHelpMessage;
+				if (bRpcMode) {
+					helpOutput = rpcHelpMessage;
+				}
+
 #if defined(Q_OS_WIN)
-				QMessageBox::information(NULL, MainWindow::tr("Invocation"), helpmessage);
+				QMessageBox::information(NULL, MainWindow::tr("Invocation"), helpOutput);
 #else
-				printf("%s", qPrintable(helpmessage));
+				printf("%s", qPrintable(helpOutput));
 #endif
 				return 1;
 			} else if (args.at(i) == QLatin1String("-m") || args.at(i) == QLatin1String("--multiple")) {
@@ -216,7 +204,31 @@ int main(int argc, char **argv) {
 			} else if (args.at(i) == QLatin1String("-z") || args.at(i) == QLatin1String("--minimize")) {
 				bStartMinimized = true;
 			} else if (args.at(i) == QLatin1String("-n") || args.at(i) == QLatin1String("--noidentity")) {
+				suppressIdentity = true;
 				g.s.bSuppressIdentity = true;
+			} else if (args.at(i) == QLatin1String("-license") || args.at(i) == QLatin1String("--license")) {
+				printf("%s\n", qPrintable(License::license()));
+				return 0;
+			} else if (args.at(i) == QLatin1String("-authors") || args.at(i) == QLatin1String("--authors")) {
+				printf("%s\n", qPrintable(License::authors()));
+				return 0;
+			} else if (args.at(i) == QLatin1String("-third-party-licenses") || args.at(i) == QLatin1String("--third-party-licenses")) {
+				printf("%s", qPrintable(License::printableThirdPartyLicenseInfo()));
+				return 0;
+			} else if (args.at(i) == QLatin1String("rpc")) {
+				bRpcMode = true;
+				if (args.count() - 1 > i) {
+					rpcCommand = QString(args.at(i + 1));
+				}
+				else {
+					QString rpcError = MainWindow::tr("Error: No RPC command specified");
+#if defined(Q_OS_WIN)
+					QMessageBox::information(NULL, MainWindow::tr("RPC"), rpcError);
+#else
+					printf("%s\n", qPrintable(rpcError));
+#endif
+					return 1;
+				}
 			} else {
 				QUrl u = QUrl::fromEncoded(args.at(i).toUtf8());
 				if (u.isValid() && (u.scheme() == QLatin1String("prmumble"))) {
@@ -238,18 +250,36 @@ int main(int argc, char **argv) {
 
 	{
 		size_t reqSize;
-		_wgetenv_s(&reqSize, NULL, 0, L"PATH");
-		if (reqSize > 0) {
+		if (_wgetenv_s(&reqSize, NULL, 0, L"PATH") != 0)) {
+			qWarning() << "Failed to get PATH. Not adding application directory to PATH. DBus bindings may not work.";
+		} else if (reqSize > 0) {
 			STACKVAR(wchar_t, buff, reqSize+1);
-			_wgetenv_s(&reqSize, buff, reqSize, L"PATH");
-			QString path = QString::fromLatin1("%1;%2").arg(QDir::toNativeSeparators(a.applicationDirPath())).arg(QString::fromWCharArray(buff));
-			STACKVAR(wchar_t, buffout, path.length() + 1);
-			path.toWCharArray(buffout);
-			_wputenv_s(L"PATH", buffout);
+			if (_wgetenv_s(&reqSize, buff, reqSize, L"PATH") != 0) {
+				qWarning() << "Failed to get PATH. Not adding application directory to PATH. DBus bindings may not work.";
+			} else {
+				QString path = QString::fromLatin1("%1;%2").arg(QDir::toNativeSeparators(MumbleApplication::instance()->applicationVersionRootPath())).arg(QString::fromWCharArray(buff));
+				STACKVAR(wchar_t, buffout, path.length() + 1);
+				path.toWCharArray(buffout);
+				if (_wputenv_s(L"PATH", buffout) != 0) {
+					qWarning() << "Failed to set PATH. DBus bindings may not work.";
+				}
+			}
 		}
 	}
 #endif
 #endif
+
+	if (bRpcMode) {
+		bool sent = false;
+		QMap<QString, QVariant> param;
+		param.insert(rpcCommand, rpcCommand);
+		sent = SocketRPC::send(QLatin1String("Mumble"), QLatin1String("self"), param);
+		if (sent) {
+			return 0;
+		} else {
+			return 1;
+		}
+	}
 
 	if (! bAllowMultiple) {
 		if (url.isValid()) {
@@ -284,10 +314,29 @@ int main(int argc, char **argv) {
 		}
 	}
 
+#ifdef Q_OS_WIN
+	// The code above this block is somewhat racy, in that it might not
+	// be possible to do RPC/DBus if two processes start at almost the
+	// same time.
+	//
+	// In order to be completely sure we don't open multiple copies of
+	// Mumble, we open a lock file. The file is opened without any sharing
+	// modes enabled. This gives us exclusive access to the file.
+	// If another Mumble instance attempts to open the file, it will fail,
+	// and that instance will know to terminate itself.
+	UserLockFile userLockFile(g.qdBasePath.filePath(QLatin1String("mumble.lock")));
+	if (! bAllowMultiple) {
+		if (!userLockFile.acquire()) {
+			qWarning("Another process has already acquired the lock file at '%s'. Terminating...", qPrintable(userLockFile.path()));
+			return 1;
+		}
+	}
+#endif
+
 	// Load preferences
 	g.s.load();
 
-	// Check wheter we need to enable accessibility features
+	// Check whether we need to enable accessibility features
 #ifdef Q_OS_WIN
 	// Only windows for now. Could not find any information on how to query this for osx or linux
 	{
@@ -303,26 +352,9 @@ int main(int argc, char **argv) {
 
 	DeferInit::run_initializers();
 
-	if (! g.s.qsStyle.isEmpty()) {
-		a.setStyle(g.s.qsStyle);
-		g.qsCurrentStyle = g.s.qsStyle;
-	}
-
-	if (! g.s.qsSkin.isEmpty()) {
-		QFile file(g.s.qsSkin);
-		file.open(QFile::ReadOnly);
-		QString styleSheet=QLatin1String(file.readAll());
-		if (! styleSheet.isEmpty()) {
-			QFileInfo fi(g.s.qsSkin);
-			QDir::addSearchPath(QLatin1String("skin"), fi.path());
-			a.setStyleSheet(styleSheet);
-		}
-	} else {
-		a.setStyleSheet(MainWindow::defaultStyleSheet);
-	}
-
-	QDir::addSearchPath(QLatin1String("skin"),QLatin1String(":/"));
-	QDir::addSearchPath(QLatin1String("translation"), QLatin1String(":/"));
+	ApplicationPalette applicationPalette;
+	
+	Themes::apply();
 
 	QString qsSystemLocale = QLocale::system().name();
 
@@ -337,24 +369,32 @@ int main(int argc, char **argv) {
 	qWarning("Locale is \"%s\" (System: \"%s\")", qPrintable(locale), qPrintable(qsSystemLocale));
 
 	QTranslator translator;
-	if (translator.load(QLatin1String("translation:mumble_") + locale))
+	if (translator.load(QLatin1String(":mumble_") + locale))
 		a.installTranslator(&translator);
 
 	QTranslator loctranslator;
 	if (loctranslator.load(QLatin1String("mumble_") + locale, a.applicationDirPath()))
-		a.installTranslator(&loctranslator);
+		a.installTranslator(&loctranslator); // Can overwrite strings from bundled mumble translation
 
+	// With modularization of Qt 5 some - but not all - of the qt_<locale>.ts files have become
+	// so-called meta catalogues which no longer contain actual translations but refer to other
+	// more specific ts files like qtbase_<locale>.ts . To successfully load a meta catalogue all
+	// of its referenced translations must be available. As we do not want to bundle them all
+	// we now try to load the old qt_<locale>.ts file first and then fall back to loading
+	// qtbase_<locale>.ts if that failed.
+	//
+	// See http://doc.qt.io/qt-5/linguist-programmers.html#deploying-translations for more information
 	QTranslator qttranslator;
-	if (qttranslator.load(QLibraryInfo::location(QLibraryInfo::TranslationsPath) + QLatin1String("/qt_") + locale))
+	if (qttranslator.load(QLatin1String("qt_") + locale, QLibraryInfo::location(QLibraryInfo::TranslationsPath))) { // Try system qt translations
 		a.installTranslator(&qttranslator);
-	else if (qttranslator.load(QLatin1String("translation:qt_") + locale))
+	} else if (qttranslator.load(QLatin1String("qtbase_") + locale, QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
 		a.installTranslator(&qttranslator);
-
-	if (g.s.qsRegionalHost.isEmpty()) {
-		g.s.qsRegionalHost = qsSystemLocale;
-		g.s.qsRegionalHost = g.s.qsRegionalHost.remove(QRegExp(QLatin1String("^.+_"))).toLower() + QLatin1String(".mumble.info");
+	} else if (qttranslator.load(QLatin1String(":qt_") + locale)) { // Try bundled translations
+		a.installTranslator(&qttranslator);
+	} else if (qttranslator.load(QLatin1String(":qtbase_") + locale)) {
+		a.installTranslator(&qttranslator);
 	}
-
+	
 	// Initialize proxy settings
 	NetworkConfig::SetupProxy();
 
@@ -377,6 +417,9 @@ int main(int argc, char **argv) {
 	g.bc = new BonjourClient();
 #endif
 
+	//TODO: This already loads up the DLL and does some initial hooking, even
+	// when the OL is disabled. This should either not be done (object instantiation)
+	// or the dll loading and preparation be delayed to first use.
 	g.o = new Overlay();
 	g.o->setActive(true/*g.s.os.bEnable*/);
 
@@ -404,6 +447,12 @@ int main(int argc, char **argv) {
 		}
 	}
 
+#ifdef Q_OS_WIN
+	// Set mumble_mw_hwnd in os_win.cpp.
+	// Used by APIs in ASIOInput, DirectSound and GlobalShortcut_win that require a HWND.
+	mumble_mw_hwnd = GetForegroundWindow();
+#endif
+
 #ifdef USE_DBUS
 	new MumbleDBus(g.mw);
 	QDBusConnection::sessionBus().registerObject(QLatin1String("/"), g.mw);
@@ -417,8 +466,6 @@ int main(int argc, char **argv) {
 	// Plugins
 	g.p = new Plugins(NULL);
 	g.p->rescanPlugins();
-
-	MumbleFileEngineHandler *mfeh = new MumbleFileEngineHandler();
 
 	Audio::start();
 
@@ -450,6 +497,9 @@ int main(int argc, char **argv) {
 	g.s.uiUpdateCounter = 2;
 
 	if (! CertWizard::validateCert(g.s.kpCertificate)) {
+#if QT_VERSION >= 0x050000
+		QDir qd(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+#else
 		QDir qd(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
 		
 		// copy the old certificate, because PR_Mumble just looks so shit :p
@@ -519,17 +569,18 @@ int main(int argc, char **argv) {
 
 	g.s.save();
 
+	url.clear();
+	
 	ServerHandlerPtr sh = g.sh;
-
-	if (sh && sh->isRunning())
+	if (sh && sh->isRunning()) {
+		url = sh->getServerURL();
 		Database::setShortcuts(g.sh->qbaDigest, g.s.qlShortcuts);
+	}
 
 	Audio::stop();
 
 	if (sh)
 		sh->disconnect();
-
-	delete mfeh;
 
 	delete srpc;
 
@@ -554,6 +605,9 @@ int main(int argc, char **argv) {
 
 	delete g.o;
 
+	delete g.c;
+	g.le.clear();
+
 	DeferInit::run_destroyers();
 
 	delete Global::g_global_struct;
@@ -567,5 +621,79 @@ int main(int argc, char **argv) {
 	google::protobuf::ShutdownProtobufLibrary();
 #endif
 #endif
+
+#ifdef Q_OS_WIN
+	// Release the userLockFile.
+	//
+	// It is important that we release it before we attempt to
+	// restart Mumble (if requested). If we do not release it
+	// before that, the new instance might not be able to start
+	// correctly.
+	userLockFile.release();
+#endif
+	
+	// At this point termination of our process is immenent. We can safely
+	// launch another version of Mumble. The reason we do an actual
+	// restart instead of re-creating our data structures is that making
+	// sure we won't leave state is quite tricky. Mumble has quite a
+	// few spots which might not consider seeing to basic initializations.
+	// Until we invest the time to verify this, rather be safe (and a bit slower)
+	// than sorry (and crash/bug out). Also take care to reconnect if possible.
+	if (res == MUMBLE_EXIT_CODE_RESTART) {
+		QStringList arguments;
+		
+		if (bAllowMultiple)   arguments << QLatin1String("--multiple");
+		if (suppressIdentity) arguments << QLatin1String("--noidentity");
+		if (!url.isEmpty())   arguments << url.toString();
+		
+		qWarning() << "Triggering restart of Mumble with arguments: " << arguments;
+		
+#ifdef Q_OS_WIN
+		// Work around bug related to QTBUG-7645. Mumble has uiaccess=true set
+		// on windows which makes normal CreateProcess calls (like Qt uses in
+		// startDetached) fail unless they specifically enable additional priviledges.
+		// Note that we do not actually require user interaction by UAC nor full admin
+		// rights but only the right token on launch. Here we use ShellExecuteEx
+		// which handles this transparently for us.
+		const std::wstring applicationFilePath = qApp->applicationFilePath().toStdWString();
+		const std::wstring argumentsString = arguments.join(QLatin1String(" ")).toStdWString();
+		
+		SHELLEXECUTEINFO si;
+		ZeroMemory(&si, sizeof(SHELLEXECUTEINFO));
+		si.cbSize = sizeof(SHELLEXECUTEINFO);
+		si.lpFile = applicationFilePath.data();
+		si.lpParameters = argumentsString.data();
+		
+		bool ok = (ShellExecuteEx(&si) == TRUE);
+#else
+		bool ok = QProcess::startDetached(qApp->applicationFilePath(), arguments);
+#endif
+		if(!ok) {
+			QMessageBox::warning(NULL,
+			                     QApplication::tr("Failed to restart mumble"),
+			                     QApplication::tr("Mumble failed to restart itself. Please restart it manually.")
+			);
+			return 1;
+		}
+		return 0;
+	}
 	return res;
 }
+
+#if defined(Q_OS_WIN) && defined(QT_NO_DEBUG)
+extern void qWinMain(HINSTANCE, HINSTANCE, LPSTR, int, int &, QVector<char *> &);
+
+extern "C" __declspec(dllexport) int MumbleMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdArg, int cmdShow) {
+	Q_UNUSED(cmdArg);
+
+	QByteArray cmdParam = QString::fromWCharArray(GetCommandLine()).toLocal8Bit();
+	int argc = 0;
+
+	// qWinMain takes argv as a reference.
+	QVector<char *> argv;
+	qWinMain(instance, prevInstance, cmdParam.data(), cmdShow, argc, argv);
+
+	int result = main(argc, argv.data());
+	return result;
+}
+#endif

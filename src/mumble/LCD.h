@@ -1,36 +1,10 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2008-2011, Mikkel Krautz <mikkel@krautz.dk>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef LCD_H_
-#define LCD_H_
+#ifndef MUMBLE_MUMBLE_LCD_H_
+#define MUMBLE_MUMBLE_LCD_H_
 
 #include "ConfigDialog.h"
 #include "Timer.h"
@@ -46,15 +20,14 @@ class LCDConfig : public ConfigWidget, public Ui::LCDConfig {
 		Q_DISABLE_COPY(LCDConfig)
 	public:
 		LCDConfig(Settings &st);
-		virtual QString title() const;
-		virtual QIcon icon() const;
+		QString title() const Q_DECL_OVERRIDE;
+		QIcon icon() const Q_DECL_OVERRIDE;
 	public slots:
 		void on_qsMinColWidth_valueChanged(int v);
 		void on_qsSplitterWidth_valueChanged(int v);
-		void accept() const;
-		void save() const;
-		void load(const Settings &r);
-		bool expert(bool);
+		void accept() const Q_DECL_OVERRIDE;
+		void save() const Q_DECL_OVERRIDE;
+		void load(const Settings &r) Q_DECL_OVERRIDE;
 };
 
 class LCDEngine : public QObject {
@@ -65,7 +38,7 @@ class LCDEngine : public QObject {
 		QList<LCDDevice *> qlDevices;
 	public:
 		LCDEngine();
-		virtual ~LCDEngine();
+		virtual ~LCDEngine() Q_DECL_OVERRIDE;
 		virtual QList<LCDDevice *> devices() const = 0;
 };
 
@@ -82,7 +55,7 @@ class LCDDevice {
 
 typedef LCDEngine *(*LCDEngineNew)(void);
 
-class LCDEngineRegistrar {
+class LCDEngineRegistrar Q_DECL_FINAL {
 	protected:
 		LCDEngineNew n;
 	public:
@@ -114,7 +87,7 @@ class LCD : public QObject {
 		void tick();
 	public:
 		LCD();
-		~LCD();
+		~LCD() Q_DECL_OVERRIDE;
 		void updateUserView();
 		bool hasDevices();
 };

@@ -1,67 +1,38 @@
-/* Copyright (C) 2009-2012, Snares <snares@users.sourceforge.net>
-   Copyright (C) 2005-2012, Thorvald Natvig <thorvald@natvig.com>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#include "../mumble_plugin_win32.h"
+#include "../mumble_plugin_win32_32bit.h"
 
 using namespace std;
 
-BYTE *posptr;
-BYTE *rotptr;
-BYTE *stateptr;
-BYTE *hostptr;
+procptr32_t posptr, rotptr, stateptr, hostptr;
 
 static bool calcout(float *pos, float *rot, float *opos, float *front, float *top) {
-	float h = rot[0];
-	float v = rot[1];
+	float v = rot[0];
+	float h = rot[1];
 
 	if ((v < -360.0f) || (v > 360.0f) || (h < -360.0f) || (h > 360.0f))
 		return false;
 
-	h *= static_cast<float>(M_PI / 180.0f);
 	v *= static_cast<float>(M_PI / 180.0f);
+	h *= static_cast<float>(M_PI / 180.0f);
 
 	// Seems Gmod is in inches. INCHES?!?
 	opos[0] = pos[0] / 39.37f;
 	opos[1] = pos[2] / 39.37f;
 	opos[2] = pos[1] / 39.37f;
 
-	front[0] = cos(v) * cos(h);
-	front[1] = -sin(h);
-	front[2] = sin(v) * cos(h);
+	front[0] = cos(h) * cos(v);
+	front[1] = -sin(v);
+	front[2] = sin(h) * cos(v);
 
-	h -= static_cast<float>(M_PI / 2.0f);
+	v -= static_cast<float>(M_PI / 2.0f);
 
-	top[0] = cos(v) * cos(h);
-	top[1] = -sin(h);
-	top[2] = sin(v) * cos(h);
+	top[0] = cos(h) * cos(v);
+	top[1] = -sin(v);
+	top[2] = sin(h) * cos(v);
 
 	return true;
 }
@@ -72,16 +43,16 @@ static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, floa
 
 	float ipos[3], rot[3];
 	bool ok;
-	char state;
+	//char state;
 	char chHostStr[40];
 	string sHost;
-	wostringstream new_identity;
 	ostringstream new_context;
 
-	ok = peekProc(posptr, ipos, 12) &&
-	     peekProc(rotptr, rot, 12) &&
-	     peekProc(stateptr, &state, 1) &&
-	     peekProc(hostptr, chHostStr, 40);
+	ok = peekProc(posptr, ipos, 12)
+	     && peekProc(rotptr, rot, 12)
+	     //&& peekProc(stateptr, &state, 1)
+	     && peekProc(hostptr, chHostStr, 40)
+	     ;
 	if (!ok)
 		return false;
 
@@ -92,15 +63,15 @@ static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, floa
 		sHost.append(":27015");
 
 	new_context << "<context>"
-	<< "<game>gmod</game>"
-	<< "<hostport>" << sHost << "</hostport>"
-	<< "</context>";
+	            << "<game>gmod</game>"
+	            << "<hostport>" << sHost << "</hostport>"
+	            << "</context>";
 	context = new_context.str();
-
+/*
 	// Check to see if you are spawned
 	if (state != 18)
 		return true; // Deactivate plugin
-
+*/
 	ok = calcout(ipos, rot, avatar_pos, avatar_front, avatar_top);
 	if (ok) {
 		for (int i=0;i<3;++i) {
@@ -115,33 +86,37 @@ static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, floa
 }
 
 static int trylock(const std::multimap<std::wstring, unsigned long long int> &pids) {
-	posptr = rotptr = NULL;
+	posptr = rotptr = 0;
 
 	if (! initialize(pids, L"hl2.exe", L"client.dll"))
 		return false;
 
-	BYTE *mod_engine=getModuleAddr(L"engine.dll");
+	procptr32_t mod_engine=getModuleAddr(L"engine.dll");
 	if (!mod_engine)
 		return false;
 
-	// Check if we really have Gmod running
-	/*
-		position tuple:		client.dll+0x483fe0  (x,y,z, float)
-		orientation tuple:	client.dll+0x4733bc  (v,h float)
-		ID string:			client.dll+0x5ec370 = "garrysmod" (9 characters, text)
-		spawn state:        client.dll+0x46ab34  (0 when at main menu, 2 when not spawned, 15 to 14 when spawned, byte)
-		host string: 		engine.dll+0x3C2A04
-	*/
-
 	// Remember addresses for later
-	posptr = pModule + 0x50A2B0;
-	rotptr = pModule + 0x50A16C;
+	// position tuple: x,y,z, float
+	// client.dll+0x6856B8
+	posptr = pModule + 0x6856B8;
+	// orientation tuple: v,h,? float
+	// v: up = -90°, down = 90°; h (rotation): -180 - 180°
+	// client.dll+0x5B5914
+	rotptr = pModule + 0x5B5914;
+	// spawn state: client.dll+0x?????? - 0 when at main menu, 2 when not spawned, 15 to 14 when spawned, byte
+	// This could not be verified/found by Kissaki
 	stateptr = mod_engine + 0x375565;
-	hostptr = mod_engine + 0x3D3E94;
+	// ID string; Game name "garrysmod"
+	// engine.dll+0x6622DC
+	procptr32_t idptr = mod_engine + 0x6622DC;
+	// host string: String in form "ip:port".
+	// engine.dll+0x49176C
+	hostptr = mod_engine + 0x49176C;
 
 	// Gamecheck
+	const char ID[] = "garrysmod";
 	char sMagic[18];
-	if (!peekProc(pModule + 0x4B2515, sMagic, 18) || strncmp("?AVCSpectatorGUI@@", sMagic, 18)!=0)
+	if (!peekProc(idptr, sMagic, sizeof(ID)) || strncmp(ID, sMagic, sizeof(ID))!=0)
 		return false;
 
 	// Check if we can get meaningful data from it
@@ -159,10 +134,11 @@ static int trylock(const std::multimap<std::wstring, unsigned long long int> &pi
 }
 
 static const std::wstring longdesc() {
+	// Exe build: 20:55:48 Jun 17 2014 (5692) (4000)
 	return std::wstring(L"Supports Gmod 11 build 4426. No identity support yet.");
 }
 
-static std::wstring description(L"Garry's Mod 11 (Build 4426)");
+static std::wstring description(L"Garry's Mod 11 (Build 5692)");
 static std::wstring shortname(L"Garry's Mod 11");
 
 static int trylock1() {
@@ -187,10 +163,10 @@ static MumblePlugin2 gmodplug2 = {
 	trylock
 };
 
-extern "C" __declspec(dllexport) MumblePlugin *getMumblePlugin() {
+extern "C" MUMBLE_PLUGIN_EXPORT MumblePlugin *getMumblePlugin() {
 	return &gmodplug;
 }
 
-extern "C" __declspec(dllexport) MumblePlugin2 *getMumblePlugin2() {
+extern "C" MUMBLE_PLUGIN_EXPORT MumblePlugin2 *getMumblePlugin2() {
 	return &gmodplug2;
 }

@@ -1,36 +1,10 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2009-2011, Stefan Hacker <dd0t@users.sourceforge.net>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef SETTINGS_H_
-#define SETTINGS_H_
+#ifndef MUMBLE_MUMBLE_SETTINGS_H_
+#define MUMBLE_MUMBLE_SETTINGS_H_
 
 #include <QtCore/QVariant>
 #include <QtCore/QList>
@@ -45,7 +19,7 @@
 #include <QtNetwork/QSslKey>
 
 // Global helper classes to spread variables around across threads
-// especially helpfull to initialize things like the stored
+// especially helpful to initialize things like the stored
 // preference for audio transmission, since the GUI elements
 // will be created long before the AudioInput object, and the
 // latter lives in a separate thread and so cannot touch the
@@ -90,6 +64,8 @@ struct OverlaySettings {
 
 	enum OverlaySort { Alphabetical, LastStateChange };
 
+	enum OverlayExclusionMode { LauncherFilterExclusionMode, WhitelistExclusionMode, BlacklistExclusionMode };
+
 	bool bEnable;
 
 	QString qsStyle;
@@ -125,6 +101,7 @@ struct OverlaySettings {
 	bool bAvatar;
 	bool bBox;
 	bool bFps;
+	bool bTime;
 
 	qreal fUserName;
 	qreal fChannel;
@@ -138,15 +115,22 @@ struct OverlaySettings {
 	QRectF qrfMutedDeafened;
 	QRectF qrfAvatar;
 	QRectF qrfFps;
+	QRectF qrfTime;
 
 	Qt::Alignment qaUserName;
 	Qt::Alignment qaChannel;
 	Qt::Alignment qaMutedDeafened;
 	Qt::Alignment qaAvatar;
 
-	bool bUseWhitelist;
-	QStringList qslBlacklist;
+	OverlayExclusionMode oemOverlayExcludeMode;
+	QStringList qslLaunchers;
+	QStringList qslLaunchersExclude;
 	QStringList qslWhitelist;
+	QStringList qslWhitelistExclude;
+	QStringList qslPaths;
+	QStringList qslPathsExclude;
+	QStringList qslBlacklist;
+	QStringList qslBlacklistExclude;
 
 	OverlaySettings();
 	void setPreset(const OverlayPresets preset = AvatarAndName);
@@ -158,7 +142,7 @@ struct OverlaySettings {
 };
 
 struct Settings {
-	enum AudioTransmit { Continous, VAD, PushToTalk };
+	enum AudioTransmit { Continuous, VAD, PushToTalk };
 	enum VADSource { Amplitude, SignalToNoise };
 	enum LoopMode { None, Local, Server };
 	enum ChannelExpand { NoChannels, ChannelsWithUsers, AllChannels };
@@ -170,8 +154,10 @@ struct Settings {
 
 	AudioTransmit atTransmit;
 	quint64 uiDoublePush;
-	quint64 uiPTTHold;
+	quint64 pttHold;
 
+	/// Removed. This was previously used to configure whether the Mumble
+	/// ConfigDialog should show advanced options or not.
 	bool bExpert;
 
 	bool bTxAudioCue;
@@ -187,12 +173,23 @@ struct Settings {
 	bool bWhisperFriends;
 	bool bTTSMessageReadBack;
 	int iTTSVolume, iTTSThreshold;
+	/// The Text-to-Speech language to use. This setting overrides
+	/// the default language for the Text-to-Speech engine, which
+	/// is usually inferred from the current locale.
+	///
+	/// The language is expected to be in BCP47 form.
+	///
+	/// The setting is currently only supported by the speech-dispatcher
+	///backend.
+	QString qsTTSLanguage;
 	int iQuality, iMinLoudness, iVoiceHold, iJitterBufferSize;
 	int iNoiseSuppress;
+	quint64 uiAudioInputChannelMask;
 
 	// Idle auto actions
 	unsigned int iIdleTime;
 	IdleAction iaeIdleAction;
+	bool bUndoIdleActionUponActivity;
 
 	VADSource vsVAD;
 	float fVADmin, fVADmax;
@@ -202,17 +199,47 @@ struct Settings {
 	float fOtherVolume;
 	bool bAttenuateOthersOnTalk;
 	bool bAttenuateOthers;
+	bool bAttenuateUsersOnPrioritySpeak;
+	bool bOnlyAttenuateSameOutput;
+	bool bAttenuateLoopbacks;
 	int iOutputDelay;
+	bool bUseOpusMusicEncoding;
 
 	QString qsALSAInput, qsALSAOutput;
 	QString qsPulseAudioInput, qsPulseAudioOutput;
 	QString qsOSSInput, qsOSSOutput;
 	int iPortAudioInput, iPortAudioOutput;
+
+	bool bASIOEnable;
 	QString qsASIOclass;
 	QList<QVariant> qlASIOmic;
 	QList<QVariant> qlASIOspeaker;
+
 	QString qsCoreAudioInput, qsCoreAudioOutput;
+
 	QString qsWASAPIInput, qsWASAPIOutput;
+	/// qsWASAPIRole is configured via 'wasapi/role'.
+	/// It is a string explaining Mumble's purpose for opening
+	/// the audio device. This can be used to force Windows
+	/// to not treat Mumble as a communications program
+	/// (the default).
+	///
+	/// The default is "communications". When this is set,
+	/// Windows treats Mumble as a telephony app, including
+	/// potential audio ducking.
+	///
+	/// Other values include:
+	///
+	///   "console", which should be used for games, system
+	///              notification sounds, and voice commands.
+	///
+	///   "multimedia", which should be used for music, movies,
+	///                 narration, and live music recording.
+	///
+	/// This is practically a direct mapping of the ERole enum
+	/// from Windows: https://msdn.microsoft.com/en-us/library/windows/desktop/dd370842
+	QString qsWASAPIRole;
+
 	QByteArray qbaDXInput, qbaDXOutput;
 
 	bool bExclusiveInput, bExclusiveOutput;
@@ -225,12 +252,23 @@ struct Settings {
 
 	OverlaySettings os;
 
+	int iOverlayWinHelperRestartCooldownMsec;
+	bool bOverlayWinHelperX86Enable;
+	bool bOverlayWinHelperX64Enable;
+
 	int iLCDUserViewMinColWidth;
 	int iLCDUserViewSplitterWidth;
 	QMap<QString, bool> qmLCDDevices;
 
 	bool bShortcutEnable;
 	bool bSuppressMacEventTapWarning;
+	bool bEnableEvdev;
+	bool bEnableXInput2;
+	bool bEnableGKey;
+	bool bEnableXboxInput;
+	bool bEnableWinHooks;
+	/// Enable verbose logging in GlobalShortcutWin's DirectInput backend.
+	bool bDirectInputVerboseLogging;
 	QList<Shortcut> qlShortcuts;
 
 	enum MessageLog { LogNone = 0x00, LogConsole = 0x01, LogTTS = 0x02, LogBalloon = 0x04, LogSoundfile = 0x08};
@@ -239,24 +277,32 @@ struct Settings {
 	QMap<int, quint32> qmMessages;
 
 	QString qsLanguage;
-	QString qsStyle;
-	QString qsSkin;
+
+	/// Name of the theme to use. @see Themes
+	QString themeName;
+	/// Name of the style to use from theme. @see Themes
+	QString themeStyleName;
+	
 	QByteArray qbaMainWindowGeometry, qbaMainWindowState, qbaMinimalViewGeometry, qbaMinimalViewState, qbaSplitterState, qbaHeaderState;
 	QByteArray qbaConfigGeometry;
 	enum WindowLayout { LayoutClassic, LayoutStacked, LayoutHybrid, LayoutCustom };
 	WindowLayout wlWindowLayout;
 	ChannelExpand ceExpand;
 	ChannelDrag ceChannelDrag;
+	ChannelDrag ceUserDrag;
 	bool bMinimalView;
 	bool bHideFrame;
 	enum AlwaysOnTopBehaviour { OnTopNever, OnTopAlways, OnTopInMinimal, OnTopInNormal };
 	AlwaysOnTopBehaviour aotbAlwaysOnTop;
 	bool bAskOnQuit;
+	bool bEnableDeveloperMenu;
 	bool bHideInTray;
 	bool bStateInTray;
 	bool bUsage;
 	bool bShowUserCount;
 	bool bChatBarUseSelection;
+	bool bFilterHidesEmptyChannels;
+	bool bFilterActive;
 	QByteArray qbaConnectDialogHeader, qbaConnectDialogGeometry;
 	bool bShowContextMenuInMenuBar;
 
@@ -282,7 +328,39 @@ struct Settings {
 	ProxyType ptProxyType;
 	QString qsProxyHost, qsProxyUsername, qsProxyPassword;
 	unsigned short usProxyPort;
-	QString qsRegionalHost;
+	/// bUdpForceTcpAddr forces Mumble to bind its UDP
+	/// socket to the same address as its TCP
+	/// connection is using.
+	bool bUdpForceTcpAddr;
+
+	/// iMaxInFlightTCPPings specifies the maximum
+	/// number of ping messages that the client has
+	/// sent, but not yet recieved a response for
+	/// from the server. This value is checked when
+	/// the client sends its next ping message. If
+	/// the maximum is reached, the connection will
+	/// be closed.
+	/// If this setting is assigned a value of 0 or
+	/// a negative number, the TCP ping check is
+	/// disabled.
+	int iMaxInFlightTCPPings;
+
+	/// The service prefix that the WebFetch class will use
+	/// when it constructs its fully-qualified URL. If this
+	/// is empty, no prefix is used.
+	///
+	/// When the WebFetch class receives a HTTP response which
+	/// includes the header "Use-Service-Prefix", this setting
+	/// is updated to reflect the received service prefix.
+	///
+	/// For more information, see the documentation for WebFetch::fetch().
+	QString qsServicePrefix;
+
+	// Network settings - SSL
+	QString qsSslCiphers;
+
+	// Privacy settings
+	bool bHideOS;
 
 	static const int ciDefaultMaxImageSize = 0;//50 * 1024; // Restrict to 50KiB as a default
 	int iMaxImageSize;
@@ -290,6 +368,8 @@ struct Settings {
 	int iMaxImageHeight;
 	KeyPair kpCertificate;
 	bool bSuppressIdentity;
+
+	bool bShowTransmitModeComboBox;
 
 	// Accessibility
 	bool bHighContrast;
@@ -301,9 +381,17 @@ struct Settings {
 	RecordingMode rmRecordingMode;
 	int iRecordingFormat;
 
-	// Codec kill-switch
+	// Special configuration options not exposed to UI
+	
+	/// Codec kill-switch
 	bool bDisableCELT;
-
+	
+	/// Disables the "Public Internet" section in the connect dialog if set.
+	bool disablePublicList;
+	
+	/// Removes the add and edit options in the connect dialog if set.
+	bool disableConnectDialogEditing;
+	
 	// Config updates
 	unsigned int uiUpdateCounter;
 
@@ -311,6 +399,8 @@ struct Settings {
 	LoopMode lmLoopMode;
 	float dPacketLoss;
 	float dMaxPacketDelay;
+	/// If true settings in this structure require a client restart to apply fully
+	bool requireRestartToApply;
 
 	bool doEcho() const;
 	bool doPositionalAudio() const;

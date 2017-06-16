@@ -1,35 +1,10 @@
-/* Copyright (C) 2005-2011, Thorvald Natvig <thorvald@natvig.com>
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style license
+// that can be found in the LICENSE file at the root of the
+// Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-   - Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-   - Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-   - Neither the name of the Mumble Developers nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef META_H_
-#define META_H_
+#ifndef MUMBLE_MURMUR_META_H_
+#define MUMBLE_MURMUR_META_H_
 
 #include <QtCore/QDir>
 #include <QtCore/QList>
@@ -38,6 +13,7 @@
 #include <QtNetwork/QHostAddress>
 #include <QtNetwork/QSslCertificate>
 #include <QtNetwork/QSslKey>
+#include <QtNetwork/QSslCipher>
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
@@ -63,16 +39,25 @@ public:
 	int iMaxImageMessageLength;
 	int iOpusThreshold;
 	int iChannelNestingLimit;
+	/// If true the old SHA1 password hashing is used instead of PBKDF2
+	bool legacyPasswordHash;
+	/// Contains the default number of PBKDF2 iterations to use
+	/// when hashing passwords. If the value loaded from config
+	/// is <= 0 the value is loaded from the database and if not
+	/// available there yet found by a benchmark.
+	int kdfIterations;
 	bool bAllowHTML;
 	QString qsPassword;
 	QString qsWelcomeText;
 	bool bCertRequired;
+	bool bForceExternalAuth;
 
 	int iBanTries;
 	int iBanTimeframe;
 	int iBanTime;
 
 	QString qsDatabase;
+	int iSQLiteWAL;
 	QString qsDBDriver;
 	QString qsDBUserName;
 	QString qsDBPassword;
@@ -94,6 +79,10 @@ public:
 	QString qsIceEndpoint;
 	QString qsIceSecretRead, qsIceSecretWrite;
 
+	QString qsGRPCAddress;
+	QString qsGRPCCert;
+	QString qsGRPCKey;
+
 	QString qsRegName;
 	QString qsRegPassword;
 	QString qsRegHost;
@@ -106,7 +95,29 @@ public:
 
 	QSslCertificate qscCert;
 	QSslKey qskKey;
+
+	/// qlIntermediates contains the certificates
+	/// from PEM bundle pointed to by murmur.ini's
+	/// sslCert option that do not match the key
+	/// pointed to by murmur.ini's sslKey option.
+	///
+	/// Simply put: it contains any certificates
+	/// that aren't the main certificate, or "leaf"
+	/// certificate.
+	QList<QSslCertificate> qlIntermediates;
+
+	/// qlCA contains all certificates read from
+	/// the PEM bundle pointed to by murmur.ini's
+	/// sslCA option.
+	QList<QSslCertificate> qlCA;
+
+	/// qlCiphers contains the list of supported
+	/// cipher suites.
+	QList<QSslCipher> qlCiphers;
+
+	QByteArray qbaDHParams;
 	QByteArray qbaPassPhrase;
+	QString qsCiphers;
 
 	QMap<QString, QString> qmConfig;
 
@@ -120,15 +131,24 @@ public:
 	QVariant qvSuggestPositional;
 	QVariant qvSuggestPushToTalk;
 
+	/// qsAbsSettingsFilePath is the absolute path to
+	/// the murmur.ini used by this Meta instance.
+	QString qsAbsSettingsFilePath;
 	QSettings *qsSettings;
 
 	MetaParams();
 	~MetaParams();
 	void read(QString fname = QString("murmur.ini"));
 
+	/// Attempt to load SSL settings from murmur.ini.
+	/// Returns true if successful. Returns false if
+	/// the operation failed. On failure, the MetaParams
+	/// object is left 100% intact.
+	bool loadSSLSettings();
+
 private:
-		template <class T>
-		T typeCheckedFromSettings(const QString &name, const T &variable);
+	template <class T>
+	T typeCheckedFromSettings(const QString &name, const T &variable, QSettings *settings = NULL);
 };
 
 class Meta : public QObject {
@@ -149,6 +169,13 @@ class Meta : public QObject {
 
 		Meta();
 		~Meta();
+
+		/// reloadSSLSettings reloads Murmur's MetaParams's
+		/// SSL settings, and updates the certificate and
+		/// private key for all virtual servers that use the
+		/// Meta server's certificate and private key.
+		bool reloadSSLSettings();
+
 		void bootAll();
 		bool boot(int);
 		bool banCheck(const QHostAddress &);
