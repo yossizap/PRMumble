@@ -7,13 +7,13 @@
 	<key>CFBundleGetInfoString</key>
 	<string>Mumble helper daemon for interfacing with G15 and compatible keyboards.</string>
 	<key>CFBundleIdentifier</key>
-	<string>net.sourceforge.mumble.g15helper</string>
+	<string>com.reality.PRMumble.g15helper</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>G15H</string>
 	<key>CFBundleVersion</key>
-	<string>1.2.4</string>
+	<string>1.0.0</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright (c) 2009 Mikkel Krautz &lt;mikkel@krautz.dk&gt;</string>
 </dict>

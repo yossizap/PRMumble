@@ -5,7 +5,7 @@ include (../compiler.pri)
 TEMPLATE = app
 CONFIG -= qt
 CONFIG *= debug_and_release warn_on
-TARGET = mumble-g15-helper
+TARGET = PRMumbleG15Helper
 
 HEADERS = g15helper.h
 
