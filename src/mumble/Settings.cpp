@@ -300,8 +300,6 @@ Settings::Settings() {
 	bShowContextMenuInMenuBar = false;
 
 	ssFilter = ShowReachable;
-
-	qsSkin = QLatin1String(":/Reality.qss");
 	
 	iOutputDelay = 1;
 

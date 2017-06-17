@@ -169,7 +169,11 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		virtual void closeEvent(QCloseEvent *e);
 		virtual void hideEvent(QHideEvent *e);
 		virtual void showEvent(QShowEvent *e);
-
+        void changeEvent(QEvent* e) Q_DECL_OVERRIDE;
+        void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+        
+        QMenu *createPopupMenu() Q_DECL_OVERRIDE;
+        
 		bool handleSpecialContextMenu(const QUrl &url, const QPoint &pos_, bool focus = false);
 		Channel* getContextMenuChannel();
 		ClientUser* getContextMenuUser();
@@ -252,6 +256,11 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_gsMuteSelf_down(QVariant);
 		void on_gsDeafSelf_down(QVariant);
 		void on_gsWhisper_triggered(bool, QVariant);
+        void addTarget(ShortcutTarget *);
+        void removeTarget(ShortcutTarget *st);
+        void on_gsCycleTransmitMode_triggered(bool, QVariant);
+		void on_gsSendTextMessage_triggered(bool, QVariant);
+        void on_gsSendClipboardTextMessage_triggered(bool, QVariant);
 		void on_PRCommSquadRadio_triggered(bool, QVariant);
 		void on_PRCommSLAll_triggered(bool, QVariant);
 		void on_PRCommSL1_triggered(bool, QVariant);

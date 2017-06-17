@@ -178,62 +178,62 @@ void MainWindow::createActions() {
 	
 	// Custom PR buttons, in addition to renaming Local Speech above...
 	
-	gsPRSquad=new GlobalShortcut(this, idx++, tr("Squad Radio", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSquad=new GlobalShortcut(this, idx++, tr("Squad Radio", "Global Shortcut"), false);
 	gsPRSquad->setObjectName(QLatin1String("PRCommSquadRadio"));
 	gsPRSquad->qsToolTip = tr("Push and hold this button to talk to your squad, no matter where they are", "Global Shortcut");
 	gsPRSquad->qsWhatsThis = tr("This configures the Squad Radio button, and as long as you hold this button down, you will transmit to your squad, no matter where they are.", "Global Shortcut");
 	
-	gsPRSLAll=new GlobalShortcut(this, idx++, tr("SL To All SL", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSLAll=new GlobalShortcut(this, idx++, tr("SL To All SL", "Global Shortcut"), false);
 	gsPRSLAll->setObjectName(QLatin1String("PRCommSLAll"));
 	gsPRSLAll->qsToolTip = tr("Push and hold this button to talk to all other squad leaders on your team, if you are a squad leader", "Global Shortcut");
 	gsPRSLAll->qsWhatsThis = tr("This configures the SL To All SL button, and as long as you hold this button down, you will transmit to all other squad leaders on your team, if you are a squad leader", "Global Shortcut");
 	
-	gsPRSL1=new GlobalShortcut(this, idx++, tr("SL to SL 1", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL1=new GlobalShortcut(this, idx++, tr("SL to SL 1", "Global Shortcut"), false);
 	gsPRSL1->setObjectName(QLatin1String("PRCommSL1"));
 	gsPRSL1->qsToolTip = tr("Push and hold this button to talk to Squad Leader 1, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL1->qsWhatsThis = tr("This configures the SL to SL 1 button, and as long as you hold this button down, you will transmit to Squad Leader 1, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSL2=new GlobalShortcut(this, idx++, tr("SL to SL 2", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL2=new GlobalShortcut(this, idx++, tr("SL to SL 2", "Global Shortcut"), false);
 	gsPRSL2->setObjectName(QLatin1String("PRCommSL2"));
 	gsPRSL2->qsToolTip = tr("Push and hold this button to talk to Squad Leader 2, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL2->qsWhatsThis = tr("This configures the SL to SL 2 button, and as long as you hold this button down, you will transmit to Squad Leader 2, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSL3=new GlobalShortcut(this, idx++, tr("SL to SL 3", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL3=new GlobalShortcut(this, idx++, tr("SL to SL 3", "Global Shortcut"), false);
 	gsPRSL3->setObjectName(QLatin1String("PRCommSL3"));
 	gsPRSL3->qsToolTip = tr("Push and hold this button to talk to Squad Leader 3, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL3->qsWhatsThis = tr("This configures the SL to SL 3 button, and as long as you hold this button down, you will transmit to Squad Leader 3, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSL4=new GlobalShortcut(this, idx++, tr("SL to SL 4", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL4=new GlobalShortcut(this, idx++, tr("SL to SL 4", "Global Shortcut"), false);
 	gsPRSL4->setObjectName(QLatin1String("PRCommSL4"));
 	gsPRSL4->qsToolTip = tr("Push and hold this button to talk to Squad Leader 4, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL4->qsWhatsThis = tr("This configures the SL to SL 4 button, and as long as you hold this button down, you will transmit to Squad Leader 4, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSL5=new GlobalShortcut(this, idx++, tr("SL to SL 5", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL5=new GlobalShortcut(this, idx++, tr("SL to SL 5", "Global Shortcut"), false);
 	gsPRSL5->setObjectName(QLatin1String("PRCommSL5"));
 	gsPRSL5->qsToolTip = tr("Push and hold this button to talk to Squad Leader 5, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL5->qsWhatsThis = tr("This configures the SL to SL 5 button, and as long as you hold this button down, you will transmit to Squad Leader 5, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSL6=new GlobalShortcut(this, idx++, tr("SL to SL 6", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL6=new GlobalShortcut(this, idx++, tr("SL to SL 6", "Global Shortcut"), false);
 	gsPRSL6->setObjectName(QLatin1String("PRCommSL6"));
 	gsPRSL6->qsToolTip = tr("Push and hold this button to talk to Squad Leader 6, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL6->qsWhatsThis = tr("This configures the SL to SL 6 button, and as long as you hold this button down, you will transmit to Squad Leader 6, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSL7=new GlobalShortcut(this, idx++, tr("SL to SL 7", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL7=new GlobalShortcut(this, idx++, tr("SL to SL 7", "Global Shortcut"), false);
 	gsPRSL7->setObjectName(QLatin1String("PRCommSL7"));
 	gsPRSL7->qsToolTip = tr("Push and hold this button to talk to Squad Leader 7, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL7->qsWhatsThis = tr("This configures the SL to SL 7 button, and as long as you hold this button down, you will transmit to Squad Leader 7, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSL8=new GlobalShortcut(this, idx++, tr("SL to SL 8", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL8=new GlobalShortcut(this, idx++, tr("SL to SL 8", "Global Shortcut"), false);
 	gsPRSL8->setObjectName(QLatin1String("PRCommSL8"));
 	gsPRSL8->qsToolTip = tr("Push and hold this button to talk to Squad Leader 8, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL8->qsWhatsThis = tr("This configures the SL to SL 8 button, and as long as you hold this button down, you will transmit to Squad Leader 8, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSL9=new GlobalShortcut(this, idx++, tr("SL to SL 9", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSL9=new GlobalShortcut(this, idx++, tr("SL to SL 9", "Global Shortcut"), false);
 	gsPRSL9->setObjectName(QLatin1String("PRCommSL9"));
 	gsPRSL9->qsToolTip = tr("Push and hold this button to talk to Squad Leader 9, if you are a squad leader or the commander.", "Global Shortcut");
 	gsPRSL9->qsWhatsThis = tr("This configures the SL to SL 9 button, and as long as you hold this button down, you will transmit to Squad Leader 9, if you are a squad leader or the commander.", "Global Shortcut");
 	
-	gsPRSLCommander=new GlobalShortcut(this, idx++, tr("SL to Commander", "Global Shortcut"), false, QVariant::fromValue(ShortcutTarget()));
+	gsPRSLCommander=new GlobalShortcut(this, idx++, tr("SL to Commander", "Global Shortcut"), false);
 	gsPRSLCommander->setObjectName(QLatin1String("PRCommSLCommander"));
 	gsPRSLCommander->qsToolTip = tr("Push and hold this button to talk to the commander, if you are a squad leader", "Global Shortcut");
 	gsPRSLCommander->qsWhatsThis = tr("This configures the SL to Commander button, and as long as you hold this button down, you will transmit to the commander, if you are a squad leader.", "Global Shortcut");
@@ -243,12 +243,12 @@ void MainWindow::createActions() {
 	gsResetAudio=new GlobalShortcut(this, idx++, tr("Reset Audio Processor", "Global Shortcut"));
 	gsResetAudio->setObjectName(QLatin1String("ResetAudio"));
 
-	gsMuteSelf=new GlobalShortcut(this, idx++, tr("Mute Self", "Global Shortcut"), false, 0);
+	gsMuteSelf=new GlobalShortcut(this, idx++, tr("Mute Self", "Global Shortcut"), false);
 	gsMuteSelf->setObjectName(QLatin1String("gsMuteSelf"));
 	gsMuteSelf->qsToolTip = tr("Set self-mute status.", "Global Shortcut");
 	gsMuteSelf->qsWhatsThis = tr("This will set or toggle your muted status. If you turn this off, you will also disable self-deafen.", "Global Shortcut");
 
-	gsDeafSelf=new GlobalShortcut(this, idx++, tr("Deafen Self", "Global Shortcut"), false, 0);
+	gsDeafSelf=new GlobalShortcut(this, idx++, tr("Deafen Self", "Global Shortcut"), false);
 	gsDeafSelf->setObjectName(QLatin1String("gsDeafSelf"));
 	gsDeafSelf->qsToolTip = tr("Set self-deafen status.", "Global Shortcut");
 	gsDeafSelf->qsWhatsThis = tr("This will set or toggle your deafened status. If you turn this on, you will also enable self-mute.", "Global Shortcut");
@@ -281,7 +281,7 @@ void MainWindow::createActions() {
 	qstiIcon->setToolTip(tr("Project Reality Mumble"));
 	qstiIcon->setObjectName(QLatin1String("Icon"));
 
-	gsWhisper = new GlobalShortcut(this, idx++, tr("Whisper/Shout"), false, QVariant::fromValue(ShortcutTarget()));
+	gsWhisper = new GlobalShortcut(this, idx++, tr("Whisper/Shout"), false);
 	gsWhisper->setObjectName(QLatin1String("gsWhisper"));
 
 	gsMetaLink=new GlobalShortcut(this, idx++, tr("Link Channel", "Global Shortcut"));
@@ -920,6 +920,14 @@ void MainWindow::openUrl(const QUrl &url) {
 		return;
 	}
 */
+
+#if QT_VERSION >= 0x050000
+	QUrlQuery query(url);
+	QString version = query.queryItemValue(QLatin1String("version"));
+#else
+	QString version = url.queryItemValue(QLatin1String("version"));
+#endif
+
 	QString host = url.host();
 	unsigned short port = static_cast<unsigned short>(url.port(DEFAULT_MUMBLE_PORT));
 	QString user = url.userName();
@@ -2693,7 +2701,7 @@ void MainWindow::on_gsWhisper_triggered(bool down, QVariant scdata) {
 	ShortcutTarget st = scdata.value<ShortcutTarget>();
 
 	if (down) {
-		if (gsJoinChannel->active()) {
+		if (gsMetaChannel->active()) {
 			if (! st.bUsers) {
 				Channel *c = mapChannel(st.iChannel);
 				if (c) {
@@ -2703,7 +2711,7 @@ void MainWindow::on_gsWhisper_triggered(bool down, QVariant scdata) {
 			}
 		}
 
-		if (gsLinkChannel->active()) {
+		if (gsMetaLink->active()) {
 			if (! st.bUsers) {
 				Channel *c = ClientUser::get(g.uiSession)->cChannel;
 				Channel *l = mapChannel(st.iChannel);
@@ -3102,7 +3110,7 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 				                           tr("Wrong server password for unregistered user account, please try again."),
 				                           QLineEdit::Password, pw, &ok, wf);
 				break;
-			case MumbleProto::Reject_RejectType_InvalidClient:
+			case MumbleProto::Reject_RejectType_AuthenticatorFail:
 				ok = false;
 				break;
 			default:

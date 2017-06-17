@@ -153,7 +153,7 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 	
 	if (ok && msg.prguid() != "{7cf19ff0-2950-4551-b329-07dd9469f605}") {
 		reason = QString::fromLatin1("This server requires you to use Project Reality Mumble. This is automatically launched when playing Project Reality. http://www.realitymod.com");
-		rtType = MumbleProto::Reject_RejectType_InvalidClient;
+		rtType = MumbleProto::Reject_RejectType_AuthenticatorFail;
 		ok = false;
 	}
 
@@ -641,6 +641,23 @@ void Server::msgUserState(ServerUser *uSource, MumbleProto::UserState &msg) {
 				msg.set_self_mute(true);
 			bBroadcast = true;
 		}
+        
+		if (msg.has_self_mute()) {
+			uSource->bSelfMute = msg.self_mute();
+			if (! uSource->bSelfMute) {
+				msg.set_self_deaf(false);
+				uSource->bSelfDeaf = false;
+			}
+			bBroadcast = true;
+		}
+
+		if (msg.has_plugin_context()) {
+			uSource->ssContext = msg.plugin_context();
+
+			// Make sure to clear this from the packet so we don't broadcast it
+			msg.clear_plugin_context();
+        }
+    }
 
 	if (msg.position_size()) {
 		bBroadcast = true;

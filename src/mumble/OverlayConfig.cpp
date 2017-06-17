@@ -36,6 +36,7 @@ static const int OVERLAYCONFIG_BUILTIN_ROLE = Qt::UserRole + 1;
 static ConfigWidget *OverlayConfigDialogNew(Settings &st) {
 	return new OverlayConfig(st);
 }
+#endif
 
 // Hide overlay config for Mac OS X universal builds
 // Hide the overlay for Project Reality...

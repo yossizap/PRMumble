@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 #endif
 
 	// Initialize application object.
-	QAppMumble a(argc, argv);
+    MumbleApplication a(argc, argv);
 	a.setApplicationName(QLatin1String("PR Mumble"));
 	a.setOrganizationName(QLatin1String("Project Reality"));
 	a.setOrganizationDomain(QLatin1String("realitymod.com"));
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 				|| args.at(i) == QLatin1String("/?")
 #endif
 			) {
-				QString helpmessage = MainWindow::tr( "Usage: PRMumble [options] [<url>]\n"
+				QString helpMessage = MainWindow::tr( "Usage: PRMumble [options] [<url>]\n"
 					"\n"
 					"<url> specifies a URL to connect to after startup instead of showing\n"
 					"the connection window, and has the following form:\n"
@@ -501,7 +501,7 @@ int main(int argc, char **argv) {
 		QDir qd(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
 #else
 		QDir qd(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-		
+#endif		
 		// copy the old certificate, because PR_Mumble just looks so shit :p
 		// TODO: maybe in a later version the old one should be deleted
 		if (QFile::exists(qd.absoluteFilePath(QLatin1String("PR_MumbleAutomaticCertificateBackup.p12"))))
