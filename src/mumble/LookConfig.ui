@@ -58,6 +58,9 @@
         <property name="text">
          <string>Show transmit mode dropdown in toolbar</string>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="4" column="0" colspan="2">

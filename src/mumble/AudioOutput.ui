@@ -250,6 +250,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QSlider" name="qsOtherVolume">
+        <property name="visible">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
          <string>Attenuation of other applications during speech</string>
         </property>
@@ -390,6 +393,9 @@
     <widget class="QGroupBox" name="qgbPrioritySpeaker">
      <property name="title">
       <string>Priority Speaker</string>
+     </property>
+     <property name="visible">
+       <bool>false</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>

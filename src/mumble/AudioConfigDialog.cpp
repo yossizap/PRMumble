@@ -75,10 +75,11 @@ AudioInputDialog::AudioInputDialog(Settings &st) : ConfigWidget(st) {
 			qcbSystem->addItem(key);
 		}
 	}
+    
 	qcbSystem->setEnabled(qcbSystem->count() > 1);
 
-	qcbTransmit->addItem(tr("Continuous"), Settings::Continuous);
-	qcbTransmit->addItem(tr("Voice Activity"), Settings::VAD);
+	//qcbTransmit->addItem(tr("Continuous"), Settings::Continuous);
+	//qcbTransmit->addItem(tr("Voice Activity"), Settings::VAD);
 	qcbTransmit->addItem(tr("Push To Talk"), Settings::PushToTalk);
 
 	abSpeech->qcBelow = Qt::red;
@@ -273,10 +274,10 @@ void AudioInputDialog::updateBitrate() {
 	int total = audiorate + overhead + posrate;
 
 	if (g.uiSession && (total > g.iMaxBandwidth)) {
-		qlBitrate->setEnabled(false)
+		qlBitrate->setEnabled(false);
 	}
     else {
-        qlBitrate->setEnabled(true)
+        qlBitrate->setEnabled(true);
     }
 
 	QString v = tr("%1 kbit/s (Audio %2, Position %4, Overhead %3)")
@@ -605,19 +606,21 @@ void AudioOutputDialog::on_qcbPositional_stateChanged(int v) {
 	qgbVolume->setEnabled(v);
 }
 
+#pragma warning(disable:4100)
 void AudioOutputDialog::on_qcbAttenuateOthersOnTalk_clicked(bool checked) {
-	bool b = qcbAttenuateOthers->isChecked() || checked;
+	//bool b = qcbAttenuateOthers->isChecked() || checked;
 	//qsOtherVolume->setEnabled(b);
 	//qlOtherVolume->setEnabled(b);
 	//qgbAdvancedAttenuation->setEnabled(b);
 }
 
 void AudioOutputDialog::on_qcbAttenuateOthers_clicked(bool checked) {
-	bool b = qcbAttenuateOthersOnTalk->isChecked() || checked;
+	//bool b = qcbAttenuateOthersOnTalk->isChecked() || checked;
 	//qsOtherVolume->setEnabled(b);
 	//qlOtherVolume->setEnabled(b);
 	//qgbAdvancedAttenuation->setEnabled(b);
 }
+#pragma warning(default:4100)
 
 void AudioOutputDialog::on_qcbOnlyAttenuateSameOutput_clicked(bool checked) {
 	qcbAttenuateLoopbacks->setEnabled(checked);

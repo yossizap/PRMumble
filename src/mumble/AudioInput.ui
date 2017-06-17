@@ -159,6 +159,9 @@
      <property name="title">
       <string>Transmission</string>
      </property>
+     <property name="visible">
+      <bool>false</bool>
+     </property>
      <layout class="QGridLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="qliTransmit">

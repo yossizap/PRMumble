@@ -1,75 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg2995"
-   version="1.1"
-   inkscape:version="0.48.4 r9939"
-   width="64"
-   height="64"
-   sodipodi:docname="comment_seen.png">
-  <metadata
-     id="metadata3001">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs2999" />
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
-     id="namedview2997"
-     showgrid="false"
-     inkscape:zoom="3.6875"
-     inkscape:cx="32"
-     inkscape:cy="32"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg2995" />
-  <image
-     width="64"
-     height="64"
-     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAwlJREFU
-eJztmy134kAUhp/ds2KRyCKRRSJbiWwlspX7O/gLK1lbiezKyiCRWbkyK5GxK25mw4ZMwnxx25M8
-5/QAIYQ778z9yB36abvdbhgwn7UN0GbwAnxpvN5oGKHAxjwZ/AoYBdA2QJtRAG0DtBkF0DZAm1EA
-bQO0aVaCKVgA0+r5HTDpOf+teiyA36mMMqQSYAnMkcG7smq8PgA5icSILcASGUDfLLtec4kIkBFZ
-iFgCzICH6jEV8+rvALzGumgMARbA2uH8IzKIJmaAfRj32iFxIohQAZbAY885JbBHlm6XwVn1OKmu
-e4t9RU2BJ0SEIJcIEWBO9+CPyKDaZruLsvpchghwR3swnQDPwA8CVoJvHTChe9nnwHfcB9+kQGZ5
-13HOE3WadcZXgK5I/0a3wT7kyEyXLe9NOE+dF+MjwBTx0TZyal+OTQG8WN5bcFkAPcNHANvgj8BP
-HyMcKKgrxSY2uzqJKUBG+xKNTYaIbSgRUbyygWsWmNHu+yXhAc+FV+oUGeRyrgLY/OyagweZ7Sgl
-sasL2NLNn1BDtHAV4KvleHBJqoWrALbcf7Qcf/fE6Ah92MHD2BKLIoAtLnwIXAVoW+4T4naArkoM
-AcCzDn8PDF4A10rQVn3dIvX4Ne4F4P82XFCz1HUFlJYvMm2sa9C8/58jnaFnPBojPlkgtxxfkbYr
-bHigfaA3PhfzEeCAPRasCWhPXcAj9s2WPR5FmW8dYGtKTIFvpAmKa+xuVuB5W+wrQI7dFUy31rtP
-12CGiGqb+ZKAHmRIW3yHzLjN7++RGdsjbuOaIWbU22JdvBBwPxK6MfKCtKVtIpiIvUKW6a/qeJsg
-p5lkSX8sMTMfdCseKkCJtKvX9O8Ez6iFCnWPAmnAqm+NGXbI7K5ImwVAgp0tCDsTc3vcBEbj+7GF
-yJB4ErXaTPEDidN9vTlhYpjyOlnTNeVPZArO8/P9BZ/r20WOyjV+I3RKqm0zb8aWmLYB2owCaBug
-zSiAtgHajAJoG6DNKIC2AdoMXoCh/ufoPwa/AgYvwF+8hYREGMFJ+QAAAABJRU5ErkJggg==
-"
-     id="image3003"
-     x="0"
-     y="0" />
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<path opacity="0.5" fill="#999999" enable-background="new    " d="M430.812,103.5H81.188c-15.305,0-27.688,12.383-27.688,27.688
+	V395.75c0,15.304,12.383,27.688,27.688,27.688h55.375V506.5l124.594-83.063h169.656c15.304,0,27.688-12.383,27.688-27.688V131.188
+	C458.499,115.883,446.116,103.5,430.812,103.5z"/>
 </svg>

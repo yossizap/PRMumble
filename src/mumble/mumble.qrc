@@ -52,8 +52,8 @@
  <file alias="UserMutedYouOrByYou.ogg">../../samples/UserMutedYouOrByYou.ogg</file>
  <file alias="RecordingStateChanged.ogg">../../samples/RecordingStateChanged.ogg</file>
  <file alias="Reality.qss">../../themes/reality/Reality.qss</file>
- <file alias="checkbox-checked.png">../../themes/reality/checkbox-checked.png</file>
- <file alias="checkbox-indeterminate.png">../../themes/reality/checkbox-indeterminate.png</file>
+ <file alias="checkbox-checked.png">../../themes/reality/checkbox-checked.svg</file>
+ <file alias="checkbox-indeterminate.png">../../themes/reality/checkbox-indeterminate.svg</file>
  <file alias="drop-down-arrow.png">../../themes/reality/drop-down-arrow.png</file>
  <file alias="scrollbar-down-arrow.png">../../themes/reality/scrollbar-down-arrow.png</file>
  <file alias="scrollbar-up-arrow.png">../../themes/reality/scrollbar-up-arrow.png</file>

@@ -1,64 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg3085"
-   version="1.1"
-   inkscape:version="0.48.4 r9939"
-   width="14"
-   height="14"
-   sodipodi:docname="talking_alt.png">
-  <metadata
-     id="metadata3091">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs3089" />
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
-     id="namedview3087"
-     showgrid="false"
-     inkscape:zoom="16.857143"
-     inkscape:cx="7"
-     inkscape:cy="7"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg3085" />
-  <image
-     width="14"
-     height="14"
-     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABHNCSVQICAgIfAhkiAAAAHdJREFU
-KJGdkkEOwCAIBEfjW+VN+Fl7EQ4VjO0mxgSdRcwWVeWgCZSoXt+VLkIXAZi2B2ZsIMBQNSh6AUDZ
-wBsIoL2fkkAOmKpdzoBkTlpmn8gNws+50deOPmcDGIcQrLMtBHUVfR1MJqcZu0gGW9c8OTdw+Rvy
-B23aL4bQnlqKAAAAAElFTkSuQmCC
-"
-     id="image3093"
-     x="0"
-     y="0" />
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<path opacity="0.9" fill="#FBBC05" enable-background="new    " d="M256.104,59.479c63.393,0,114.783,51.39,114.783,114.783
+	s-51.39,114.783-114.783,114.783s-114.783-51.39-114.783-114.783S192.711,59.479,256.104,59.479z M256.104,239.852
+	c102.91,0,186.335,60.066,186.335,134.161s-83.425,134.161-186.335,134.161S69.769,448.108,69.769,374.013
+	S153.194,239.852,256.104,239.852z"/>
+<path opacity="0.9" fill="#FBBC05" enable-background="new    " d="M439.061,251.956l-33.312-22.57
+	c39.665-56.785,25.166-137.337-26.215-173.23l22.57-32.313C487.432,83.446,499.041,166.086,439.061,251.956z"/>
+<path opacity="0.9" fill="#FBBC05" enable-background="new    " d="M111.561,23.827l22.593,32.297
+	c-51.367,35.93-68.125,116.506-28.431,173.255L73.426,251.97C12.513,164.889,24.48,84.74,111.561,23.827z"/>
 </svg>

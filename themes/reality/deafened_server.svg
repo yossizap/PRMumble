@@ -1,89 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg3125"
-   version="1.1"
-   inkscape:version="0.48.4 r9939"
-   width="64"
-   height="64"
-   sodipodi:docname="deafened_server.png">
-  <metadata
-     id="metadata3131">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs3129" />
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
-     id="namedview3127"
-     showgrid="false"
-     inkscape:zoom="3.6875"
-     inkscape:cx="32"
-     inkscape:cy="32"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg3125" />
-  <image
-     width="64"
-     height="64"
-     xlink:href="data:image/png;base64,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
-gLw34F8cCN1dh9il4gAAAABJRU5ErkJggg==
-"
-     id="image3133"
-     x="0"
-     y="0" />
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<g>
+	<path fill="#44A3F2" d="M168.46,169.386c0-12.6-10.309-22.909-22.909-22.909h-10.19c-12.6,0-22.909,10.309-22.909,22.909v21.048
+		v53.296l56.008-28.068V169.386z"/>
+</g>
+<path fill="#44A3F2" d="M391.982,103.627l-198.147,99.316l-0.001-33.063c0-12.6,9.309-27.338,20.687-32.751l156.772-74.583
+	c11.379-5.413,20.687,0.079,20.687,12.203L391.982,103.627z"/>
+<path fill="#44A3F2" d="M193.835,297.054v44.058c0,12.6,9.309,27.338,20.687,32.751l156.771,74.583
+	c11.379,5.413,20.687-0.467,20.687-13.067l0.002-237.018l73.56-35.201l-19.709-39.323L46.46,324.009l19.709,39.323l46.282-24.613
+	v4.721c0,12.6,10.309,22.909,22.909,22.909h10.19c12.6,0,22.909-10.309,22.909-22.909v-32.799L193.835,297.054z"/>
 </svg>

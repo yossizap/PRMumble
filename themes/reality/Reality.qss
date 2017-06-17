@@ -173,12 +173,12 @@ QCheckBox::indicator:hover {
 
 QTreeView::indicator:checked,
 QCheckBox::indicator:checked {
-	image: url(:/checkbox-checked.png);
+	image: url(:/checkbox-checked.svg);
 }
 
 QTreeView::indicator:indeterminate,
 QCheckBox::indicator:indeterminate {
-	image: url(:/checkbox-indeterminate.png);
+	image: url(:/checkbox-indeterminate.svg);
 }
 
 QSpinBox {

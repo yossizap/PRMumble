@@ -524,8 +524,7 @@ void AudioWizard::on_qsVAD_valueChanged(int v) {
 
 void AudioWizard::on_qrSNR_clicked(bool on) {
 	if (on) {
-		//g.s.vsVAD = Settings::SignalToNoise;
-        g.s.vsVAD = Settings::PushToTalk;
+		g.s.vsVAD = Settings::SignalToNoise;
 		g.s.atTransmit = Settings::VAD;
 		updateTriggerWidgets(false);
 		bTransmitChanged = true;
@@ -535,8 +534,7 @@ void AudioWizard::on_qrSNR_clicked(bool on) {
 void AudioWizard::on_qrAmplitude_clicked(bool on) {
 	if (on) {
 		g.s.vsVAD = Settings::Amplitude;
-		//g.s.vsVAD = Settings::SignalToNoise;
-        g.s.vsVAD = Settings::PushToTalk;
+		g.s.vsVAD = Settings::SignalToNoise;
 		updateTriggerWidgets(false);
 		bTransmitChanged = true;
 	}

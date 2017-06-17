@@ -372,8 +372,8 @@ void MainWindow::setupGui()  {
 	// such as a MUComboBox to a QToolbar, even though they are supported.
 	qcbTransmitMode = new MUComboBox(qtIconToolbar);
 	qcbTransmitMode->setObjectName(QLatin1String("qcbTransmitMode"));
-	qcbTransmitMode->addItem(tr("Continuous"));
-	qcbTransmitMode->addItem(tr("Voice Activity"));
+	//qcbTransmitMode->addItem(tr("Continuous"));
+	//qcbTransmitMode->addItem(tr("Voice Activity"));
 	qcbTransmitMode->addItem(tr("Push-to-Talk"));
 
 	qaTransmitModeSeparator = qtIconToolbar->insertSeparator(qaConfigDialog);
@@ -1269,7 +1269,9 @@ void MainWindow::on_qaSelfRegister_triggered() {
 }
 
 void MainWindow::qcbTransmitMode_activated(int index) {
-	switch (index) {
+	switch (index) 
+    {
+    /* Disabled for PR
 		case 0: // Continuous
 			g.s.atTransmit = Settings::Continuous;
 			g.l->log(Log::Information, tr("Transmit Mode set to Continuous"));
@@ -1279,8 +1281,9 @@ void MainWindow::qcbTransmitMode_activated(int index) {
 			g.s.atTransmit = Settings::VAD;
 			g.l->log(Log::Information, tr("Transmit Mode set to Voice Activity"));
 			return;
-
+    */
 		case 2: // Push-to-Talk
+        default:
 			g.s.atTransmit = Settings::PushToTalk;
 			g.l->log(Log::Information, tr("Transmit Mode set to Push-to-Talk"));
 			return;
@@ -2768,6 +2771,7 @@ void MainWindow::on_gsCycleTransmitMode_triggered(bool down, QVariant)
 
 		switch (g.s.atTransmit)
 		{
+            /* Disabled for PR
 			case Settings::Continuous:
 				g.s.atTransmit = Settings::VAD;
 				g.l->log(Log::Information, tr("Transmit Mode set to Voice Activity"));
@@ -2776,6 +2780,8 @@ void MainWindow::on_gsCycleTransmitMode_triggered(bool down, QVariant)
 				g.s.atTransmit = Settings::PushToTalk;
 				g.l->log(Log::Information, tr("Transmit Mode set to Push-to-Talk"));
 				break;
+            */
+            default:
 			case Settings::PushToTalk:
 				g.s.atTransmit = Settings::Continuous;
 				g.l->log(Log::Information, tr("Transmit Mode set to Continuous"));
