@@ -112,8 +112,8 @@ ice {
 	}
 
 	macx {
-		INCLUDEPATH *= $$(MUMBLE_PREFIX)/Ice-3.4.2/include/
-		QMAKE_LIBDIR *= $$(MUMBLE_PREFIX)/Ice-3.4.2/lib/
+		INCLUDEPATH *= $$(MUMBLE_PREFIX)/Ice-3.6.3/include/
+		QMAKE_LIBDIR *= $$(MUMBLE_PREFIX)/Ice-3.6.3/lib/
 	}
 
 	CONFIG(ermine) {
@@ -122,8 +122,8 @@ ice {
 	}
 
 	unix:!macx:CONFIG(static) {
-		INCLUDEPATH *= /opt/Ice-3.3/include
-		QMAKE_LIBDIR *= /opt/Ice-3.3/lib
+		INCLUDEPATH *= /opt/Ice-3.6/include
+		QMAKE_LIBDIR *= /opt/Ice-3.6/lib
 		LIBS *= -lbz2
 		QMAKE_CXXFLAGS *= -fPIC
 	}
