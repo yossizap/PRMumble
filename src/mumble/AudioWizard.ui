@@ -195,14 +195,14 @@ Please be aware that as long as this wizard is active, audio will be looped loca
          <property name="toolTip">
           <string>Allows positioning of sound</string>
          </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
          <property name="whatsThis">
           <string>This allows Mumble to use positional audio to place voices.</string>
          </property>
          <property name="text">
           <string>Enable positional audio</string>
-         </property>
-         <property name="visible">
-          <bool>false</bool>
          </property>
         </widget>
        </item>

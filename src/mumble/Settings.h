@@ -362,6 +362,7 @@ struct Settings {
 	// Privacy settings
 	bool bHideOS;
 
+    /* We don't need images in PR mumble */
 	static const int ciDefaultMaxImageSize = 0;//50 * 1024; // Restrict to 50KiB as a default
 	int iMaxImageSize;
 	int iMaxImageWidth;
@@ -406,11 +407,14 @@ struct Settings {
 	bool doPositionalAudio() const;
 
 	Settings();
-	void addButtons(QList<Shortcut>& shortcuts);
-	void addButton(QList<Shortcut>& shortcuts, quint32 index, quint32 type, QString guid, bool addData = false, qint32 channel = -3, const char* group = "", bool children = false, bool forceCenter = false);
 	void load();
 	void load(QSettings*);
 	void save();
+    
+    /* The following two functions were added for PR shortcuts */
+	void addButtons(QList<Shortcut>& shortcuts);
+	void addButton(QList<Shortcut>& shortcuts, quint32 index, quint32 type, QString guid, bool addData = false, qint32 channel = -3, const char* group = "", bool children = false, bool forceCenter = false);
+
 };
 
 #endif

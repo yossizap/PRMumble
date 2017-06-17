@@ -168,6 +168,9 @@
         <property name="buddy">
          <cstring>qcbTransmit</cstring>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="0" column="1" colspan="2">
@@ -177,6 +180,9 @@
         </property>
         <property name="whatsThis">
          <string>&lt;b&gt;This sets when speech should be transmitted.&lt;/b&gt;&lt;br /&gt;&lt;i&gt;Continuous&lt;/i&gt; - All the time&lt;br /&gt;&lt;i&gt;Voice Activity&lt;/i&gt; - When you are speaking clearly.&lt;br /&gt;&lt;i&gt;Push To Talk&lt;/i&gt; - When you hold down the hotkey set under &lt;i&gt;Shortcuts&lt;/i&gt;.</string>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -191,6 +197,9 @@
         <property name="currentIndex">
          <number>1</number>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
         <widget class="QWidget" name="qwPTT">
          <layout class="QGridLayout" columnstretch="0,1,0,0">
           <item row="0" column="0">
@@ -200,6 +209,9 @@
             </property>
             <property name="buddy">
              <cstring>qsDoublePush</cstring>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -214,6 +226,9 @@
             <property name="text">
              <string notr="true">TextLabel</string>
             </property>
+            <property name="visible">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="1">
@@ -223,6 +238,9 @@
             </property>
             <property name="text">
              <string>Display push to talk window</string>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -236,6 +254,9 @@
               <width>20</width>
               <height>40</height>
              </size>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </spacer>
           </item>
@@ -259,6 +280,9 @@
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
+            <property name="visible">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="0">
@@ -266,12 +290,18 @@
             <property name="text">
              <string>Hold Time</string>
             </property>
+            <property name="visible">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="3">
            <widget class="QLabel" name="qlPTTHold">
             <property name="text">
              <string notr="true">TextLabel</string>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -288,6 +318,9 @@
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -308,6 +341,9 @@
               <property name="text">
                <string>Amplitude</string>
               </property>
+              <property name="visible">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -321,6 +357,9 @@
               <property name="text">
                <string>Signal to Noise</string>
               </property>
+              <property name="visible">
+                <bool>false</bool>
+              </property>
              </widget>
             </item>
            </layout>
@@ -332,6 +371,9 @@
             </property>
             <property name="buddy">
              <cstring>qsTransmitHold</cstring>
+            </property>
+            <property name="visible">
+              <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -352,6 +394,9 @@
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
+            <property name="visible">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="2">
@@ -364,6 +409,9 @@
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -381,12 +429,18 @@
             <property name="whatsThis">
              <string>&lt;b&gt;This shows the current speech detection settings.&lt;/b&gt;&lt;br /&gt;You can change the settings from the Settings dialog or from the Audio Wizard.</string>
             </property>
+            <property name="visible">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="qliTransmitMin">
             <property name="text">
              <string>Silence Below</string>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -413,12 +467,18 @@
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
+            <property name="visible">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="qliTransmitMax">
             <property name="text">
              <string>Speech Above</string>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -444,6 +504,9 @@
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="visible">
+             <bool>false</bool>
             </property>
            </widget>
           </item>

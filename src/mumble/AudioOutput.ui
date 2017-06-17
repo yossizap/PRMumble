@@ -298,6 +298,9 @@
         <property name="buddy">
          <cstring>qsOtherVolume</cstring>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="5" column="1">
@@ -313,6 +316,9 @@
           <property name="text">
            <string>while other users talk</string>
           </property>
+          <property name="visible">
+         <bool>false</bool>
+        </property>
          </widget>
         </item>
         <item>
@@ -326,6 +332,9 @@
           <property name="text">
            <string>while you talk</string>
           </property>
+          <property name="visible">
+         <bool>false</bool>
+        </property>
          </widget>
         </item>
        </layout>
@@ -353,6 +362,9 @@
         <property name="text">
          <string>Only attenuate applications using the same output device</string>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -365,6 +377,9 @@
         </property>
         <property name="text">
          <string>Attenuate PulseAudio loopback modules</string>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -387,6 +402,9 @@
         </property>
         <property name="text">
          <string>Attenuate other users while talking as Priority Speaker.</string>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -423,6 +441,9 @@
         <property name="buddy">
          <cstring>qsMinDistance</cstring>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="1" column="3">
@@ -445,6 +466,9 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="1" column="5">
@@ -458,6 +482,9 @@
         <property name="text">
          <string notr="true">md</string>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="3" column="1">
@@ -467,6 +494,9 @@
         </property>
         <property name="buddy">
          <cstring>qsMaxDistance</cstring>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -487,6 +517,9 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="3" column="5">
@@ -500,6 +533,9 @@
         <property name="text">
          <string notr="true">md</string>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="4" column="1">
@@ -509,6 +545,9 @@
         </property>
         <property name="buddy">
          <cstring>qsMaxDistVolume</cstring>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -526,6 +565,9 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="4" column="5">
@@ -539,6 +581,9 @@
         <property name="text">
          <string notr="true">mv</string>
         </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -548,6 +593,9 @@
         </property>
         <property name="buddy">
          <cstring>qsMaxDistVolume</cstring>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -561,6 +609,9 @@
         </property>
         <property name="text">
          <string notr="true">bl</string>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -580,6 +631,9 @@
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
