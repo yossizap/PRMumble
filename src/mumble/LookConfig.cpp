@@ -97,7 +97,7 @@ void LookConfig::reloadThemes(const boost::optional<ThemeInfo::StyleInfo> config
 	int selectedThemeEntry = 0;
 	
 	qcbTheme->clear();
-	qcbTheme->addItem(tr("None"));
+	qcbTheme->addItem(tr("reality"));
 	for (ThemeMap::const_iterator theme = themes.begin();
 	     theme != themes.end();
 	     ++theme) {
@@ -209,7 +209,7 @@ void LookConfig::save() const {
 	s.bStateInTray = qcbStateInTray->isChecked();
 	s.bShowUserCount = qcbShowUserCount->isChecked();
 	s.bShowContextMenuInMenuBar = qcbShowContextMenuInMenuBar->isChecked();
-	s.bShowTransmitModeComboBox = qcbShowTransmitModeComboBox->isChecked();
+	s.bShowTransmitModeComboBox = false;
 	s.bHighContrast = qcbHighContrast->isChecked();
 	s.bChatBarUseSelection = qcbChatBarUseSelection->isChecked();
 	s.bFilterHidesEmptyChannels = qcbFilterHidesEmptyChannels->isChecked();

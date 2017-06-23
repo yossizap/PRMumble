@@ -1371,7 +1371,7 @@ bool UserModel::dropMimeData(const QMimeData *md, Qt::DropAction, int row, int c
 		int ret;
 		switch (g.s.ceUserDrag) {
 			case Settings::Ask:
-				ret=QMessageBox::question(g.mw, QLatin1String("Mumble"), tr("Are you sure you want to drag this user?"), QMessageBox::Yes, QMessageBox::No);
+				ret=QMessageBox::question(g.mw, QLatin1String("PRMumble"), tr("Are you sure you want to drag this user?"), QMessageBox::Yes, QMessageBox::No);
 
 				if (ret == QMessageBox::No)
 					return false;
@@ -1392,7 +1392,7 @@ bool UserModel::dropMimeData(const QMimeData *md, Qt::DropAction, int row, int c
 		int ret;
 		switch (g.s.ceChannelDrag) {
 			case Settings::Ask:
-				ret=QMessageBox::question(g.mw, QLatin1String("Mumble"), tr("Are you sure you want to drag this channel?"), QMessageBox::Yes, QMessageBox::No);
+				ret=QMessageBox::question(g.mw, QLatin1String("PRMumble"), tr("Are you sure you want to drag this channel?"), QMessageBox::Yes, QMessageBox::No);
 
 				if (ret == QMessageBox::No)
 					return false;
@@ -1486,7 +1486,7 @@ bool UserModel::dropMimeData(const QMimeData *md, Qt::DropAction, int row, int c
 					} else {
 						// Not enough space, other channels have to be moved
 						if (static_cast<long long>(pi->channelAt(ilast)->iPosition) + 40 > INT_MAX) {
-							QMessageBox::critical(g.mw, QLatin1String("Mumble"), tr("Cannot perform this movement automatically, please reset the numeric sorting indicators or adjust it manually."));
+							QMessageBox::critical(g.mw, QLatin1String("PRMumble"), tr("Cannot perform this movement automatically, please reset the numeric sorting indicators or adjust it manually."));
 							return false;
 						}
 						for (int i = row; i <= ilast; i++) {
@@ -1506,7 +1506,7 @@ bool UserModel::dropMimeData(const QMimeData *md, Qt::DropAction, int row, int c
 		}
 
 		if (inewpos > INT_MAX || inewpos < INT_MIN) {
-			QMessageBox::critical(g.mw, QLatin1String("Mumble"), tr("Cannot perform this movement automatically, please reset the numeric sorting indicators or adjust it manually."));
+			QMessageBox::critical(g.mw, QLatin1String("PRMumble"), tr("Cannot perform this movement automatically, please reset the numeric sorting indicators or adjust it manually."));
 			return false;
 		}
 

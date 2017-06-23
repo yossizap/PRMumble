@@ -32,16 +32,16 @@ void Log::postNotification(MsgType mt, const QString &plain) {
 #ifdef USE_DBUS
 	QDBusMessage response;
 	QVariantMap hints;
-	hints.insert(QLatin1String("desktop-entry"), QLatin1String("mumble"));
+	hints.insert(QLatin1String("desktop-entry"), QLatin1String("PRMumble"));
 
 	{
 		QDBusInterface kde(QLatin1String("org.kde.VisualNotifications"), QLatin1String("/VisualNotifications"), QLatin1String("org.kde.VisualNotifications"));
 		if (kde.isValid()) {
 			QList<QVariant> args;
-			args.append(QLatin1String("mumble"));
+			args.append(QLatin1String("PRMumble"));
 			args.append(uiLastId);
 			args.append(QString());
-			args.append(QLatin1String("mumble"));
+			args.append(QLatin1String("PRMumble"));
 			args.append(msgName(mt));
 			args.append(plain);
 			args.append(QStringList());
@@ -55,7 +55,7 @@ void Log::postNotification(MsgType mt, const QString &plain) {
 	if (response.type()!=QDBusMessage::ReplyMessage || response.arguments().at(0).toUInt()==0) {
 		QDBusInterface gnome(QLatin1String("org.freedesktop.Notifications"), QLatin1String("/org/freedesktop/Notifications"), QLatin1String("org.freedesktop.Notifications"));
 		if (gnome.isValid())
-			response = gnome.call(QLatin1String("Notify"), QLatin1String("Mumble"), uiLastId, qsIcon, msgName(mt), plain, QStringList(), hints, -1);
+			response = gnome.call(QLatin1String("Notify"), QLatin1String("PRMumble"), uiLastId, qsIcon, msgName(mt), plain, QStringList(), hints, -1);
 	}
 
 	if (response.type()==QDBusMessage::ReplyMessage && response.arguments().count() == 1) {

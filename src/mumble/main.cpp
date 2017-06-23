@@ -273,7 +273,7 @@ int main(int argc, char **argv) {
 		bool sent = false;
 		QMap<QString, QVariant> param;
 		param.insert(rpcCommand, rpcCommand);
-		sent = SocketRPC::send(QLatin1String("Mumble"), QLatin1String("self"), param);
+		sent = SocketRPC::send(QLatin1String("PRMumble"), QLatin1String("self"), param);
 		if (sent) {
 			return 0;
 		} else {
@@ -294,7 +294,7 @@ int main(int argc, char **argv) {
 			QDBusMessage reply=qdbi.call(QLatin1String("openUrl"), QLatin1String(url.toEncoded()));
 			sent = (reply.type() == QDBusMessage::ReplyMessage);
 #else
-			sent = SocketRPC::send(QLatin1String("Mumble"), QLatin1String("url"), param);
+			sent = SocketRPC::send(QLatin1String("PRMumble"), QLatin1String("url"), param);
 #endif
 			if (sent)
 				return 0;
@@ -306,7 +306,7 @@ int main(int argc, char **argv) {
 			QDBusMessage reply=qdbi.call(QLatin1String("focus"));
 			sent = (reply.type() == QDBusMessage::ReplyMessage);
 #else
-			sent = SocketRPC::send(QLatin1String("Mumble"), QLatin1String("focus"));
+			sent = SocketRPC::send(QLatin1String("PRMumble"), QLatin1String("focus"));
 #endif
 			if (sent)
 				return 0;
@@ -324,7 +324,7 @@ int main(int argc, char **argv) {
 	// modes enabled. This gives us exclusive access to the file.
 	// If another Mumble instance attempts to open the file, it will fail,
 	// and that instance will know to terminate itself.
-	UserLockFile userLockFile(g.qdBasePath.filePath(QLatin1String("mumble.lock")));
+	UserLockFile userLockFile(g.qdBasePath.filePath(QLatin1String("prmumble.lock")));
 	if (! bAllowMultiple) {
 		if (!userLockFile.acquire()) {
 			qWarning("Another process has already acquired the lock file at '%s'. Terminating...", qPrintable(userLockFile.path()));
@@ -459,7 +459,7 @@ int main(int argc, char **argv) {
 	QDBusConnection::sessionBus().registerService(QLatin1String("com.reality.PRMumble.PRMumble"));
 #endif
 
-	SocketRPC *srpc = new SocketRPC(QLatin1String("Mumble"));
+	SocketRPC *srpc = new SocketRPC(QLatin1String("PRMumble"));
 
 	g.l->log(Log::Information, MainWindow::tr("Welcome to Project Reality Mumble."));
 

@@ -63,7 +63,7 @@ void MumbleDBus::getCurrentUrl(const QDBusMessage &msg) {
 
 void MumbleDBus::getTalkingUsers(const QDBusMessage &msg) {
 	if (!g.sh || !g.sh->isRunning() || ! g.uiSession) {
-		QDBusConnection::sessionBus().send(msg.createErrorReply(QLatin1String("net.sourceforge.mumble.Error.connection"), QLatin1String("Not connected")));
+		QDBusConnection::sessionBus().send(msg.createErrorReply(QLatin1String("com.reality.PRMumble.Error.connection"), QLatin1String("Not connected")));
 		return;
 	}
 	QStringList names;

@@ -27,7 +27,7 @@ void TaskList::addToRecentList(QString name, QString user, QString host, int por
 		return;
 
 	QUrl url;
-	url.setScheme(QLatin1String("mumble"));
+	url.setScheme(QLatin1String("PRMumble"));
 	url.setUserName(user);
 	url.setHost(host);
 	url.setPort(port);

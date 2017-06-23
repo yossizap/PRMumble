@@ -872,6 +872,9 @@ the channel's context menu.</string>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
    </property>
+   <property name="visible">
+         <bool>false</bool>
+   </property>
   </action>
   <action name="qaSelfRegister">
    <property name="text">

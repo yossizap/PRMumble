@@ -125,7 +125,7 @@ void PluginConfig::on_qpbConfig_clicked() {
 	} else if (pi->p->config) {
 		pi->p->config(0);
 	} else {
-		QMessageBox::information(this, QLatin1String("Mumble"), tr("Plugin has no configure function."), QMessageBox::Ok, QMessageBox::NoButton);
+		QMessageBox::information(this, QLatin1String("PRMumble"), tr("Plugin has no configure function."), QMessageBox::Ok, QMessageBox::NoButton);
 	}
 }
 
@@ -144,7 +144,7 @@ void PluginConfig::on_qpbAbout_clicked() {
 	} else if (pi->p->about) {
 		pi->p->about(0);
 	} else {
-		QMessageBox::information(this, QLatin1String("Mumble"), tr("Plugin has no about function."), QMessageBox::Ok, QMessageBox::NoButton);
+		QMessageBox::information(this, QLatin1String("PRMumble"), tr("Plugin has no about function."), QMessageBox::Ok, QMessageBox::NoButton);
 	}
 }
 
