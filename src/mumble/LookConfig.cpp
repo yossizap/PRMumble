@@ -97,7 +97,7 @@ void LookConfig::reloadThemes(const boost::optional<ThemeInfo::StyleInfo> config
 	int selectedThemeEntry = 0;
 	
 	qcbTheme->clear();
-	qcbTheme->addItem(tr("reality"));
+	qcbTheme->addItem(tr("None"));
 	for (ThemeMap::const_iterator theme = themes.begin();
 	     theme != themes.end();
 	     ++theme) {
@@ -116,7 +116,10 @@ void LookConfig::reloadThemes(const boost::optional<ThemeInfo::StyleInfo> config
 		}
 	}
 	
-	qcbTheme->setCurrentIndex(selectedThemeEntry);
+    if (0 == selectedThemeEntry)
+        qcbTheme->setCurrentIndex(1);
+    else
+        qcbTheme->setCurrentIndex(selectedThemeEntry);
 }
 
 void LookConfig::load(const Settings &r) {
@@ -216,10 +219,10 @@ void LookConfig::save() const {
 	
 	QVariant themeData = qcbTheme->itemData(qcbTheme->currentIndex());
 	if (themeData.isNull()) {
-		Themes::setConfiguredStyle(s, boost::none, s.requireRestartToApply);
-	} else {
-		Themes::setConfiguredStyle(s, themeData.value<ThemeInfo::StyleInfo>(), s.requireRestartToApply);
-	}
+        /* Set PR's theme if none was set */
+        themeData = qcbTheme->itemData(1);
+    }
+    Themes::setConfiguredStyle(s, themeData.value<ThemeInfo::StyleInfo>(), s.requireRestartToApply);
 }
 
 void LookConfig::accept() const {

@@ -140,7 +140,7 @@ QVector<QDir> Themes::getSearchDirectories() {
 }
 
 QString Themes::userStylesheetPath() {
-	return g.qdBasePath.absolutePath() + QLatin1String("/user.qss");
+	return g.qdBasePath.absolutePath() + QLatin1String("/Reality.qss");
 }
 
 bool Themes::readStylesheet(const QString &stylesheetFn, QString &stylesheetContent) {

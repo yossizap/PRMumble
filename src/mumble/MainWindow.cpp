@@ -382,7 +382,7 @@ void MainWindow::setupGui()  {
 	connect(qcbTransmitMode, SIGNAL(activated(int)),
 	        this, SLOT(qcbTransmitMode_activated(int)));
 
-	updateTransmitModeComboBox();
+	//updateTransmitModeComboBox();
 
 // For Qt >= 5, enable this call (only) for Windows.
 // For Qt < 5, enable for anything but macOS.
@@ -2434,7 +2434,7 @@ void MainWindow::on_qaConfigDialog_triggered() {
 
 	if (dlg->exec() == QDialog::Accepted) {
 		setupView(false);
-		updateTransmitModeComboBox();
+		//updateTransmitModeComboBox();
 		updateTrayIcon();
 
 		UserModel *um = static_cast<UserModel *>(qtvUsers->model());
