@@ -423,7 +423,7 @@ void WASAPIInput::run() {
 			wfe.Format.cbSize = 0;
 			wfe.Format.wFormatTag = WAVE_FORMAT_PCM;
 			wfe.Format.nChannels = channels;
-			wfe.Format.nSamplesPerSec = 48000;
+			wfe.Format.nSamplesPerSec = 44100;
 			wfe.Format.wBitsPerSample = 16;
 			wfe.Format.nBlockAlign = wfe.Format.nChannels * wfe.Format.wBitsPerSample / 8;
 			wfe.Format.nAvgBytesPerSec = wfe.Format.nBlockAlign * wfe.Format.nSamplesPerSec;
@@ -900,7 +900,7 @@ void WASAPIOutput::run() {
 		} else {
 			pwfx->wFormatTag = WAVE_FORMAT_PCM;
 		}
-		pwfx->nSamplesPerSec = 48000;
+		pwfx->nSamplesPerSec = 44100;
 		pwfx->wBitsPerSample = 16;
 		pwfx->nBlockAlign = pwfx->nChannels * pwfx->wBitsPerSample / 8;
 		pwfx->nAvgBytesPerSec = pwfx->nBlockAlign * pwfx->nSamplesPerSec;

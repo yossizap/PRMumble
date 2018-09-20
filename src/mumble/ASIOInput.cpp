@@ -200,7 +200,7 @@ void ASIOConfig::on_qpbQuery_clicked() {
 			SleepEx(10, false);
 
 			ASIOSampleRate srate = 0.0;
-			iasio->setSampleRate(48000.0);
+			iasio->setSampleRate(44100.0);
 			iasio->getSampleRate(&srate);
 			SleepEx(10, false);
 
