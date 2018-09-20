@@ -166,19 +166,53 @@ QCheckBox::indicator {
 	background-color: #ffffff;
 }
 
+QCheckBox::indicator:checked,
+QMenu::indicator:checked,
+QTreeView::indicator:checked {
+  image: url(skin:controls/checkbox_check_dark.svg);
+}
+
+QCheckBox::indicator:disabled,
+QTreeView::indicator:disabled {
+  border: 1px solid #2d2d2d;
+  background-color: #282828;
+}
+
+QCheckBox::indicator:checked:disabled,
+QTreeView::indicator:checked:disabled {
+  border: 1px solid transparent;
+  image: url(skin:controls/checkbox_check_disabled.svg);
+}
+
+QCheckBox::indicator:focus,
+QTreeView::indicator:focus,
+QRadioButton::indicator:focus,
+QComboBox:focus {
+  background-color: #3e4f5e;
+}
+
+QCheckBox::indicator:focus:hover,
+QTreeView::indicator:focus:hover,
+QRadioButton::indicator:focus:hover,
+QComboBox:focus:hover {
+  background-color: #485d6f;
+  border-color: #485d6f;
+}
+
+QCheckBox::indicator:hover,
 QTreeView::indicator:hover,
-QCheckBox::indicator:hover {
-	background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ffffff, stop:1 #cccccc);
+QRadioButton::indicator:hover,
+QComboBox:hover {
+  background-color: #595959;
+  border-color: #555;
 }
 
-QTreeView::indicator:checked,
-QCheckBox::indicator:checked {
-	image: url(:/checkbox-checked.svg);
+QRadioButton::indicator:checked {
+  image: url(skin:controls/radio_check_dark.svg);
 }
 
-QTreeView::indicator:indeterminate,
-QCheckBox::indicator:indeterminate {
-	image: url(:/checkbox-indeterminate.svg);
+QRadioButton::indicator:checked:disabled {
+  image: url(skin:controls/radio_check_disabled.svg);
 }
 
 QSpinBox {
