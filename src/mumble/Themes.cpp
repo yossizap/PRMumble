@@ -11,18 +11,29 @@
 #include "MumbleApplication.h"
 
 boost::optional<ThemeInfo::StyleInfo> Themes::getConfiguredStyle(const Settings &settings) {
-	if (settings.themeName.isEmpty() && settings.themeStyleName.isEmpty()) {
-			return boost::none;
-	}
-
 	const ThemeMap themes = getThemes();
-	ThemeMap::const_iterator themeIt = themes.find(settings.themeName);
+    ThemeMap::const_iterator themeIt;
+    ThemeInfo::StylesMap::const_iterator styleIt;
+
+    /* Set PRMumble as the default theme if there's no theme entry in the registry */
+	if (settings.themeName.isEmpty()) {
+	    themeIt = themes.find(QLatin1String("PRMumble"));
+    }
+    else {
+	    themeIt = themes.find(settings.themeName);
+    }
 	if (themeIt == themes.end()) {
 		qWarning() << "Could not find configured theme" << settings.themeName;
 		return boost::none;
 	}
 	
-	ThemeInfo::StylesMap::const_iterator styleIt = themeIt->styles.find(settings.themeStyleName);
+    /* Set Reality as the default theme style if there's no theme style entry in the registry */
+	if (settings.themeStyleName.isEmpty()) {
+        styleIt = themeIt->styles.find(QLatin1String("Reality"));
+    }
+    else {
+        styleIt = themeIt->styles.find(settings.themeStyleName);
+    }
 	if (styleIt == themeIt->styles.end()) {
 		qWarning() << "Configured theme" << settings.themeName << "does not have configured style" << settings.themeStyleName;
 		return boost::none;
