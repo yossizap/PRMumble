@@ -260,7 +260,7 @@ Settings::Settings() {
 	bWhisperFriends = false;
 
 	uiDoublePush = 0;
-	pttHold = 0;
+	pttHold = 300;
 	bExpert = true;
 
 #ifdef NO_UPDATE_CHECK
@@ -319,8 +319,10 @@ Settings::Settings() {
 
 	bPositionalAudio = true;
 	bPositionalHeadphone = true;
-	fAudioMinDistance = 2.5f;
-	fAudioMaxDistance = 75.0f;
+    /* PR volume was increased to 5 for better gunner-driver communication */
+	fAudioMinDistance = 5.0f;
+    /* Max distance changed according to min distance, default was 2.5-75 */
+	fAudioMaxDistance = 77.5f;
 	fAudioMaxDistVolume = 0.0f;
 	fAudioBloom = 0.15f;
 
