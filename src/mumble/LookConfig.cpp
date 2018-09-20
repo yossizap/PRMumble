@@ -97,7 +97,7 @@ void LookConfig::reloadThemes(const boost::optional<ThemeInfo::StyleInfo> config
 	int selectedThemeEntry = 0;
 	
 	qcbTheme->clear();
-    /* Only allow PR's theme or a user defined one, default is removed due to compatability issues
+    /* Only allow PR's theme or a user defined one, default is removed due to compatibility issues
 	qcbTheme->addItem(tr("None")); */
 	for (ThemeMap::const_iterator theme = themes.begin();
 	     theme != themes.end();
