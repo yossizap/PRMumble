@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -67,10 +67,10 @@ QList<ServerResolverRecord> ServerResolverPrivate::records() {
 void ServerResolverPrivate::srvResolved() {
 	QDnsLookup *resolver = qobject_cast<QDnsLookup *>(sender());
 
-	if (resolver->error() == QDnsLookup::NoError) {
-		m_srvQueue = resolver->serviceRecords();
-		m_srvQueueRemain = m_srvQueue.count();
+	m_srvQueue = resolver->serviceRecords();
+	m_srvQueueRemain = m_srvQueue.count();
 
+	if (resolver->error() == QDnsLookup::NoError && m_srvQueueRemain > 0) {
 		for (int i = 0; i < m_srvQueue.count(); i++) {
 			QDnsServiceRecord record = m_srvQueue.at(i);
 			int hostInfoId = QHostInfo::lookupHost(record.target(), this, SLOT(hostResolved(QHostInfo)));
@@ -98,7 +98,7 @@ void ServerResolverPrivate::hostResolved(QHostInfo hostInfo) {
 		}
 
 		qint64 priority = normalizeSrvPriority(record.priority(), record.weight());
-		m_resolved << ServerResolverRecord(m_origHostname, m_origPort, priority, addresses);
+		m_resolved << ServerResolverRecord(m_origHostname, record.port(), priority, addresses);
 	}
 
 	m_srvQueueRemain -= 1;

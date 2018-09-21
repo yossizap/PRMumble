@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -45,6 +45,7 @@ AboutDialog::AboutDialog(QWidget *p) : QDialog(p) {
 	icon->setPixmap(g.mw->qiIcon.pixmap(g.mw->qiIcon.actualSize(QSize(128, 128))));
 
 	QLabel *text = new QLabel(about);
+	text->setTextInteractionFlags(Qt::TextSelectableByMouse);
 	text->setOpenExternalLinks(true);
 	text->setText(tr(
 	                  "<h3>Project Reality Mumble %1</h3>"

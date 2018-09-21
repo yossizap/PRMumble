@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -16,6 +16,11 @@
 #include "ServerUser.h"
 #include "Version.h"
 #include "CryptState.h"
+
+#define RATELIMIT(user) \
+	if (user->leakyBucket.ratelimit(1)) { \
+		return; \
+	}
 
 #define MSG_SETUP(st) \
 	if (uSource->sState != st) { \
@@ -515,6 +520,10 @@ void Server::msgUserState(ServerUser *uSource, MumbleProto::UserState &msg) {
 		return;
 	}
 
+	if (uSource == pDstServerUser) {
+		RATELIMIT(uSource);
+	}
+
 	if (msg.has_channel_id()) {
 		Channel *c = qhChannels.value(msg.channel_id());
 		if (!c || (c == pDstServerUser->cChannel))
@@ -851,6 +860,8 @@ void Server::msgChannelState(ServerUser *uSource, MumbleProto::ChannelState &msg
 		c = qhChannels.value(msg.channel_id());
 		if (! c)
 			return;
+	} else {
+		RATELIMIT(uSource);
 	}
 
 	// Check if the parent exists
@@ -917,6 +928,11 @@ void Server::msgChannelState(ServerUser *uSource, MumbleProto::ChannelState &msg
 		if (! p || qsName.isNull())
 			return;
 
+		if (iChannelCountLimit != 0 && qhChannels.count() >= iChannelCountLimit) {
+			PERM_DENIED_FALLBACK(ChannelCountLimit, 0x010300, QLatin1String("Channel count limit reached"));
+			return;
+		}
+		
 		ChanACL::Perm perm = msg.temporary() ? ChanACL::MakeTempChannel : ChanACL::MakeChannel;
 		if (! hasPermission(uSource, p, perm)) {
 			PERM_DENIED(uSource, p, perm);
@@ -1139,6 +1155,8 @@ void Server::msgTextMessage(ServerUser *uSource, MumbleProto::TextMessage &msg) 
 	QSet<ServerUser *> users;
 	QQueue<Channel *> q;
 
+	RATELIMIT(uSource);
+
 	int res = 0;
 	emit textMessageFilterSig(res, uSource, msg);
 	switch (res) {
@@ -1256,6 +1274,8 @@ void Server::msgACL(ServerUser *uSource, MumbleProto::ACL &msg) {
 		PERM_DENIED(uSource, c, ChanACL::Write);
 		return;
 	}
+
+	RATELIMIT(uSource);
 
 	if (msg.has_query() && msg.query()) {
 		QStack<Channel *> chans;
@@ -1513,6 +1533,8 @@ void Server::msgContextAction(ServerUser *uSource, MumbleProto::ContextAction &m
 }
 
 void Server::msgVersion(ServerUser *uSource, MumbleProto::Version &msg) {
+	RATELIMIT(uSource);
+
 	if (msg.has_version())
 		uSource->uiVersion=msg.version();
 	if (msg.has_release())

@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -121,7 +121,7 @@ void MainWindow::msgServerSync(const MumbleProto::ServerSync &msg) {
 
 	g.sh->getConnectionInfo(host, port, uname, pw);
 
-	QList<Shortcut> sc = Database::getShortcuts(g.sh->qbaDigest);
+	QList<Shortcut> sc = g.db->getShortcuts(g.sh->qbaDigest);
 	if (! sc.isEmpty()) {
 		for (int i=0;i<sc.count(); ++i) {
 			Shortcut &s = sc[i];
@@ -242,6 +242,10 @@ void MainWindow::msgPermissionDenied(const MumbleProto::PermissionDenied &msg) {
 				g.l->log(Log::PermissionDenied, tr("Channel nesting limit reached."));
 			}
 			break;
+		case MumbleProto::PermissionDenied_DenyType_ChannelCountLimit: {
+				g.l->log(Log::PermissionDenied, tr("Channel count limit reached. Need to delete channels before creating new ones."));
+			}
+			break;
 		default: {
 				if (msg.has_reason())
 					g.l->log(Log::PermissionDenied, tr("Denied: %1.").arg(Qt::escape(u8(msg.reason()))));
@@ -258,35 +262,118 @@ void MainWindow::msgUDPTunnel(const MumbleProto::UDPTunnel &) {
 void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 	ACTOR_INIT;
 	SELF_INIT;
-	ClientUser *pDst = ClientUser::get(msg.session());
-	bool bNewUser = false;
 
-	if (! pDst) {
-		if (msg.has_name()) {
-			pDst = pmModel->addUser(msg.session(), u8(msg.name()));
-			bNewUser = true;
-		} else {
-			return;
+	ClientUser *pDst = ClientUser::get(msg.session());
+	Channel *channel = NULL;
+
+	if (msg.has_channel_id()) {
+		channel = Channel::get(msg.channel_id());
+		if (!channel) {
+			qWarning("msgUserState(): unknown channel.");
+			channel = Channel::get(0);
 		}
 	}
 
-	if (msg.has_user_id())
-		pmModel->setUserId(pDst, msg.user_id());
+	// User just connected
+	if (!pDst) {
+		if (!msg.has_name()) {
+			return;
+		}
 
-	if (msg.has_hash()) {
-		pmModel->setHash(pDst, u8(msg.hash()));
-		const QString &name = Database::getFriend(pDst->qsHash);
-		if (! name.isEmpty())
-			pmModel->setFriendName(pDst, name);
-		if (Database::isLocalMuted(pDst->qsHash))
-			pDst->setLocalMute(true);
-		if (Database::isLocalIgnored(pDst->qsHash))
-			pDst->setLocalIgnore(true);
-		pDst->fLocalVolume = Database::getUserLocalVolume(pDst->qsHash);
+		pDst = pmModel->addUser(msg.session(), u8(msg.name()));
+
+		if (channel) {
+			pmModel->moveUser(pDst, channel);
+		}
+
+		if (msg.has_user_id()) {
+			pmModel->setUserId(pDst, msg.user_id());
+		}
+
+		if (msg.has_hash()) {
+			pmModel->setHash(pDst, u8(msg.hash()));
+		}
+
+		if (pSelf) {
+			if (pDst->cChannel == pSelf->cChannel) {
+				g.l->log(Log::ChannelJoinConnect, tr("%1 connected and entered channel.").arg(Log::formatClientUser(pDst, Log::Source)));
+			} else {
+				g.l->log(Log::UserJoin, tr("%1 connected.").arg(Log::formatClientUser(pDst, Log::Source)));
+			}
+		}
 	}
 
-	if (bNewUser)
-		g.l->log(Log::UserJoin, tr("%1 connected.").arg(Log::formatClientUser(pDst, Log::Source)));
+	if (channel) {
+		Channel *oldChannel = pDst->cChannel;
+		if (channel != oldChannel) {
+			pmModel->moveUser(pDst, channel);
+
+			if (pSelf) {
+				if (pDst == pSelf) {
+					g.mw->updateChatBar();
+					qsDesiredChannel = channel->getPath();
+				}
+
+				if (pDst == pSelf) {
+					if (pSrc == pSelf) {
+						g.l->log(Log::SelfChannelJoin, tr("You joined %1.").arg(Log::formatChannel(channel)));
+					} else {
+						g.l->log(Log::SelfChannelJoinOther, tr("You were moved to %1 by %2.").arg(Log::formatChannel(channel)).arg(Log::formatClientUser(pSrc, Log::Source)));
+					}
+				} else if ((channel == pSelf->cChannel) || oldChannel == pSelf->cChannel) {
+					if (pDst == pSrc) {
+						if (channel == pSelf->cChannel) {
+							g.l->log(Log::ChannelJoin, tr("%1 entered channel.").arg(Log::formatClientUser(pDst, Log::Target)));
+						} else {
+							g.l->log(Log::ChannelLeave, tr("%1 moved to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)));
+						}
+					} else if (pSrc == pSelf) {
+						if (channel == pSelf->cChannel) {
+							g.l->log(Log::ChannelJoin, tr("You moved %1 to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)));
+						} else {
+							g.l->log(Log::ChannelLeave, tr("You moved %1 to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)));
+						}
+					} else {
+						if (channel == pSelf->cChannel) {
+							g.l->log(Log::ChannelJoin, tr("%1 moved in from %2 by %3.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(oldChannel)).arg(Log::formatClientUser(pSrc, Log::Source)));
+						} else {
+							g.l->log(Log::ChannelLeave, tr("%1 moved to %2 by %3.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)).arg(Log::formatClientUser(pSrc, Log::Source)));
+						}
+					}
+				}
+
+				if ((channel == pSelf->cChannel) && pDst->bRecording) {
+					g.l->log(Log::Recording, tr("%1 is recording").arg(Log::formatClientUser(pDst, Log::Target)));
+				}
+			}
+		}
+	}
+
+	if (msg.has_name()) {
+		QString oldName = pDst->qsName;
+		QString newName = u8(msg.name());
+		pmModel->renameUser(pDst, newName);
+		if (! oldName.isNull() && oldName != newName) {
+			if (pSrc != pDst) {
+				g.l->log(Log::UserRenamed, tr("%1 renamed to %2 by %3.").arg(Log::formatClientUser(pDst, Log::Target, oldName))
+					.arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatClientUser(pSrc, Log::Source)));
+			} else {
+				g.l->log(Log::UserRenamed, tr("%1 renamed to %2.").arg(Log::formatClientUser(pDst, Log::Target, oldName),
+					Log::formatClientUser(pDst, Log::Target)));
+			}
+		}
+	}
+
+	if (!pDst->qsHash.isEmpty()) {
+		const QString &name = g.db->getFriend(pDst->qsHash);
+		if (! name.isEmpty())
+			pmModel->setFriendName(pDst, name);
+		if (g.db->isLocalMuted(pDst->qsHash))
+			pDst->setLocalMute(true);
+		if (g.db->isLocalIgnored(pDst->qsHash))
+			pDst->setLocalIgnore(true);
+		pDst->fLocalVolume = g.db->getUserLocalVolume(pDst->qsHash);
+	}
 
 	if (msg.has_self_deaf() || msg.has_self_mute()) {
 		if (msg.has_self_mute())
@@ -295,7 +382,6 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 			pDst->setSelfDeaf(msg.self_deaf());
 
 		if (pSelf && pDst != pSelf && ((pDst->cChannel == pSelf->cChannel) || pDst->cChannel->allLinks().contains(pSelf->cChannel))) {
-			QString name = pDst->qsName;
 			if (pDst->bSelfMute && pDst->bSelfDeaf)
 				g.l->log(Log::OtherSelfMute, tr("%1 is now muted and deafened.").arg(Log::formatClientUser(pDst, Log::Target)));
 			else if (pDst->bSelfMute)
@@ -462,62 +548,6 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 		}
 	}
 
-	if (msg.has_channel_id()) {
-		Channel *c = Channel::get(msg.channel_id());
-		if (!c) {
-			qWarning("MessageUserMove for unknown channel.");
-			c = Channel::get(0);
-		}
-
-		Channel *old = pDst->cChannel;
-		if (c != old) {
-			bool log = pSelf && !((pDst == pSelf) && (pSrc == pSelf));
-
-			if (log) {
-				if (pDst == pSelf) {
-					g.l->log(Log::ChannelJoin, tr("You were moved to %1 by %2.").arg(Log::formatChannel(c)).arg(Log::formatClientUser(pSrc, Log::Source)));
-				} else if (pDst->cChannel == pSelf->cChannel) {
-					if (pDst == pSrc)
-						g.l->log(Log::ChannelLeave, tr("%1 moved to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(c)));
-					else
-						g.l->log(Log::ChannelLeave, tr("%1 moved to %2 by %3.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(c)).arg(Log::formatClientUser(pSrc, Log::Source)));
-				} else if (pSrc == pSelf) {
-					g.l->log(Log::ChannelJoin, tr("You moved %1 to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(c)));
-				}
-			}
-
-			pmModel->moveUser(pDst, c);
-
-			if (pDst == pSelf) {
-				g.mw->updateChatBar();
-				qsDesiredChannel = c->getPath();
-			}
-
-			if (log && (pDst != pSelf) && (pDst->cChannel == pSelf->cChannel)) {
-				if (pDst == pSrc)
-					g.l->log(Log::ChannelJoin, tr("%1 entered channel.").arg(Log::formatClientUser(pDst, Log::Target)));
-				else
-					g.l->log(Log::ChannelJoin, tr("%1 moved in from %2 by %3.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(old)).arg(Log::formatClientUser(pSrc, Log::Source)));
-
-				if (pDst->bRecording)
-					g.l->log(Log::Recording, tr("%1 is recording").arg(Log::formatClientUser(pDst, Log::Target)));
-			}
-		}
-	}
-	if (msg.has_name()) {
-		QString oldName = pDst->qsName;
-		QString newName = u8(msg.name());
-		pmModel->renameUser(pDst, newName);
-		if (! oldName.isNull() && oldName != newName) {
-			if (pSrc != pDst) {
-				g.l->log(Log::UserRenamed, tr("%1 renamed to %2 by %3.").arg(Log::formatClientUser(pDst, Log::Target, oldName))
-					.arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatClientUser(pSrc, Log::Source)));
-			} else {
-				g.l->log(Log::UserRenamed, tr("%1 renamed to %2.").arg(Log::formatClientUser(pDst, Log::Target, oldName),
-					Log::formatClientUser(pDst, Log::Target)));
-			}
-		}
-	}
 	if (msg.has_texture_hash()) {
 		pDst->qbaTextureHash = blob(msg.texture_hash());
 		pDst->qbaTexture = QByteArray();
@@ -529,7 +559,7 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 			pDst->qbaTextureHash = QByteArray();
 		} else {
 			pDst->qbaTextureHash = sha1(pDst->qbaTexture);
-			Database::setBlob(pDst->qbaTextureHash, pDst->qbaTexture);
+			g.db->setBlob(pDst->qbaTextureHash, pDst->qbaTexture);
 		}
 		g.o->verifyTexture(pDst);
 	}
@@ -567,7 +597,7 @@ void MainWindow::msgUserRemove(const MumbleProto::UserRemove &msg) {
 			g.l->log((pSrc == pSelf) ? Log::YouKicked : Log::UserKicked, tr("%3 was kicked from the server by %1: %2.").arg(Log::formatClientUser(pSrc, Log::Source)).arg(reason).arg(Log::formatClientUser(pDst, Log::Target)));
 	} else {
 		if (pDst->cChannel == pSelf->cChannel || pDst->cChannel->allLinks().contains(pSelf->cChannel)) {
-			g.l->log(Log::ChannelLeave, tr("%1 left channel and disconnected.").arg(Log::formatClientUser(pDst, Log::Source)));
+			g.l->log(Log::ChannelLeaveDisconnect, tr("%1 left channel and disconnected.").arg(Log::formatClientUser(pDst, Log::Source)));
 		} else {
 			g.l->log(Log::UserLeave, tr("%1 disconnected.").arg(Log::formatClientUser(pDst, Log::Source)));
 		}
@@ -592,7 +622,7 @@ void MainWindow::msgChannelState(const MumbleProto::ChannelState &msg) {
 
 			ServerHandlerPtr sh = g.sh;
 			if (sh)
-				c->bFiltered = Database::isChannelFiltered(sh->qbaDigest, c->iId);
+				c->bFiltered = g.db->isChannelFiltered(sh->qbaDigest, c->iId);
 
 		} else {
 			qWarning("Server attempted state change on nonexistent channel");
@@ -669,7 +699,7 @@ void MainWindow::msgChannelRemove(const MumbleProto::ChannelRemove &msg) {
 		if (c->bFiltered) {
 			ServerHandlerPtr sh = g.sh;
 			if (sh)
-				Database::setChannelFiltered(sh->qbaDigest, c->iId, false);
+				g.db->setChannelFiltered(sh->qbaDigest, c->iId, false);
 			c->bFiltered = false;
 		}
 		pmModel->removeChannel(c);
@@ -686,6 +716,7 @@ void MainWindow::msgTextMessage(const MumbleProto::TextMessage &msg) {
 
 	const QString &plainName = pSrc ? pSrc->qsName : tr("Server", "message from");
 	const QString &name = pSrc ? Log::formatClientUser(pSrc, Log::Source) : tr("Server", "message from");
+	bool privateMessage = false;
 
 	if (msg.tree_id_size() > 0) {
 		target += tr("(Tree) ");
@@ -693,9 +724,11 @@ void MainWindow::msgTextMessage(const MumbleProto::TextMessage &msg) {
 		target += tr("(Channel) ");
 	} else if (msg.session_size() > 0) {
 		target += tr("(Private) ");
+		privateMessage = true;
 	}
 
-	g.l->log(Log::TextMessage, tr("%2%1: %3").arg(name).arg(target).arg(u8(msg.message())),
+	g.l->log(privateMessage ? Log::PrivateTextMessage : Log::TextMessage,
+	         tr("%2%1: %3").arg(name).arg(target).arg(u8(msg.message())),
 	         tr("Message from %1").arg(plainName));
 }
 

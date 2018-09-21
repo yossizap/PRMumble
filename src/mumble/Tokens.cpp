@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -15,7 +15,7 @@ Tokens::Tokens(QWidget *p) : QDialog(p) {
 	setupUi(this);
 
 	qbaDigest = g.sh->qbaDigest;
-	QStringList tokens = Database::getTokens(qbaDigest);
+	QStringList tokens = g.db->getTokens(qbaDigest);
 	tokens.sort();
 	foreach(const QString &qs, tokens) {
 		QListWidgetItem *qlwi = new QListWidgetItem(qs);
@@ -33,7 +33,7 @@ void Tokens::accept() {
 		if (! text.isEmpty())
 			qsl << text;
 	}
-	Database::setTokens(qbaDigest, qsl);
+	g.db->setTokens(qbaDigest, qsl);
 	g.sh->setTokens(qsl);
 	QDialog::accept();
 }

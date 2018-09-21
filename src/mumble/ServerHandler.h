@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -35,6 +35,7 @@
 #include "ServerAddress.h"
 
 class Connection;
+class Database;
 class Message;
 class PacketDataStream;
 class QUdpSocket;
@@ -55,6 +56,8 @@ class ServerHandler : public QThread {
 	private:
 		Q_OBJECT
 		Q_DISABLE_COPY(ServerHandler)
+
+		Database *database;
 	protected:
 		QString qsHostName;
 		QString qsUserName;
@@ -135,8 +138,10 @@ class ServerHandler : public QThread {
 		void disconnect();
 		void run() Q_DECL_OVERRIDE;
 	signals:
+		void error(QAbstractSocket::SocketError, QString reason);
 		void disconnected(QAbstractSocket::SocketError, QString reason);
 		void connected();
+		void pingRequested();
 	protected slots:
 		void message(unsigned int, const QByteArray &);
 		void serverConnectionConnected();
@@ -146,6 +151,8 @@ class ServerHandler : public QThread {
 		void setSslErrors(const QList<QSslError> &);
 		void udpReady();
 		void hostnameResolved();
+	private slots:
+		void sendPingInternal();
 	public slots:
 		void sendPing();
 };

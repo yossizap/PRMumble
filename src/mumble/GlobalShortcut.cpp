@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -191,7 +191,7 @@ ShortcutTargetDialog::ShortcutTargetDialog(const ShortcutTarget &st, QWidget *pw
 	qcbUser->setItemDelegate(itemDelegate1);
 
 	// Insert all known friends into the possible targets list
-	const QMap<QString, QString> &friends = Database::getFriends();
+	const QMap<QString, QString> &friends = g.db->getFriends();
 	if (! friends.isEmpty()) {
 		QMap<QString, QString>::const_iterator i;
 		for (i = friends.constBegin(); i != friends.constEnd(); ++i) {
@@ -379,7 +379,7 @@ QString ShortcutTargetWidget::targetString(const ShortcutTarget &st) {
 				if (hashes.contains(hash)) {
 					name = hashes.value(hash);
 				} else {
-					name = Database::getFriend(hash);
+					name = g.db->getFriend(hash);
 					if (name.isEmpty())
 						name = QString::fromLatin1("#%1").arg(hash);
 				}
@@ -668,6 +668,7 @@ void GlobalShortcutConfig::load(const Settings &r) {
 		qwWarningContainer->setVisible(showWarning());
 	}
 
+	qcbEnableUIAccess->setChecked(r.bEnableUIAccess);
 	qcbEnableWinHooks->setChecked(r.bEnableWinHooks);
 	qcbEnableGKey->setChecked(r.bEnableGKey);
 	qcbEnableXboxInput->setChecked(r.bEnableXboxInput);
@@ -681,6 +682,9 @@ void GlobalShortcutConfig::save() const {
 	s.qlShortcuts = qlShortcuts;
 	s.bShortcutEnable = qcbEnableGlobalShortcuts->checkState() == Qt::Checked;
 
+	bool oldUIAccess = s.bEnableUIAccess;
+	s.bEnableUIAccess = qcbEnableUIAccess->checkState() == Qt::Checked;
+
 	bool oldWinHooks = s.bEnableWinHooks;
 	s.bEnableWinHooks = qcbEnableWinHooks->checkState() == Qt::Checked;
 
@@ -690,7 +694,7 @@ void GlobalShortcutConfig::save() const {
 	bool oldXboxInput = s.bEnableXboxInput;
 	s.bEnableXboxInput = qcbEnableXboxInput->checkState() == Qt::Checked;
 
-	if (s.bEnableWinHooks != oldWinHooks || s.bEnableGKey != oldGKey || s.bEnableXboxInput != oldXboxInput) {
+	if (s.bEnableUIAccess != oldUIAccess || s.bEnableWinHooks != oldWinHooks || s.bEnableGKey != oldGKey || s.bEnableXboxInput != oldXboxInput) {
 		s.requireRestartToApply = true;
 	}
 }
@@ -935,9 +939,6 @@ QString GlobalShortcutEngine::buttonText(const QList<QVariant> &list) {
 			keys << id;
 	}
 	return keys.join(QLatin1String(" + "));
-}
-
-void GlobalShortcutEngine::prepareInput() {
 }
 
 GlobalShortcut::GlobalShortcut(QObject *p, int index, QString qsName, QVariant def) : QObject(p) {

@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -238,6 +238,7 @@ Settings::Settings() {
 	iJitterBufferSize = 1;
 	iFramesPerPacket = 2;
 	iNoiseSuppress = -30;
+	bDenoise = false;
 	uiAudioInputChannelMask = 0xffffffffffffffffULL;
 
 	// Idle auto actions
@@ -285,6 +286,7 @@ Settings::Settings() {
 	aotbAlwaysOnTop = OnTopNever;
 	bAskOnQuit = true;
 	bEnableDeveloperMenu = false;
+	bLockLayout = false;
 #ifdef Q_OS_WIN
 	// Don't enable minimize to tray by default on Windows 7 or Windows 8
 	//const QSysInfo::WinVersion winVer = QSysInfo::windowsVersion();
@@ -307,6 +309,11 @@ Settings::Settings() {
 
 	qsALSAInput=QLatin1String("default");
 	qsALSAOutput=QLatin1String("default");
+
+	qsJackClientName = QLatin1String("mumble");
+	qsJackAudioOutput = QLatin1String("1");
+	bJackStartServer = true;
+	bJackAutoConnect = true;
 
 	bEcho = false;
 	bEchoMulti = true;
@@ -346,8 +353,8 @@ Settings::Settings() {
 	usProxyPort = 0;
 	iMaxInFlightTCPPings = 2;
 	bUdpForceTcpAddr = true;
-
-	iMaxImageSize = ciDefaultMaxImageSize;
+	iPingIntervalMsec = 5000;
+	iConnectionTimeoutDurationMsec = 30000;
 	iMaxImageWidth = 1024; // Allow 1024x1024 resolution
 	iMaxImageHeight = 1024;
 	bSuppressIdentity = false;
@@ -397,6 +404,7 @@ Settings::Settings() {
 	bEnableXboxInput = true;
 	bEnableWinHooks = true;
 	bDirectInputVerboseLogging = false;
+	bEnableUIAccess = true;
 
 	for (int i=Log::firstMsgType; i<=Log::lastMsgType; ++i)
 		//qmMessages.insert(i, Settings::LogConsole | Settings::LogBalloon | Settings::LogTTS);
@@ -414,8 +422,11 @@ Settings::Settings() {
 	qmMessageSounds[Log::ServerConnected] = QLatin1String(":/ServerConnected.ogg");
 	qmMessageSounds[Log::ServerDisconnected] = QLatin1String(":/ServerDisconnected.ogg");
 	qmMessageSounds[Log::TextMessage] = QLatin1String(":/TextMessage.ogg");
+	qmMessageSounds[Log::PrivateTextMessage] = qmMessageSounds[Log::TextMessage];
 	qmMessageSounds[Log::ChannelJoin] = QLatin1String(":/UserJoinedChannel.ogg");
 	qmMessageSounds[Log::ChannelLeave] = QLatin1String(":/UserLeftChannel.ogg");
+	qmMessageSounds[Log::ChannelJoinConnect] = qmMessageSounds[Log::ChannelJoin];
+	qmMessageSounds[Log::ChannelLeaveDisconnect] = qmMessageSounds[Log::UserLeave];
 	qmMessageSounds[Log::YouMutedOther] = QLatin1String(":/UserMutedYouOrByYou.ogg");
 	qmMessageSounds[Log::YouMuted] = QLatin1String(":/UserMutedYouOrByYou.ogg");
 	qmMessageSounds[Log::YouKicked] = QLatin1String(":/UserKickedYouOrByYou.ogg");
@@ -473,6 +484,7 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(QList, 1)
 #define SAVELOAD(var,name) var = qvariant_cast<BOOST_TYPEOF(var)>(settings_ptr->value(QLatin1String(name), var))
 #define LOADENUM(var, name) var = static_cast<BOOST_TYPEOF(var)>(settings_ptr->value(QLatin1String(name), var).toInt())
 #define LOADFLAG(var, name) var = static_cast<BOOST_TYPEOF(var)>(settings_ptr->value(QLatin1String(name), static_cast<int>(var)).toInt())
+#define DEPRECATED(name) do { } while (0)
 
 // Workaround for mumble-voip/mumble#2638.
 //
@@ -599,6 +611,7 @@ void Settings::load(QSettings* settings_ptr) {
 	SAVELOAD(fVADmin, "audio/vadmin");
 	SAVELOAD(fVADmax, "audio/vadmax");
 	SAVELOAD(iNoiseSuppress, "audio/noisesupress");
+	SAVELOAD(bDenoise, "audio/denoise");
 	SAVELOAD(uiAudioInputChannelMask, "audio/inputchannelmask");
 	SAVELOAD(iVoiceHold, "audio/voicehold");
 	SAVELOAD(iOutputDelay, "audio/outputdelay");
@@ -643,6 +656,10 @@ void Settings::load(QSettings* settings_ptr) {
 	SAVELOAD(qsPulseAudioInput, "pulseaudio/input");
 	SAVELOAD(qsPulseAudioOutput, "pulseaudio/output");
 
+	SAVELOAD(qsJackAudioOutput, "jack/output");
+	SAVELOAD(bJackStartServer, "jack/startserver");
+	SAVELOAD(bJackAutoConnect, "jack/autoconnect");
+
 	SAVELOAD(qsOSSInput, "oss/input");
 	SAVELOAD(qsOSSOutput, "oss/output");
 
@@ -672,11 +689,13 @@ void Settings::load(QSettings* settings_ptr) {
 	SAVELOAD(usProxyPort, "net/proxyport");
 	SAVELOAD(qsProxyUsername, "net/proxyusername");
 	SAVELOAD(qsProxyPassword, "net/proxypassword");
-	SAVELOAD(iMaxImageSize, "net/maximagesize");
+	DEPRECATED("net/maximagesize");
 	SAVELOAD(iMaxImageWidth, "net/maximagewidth");
 	SAVELOAD(iMaxImageHeight, "net/maximageheight");
 	SAVELOAD(qsServicePrefix, "net/serviceprefix");
 	SAVELOAD(iMaxInFlightTCPPings, "net/maxinflighttcppings");
+	SAVELOAD(iPingIntervalMsec, "net/pingintervalmsec");
+	SAVELOAD(iConnectionTimeoutDurationMsec, "net/connectiontimeoutdurationmsec");
 	SAVELOAD(bUdpForceTcpAddr, "net/udpforcetcpaddr");
 
 	// Network settings - SSL
@@ -695,6 +714,7 @@ void Settings::load(QSettings* settings_ptr) {
 	LOADENUM(aotbAlwaysOnTop, "ui/alwaysontop");
 	SAVELOAD(bAskOnQuit, "ui/askonquit");
 	SAVELOAD(bEnableDeveloperMenu, "ui/developermenu");
+	SAVELOAD(bLockLayout, "ui/locklayout");
 	SAVELOAD(bMinimalView, "ui/minimalview");
 	SAVELOAD(bHideFrame, "ui/hideframe");
 	SAVELOAD(bUserTop, "ui/usertop");
@@ -764,6 +784,7 @@ void Settings::load(QSettings* settings_ptr) {
 	SAVELOAD(bEnableXboxInput, "shortcut/windows/xbox/enable");
 	SAVELOAD(bEnableWinHooks, "winhooks");
 	SAVELOAD(bDirectInputVerboseLogging, "shortcut/windows/directinput/verboselogging");
+	SAVELOAD(bEnableUIAccess, "shortcut/windows/uiaccess/enable");
 
 	qlShortcuts.clear();
 	int nshorts = settings_ptr->beginReadArray(QLatin1String("shortcuts"));
@@ -866,6 +887,8 @@ void Settings::addButton(QList<Shortcut>& shortcuts, quint32 index, quint32 type
 #undef SAVELOAD
 #define SAVELOAD(var,name) if (var != def.var) settings_ptr->setValue(QLatin1String(name), var); else settings_ptr->remove(QLatin1String(name))
 #define SAVEFLAG(var,name) if (var != def.var) settings_ptr->setValue(QLatin1String(name), static_cast<int>(var)); else settings_ptr->remove(QLatin1String(name))
+#undef DEPRECATED
+#define DEPRECATED(name) settings_ptr->remove(QLatin1String(name))
 
 void OverlaySettings::save() {
 	save(g.qs);
@@ -980,6 +1003,7 @@ void Settings::save() {
 	SAVELOAD(fVADmin, "audio/vadmin");
 	SAVELOAD(fVADmax, "audio/vadmax");
 	SAVELOAD(iNoiseSuppress, "audio/noisesupress");
+	SAVELOAD(bDenoise, "audio/denoise");
 	SAVELOAD(uiAudioInputChannelMask, "audio/inputchannelmask");
 	SAVELOAD(iVoiceHold, "audio/voicehold");
 	SAVELOAD(iOutputDelay, "audio/outputdelay");
@@ -1024,6 +1048,10 @@ void Settings::save() {
 	SAVELOAD(qsPulseAudioInput, "pulseaudio/input");
 	SAVELOAD(qsPulseAudioOutput, "pulseaudio/output");
 
+	SAVELOAD(qsJackAudioOutput, "jack/output");
+	SAVELOAD(bJackStartServer, "jack/startserver");
+	SAVELOAD(bJackAutoConnect, "jack/autoconnect");
+
 	SAVELOAD(qsOSSInput, "oss/input");
 	SAVELOAD(qsOSSOutput, "oss/output");
 
@@ -1052,11 +1080,13 @@ void Settings::save() {
 	SAVELOAD(usProxyPort, "net/proxyport");
 	SAVELOAD(qsProxyUsername, "net/proxyusername");
 	SAVELOAD(qsProxyPassword, "net/proxypassword");
-	SAVELOAD(iMaxImageSize, "net/maximagesize");
+	DEPRECATED("net/maximagesize");
 	SAVELOAD(iMaxImageWidth, "net/maximagewidth");
 	SAVELOAD(iMaxImageHeight, "net/maximageheight");
 	SAVELOAD(qsServicePrefix, "net/serviceprefix");
 	SAVELOAD(iMaxInFlightTCPPings, "net/maxinflighttcppings");
+	SAVELOAD(iPingIntervalMsec, "net/pingintervalmsec");
+	SAVELOAD(iConnectionTimeoutDurationMsec, "net/connectiontimeoutdurationmsec");
 	SAVELOAD(bUdpForceTcpAddr, "net/udpforcetcpaddr");
 
 	// Network settings - SSL
@@ -1075,6 +1105,7 @@ void Settings::save() {
 	SAVELOAD(aotbAlwaysOnTop, "ui/alwaysontop");
 	SAVELOAD(bAskOnQuit, "ui/askonquit");
 	SAVELOAD(bEnableDeveloperMenu, "ui/developermenu");
+	SAVELOAD(bLockLayout, "ui/locklayout");
 	SAVELOAD(bMinimalView, "ui/minimalview");
 	SAVELOAD(bHideFrame, "ui/hideframe");
 	SAVELOAD(bUserTop, "ui/usertop");
@@ -1141,6 +1172,7 @@ void Settings::save() {
 	SAVELOAD(bEnableXboxInput, "shortcut/windows/xbox/enable");
 	SAVELOAD(bEnableWinHooks, "winhooks");
 	SAVELOAD(bDirectInputVerboseLogging, "shortcut/windows/directinput/verboselogging");
+	SAVELOAD(bEnableUIAccess, "shortcut/windows/uiaccess/enable");
 
 	settings_ptr->beginWriteArray(QLatin1String("shortcuts"));
 	int idx = 0;

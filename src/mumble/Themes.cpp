@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -61,7 +61,7 @@ void Themes::applyFallback() {
 	qWarning() << "Applying fallback style sheet";
 	
 	QStringList skinPaths;
-	skinPaths << QLatin1String(":/");
+	skinPaths << QLatin1String(":/themes/Reality");
 	QDir::setSearchPaths(QLatin1String("skin"), skinPaths);
 	
 	QString userStylesheetFn = userStylesheetPath();
@@ -97,7 +97,7 @@ bool Themes::applyConfigured() {
 	
 	QStringList skinPaths;
 	skinPaths << qssFile.path();
-	skinPaths << QLatin1String(":/"); // Some skins might want to fall-back on our built-in resources
+	skinPaths << QLatin1String(":/themes/Reality"); // Some skins might want to fall-back on our built-in resources
 	QDir::setSearchPaths(QLatin1String("skin"), skinPaths);
 
 	QString themeQss = QString::fromUtf8(file.readAll());
@@ -166,5 +166,5 @@ bool Themes::readStylesheet(const QString &stylesheetFn, QString &stylesheetCont
 }
 
 QString Themes::getDefaultStylesheet() {
-	return QLatin1String(".log-channel{text-decoration:none;}.log-user{text-decoration:none;}p{margin:0;}#qwMacWarning{background-color:#FFFEDC;border-radius:5px;border:1px solid #B5B59E;}");
+	return QLatin1String(".log-channel{text-decoration:none;}.log-user{text-decoration:none;}p{margin:0;}#qwMacWarning,#qwInlineNotice{background-color:#FFFEDC;border-radius:5px;border:1px solid #B5B59E;}");
 }

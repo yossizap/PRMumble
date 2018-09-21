@@ -1,10 +1,11 @@
 #! /usr/bin/perl -w
 #
-# Copyright 2005-2017 The Mumble Developers. All rights reserved.
+# Copyright 2005-2018 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
-
+#
+# Creates a source tar.gz and zip file with adjusted Version.h file
 use strict;
 use warnings;
 use Carp;
@@ -32,7 +33,7 @@ if ($#ARGV < 0) {
   $ver = $ARGV[0];
 }
 
-print "Adjusting Version.cpp\n";
+print "Adjusting Version.h\n";
 
 open(F, "<src/Version.h") or croak "Could not open src/Version.h for reading";
 my @lines = <F>;

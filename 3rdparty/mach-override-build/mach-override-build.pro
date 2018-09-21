@@ -8,15 +8,6 @@ SOURCEDIR=$$replace(BUILDDIR,-build,-src)
   error("Aborting configuration")
 }
 
-CONFIG(debug, debug|release) {
-  CONFIG += console
-  DESTDIR	= ../../debug
-}
-
-CONFIG(release, debug|release) {
-  DESTDIR	= ../../release
-}
-
 TEMPLATE = lib
 CONFIG -= qt
 CONFIG += debug_and_release
@@ -30,7 +21,7 @@ CONFIG += x86_64 x86
   CONFIG += warn_off
 }
 
-VPATH	= ../mach-override-src
+VPATH = ../mach-override-src
 TARGET = mach-override
 INCLUDEPATH = ../mach-override-src/ ../mach-override-src/libudis86
 

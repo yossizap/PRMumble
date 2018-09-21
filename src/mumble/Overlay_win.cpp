@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -133,6 +133,18 @@ OverlayPrivateWin::~OverlayPrivateWin() {
 		qFatal("OverlayPrivateWin: unable to close Mumble process handle.");
 		return;
 	}
+
+	// Remove all signals, so they don't
+	// interfere with our calls to waitForFinished
+	// below.
+	m_helper_process->disconnect();
+	m_helper64_process->disconnect();
+
+	m_helper_process->terminate();
+	m_helper64_process->terminate();
+
+	m_helper_process->waitForFinished();
+	m_helper64_process->waitForFinished();
 }
 
 void OverlayPrivateWin::startHelper(QProcess *helper) {

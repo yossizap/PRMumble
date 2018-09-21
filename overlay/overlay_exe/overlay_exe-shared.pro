@@ -1,4 +1,4 @@
-# Copyright 2005-2017 The Mumble Developers. All rights reserved.
+# Copyright 2005-2018 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -8,7 +8,6 @@ include(../../qmake/compiler.pri)
 TEMPLATE = app
 CONFIG -= qt
 CONFIG += debug_and_release
-TARGET = mumble_ol_helper
 
 win32 {
   DEFINES += WIN32 _WIN32
@@ -32,12 +31,10 @@ QMAKE_POST_LINK = $$QMAKE_POST_LINK$$escape_expand(\\n\\t)$$quote(mt.exe -nologo
 CONFIG(debug, debug|release) {
   CONFIG += console
   DEFINES *= DEBUG
-  DESTDIR	= ../../debug
 }
 
 CONFIG(release, debug|release) {
   DEFINES *= NDEBUG
-  DESTDIR	= ../../release
 }
 
 include(../../qmake/symbols.pri)

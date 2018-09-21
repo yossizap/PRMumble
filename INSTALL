@@ -72,6 +72,12 @@ CONFIG+=no-opus (Mumble)
 CONFIG+=no-bundled-opus (Mumble)
  Don't use the included version of Opus, but look for one on the system.
 
+CONFIG+=no-rnnoise (Mumble)
+ Don't build RNNoise support at all.
+
+CONFIG+=no-bundled-rnnoise (Mumble)
+ Don't use the included version of RNNoise, but look for one on the system.
+
 CONFIG+=sbcelt (Mumble, Linux, OSX, FreeBSD)
  Use the SBCELT library for decoding CELT frames. Enabling this option will
  build Mumble in a mode that forces all CELT frames to be decoded in a
@@ -105,6 +111,9 @@ CONFIG+=no-dbus (Mumble)
 CONFIG+=no-g15 (Mumble)
  Don't include support for the G15 keyboard (and compatible devices).
 
+CONFIG+=no-jackaudio (Mumble)
+ Don't build support for JackAudio.
+
 CONFIG+=no-asio (Mumble, Win32)
  Don't build support for ASIO audio input.
 
@@ -114,8 +123,8 @@ CONFIG+=no-directsound (Mumble, Win32)
 CONFIG+=no-wasapi (Mumble, Win32)
  Don't build support for WASAPI.
 
-CONFIG+=no-portaudio (Mumble, Unix, OSX)
- Don't build support for PortAudio.
+CONFIG+=portaudio (Mumble, Unix, OSX)
+ Build support for PortAudio.
 
 CONFIG+=no-pulseaudio (Mumble, Unix)
  Don't build support for PulseAudio.
@@ -139,9 +148,6 @@ CONFIG+=no-vorbis-recording (Mumble)
 CONFIG+=no-embed-qt-translations (Mumble)
  Don't embed the translations for Qt, load them from the system. (For
  distributions).
-
-CONFIG+=no-embed-tango-icons (Mumble)
- Don't embed the tango icons at all.
 
 CONFIG+=no-ice (Murmur)
  Don't build support for Ice RPC.

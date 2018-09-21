@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -8,9 +8,8 @@
 
 #include <QObject>
 #include <QMap>
-
-class QXmlStreamReader;
-class QXmlStreamWriter;
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 class XMLTools : public QObject {
 		Q_OBJECT
@@ -22,7 +21,7 @@ class XMLTools : public QObject {
 		static void recurseParse(QXmlStreamReader &reader,
 		                         QXmlStreamWriter &writer,
 		                         int &paragraphs,
-		                         const QMap<QString, QString> &opstyle = QMap<QString, QString>(),
+		                         const QMap<QString, QString> &opstyle,
 		                         const int close = 0, bool ignore = true);
 
 		/* Iterate XML and remove close-followed-by-open.

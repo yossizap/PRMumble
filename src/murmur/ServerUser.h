@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -12,6 +12,13 @@
 #include <sys/socket.h>
 #else
 #include <winsock2.h>
+#endif
+
+// <chrono> was introduced in C++11
+#if __cplusplus > 199711LL
+#include <chrono>
+#else
+#include <ctime>
 #endif
 
 #include "Connection.h"
@@ -54,6 +61,26 @@ struct WhisperTarget {
 };
 
 class Server;
+
+#if __cplusplus > 199711L
+        typedef std::chrono::time_point<std::chrono::steady_clock> time_point;
+#else
+        typedef clock_t time_point;
+#endif
+
+// Simple algorithm for rate limiting
+class LeakyBucket {
+	private:
+		unsigned int tokensPerSec, maxTokens;
+		long currentTokens;
+		time_point lastUpdate;
+
+	public:
+		// Returns true if packets should be dropped
+		bool ratelimit(int tokens);
+
+		LeakyBucket(unsigned int tokensPerSec, unsigned int maxTokens);
+};
 
 class ServerUser : public Connection, public User {
 	private:
@@ -102,6 +129,8 @@ class ServerUser : public Connection, public User {
 		typedef QPair<QSet<ServerUser *>, QSet<ServerUser *> > TargetCache;
 		QMap<int, TargetCache> qmTargetCache;
 		QMap<QString, QString> qmWhisperRedirect;
+
+		LeakyBucket leakyBucket;
 
 		int iLastPermissionCheck;
 		QMap<int, unsigned int> qmPermissionSent;

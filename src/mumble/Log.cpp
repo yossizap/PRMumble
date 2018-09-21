@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -34,12 +34,14 @@ LogConfig::LogConfig(Settings &st) : ConfigWidget(st) {
 	qtwMessages->header()->setSectionResizeMode(ColMessage, QHeaderView::Stretch);
 	qtwMessages->header()->setSectionResizeMode(ColConsole, QHeaderView::ResizeToContents);
 	qtwMessages->header()->setSectionResizeMode(ColNotification, QHeaderView::ResizeToContents);
+	qtwMessages->header()->setSectionResizeMode(ColHighlight, QHeaderView::ResizeToContents);
 	qtwMessages->header()->setSectionResizeMode(ColTTS, QHeaderView::ResizeToContents);
 	qtwMessages->header()->setSectionResizeMode(ColStaticSound, QHeaderView::ResizeToContents);
 #else
 	qtwMessages->header()->setResizeMode(ColMessage, QHeaderView::Stretch);
 	qtwMessages->header()->setResizeMode(ColConsole, QHeaderView::ResizeToContents);
 	qtwMessages->header()->setResizeMode(ColNotification, QHeaderView::ResizeToContents);
+	qtwMessages->header()->setResizeMode(ColHighlight, QHeaderView::ResizeToContents);
 	qtwMessages->header()->setResizeMode(ColTTS, QHeaderView::ResizeToContents);
 	qtwMessages->header()->setResizeMode(ColStaticSound, QHeaderView::ResizeToContents);
 #endif
@@ -54,15 +56,18 @@ LogConfig::LogConfig(Settings &st) : ConfigWidget(st) {
 		twi->setText(ColMessage, messageName);
 		twi->setCheckState(ColConsole, Qt::Unchecked);
 		twi->setCheckState(ColNotification, Qt::Unchecked);
+		twi->setCheckState(ColHighlight, Qt::Unchecked);
 		twi->setCheckState(ColStaticSound, Qt::Unchecked);
 
 		twi->setToolTip(ColConsole, tr("Toggle console for %1 events").arg(messageName));
 		twi->setToolTip(ColNotification, tr("Toggle pop-up notifications for %1 events").arg(messageName));
+		twi->setToolTip(ColHighlight, tr("Toggle window highlight (if not active) for %1 events").arg(messageName));
 		twi->setToolTip(ColStaticSound, tr("Click here to toggle sound notification for %1 events").arg(messageName));
 		twi->setToolTip(ColStaticSoundPath, tr("Path to sound file used for sound notifications in the case of %1 events<br />Single click to play<br />Double-click to change").arg(messageName));
 
 		twi->setWhatsThis(ColConsole, tr("Click here to toggle console output for %1 events.<br />If checked, this option makes Mumble output all %1 events in its message log.").arg(messageName));
 		twi->setWhatsThis(ColNotification, tr("Click here to toggle pop-up notifications for %1 events.<br />If checked, a notification pop-up will be created by Mumble for every %1 event.").arg(messageName));
+		twi->setWhatsThis(ColHighlight, tr("Click here to toggle window highlight for %1 events.<br />If checked, Mumble's window will be highlighted for every %1 event, if not active.").arg(messageName));
 		twi->setWhatsThis(ColStaticSound, tr("Click here to toggle sound notification for %1 events.<br />If checked, Mumble uses a sound file predefined by you to indicate %1 events. Sound files and Text-To-Speech cannot be used at the same time.").arg(messageName));
 		twi->setWhatsThis(ColStaticSoundPath, tr("Path to sound file used for sound notifications in the case of %1 events.<br />Single click to play<br />Double-click to change<br />Ensure that sound notifications for these events are enabled or this field will not have any effect.").arg(messageName));
 #ifndef USE_NO_TTS
@@ -90,6 +95,7 @@ void LogConfig::load(const Settings &r) {
 
 		i->setCheckState(ColConsole, (ml & Settings::LogConsole) ? Qt::Checked : Qt::Unchecked);
 		i->setCheckState(ColNotification, (ml & Settings::LogBalloon) ? Qt::Checked : Qt::Unchecked);
+		i->setCheckState(ColHighlight, (ml & Settings::LogHighlight) ? Qt::Checked : Qt::Unchecked);
 #ifndef USE_NO_TTS
 		i->setCheckState(ColTTS, (ml & Settings::LogTTS) ? Qt::Checked : Qt::Unchecked);
 #endif
@@ -119,6 +125,8 @@ void LogConfig::save() const {
 			v |= Settings::LogConsole;
 		if (i->checkState(ColNotification) == Qt::Checked)
 			v |= Settings::LogBalloon;
+		if (i->checkState(ColHighlight) == Qt::Checked)
+			v |= Settings::LogHighlight;
 #ifndef USE_NO_TTS
 		if (i->checkState(ColTTS) == Qt::Checked)
 			v |= Settings::LogTTS;
@@ -203,9 +211,11 @@ const Log::MsgType Log::msgOrder[] = {
 	UserRenamed,
 	SelfMute, SelfUnmute, SelfDeaf, SelfUndeaf,
 	OtherSelfMute, YouMuted, YouMutedOther, OtherMutedOther,
+	SelfChannelJoin, SelfChannelJoinOther,
 	ChannelJoin, ChannelLeave,
+	ChannelJoinConnect, ChannelLeaveDisconnect,
 	PermissionDenied,
-	TextMessage
+	TextMessage, PrivateTextMessage
 };
 
 const char *Log::msgNames[] = {
@@ -232,7 +242,12 @@ const char *Log::msgNames[] = {
 	QT_TRANSLATE_NOOP("Log", "You self-unmuted"),
 	QT_TRANSLATE_NOOP("Log", "You self-deafened"),
 	QT_TRANSLATE_NOOP("Log", "You self-undeafened"),
-	QT_TRANSLATE_NOOP("Log", "User renamed")
+	QT_TRANSLATE_NOOP("Log", "User renamed"),
+	QT_TRANSLATE_NOOP("Log", "You Joined Channel"),
+	QT_TRANSLATE_NOOP("Log", "You Joined Channel (moved)"),
+	QT_TRANSLATE_NOOP("Log", "User connected and entered channel"),
+	QT_TRANSLATE_NOOP("Log", "User left channel and disconnected"),
+	QT_TRANSLATE_NOOP("Log", "Private text message")
 };
 
 QString Log::msgName(MsgType t) const {
@@ -364,13 +379,9 @@ QString Log::imageToImg(QImage img) {
 	return QString();
 }
 
-QString Log::validHtml(const QString &html, bool allowReplacement, QTextCursor *tc) {
+QString Log::validHtml(const QString &html, QTextCursor *tc) {
 	QDesktopWidget dw;
 	LogDocument qtd;
-	bool valid = false;
-
-	qtd.setAllowHTTPResources(allowReplacement);
-	qtd.setOnlyLoadDataURLs(true);
 
 	QRectF qr = dw.availableGeometry(dw.screenNumber(g.mw));
 	qtd.setTextWidth(qr.width() / 2);
@@ -384,7 +395,6 @@ QString Log::validHtml(const QString &html, bool allowReplacement, QTextCursor *
 	// data URL images to run.
 	(void) qtd.documentLayout();
 	qtd.setHtml(html);
-	valid = qtd.isValid();
 
 	QStringList qslAllowed = allowedSchemes();
 	for (QTextBlock qtb = qtd.begin(); qtb != qtd.end(); qtb = qtb.next()) {
@@ -402,22 +412,6 @@ QString Log::validHtml(const QString &html, bool allowReplacement, QTextCursor *
 					qtbi = qtb.begin();
 				}
 			}
-			if (qcf.isImageFormat()) {
-				QTextImageFormat qtif = qcf.toImageFormat();
-				QUrl url(qtif.name());
-				if (! qtif.name().isEmpty() && ! url.isValid())
-					valid = false;
-			}
-		}
-	}
-
-	if (!valid) {
-		QString errorImageMessage = tr("[[ No valid image ]]");
-		if (tc) {
-			tc->insertText(errorImageMessage);
-			return QString();
-		} else {
-			return errorImageMessage;
 		}
 	}
 
@@ -498,7 +492,7 @@ void Log::log(MsgType mt, const QString &console, const QString &terse, bool own
 			tc.insertBlock();
 		}
 		tc.insertHtml(Log::msgColor(QString::fromLatin1("[%1] ").arg(Qt::escape(dt.time().toString())), Log::Time));
-		validHtml(console, true, &tc);
+		validHtml(console, &tc);
 		tc.movePosition(QTextCursor::End);
 		g.mw->qteLog->setTextCursor(tc);
 
@@ -508,30 +502,41 @@ void Log::log(MsgType mt, const QString &console, const QString &terse, bool own
 			tlog->setLogScroll(oldscrollvalue);
 	}
 
-	if (!g.s.bTTSMessageReadBack && ownMessage)
-		return;
+	if (!ownMessage) {
+		if (!(g.mw->isActiveWindow() && g.mw->qdwLog->isVisible())) {
+			// Message notification with window highlight
+			if (flags & Settings::LogHighlight) {
+				QApplication::alert(g.mw);
+			}
 
-	// Message notification with balloon tooltips
-	if ((flags & Settings::LogBalloon) && !(g.mw->isActiveWindow() && g.mw->qdwLog->isVisible()))
-		postNotification(mt, plain);
-
-	// Don't make any noise if we are self deafened (Unless it is the sound for activating self deaf)
-	if (g.s.bDeaf && mt != Log::SelfDeaf)
-		return;
-
-	// Message notification with static sounds
-	if ((flags & Settings::LogSoundfile)) {
-		QString sSound = g.s.qmMessageSounds.value(mt);
-		AudioOutputPtr ao = g.ao;
-		if (!ao || !ao->playSample(sSound, false)) {
-			qWarning() << "Sound file" << sSound << "is not a valid audio file, fallback to TTS.";
-			flags ^= Settings::LogSoundfile | Settings::LogTTS; // Fallback to TTS
+			// Message notification with balloon tooltips
+			if (flags & Settings::LogBalloon) {
+				postNotification(mt, plain);
+			}
 		}
+
+		// Don't make any noise if we are self deafened (Unless it is the sound for activating self deaf)
+		if (g.s.bDeaf && mt != Log::SelfDeaf) {
+			return;
+		}
+
+		// Message notification with static sounds
+		if ((flags & Settings::LogSoundfile)) {
+			QString sSound = g.s.qmMessageSounds.value(mt);
+			AudioOutputPtr ao = g.ao;
+			if (!ao || !ao->playSample(sSound, false)) {
+				qWarning() << "Sound file" << sSound << "is not a valid audio file, fallback to TTS.";
+				flags ^= Settings::LogSoundfile | Settings::LogTTS; // Fallback to TTS
+			}
+		}
+	} else if (!g.s.bTTSMessageReadBack) {
+		return;
 	}
 
 	// Message notification with Text-To-Speech
-	if (! g.s.bTTS || !(flags & Settings::LogTTS))
+	if (g.s.bDeaf || !g.s.bTTS || !(flags & Settings::LogTTS)) {
 		return;
+	}
 
 	// Apply simplifications to spoken text
 	QRegExp identifyURL(QLatin1String("[a-z-]+://[^ <]*"),
@@ -552,7 +557,7 @@ void Log::log(MsgType mt, const QString &console, const QString &terse, bool own
 			if (url.scheme() == QLatin1String("http") || url.scheme() == QLatin1String("https"))
 				replacement = tr("link to %1").arg(host);
 			else if (url.scheme() == QLatin1String("ftp"))
-				replacement = tr("ftp link to %1").arg(host);
+				replacement = tr("FTP link to %1").arg(host);
 			else if (url.scheme() == QLatin1String("clientid"))
 				replacement = tr("player link");
 			else if (url.scheme() == QLatin1String("channelid"))
@@ -594,85 +599,37 @@ void Log::postQtNotification(MsgType mt, const QString &plain) {
 }
 
 LogDocument::LogDocument(QObject *p)
-	: QTextDocument(p)
-	, m_allowHTTPResources(true)
-	, m_valid(true)
-	, m_onlyLoadDataURLs(false) {
+	: QTextDocument(p) {
 }
 
 QVariant LogDocument::loadResource(int type, const QUrl &url) {
+	// Ignore requests for all external resources
+	// that aren't images. We don't support any of them.
 	if (type != QTextDocument::ImageResource) {
-		m_valid = false;
-		return QLatin1String("No external resources allowed.");
-	}
-
-	if (url.scheme() != QLatin1String("data") && g.s.iMaxImageSize <= 0) {
-		m_valid = false;
-		return QLatin1String("Image download disabled.");
+		addResource(type, url, QByteArray());
+		return QByteArray();
 	}
 
 	QImage qi(1, 1, QImage::Format_Mono);
 	addResource(type, url, qi);
 
-	if (! url.isValid() || url.isRelative()) {
-		m_valid = false;
+	if (! url.isValid()) {
 		return qi;
 	}
 
-	QStringList allowedSchemes;
-	allowedSchemes << QLatin1String("data");
-	if (m_allowHTTPResources) {
-		allowedSchemes << QLatin1String("http");
-		allowedSchemes << QLatin1String("https");
-	}
-
-	if (!allowedSchemes.contains(url.scheme())) {
-		m_valid = false;
+	if (url.scheme() != QLatin1String("data")) {
 		return qi;
 	}
 
-	bool shouldLoad = true;
-	if (m_onlyLoadDataURLs && url.scheme() != QLatin1String("data")) {
-		shouldLoad = false;
-	}
+	QNetworkReply *rep = Network::get(url);
+	connect(rep, SIGNAL(finished()), this, SLOT(finished()));
 
-	if (shouldLoad) {
-		QNetworkReply *rep = Network::get(url);
-		connect(rep, SIGNAL(metaDataChanged()), this, SLOT(receivedHead()));
-		connect(rep, SIGNAL(finished()), this, SLOT(finished()));
-
-		// Handle data URLs immediately without a roundtrip to the event loop.
-		// We need this to perform proper validation for data URL images when
-		// a LogDocument is used inside Log::validHtml().
-		if (url.scheme() == QLatin1String("data")) {
-			QCoreApplication::sendPostedEvents(rep, 0);
-		}
-	}
+	// Handle data URLs immediately without a roundtrip to the event loop.
+	// We need this to perform proper validation for data URL images when
+	// a LogDocument is used inside Log::validHtml().
+	QCoreApplication::sendPostedEvents(rep, 0);
 
 	return qi;
-}
-
-void LogDocument::setAllowHTTPResources(bool allowHTTPResources) {
-	m_allowHTTPResources = allowHTTPResources;
-}
-
-void LogDocument::setOnlyLoadDataURLs(bool onlyLoadDataURLs) {
-	m_onlyLoadDataURLs = onlyLoadDataURLs;
-}
-
-bool LogDocument::isValid() {
-	return m_valid;
-}
-
-void LogDocument::receivedHead() {
-	QNetworkReply *rep = qobject_cast<QNetworkReply *>(sender());
-	if (rep->url().scheme() != QLatin1String("data")) {
-		QVariant length = rep->header(QNetworkRequest::ContentLengthHeader);
-		if (length == QVariant::Invalid || length.toInt() > g.s.iMaxImageSize) {
-			m_valid = false;
-			rep->abort();
-		}
-	}
 }
 
 void LogDocument::finished() {
@@ -689,33 +646,23 @@ void LogDocument::finished() {
 		// instead of strictly requiring a correct Content-Type.
 		if (RichTextImage::isValidImage(ba, fmt)) {
 			if (qi.loadFromData(ba, fmt)) {
-				bool ok = true;
-				if (rep->url().scheme() != QLatin1String("data")) {
-					ok = (qi.width() <= g.s.iMaxImageWidth && qi.height() <= g.s.iMaxImageHeight);
-				}
-				if (ok) {
-					addResource(QTextDocument::ImageResource, rep->request().url(), qi);
+				addResource(QTextDocument::ImageResource, rep->request().url(), qi);
 
-					// Force a re-layout of the QTextEdit the next
-					// time we enter the event loop.
-					// We must not trigger a re-layout immediately.
-					// Doing so can trigger crashes deep inside Qt
-					// if the QTextDocument has just been set on the
-					// text edit widget.
-					QTextEdit *qte = qobject_cast<QTextEdit *>(parent());
-					if (qte != NULL) {
-						QEvent *e = new QEvent(QEvent::FontChange);
-						QApplication::postEvent(qte, e);
+				// Force a re-layout of the QTextEdit the next
+				// time we enter the event loop.
+				// We must not trigger a re-layout immediately.
+				// Doing so can trigger crashes deep inside Qt
+				// if the QTextDocument has just been set on the
+				// text edit widget.
+				QTextEdit *qte = qobject_cast<QTextEdit *>(parent());
+				if (qte != NULL) {
+					QEvent *e = new QEvent(QEvent::FontChange);
+					QApplication::postEvent(qte, e);
 
-						e = new LogDocumentResourceAddedEvent();
-						QApplication::postEvent(qte, e);
-					}
-				} else {
-					m_valid = false;
+					e = new LogDocumentResourceAddedEvent();
+					QApplication::postEvent(qte, e);
 				}
 			}
-		} else {
-			m_valid = false;
 		}
 	}
 

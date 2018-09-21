@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -9,7 +9,7 @@
 #include "ServerUser.h"
 #include "Meta.h"
 
-ServerUser::ServerUser(Server *p, QSslSocket *socket) : Connection(p, socket), User(), s(NULL) {
+ServerUser::ServerUser(Server *p, QSslSocket *socket) : Connection(p, socket), User(), s(NULL), leakyBucket(p->iMessageLimit, p->iMessageBurst) {
 	sState = ServerUser::Connected;
 	sUdpSocket = INVALID_SOCKET;
 
@@ -112,3 +112,61 @@ int BandwidthRecord::bandwidth() const {
 	return static_cast<int>((sum * 1000000ULL) / elapsed);
 }
 
+#if __cplusplus > 199711LL
+
+inline static
+time_point now() {
+	return std::chrono::steady_clock::now();
+}
+
+inline static
+unsigned long millisecondsBetween(time_point start, time_point end) {
+	return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+}
+
+#else
+
+inline static
+time_point now() {
+	return clock();
+}
+
+inline static
+unsigned long millisecondsBetween(time_point start, time_point end) {
+	return 1000 * (end - start) / CLOCKS_PER_SEC;
+}
+
+#endif
+
+// Rate limiting: burst up to 5, 1 message per sec limit over longer time
+LeakyBucket::LeakyBucket(unsigned int tokensPerSec, unsigned int maxTokens) : tokensPerSec(tokensPerSec), maxTokens(maxTokens), currentTokens(0) {
+	lastUpdate = now();
+}
+
+bool LeakyBucket::ratelimit(int tokens) {
+	// First remove tokens we leaked over time
+	time_point tnow = now();
+	long ms = millisecondsBetween(lastUpdate, tnow);
+
+	long drainTokens = (ms * tokensPerSec) / 1000;
+
+	// Prevent constant starvation due to too many updates
+	if (drainTokens > 0) {
+		this->lastUpdate = tnow;
+
+		this->currentTokens -= drainTokens;
+		if (this->currentTokens < 0) {
+			this->currentTokens = 0;
+		}
+	}
+
+	// Then try to add tokens
+	bool limit = this->currentTokens > ((static_cast<long>(maxTokens)) - tokens);
+
+	// If the bucket is not overflowed, allow message and add tokens
+	if (!limit) {
+		this->currentTokens += tokens;
+	}
+
+	return limit;
+}

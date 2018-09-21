@@ -1,87 +1,20 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
- <file alias="Information_icon.svg">../../themes/reality/publicdomain/Information_icon.svg</file>
- <file alias="self_undeafened.svg">../../themes/reality/self_undeafened.svg</file>
- <file alias="mumble.svg">../../themes/reality/mumble.svg</file>
- <file alias="mumble.icns">../../themes/reality/mumble.icns</file>
- <file alias="mumble.osx.png">../../themes/reality/mumble.osx.png</file>
- <file alias="talking_on.svg">../../themes/reality/talking_on.svg</file>
- <file alias="talking_alt.svg">../../themes/reality/talking_alt.svg</file>
- <file alias="talking_off.svg">../../themes/reality/talking_off.svg</file>
- <file alias="talking_whisper.svg">../../themes/reality/talking_whisper.svg</file>
- <file alias="deafened_self.svg">../../themes/reality/deafened_self.svg</file>
- <file alias="deafened_server.svg">../../themes/reality/deafened_server.svg</file>
- <file alias="muted_self.svg">../../themes/reality/muted_self.svg</file>
- <file alias="muted_server.svg">../../themes/reality/muted_server.svg</file>
- <file alias="muted_local.svg">../../themes/reality/muted_local.svg</file>
- <file alias="muted_suppressed.svg">../../themes/reality/muted_suppressed.svg</file>
- <file alias="authenticated.svg">../../themes/reality/authenticated.svg</file>
- <file alias="channel.svg">../../themes/reality/channel.svg</file>
- <file alias="channel_active.svg">../../themes/reality/channel_active.svg</file>
- <file alias="channel_linked.svg">../../themes/reality/channel_linked.svg</file>
- <file alias="config_basic.png">../../themes/reality/config_basic.png</file>
- <file alias="config_dsound.png">../../themes/reality/config_dsound.png</file>
- <file alias="config_msgs.png">../../themes/reality/config_msgs.png</file>
- <file alias="config_plugin.png">../../themes/reality/config_plugin.png</file>
- <file alias="config_asio.png">../../themes/reality/config_asio.png</file>
- <file alias="config_osd.png">../../themes/reality/config_osd.png</file>
- <file alias="config_network.png">../../themes/reality/config_network.png</file>
- <file alias="config_shortcuts.png">../../themes/reality/config_shortcuts.png</file>
- <file alias="config_ui.png">../../themes/reality/config_ui.png</file>
- <file alias="config_lcd.png">../../themes/reality/config_lcd.png</file>
- <file alias="layout_classic.svg">../../themes/reality/layout_classic.svg</file>
- <file alias="layout_stacked.svg">../../themes/reality/layout_stacked.svg</file>
- <file alias="layout_hybrid.svg">../../themes/reality/layout_hybrid.svg</file>
- <file alias="layout_custom.svg">../../themes/reality/layout_custom.svg</file>
- <file alias="comment.svg">../../themes/reality/comment.svg</file>
- <file alias="comment_seen.svg">../../themes/reality/comment_seen.svg</file>
- <file alias="default_avatar.svg">../../themes/reality/default_avatar.svg</file>
- <file alias="rec.svg">../../themes/reality/rec.svg</file>
- <file alias="wb_male.oga">../../samples/wb_male.oga</file>
- <file alias="on.ogg">../../samples/on.ogg</file>
- <file alias="off.ogg">../../samples/off.ogg</file>
- <file alias="Critical.ogg">../../samples/Critical.ogg</file>
- <file alias="PermissionDenied.ogg">../../samples/PermissionDenied.ogg</file>
- <file alias="SelfMutedDeafened.ogg">../../samples/SelfMutedDeafened.ogg</file>
- <file alias="ServerConnected.ogg">../../samples/ServerConnected.ogg</file>
- <file alias="ServerDisconnected.ogg">../../samples/ServerDisconnected.ogg</file>
- <file alias="TextMessage.ogg">../../samples/TextMessage.ogg</file>
- <file alias="UserJoinedChannel.ogg">../../samples/UserJoinedChannel.ogg</file>
- <file alias="UserKickedYouOrByYou.ogg">../../samples/UserKickedYouOrByYou.ogg</file>
- <file alias="UserLeftChannel.ogg">../../samples/UserLeftChannel.ogg</file>
- <file alias="UserMutedYouOrByYou.ogg">../../samples/UserMutedYouOrByYou.ogg</file>
- <file alias="RecordingStateChanged.ogg">../../samples/RecordingStateChanged.ogg</file>
- <file alias="Reality.qss">../../themes/reality/Reality.qss</file>
- <file alias="checkbox-checked.png">../../themes/reality/checkbox-checked.svg</file>
- <file alias="checkbox-indeterminate.png">../../themes/reality/checkbox-indeterminate.svg</file>
- <file alias="drop-down-arrow.png">../../themes/reality/drop-down-arrow.png</file>
- <file alias="scrollbar-down-arrow.png">../../themes/reality/scrollbar-down-arrow.png</file>
- <file alias="scrollbar-up-arrow.png">../../themes/reality/scrollbar-up-arrow.png</file>
- <file alias="spin-down-arrow.png">../../themes/reality/spin-down-arrow.png</file>
- <file alias="spin-up-arrow.png">../../themes/reality/spin-up-arrow.png</file>
- <file alias="talking_alt.png">../../themes/reality/talking_alt.png</file>
- <file alias="talking_off.png">../../themes/reality/talking_off.png</file>
- <file alias="talking_on.png">../../themes/reality/talking_on.png</file>
- <file alias="talking_whisper.png">../../themes/reality/talking_whisper.png</file>
- <file alias="toolbar-handle.png">../../themes/reality/toolbar-handle.png</file>
- <file alias="treeview-branch-closed.png">../../themes/reality/treeview-branch-closed.png</file>
- <file alias="treeview-branch-closed-hover.png">../../themes/reality/treeview-branch-closed-hover.png</file>
- <file alias="treeview-branch-open.png">../../themes/reality/treeview-branch-open.png</file>
- <file alias="treeview-branch-open-hover.png">../../themes/reality/treeview-branch-open-hover.png</file>
- <file>mumble_cs.qm</file>
- <file>mumble_da.qm</file>
- <file>mumble_de.qm</file>
- <file>mumble_en.qm</file>
- <file>mumble_es.qm</file>
- <file>mumble_fr.qm</file>
- <file>mumble_it.qm</file>
- <file>mumble_ja.qm</file>
- <file>mumble_pl.qm</file>
- <file>mumble_pt_BR.qm</file>
- <file>mumble_ru.qm</file>
- <file>mumble_sv.qm</file>
- <file>mumble_tr.qm</file>
- <file>mumble_zh_CN.qm</file>
- <file>mumble_zh_TW.qm</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file alias="mumble.svg">../../icons/mumble.svg</file>
+        <file alias="mumble.icns">../../icons/mumble.icns</file>
+        <file alias="wb_male.oga">../../samples/wb_male.oga</file>
+        <file alias="on.ogg">../../samples/on.ogg</file>
+        <file alias="off.ogg">../../samples/off.ogg</file>
+        <file alias="Critical.ogg">../../samples/Critical.ogg</file>
+        <file alias="PermissionDenied.ogg">../../samples/PermissionDenied.ogg</file>
+        <file alias="SelfMutedDeafened.ogg">../../samples/SelfMutedDeafened.ogg</file>
+        <file alias="ServerConnected.ogg">../../samples/ServerConnected.ogg</file>
+        <file alias="ServerDisconnected.ogg">../../samples/ServerDisconnected.ogg</file>
+        <file alias="TextMessage.ogg">../../samples/TextMessage.ogg</file>
+        <file alias="UserJoinedChannel.ogg">../../samples/UserJoinedChannel.ogg</file>
+        <file alias="UserKickedYouOrByYou.ogg">../../samples/UserKickedYouOrByYou.ogg</file>
+        <file alias="UserLeftChannel.ogg">../../samples/UserLeftChannel.ogg</file>
+        <file alias="UserMutedYouOrByYou.ogg">../../samples/UserMutedYouOrByYou.ogg</file>
+        <file alias="RecordingStateChanged.ogg">../../samples/RecordingStateChanged.ogg</file>
+    </qresource>
 </RCC>

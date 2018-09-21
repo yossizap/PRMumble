@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -152,19 +152,24 @@ static int find_odlsym() {
 		int nchains = 0;
 		ElfW(Sym) *symtab = NULL;
 		const char *strtab = NULL;
+#if defined(__GLIBC__)
+		const ElfW(Addr) base = 0;
+#else
+		const ElfW(Addr) base = lm->l_addr;
+#endif
 
 		ElfW(Dyn) *dyn = lm->l_ld;
 
 		while (dyn->d_tag) {
 			switch (dyn->d_tag) {
 				case DT_HASH:
-					nchains = *(int *)(dyn->d_un.d_ptr + 4);
+					nchains = *(int *)(base + dyn->d_un.d_ptr + 4);
 					break;
 				case DT_STRTAB:
-					strtab = (const char *) dyn->d_un.d_ptr;
+					strtab = (const char *)(base + dyn->d_un.d_ptr);
 					break;
 				case DT_SYMTAB:
-					symtab = (ElfW(Sym) *) dyn->d_un.d_ptr;
+					symtab = (ElfW(Sym) *)(base + dyn->d_un.d_ptr);
 					break;
 			}
 			dyn ++;

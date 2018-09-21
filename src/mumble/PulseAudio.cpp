@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -201,6 +201,8 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 						pasOutput = pa_stream_new(pacContext, mumble_sink_input, &pss, (pss.channels == 1) ? NULL : &pcm);
 						pa_stream_set_state_callback(pasOutput, stream_callback, this);
 						pa_stream_set_write_callback(pasOutput, write_callback, this);
+
+						// Fallthrough
 					}
 				case PA_STREAM_UNCONNECTED:
 					do_start = true;
@@ -268,7 +270,10 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 						pasInput = pa_stream_new(pacContext, "Microphone", &pss, NULL);
 						pa_stream_set_state_callback(pasInput, stream_callback, this);
 						pa_stream_set_read_callback(pasInput, read_callback, this);
+
+						// Fallthrough
 					}
+
 				case PA_STREAM_UNCONNECTED:
 					do_start = true;
 					break;
@@ -330,6 +335,8 @@ void PulseAudioSystem::eventCallback(pa_mainloop_api *api, pa_defer_event *) {
 						pasSpeaker = pa_stream_new(pacContext, mumble_echo, &pss, (pss.channels == 1) ? NULL : &pcm);
 						pa_stream_set_state_callback(pasSpeaker, stream_callback, this);
 						pa_stream_set_read_callback(pasSpeaker, read_callback, this);
+
+						// Fallthrough
 					}
 				case PA_STREAM_UNCONNECTED:
 					do_start = true;
@@ -402,12 +409,12 @@ void PulseAudioSystem::sink_callback(pa_context *, const pa_sink_info *i, int eo
 		return;
 	}
 
-	const QString name = QLatin1String(i->name);
+	const QString name = QString::fromUtf8(i->name);
 
 	pas->qhSpecMap.insert(name, i->sample_spec);
 	pas->qhChanMap.insert(name, i->channel_map);
-	pas->qhOutput.insert(name, QLatin1String(i->description));
-	pas->qhEchoMap.insert(name, QLatin1String(i->monitor_source_name));
+	pas->qhOutput.insert(name, QString::fromUtf8(i->description));
+	pas->qhEchoMap.insert(name, QString::fromUtf8(i->monitor_source_name));
 }
 
 void PulseAudioSystem::source_callback(pa_context *, const pa_source_info *i, int eol, void *userdata) {
@@ -418,19 +425,19 @@ void PulseAudioSystem::source_callback(pa_context *, const pa_source_info *i, in
 		return;
 	}
 
-	const QString name = QLatin1String(i->name);
+	const QString name = QString::fromUtf8(i->name);
 
 	pas->qhSpecMap.insert(name, i->sample_spec);
 	pas->qhChanMap.insert(name, i->channel_map);
 
-	pas->qhInput.insert(QLatin1String(i->name), QLatin1String(i->description));
+	pas->qhInput.insert(QString::fromUtf8(i->name), QString::fromUtf8(i->description));
 }
 
 void PulseAudioSystem::server_callback(pa_context *, const pa_server_info *i, void *userdata) {
 	PulseAudioSystem *pas = reinterpret_cast<PulseAudioSystem *>(userdata);
 
-	pas->qsDefaultInput = QLatin1String(i->default_source_name);
-	pas->qsDefaultOutput = QLatin1String(i->default_sink_name);
+	pas->qsDefaultInput = QString::fromUtf8(i->default_source_name);
+	pas->qsDefaultOutput = QString::fromUtf8(i->default_sink_name);
 
 	pas->bServerDone = true;
 	pas->wakeup();
@@ -640,8 +647,8 @@ void PulseAudioSystem::volume_sink_input_list_callback(pa_context *c, const pa_s
 			// create a new entry
 			PulseAttenuation patt;
 			patt.index = i->index;
-			patt.name = QLatin1String(i->name);
-			patt.stream_restore_id = QLatin1String(pa_proplist_gets(i->proplist, "module-stream-restore.id"));
+			patt.name = QString::fromUtf8(i->name);
+			patt.stream_restore_id = QString::fromUtf8(pa_proplist_gets(i->proplist, "module-stream-restore.id"));
 			patt.normal_volume = i->volume;
 
 			// calculate the attenuated volume
@@ -678,7 +685,7 @@ void PulseAudioSystem::restore_sink_input_list_callback(pa_context *c, const pa_
 
 		// otherwise, save for matching at the end of iteration
 		} else {
-			QString restore_id = QLatin1String(pa_proplist_gets(i->proplist, "module-stream-restore.id"));
+			QString restore_id = QString::fromUtf8(pa_proplist_gets(i->proplist, "module-stream-restore.id"));
 			PulseAttenuation patt;
 			patt.index = i->index;
 			patt.normal_volume = i->volume;
@@ -737,7 +744,7 @@ void PulseAudioSystem::stream_restore_read_callback(pa_context *c, const pa_ext_
 	PulseAudioSystem *pas = reinterpret_cast<PulseAudioSystem *>(userdata);
 
 	if (eol == 0) {
-		QString name = QLatin1String(i->name);
+		QString name = QString::fromUtf8(i->name);
 
 		// were we looking for this restoration?
 		if (pas->qhMissingSinks.contains(name)) {

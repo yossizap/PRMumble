@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -20,7 +20,7 @@ class LogConfig : public ConfigWidget, public Ui::LogConfig {
 		Q_OBJECT
 		Q_DISABLE_COPY(LogConfig)
 	public:
-		enum Column { ColMessage, ColConsole, ColNotification, ColTTS, ColStaticSound, ColStaticSoundPath };
+		enum Column { ColMessage, ColConsole, ColNotification, ColHighlight, ColTTS, ColStaticSound, ColStaticSoundPath };
 		LogConfig(Settings &st);
 		QString title() const Q_DECL_OVERRIDE;
 		QIcon icon() const Q_DECL_OVERRIDE;
@@ -44,10 +44,10 @@ class Log : public QObject {
 		Q_OBJECT
 		Q_DISABLE_COPY(Log)
 	public:
-		enum MsgType { DebugInfo, CriticalError, Warning, Information, ServerConnected, ServerDisconnected, UserJoin, UserLeave, Recording, YouKicked, UserKicked, SelfMute, OtherSelfMute, YouMuted, YouMutedOther, OtherMutedOther, ChannelJoin, ChannelLeave, PermissionDenied, TextMessage, SelfUnmute, SelfDeaf, SelfUndeaf, UserRenamed };
+		enum MsgType { DebugInfo, CriticalError, Warning, Information, ServerConnected, ServerDisconnected, UserJoin, UserLeave, Recording, YouKicked, UserKicked, SelfMute, OtherSelfMute, YouMuted, YouMutedOther, OtherMutedOther, ChannelJoin, ChannelLeave, PermissionDenied, TextMessage, SelfUnmute, SelfDeaf, SelfUndeaf, UserRenamed, SelfChannelJoin, SelfChannelJoinOther, ChannelJoinConnect, ChannelLeaveDisconnect, PrivateTextMessage };
 		enum LogColorType { Time, Server, Privilege, Source, Target };
 		static const MsgType firstMsgType = DebugInfo;
-		static const MsgType lastMsgType = UserRenamed;
+		static const MsgType lastMsgType = PrivateTextMessage;
 		
 		// Display order in settingsscreen, allows to insert new events without breaking config-compatibility with older versions.
 		static const MsgType msgOrder[];
@@ -67,7 +67,7 @@ class Log : public QObject {
 		QString msgName(MsgType t) const;
 		void setIgnore(MsgType t, int ignore = 1 << 30);
 		void clearIgnore();
-		static QString validHtml(const QString &html, bool allowReplacement = false, QTextCursor *tc = NULL);
+		static QString validHtml(const QString &html, QTextCursor *tc = NULL);
 		static QString imageToImg(const QByteArray &format, const QByteArray &image);
 		static QString imageToImg(QImage img);
 		static QString msgColor(const QString &text, LogColorType t);
@@ -84,16 +84,8 @@ class LogDocument : public QTextDocument {
 	public:
 		LogDocument(QObject *p = NULL);
 		QVariant loadResource(int, const QUrl &) Q_DECL_OVERRIDE;
-		void setAllowHTTPResources(bool allowHttpResources);
-		void setOnlyLoadDataURLs(bool onlyLoadDataURLs);
-		bool isValid();
 	public slots:
-		void receivedHead();
 		void finished();
-	private:
-		bool m_allowHTTPResources;
-		bool m_valid;
-		bool m_onlyLoadDataURLs;
 };
 
 class LogDocumentResourceAddedEvent : public QEvent {

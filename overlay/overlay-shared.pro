@@ -1,4 +1,4 @@
-# Copyright 2005-2017 The Mumble Developers. All rights reserved.
+# Copyright 2005-2018 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -11,22 +11,20 @@ TEMPLATE = lib
 CONFIG -= qt
 CONFIG *= dll shared debug_and_release warn_on
 CONFIG -= embed_manifest_dll
-TARGET = mumble_ol
 RC_FILE = mumble_ol.rc
 SOURCES = ancestor.cpp lib.cpp olsettings.cpp excludecheck.cpp d3d9.cpp dxgi.cpp d3d10.cpp d3d11.cpp ods.cpp opengl.cpp HardHook.cpp D11StateBlock.cpp
 HEADERS = ancestor.h lib.h olsettings.h excludecheck.h ods.h HardHook.h overlay_blacklist.h D11StateBlock.h ../3rdparty/GL/glext.h
 EFFECTS = overlay.fx
 DX11_PIXEL_SHADERS = overlay11.ps
 DX11_VERTEX_SHADERS = overlay11.vs
-DIST = overlay.h overlay.fx HardHook.h
 
 DEFINES -= UNICODE
 
-QMAKE_CXXFLAGS_RELEASE	-= -MD
-QMAKE_CXXFLAGS_DEBUG	-= -MDd
+QMAKE_CXXFLAGS_RELEASE -= -MD
+QMAKE_CXXFLAGS_DEBUG -= -MDd
 
-QMAKE_CXXFLAGS_RELEASE	*= -MT
-QMAKE_CXXFLAGS_DEBUG	*= -MTd
+QMAKE_CXXFLAGS_RELEASE *= -MT
+QMAKE_CXXFLAGS_DEBUG *= -MTd
 
 LIBS *= -ldxguid -luuid -lole32 -luser32 -ladvapi32
 LIBS *= -ld3d9 -ld3d10 -ld3d11 -ld3dcompiler -ldxgi
@@ -37,16 +35,11 @@ CONFIG(force-x86_64-toolchain) {
   LIBS *= -lminhook
 }
 
-CONFIG(release, debug|release) {
-  DESTDIR = ../release
-  QMAKE_LIBDIR = ../release $$QMAKE_LIBDIR
-}
-
 CONFIG(debug, debug|release) {
-  DESTDIR = ../debug
-  QMAKE_LIBDIR = ../debug $$QMAKE_LIBDIR
   DEFINES *= DEBUG
 }
+
+QMAKE_LIBDIR = $$DESTDIR $$QMAKE_LIBDIR
 
 # Override fxc binary for the x86 build.
 CONFIG(force-x86-toolchain) {

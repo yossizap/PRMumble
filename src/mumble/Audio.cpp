@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -10,6 +10,7 @@
 #include "AudioInput.h"
 #include "AudioOutput.h"
 #include "CELTCodec.h"
+#include "OpusCodec.h"
 #include "Global.h"
 #include "PacketDataStream.h"
 
@@ -25,12 +26,23 @@ LoopUser LoopUser::lpLoopy;
 CodecInit ciInit;
 
 void CodecInit::initialize() {
-	CELTCodec *codec = NULL;
+#ifdef USE_OPUS
+	OpusCodec *oCodec = new OpusCodec();
+	if (oCodec->isValid()) {
+		oCodec->report();
+		g.oCodec = oCodec;
+	} else {
+		qWarning("CodecInit: Failed to load Opus, it will not be available for encoding/decoding audio.");
+		delete oCodec;
+	}
+#endif
 
 	if (g.s.bDisableCELT) {
 		// Kill switch for CELT activated. Do not initialize it.
 		return;
 	}
+
+	CELTCodec *codec = NULL;
 
 #ifdef USE_SBCELT
 	codec = new CELTCodecSBCELT();
@@ -74,6 +86,10 @@ void CodecInit::initialize() {
 }
 
 void CodecInit::destroy() {
+#ifdef USE_OPUS
+	delete g.oCodec;
+#endif
+
 	foreach(CELTCodec *codec, g.qmCodecs)
 		delete codec;
 	g.qmCodecs.clear();

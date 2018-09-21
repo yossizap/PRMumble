@@ -1,25 +1,16 @@
 include(../../qmake/compiler.pri)
 
 !exists(../speex-src/COPYING) | !exists(../speexdsp-src/COPYING) {
-	message("The speex-src/ or speexdsp-src/ directories were not found. You need to do one of the following:")
-	message("")
-	message("Option 1: Use Speex Git:")
-	message("git submodule init")
-	message("git submodule update")
-	message("")
-	message("Option 2: Use system speex and speex-dsp (v 1.2 or later):")
-	message("qmake CONFIG+=no-bundled-speex -recursive")
-	message("")
-	error("Aborting configuration")
-}
-
-CONFIG(debug, debug|release) {
-  CONFIG += console
-  DESTDIR	= ../../debug
-}
-
-CONFIG(release, debug|release) {
-  DESTDIR	= ../../release
+  message("The speex-src/ or speexdsp-src/ directories were not found. You need to do one of the following:")
+  message("")
+  message("Option 1: Use Speex Git:")
+  message("git submodule init")
+  message("git submodule update")
+  message("")
+  message("Option 2: Use system speex and speex-dsp (v 1.2 or later):")
+  message("qmake CONFIG+=no-bundled-speex -recursive")
+  message("")
+  error("Aborting configuration")
 }
 
 TEMPLATE = lib
@@ -34,7 +25,7 @@ CONFIG += no_include_pwd
 # below, and nmake is unable to figure out how to handle
 # that.
 CONFIG += no_batch
-VPATH	= ../speex-src/libspeex ../speexdsp-src/libspeexdsp
+VPATH = ../speex-src/libspeex ../speexdsp-src/libspeexdsp
 
 TARGET = speex
 DEFINES += NDEBUG HAVE_CONFIG_H
@@ -61,7 +52,7 @@ win32 {
     }
   }
 
-  SOURCES	*= mumble_speex_init.c
+  SOURCES *= mumble_speex_init.c
 
   CONFIG -= static
   CONFIG += shared
@@ -72,8 +63,6 @@ win32 {
   CONFIG += staticlib
   INCLUDEPATH += ../speex-build
 }
-
-DIST = config.h speex.def speex/speex_config_types.h
 
 DEF_FILE = speex.def
 

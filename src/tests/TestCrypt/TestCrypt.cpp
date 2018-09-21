@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -9,18 +9,29 @@
 #include <QtCore>
 #include <QtTest>
 
+#include "SSL.h"
 #include "Timer.h"
 #include "CryptState.h"
 
 class TestCrypt : public QObject {
 		Q_OBJECT
 	private slots:
+		void initTestCase();
+		void cleanupTestCase();
 		void testvectors();
 		void authcrypt();
 		void ivrecovery();
 		void reverserecovery();
 		void tamper();
 };
+
+void TestCrypt::initTestCase() {
+	MumbleSSL::initialize();
+}
+
+void TestCrypt::cleanupTestCase() {
+	MumbleSSL::destroy();
+}
 
 void TestCrypt::reverserecovery() {
 	CryptState enc, dec;

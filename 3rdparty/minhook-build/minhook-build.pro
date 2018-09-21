@@ -9,20 +9,11 @@ SOURCEDIR=$$replace(BUILDDIR,-build,-src)
   error("Aborting configuration")
 }
 
-CONFIG(debug, debug|release) {
-  CONFIG += console
-  DESTDIR	= ../../debug
-}
-
-CONFIG(release, debug|release) {
-  DESTDIR	= ../../release
-}
-
 TEMPLATE = lib
 CONFIG -= qt
 CONFIG += debug_and_release
 CONFIG += staticlib
-VPATH	= ../$$SOURCEDIR
+VPATH = ../$$SOURCEDIR
 TARGET = minhook
 INCLUDEPATH *= ../$$SOURCEDIR/src ../$$SOURCEDIR/src/hde ../$$SOURCEDIR/include
 DEFINES += WIN32 _WINDOWS _USRDLL MINHOOK_EXPORTS

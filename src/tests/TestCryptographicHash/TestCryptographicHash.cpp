@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -7,11 +7,16 @@
 #include <QtTest>
 #include <QLatin1String>
 
+#include "SSL.h"
+
 #include "CryptographicHash.h"
 
 class TestCryptographicHash : public QObject {
 		Q_OBJECT
 	private slots:
+		void initTestCase();
+		void cleanupTestCase();
+
 		void sha1_data();
 		void sha1();
 
@@ -22,6 +27,14 @@ class TestCryptographicHash : public QObject {
 		void multipleResultCalls();
 		void addDataAfterResult();
 };
+
+void TestCryptographicHash::initTestCase() {
+	MumbleSSL::initialize();
+}
+
+void TestCryptographicHash::cleanupTestCase() {
+	MumbleSSL::destroy();
+}
 
 /// normalizeHash removes all whitespace from the hex-encoded hash string.
 static QString normalizeHash(QString str) {

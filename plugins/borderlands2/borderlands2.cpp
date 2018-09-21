@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -35,12 +35,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */ 
 
-#include "../mumble_plugin_win32_32bit.h"
+#include "../mumble_plugin_win32.h"
 #include <algorithm>
 
-procptr32_t vects_ptr;
-procptr32_t state_ptr;
-procptr32_t character_name_ptr_loc;
+procptr_t vects_ptr;
+procptr_t state_ptr;
+procptr_t character_name_ptr_loc;
 
 static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, float *camera_pos, float *camera_front, float *camera_top, std::string &, std::wstring &identity)
 {
@@ -80,9 +80,9 @@ static int fetch(float *avatar_pos, float *avatar_front, float *avatar_top, floa
 
 
 	// Extract the character name
-	procptr32_t ptr1 = peekProc<procptr32_t>(character_name_ptr_loc);
-	procptr32_t ptr2 = peekProc<procptr32_t>(ptr1 + 0xC);
-	procptr32_t character_name_ptr = ptr2 + 0x80;
+	procptr_t ptr1 = peekProcPtr(character_name_ptr_loc);
+	procptr_t ptr2 = peekProcPtr(ptr1 + 0xC);
+	procptr_t character_name_ptr = ptr2 + 0x80;
 
 	char character_name[16]; // The game limits us to 15 char names
 	ok = peekProc(character_name_ptr, character_name);

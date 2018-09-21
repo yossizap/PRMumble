@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -23,8 +23,10 @@
 
 class AudioInput;
 class CELTCodec;
+class OpusCodec;
 struct CELTEncoder;
 struct OpusEncoder;
+struct DenoiseState;
 typedef boost::shared_ptr<AudioInput> AudioInputPtr;
 
 class AudioInputRegistrar {
@@ -72,7 +74,9 @@ class AudioInput : public QThread {
 		inMixerFunc chooseMixer(const unsigned int nchan, SampleFormat sf, quint64 mask);
 		void resetAudioProcessor();
 
+		OpusCodec *oCodec;
 		OpusEncoder *opusState;
+		DenoiseState *denoiseState;
 		bool selectCodec();
 		
 		typedef boost::array<unsigned char, 960> EncodingOutputBuffer;

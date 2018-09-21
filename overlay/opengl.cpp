@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -356,7 +356,7 @@ void checkOpenGLHook() {
 
 			// Add a ref to ourselves; we do NOT want to get unloaded directly from this process.
 			HMODULE hTempSelf = NULL;
-			GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, reinterpret_cast<char *>(&checkOpenGLHook), &hTempSelf);
+			GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, reinterpret_cast<LPCTSTR>(&checkOpenGLHook), &hTempSelf);
 
 #define INJECT(handle, name) {\
 	o##name = reinterpret_cast<t##name>(GetProcAddress(handle, #name));\

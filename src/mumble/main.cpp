@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -43,7 +43,9 @@
 
 #if defined(USE_STATIC_QT_PLUGINS) && QT_VERSION < 0x050000
 Q_IMPORT_PLUGIN(qtaccessiblewidgets)
-Q_IMPORT_PLUGIN(qico)
+# ifdef Q_OS_WIN
+   Q_IMPORT_PLUGIN(qico)
+# endif
 Q_IMPORT_PLUGIN(qsvg)
 Q_IMPORT_PLUGIN(qsvgicon)
 # ifdef Q_OS_MAC
@@ -63,6 +65,8 @@ extern void os_init();
 extern char *os_lang;
 
 #ifdef Q_OS_WIN
+// from os_early_win.cpp
+extern int os_early_init();
 // from os_win.cpp
 extern HWND mumble_mw_hwnd;
 #endif // Q_OS_WIN
@@ -73,6 +77,13 @@ extern "C" __declspec(dllexport) int main(int argc, char **argv) {
 int main(int argc, char **argv) {
 #endif
 	int res = 0;
+
+#if defined(Q_OS_WIN)
+	int ret = os_early_init();
+	if (ret != 0) {
+		return ret;
+	}
+#endif
 
 	QT_REQUIRE_VERSION(argc, argv, "4.4.0");
 
@@ -126,6 +137,7 @@ int main(int argc, char **argv) {
 	bool bAllowMultiple = false;
 	bool bStartMinimized = false;
 	bool suppressIdentity = false;
+	bool customJackClientName = false;
 	bool bRpcMode = false;
 	QString rpcCommand;
 	QUrl url;
@@ -154,6 +166,8 @@ int main(int argc, char **argv) {
 					"                Starts PR Mumble minimized to the tray.\n"
 					"  -n, --noidentity\n"
 					"                Suppress loading of identity files (i.e., certificates.)\n"
+					"  -jn, --jackname\n"
+					"                Set custom Jack client name.\n"
 					"  --license\n"
 					"                Show the Mumble license.\n"
 					"  --authors\n"
@@ -206,6 +220,9 @@ int main(int argc, char **argv) {
 			} else if (args.at(i) == QLatin1String("-n") || args.at(i) == QLatin1String("--noidentity")) {
 				suppressIdentity = true;
 				g.s.bSuppressIdentity = true;
+			} else if (args.at(i) == QLatin1String("-jn") || args.at(i) == QLatin1String("--jackname")) {
+				g.s.qsJackClientName = QString(args.at(i+1));
+				customJackClientName = true;
 			} else if (args.at(i) == QLatin1String("-license") || args.at(i) == QLatin1String("--license")) {
 				printf("%s\n", qPrintable(License::license()));
 				return 0;
@@ -410,7 +427,7 @@ int main(int argc, char **argv) {
 	g.l = new Log();
 
 	// Initialize database
-	g.db = new Database();
+	g.db = new Database(QLatin1String("main"));
 
 #ifdef USE_BONJOUR
 	// Initialize bonjour
@@ -574,7 +591,7 @@ int main(int argc, char **argv) {
 	ServerHandlerPtr sh = g.sh;
 	if (sh && sh->isRunning()) {
 		url = sh->getServerURL();
-		Database::setShortcuts(g.sh->qbaDigest, g.s.qlShortcuts);
+		g.db->setShortcuts(g.sh->qbaDigest, g.s.qlShortcuts);
 	}
 
 	Audio::stop();
@@ -631,6 +648,9 @@ int main(int argc, char **argv) {
 	// correctly.
 	userLockFile.release();
 #endif
+
+	// Tear down OpenSSL state.
+	MumbleSSL::destroy();
 	
 	// At this point termination of our process is immenent. We can safely
 	// launch another version of Mumble. The reason we do an actual
@@ -644,6 +664,7 @@ int main(int argc, char **argv) {
 		
 		if (bAllowMultiple)   arguments << QLatin1String("--multiple");
 		if (suppressIdentity) arguments << QLatin1String("--noidentity");
+		if (customJackClientName) arguments << QLatin1String("--jackname ") + g.s.qsJackClientName;
 		if (!url.isEmpty())   arguments << url.toString();
 		
 		qWarning() << "Triggering restart of Mumble with arguments: " << arguments;

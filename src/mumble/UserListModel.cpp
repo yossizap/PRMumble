@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -89,7 +89,7 @@ QVariant UserListModel::data(const QModelIndex &dataIndex, int role) const {
 			case COL_INACTIVEDAYS: return tr("Last seen: %1").arg(user.last_seen().empty() ?
 				                                                      tr("Never")
 				                                                    : Qt::escape(u8(user.last_seen())));
-			case COL_LASTCHANNEL:  return tr("Channel id: %1").arg(user.last_channel());
+			case COL_LASTCHANNEL:  return tr("Channel ID: %1").arg(user.last_channel());
 			default:               return QVariant();
 		}
 	} else if (role == Qt::UserRole) {

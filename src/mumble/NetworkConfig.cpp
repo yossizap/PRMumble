@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -57,7 +57,6 @@ void NetworkConfig::load(const Settings &r) {
 	qleUsername->setText(r.qsProxyUsername);
 	qlePassword->setText(r.qsProxyPassword);
 
-	loadCheckBox(qcbImageDownload, r.iMaxImageSize <= 0);
 	loadCheckBox(qcbHideOS, s.bHideOS);
 
 	loadCheckBox(qcbAutoUpdate, r.bUpdateCheck);
@@ -83,12 +82,6 @@ void NetworkConfig::save() const {
 	s.usProxyPort = qlePort->text().toUShort();
 	s.qsProxyUsername = qleUsername->text();
 	s.qsProxyPassword = qlePassword->text();
-
-	if (qcbImageDownload->isChecked()) {
-		s.iMaxImageSize = 0;
-	} else if (s.iMaxImageSize <= 0) {
-		s.iMaxImageSize = s.ciDefaultMaxImageSize;
-	}
 
 	s.bUpdateCheck=qcbAutoUpdate->isChecked();
 	s.bPluginCheck=qcbPluginUpdate->isChecked();

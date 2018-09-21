@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -15,6 +15,7 @@
 #include "Version.h"
 #include "SSL.h"
 #include "EnvUtils.h"
+#include "FFDHE.h"
 
 #if defined(USE_QSSLDIFFIEHELLMANPARAMETERS)
 # include <QSslDiffieHellmanParameters>
@@ -68,9 +69,13 @@ MetaParams::MetaParams() {
 	iOpusThreshold = 100;
 
 	iChannelNestingLimit = 10;
+	iChannelCountLimit = 1000;
 
 	qrUserName = QRegExp(QLatin1String("[-=\\w\\[\\]\\{\\}\\(\\)\\@\\|\\.]+"));
 	qrChannelName = QRegExp(QLatin1String("[ \\-=\\w\\#\\[\\]\\{\\}\\(\\)\\@\\|]+"));
+
+	iMessageLimit = 1;
+	iMessageBurst = 5;
 
 	qsCiphers = MumbleSSL::defaultOpenSSLCipherString();
 
@@ -340,6 +345,7 @@ void MetaParams::read(QString fname) {
 	iOpusThreshold = typeCheckedFromSettings("opusthreshold", iOpusThreshold);
 
 	iChannelNestingLimit = typeCheckedFromSettings("channelnestinglimit", iChannelNestingLimit);
+	iChannelCountLimit = typeCheckedFromSettings("channelcountlimit", iChannelCountLimit);
 
 #ifdef Q_OS_UNIX
 	qsName = qsSettings->value("uname").toString();
@@ -365,6 +371,9 @@ void MetaParams::read(QString fname) {
 
 	qrUserName = QRegExp(typeCheckedFromSettings("username", qrUserName.pattern()));
 	qrChannelName = QRegExp(typeCheckedFromSettings("channelname", qrChannelName.pattern()));
+
+	iMessageLimit = typeCheckedFromSettings("messagelimit", 1);
+	iMessageBurst = typeCheckedFromSettings("messageburst", 5);
 
 	bool bObfuscate = typeCheckedFromSettings("obfuscate", false);
 	if (bObfuscate) {
@@ -413,6 +422,7 @@ void MetaParams::read(QString fname) {
 	qmConfig.insert(QLatin1String("suggestpushtotalk"), qvSuggestPushToTalk.isNull() ? QString() : qvSuggestPushToTalk.toString());
 	qmConfig.insert(QLatin1String("opusthreshold"), QString::number(iOpusThreshold));
 	qmConfig.insert(QLatin1String("channelnestinglimit"), QString::number(iChannelNestingLimit));
+	qmConfig.insert(QLatin1String("channelcountlimit"), QString::number(iChannelCountLimit));
 	qmConfig.insert(QLatin1String("sslCiphers"), qsCiphers);
 	qmConfig.insert(QLatin1String("sslDHParams"), QString::fromLatin1(qbaDHParams.constData()));
 }
@@ -428,7 +438,7 @@ bool MetaParams::loadSSLSettings() {
 	QString qsSSLCert = qsSettings->value("sslCert").toString();
 	QString qsSSLKey = qsSettings->value("sslKey").toString();
 	QString qsSSLCA = qsSettings->value("sslCA").toString();
-	QString qsSSLDHParams = qsSettings->value("sslDHParams").toString();
+	QString qsSSLDHParams = typeCheckedFromSettings(QLatin1String("sslDHParams"), QString(QLatin1String("@ffdhe2048")));
 
 	qbaPassPhrase = qsSettings->value("sslPassPhrase").toByteArray();
 
@@ -519,12 +529,27 @@ bool MetaParams::loadSSLSettings() {
 
 #if defined(USE_QSSLDIFFIEHELLMANPARAMETERS)
 	if (! qsSSLDHParams.isEmpty()) {
-		QFile pem(qsSSLDHParams);
-		if (pem.open(QIODevice::ReadOnly)) {
-			dhparams = pem.readAll();
-			pem.close();
+		if (qsSSLDHParams.startsWith(QLatin1String("@"))) {
+			QString group = qsSSLDHParams.mid(1).trimmed();
+			QByteArray pem = FFDHE::PEMForNamedGroup(group);
+			if (pem.isEmpty()) {
+				QStringList names = FFDHE::NamedGroups();
+				QStringList atNames;
+				foreach (QString name, names) {
+					atNames << QLatin1String("@") + name;
+				}
+				QString supported = atNames.join(QLatin1String(", "));
+				qFatal("MetaParms: Diffie-Hellman parameters with name '%s' is not available. (Supported: %s)", qPrintable(qsSSLDHParams), qPrintable(supported));
+			}
+			dhparams = pem;
 		} else {
-			qCritical("MetaParams: Failed to read %s", qPrintable(qsSSLDHParams));
+			QFile pem(qsSSLDHParams);
+			if (pem.open(QIODevice::ReadOnly)) {
+				dhparams = pem.readAll();
+				pem.close();
+			} else {
+				qFatal("MetaParams: Failed to read %s", qPrintable(qsSSLDHParams));
+			}
 		}
 	}
 
@@ -533,13 +558,14 @@ bool MetaParams::loadSSLSettings() {
 		if (qdhp.isValid()) {
 			tmpDHParams = dhparams;
 		} else {
-			qCritical("MetaParams: Unable to use specified Diffie-Hellman parameters: %s", qPrintable(qdhp.errorString()));
+			qFatal("MetaParams: Unable to use specified Diffie-Hellman parameters: %s", qPrintable(qdhp.errorString()));
 			return false;
 		}
 	}
 #else
-	if (! qsSSLDHParams.isEmpty()) {
-		qCritical("MetaParams: This version of Murmur does not support Diffie-Hellman parameters (sslDHParams). Murmur will not start unless you remove the option from your murmur.ini file.");
+	QString qsSSLDHParamsIniValue = qsSettings->value(QLatin1String("sslDHParams")).toString();
+	if (! qsSSLDHParamsIniValue.isEmpty()) {
+		qFatal("MetaParams: This version of Murmur does not support Diffie-Hellman parameters (sslDHParams). Murmur will not start unless you remove the option from your murmur.ini file.");
 		return false;
 	}
 #endif

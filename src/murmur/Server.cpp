@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -392,11 +392,14 @@ void Server::readParams() {
 	bForceExternalAuth = Meta::mp.bForceExternalAuth;
 	qrUserName = Meta::mp.qrUserName;
 	qrChannelName = Meta::mp.qrChannelName;
+	iMessageLimit = Meta::mp.iMessageLimit;
+	iMessageBurst = Meta::mp.iMessageBurst;
 	qvSuggestVersion = Meta::mp.qvSuggestVersion;
 	qvSuggestPositional = Meta::mp.qvSuggestPositional;
 	qvSuggestPushToTalk = Meta::mp.qvSuggestPushToTalk;
 	iOpusThreshold = Meta::mp.iOpusThreshold;
 	iChannelNestingLimit = Meta::mp.iChannelNestingLimit;
+	iChannelCountLimit = Meta::mp.iChannelCountLimit;
 
 	QString qsHost = getConf("host", QString()).toString();
 	if (! qsHost.isEmpty()) {
@@ -463,9 +466,19 @@ void Server::readParams() {
 	iOpusThreshold = getConf("opusthreshold", iOpusThreshold).toInt();
 
 	iChannelNestingLimit = getConf("channelnestinglimit", iChannelNestingLimit).toInt();
+	iChannelCountLimit = getConf("channelcountlimit", iChannelCountLimit).toInt();
 
 	qrUserName=QRegExp(getConf("username", qrUserName.pattern()).toString());
 	qrChannelName=QRegExp(getConf("channelname", qrChannelName.pattern()).toString());
+
+	iMessageLimit=getConf("messagelimit", iMessageLimit).toUInt();
+	if (iMessageLimit < 1) { // Prevent disabling messages entirely
+		iMessageLimit = 1;
+	}
+	iMessageBurst=getConf("messageburst", iMessageBurst).toUInt();
+	if (iMessageBurst < 1) { // Prevent disabling messages entirely
+		iMessageBurst = 1;
+	}
 }
 
 void Server::setLiveConf(const QString &key, const QString &value) {
@@ -582,6 +595,19 @@ void Server::setLiveConf(const QString &key, const QString &value) {
 		iOpusThreshold = (i >= 0 && !v.isNull()) ? qBound(0, i, 100) : Meta::mp.iOpusThreshold;
 	else if (key == "channelnestinglimit")
 		iChannelNestingLimit = (i >= 0 && !v.isNull()) ? i : Meta::mp.iChannelNestingLimit;
+	else if (key == "channelcountlimit")
+		iChannelCountLimit = (i >= 0 && !v.isNull()) ? i : Meta::mp.iChannelCountLimit;
+	else if (key == "messagelimit") {
+		iMessageLimit = (!v.isNull()) ? v.toUInt() : Meta::mp.iMessageLimit;
+		if (iMessageLimit < 1) {
+			iMessageLimit = 1;
+		}
+	} else if (key == "messageburst") {
+		iMessageBurst = (!v.isNull()) ? v.toUInt() : Meta::mp.iMessageBurst;
+		if (iMessageBurst < 1) {
+			iMessageBurst = 1;
+		}
+	}
 }
 
 #ifdef USE_BONJOUR
@@ -844,21 +870,25 @@ void Server::run() {
 
 				MessageHandler::UDPMessageType msgType = static_cast<MessageHandler::UDPMessageType>((buffer[0] >> 5) & 0x7);
 
-				switch (msgType) {
-					case MessageHandler::UDPVoiceSpeex:
-					case MessageHandler::UDPVoiceCELTAlpha:
-					case MessageHandler::UDPVoiceCELTBeta:
-						if (bOpus)
-							break;
-					case MessageHandler::UDPVoiceOpus: {
-							u->aiUdpFlag = 1;
-							processMsg(u, buffer, len);
-							break;
-						}
-					case MessageHandler::UDPPing: {
-							QByteArray qba;
-							sendMessage(u, buffer, len, qba, true);
-						}
+				if (msgType == MessageHandler::UDPVoiceSpeex ||
+				    msgType == MessageHandler::UDPVoiceCELTAlpha ||
+				    msgType == MessageHandler::UDPVoiceCELTBeta ||
+				    msgType == MessageHandler::UDPVoiceOpus) {
+
+					// Allow all voice packets through by default.
+					bool ok = true;
+					// ...Unless we're in Opus mode. In Opus mode, only Opus packets are allowed.
+					if (bOpus && msgType != MessageHandler::UDPVoiceOpus) {
+						ok = false;
+					}
+
+					if (ok) {
+						u->aiUdpFlag = 1;
+						processMsg(u, buffer, len);
+					}
+				} else if (msgType == MessageHandler::UDPPing) {
+					QByteArray qba;
+					sendMessage(u, buffer, len, qba, true);
 				}
 #ifdef Q_OS_UNIX
 				fds[i].revents = 0;
@@ -1452,8 +1482,8 @@ void Server::message(unsigned int uiType, const QByteArray &qbaMsg, ServerUser *
 	}
 
 	if (uiType == MessageHandler::UDPTunnel) {
-		int l = qbaMsg.size();
-		if (l < 2)
+		int len = qbaMsg.size();
+		if (len < 2)
 			return;
 
 		QReadLocker rl(&qrwlVoiceThread);
@@ -1464,17 +1494,21 @@ void Server::message(unsigned int uiType, const QByteArray &qbaMsg, ServerUser *
 
 		MessageHandler::UDPMessageType msgType = static_cast<MessageHandler::UDPMessageType>((buffer[0] >> 5) & 0x7);
 
-		switch (msgType) {
-			case MessageHandler::UDPVoiceCELTAlpha:
-			case MessageHandler::UDPVoiceCELTBeta:
-			case MessageHandler::UDPVoiceSpeex:
-				if (bOpus)
-					break;
-			case MessageHandler::UDPVoiceOpus:
-				processMsg(u, buffer, l);
-				break;
-			default:
-				break;
+		if (msgType == MessageHandler::UDPVoiceSpeex ||
+		    msgType == MessageHandler::UDPVoiceCELTAlpha ||
+		    msgType == MessageHandler::UDPVoiceCELTBeta ||
+		    msgType == MessageHandler::UDPVoiceOpus) {
+
+			// Allow all voice packets through by default.
+			bool ok = true;
+			// ...Unless we're in Opus mode. In Opus mode, only Opus packets are allowed.
+			if (bOpus && msgType != MessageHandler::UDPVoiceOpus) {
+				ok = false;
+			}
+
+			if (ok) {
+				processMsg(u, buffer, len);
+			}
 		}
 
 		return;

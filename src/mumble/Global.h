@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -30,6 +30,7 @@ class RealityData;
 class BonjourClient;
 class OverlayClient;
 class CELTCodec;
+class OpusCodec;
 class LogEmitter;
 class DeveloperConsole;
 
@@ -45,6 +46,9 @@ public:
 	boost::shared_ptr<ServerHandler> sh;
 	boost::shared_ptr<AudioInput> ai;
 	boost::shared_ptr<AudioOutput> ao;
+	/**
+	 * @remark Must only be accessed from the main event loop
+	 */
 	Database *db;
 	Log *l;
 	Plugins *p;
@@ -73,6 +77,7 @@ public:
 	int iAudioBandwidth;
 	QDir qdBasePath;
 	QMap<int, CELTCodec *> qmCodecs;
+	OpusCodec *oCodec;
 	int iCodecAlpha, iCodecBeta;
 	bool bPreferAlpha;
 	bool bOpus;

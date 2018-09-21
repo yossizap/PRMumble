@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -116,6 +116,7 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void setOnTop(bool top);
 		void setShowDockTitleBars(bool doShow);
 		void updateTrayIcon();
+		void updateUserModel();
 		void focusNextMainWidget();
 		void updateTransmitModeComboBox();
 		QPair<QByteArray, QImage> openImageFile();
@@ -280,6 +281,7 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void qtvUserCurrentChanged(const QModelIndex &, const QModelIndex &);
 		void serverConnected();
 		void serverDisconnected(QAbstractSocket::SocketError, QString reason);
+		void resolverError(QAbstractSocket::SocketError, QString reason);
 		void viewCertificate(bool);
 		void openUrl(const QUrl &url);
 		void context_triggered();

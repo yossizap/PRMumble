@@ -1,4 +1,4 @@
-# Copyright 2005-2017 The Mumble Developers. All rights reserved.
+# Copyright 2005-2018 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -35,6 +35,14 @@ SUBDIRS *= src/mumble_proto
 
   CONFIG(opus):!CONFIG(no-bundled-opus) {
     SUBDIRS *= 3rdparty/opus-build
+  }
+
+  !CONFIG(no-rnnoise) {
+    CONFIG *= rnnoise
+  }
+
+  CONFIG(rnnoise):!CONFIG(no-bundled-rnnoise) {
+    SUBDIRS *= 3rdparty/rnnoise-build
   }
 
   win32 {
@@ -104,7 +112,3 @@ SUBDIRS *= src/mumble_proto
 CONFIG(tests) {
   SUBDIRS *= src/tests
 }
-
-DIST=LICENSE INSTALL README README.Linux CHANGES
-
-include(scripts/scripts.pro)

@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -67,7 +67,8 @@ static HANDLE loadQoS() {
 }
 #endif
 
-ServerHandler::ServerHandler() {
+ServerHandler::ServerHandler()
+    : database(new Database(QLatin1String("ServerHandler"))) {
 	cConnection.reset();
 	qusUdp = NULL;
 	bStrong = false;
@@ -110,6 +111,8 @@ ServerHandler::ServerHandler() {
 	if (hQoS)
 		Connection::setQoS(hQoS);
 #endif
+
+  connect(this, SIGNAL(pingRequested()), this, SLOT(sendPingInternal()), Qt::QueuedConnection);
 }
 
 ServerHandler::~ServerHandler() {
@@ -266,6 +269,7 @@ void ServerHandler::hostnameResolved() {
 	// error code in case our hostname lookup failed.
 	if (records.isEmpty()) {
 		exit(-1);
+		return;
 	}
 
 	// Create the list of target host:port pairs
@@ -286,12 +290,13 @@ void ServerHandler::hostnameResolved() {
 void ServerHandler::run() {
 	// Resolve the hostname...
 	{
-		ServerResolver *sr = new ServerResolver();
-		QObject::connect(sr, SIGNAL(resolved()), this, SLOT(hostnameResolved()));
-		sr->resolve(qsHostName, usPort);
+		ServerResolver sr;
+		QObject::connect(&sr, SIGNAL(resolved()), this, SLOT(hostnameResolved()));
+		sr.resolve(qsHostName, usPort);
 		int ret = exec();
 		if (ret < 0) {
 			qWarning("ServerHandler: failed to resolve hostname");
+			emit error(QAbstractSocket::HostNotFoundError, tr("Unable to resolve hostname"));
 			return;
 		}
 	}
@@ -301,9 +306,11 @@ void ServerHandler::run() {
 	do {
 		saTargetServer = qlAddresses.takeFirst();
 
+		tConnectionTimeoutTimer = NULL;
 		qbaDigest = QByteArray();
 		bStrong = true;
 		qtsSock = new QSslSocket(this);
+		qtsSock->setPeerVerifyName(qsHostName);
 
 		if (! g.s.bSuppressIdentity && CertWizard::validateCert(g.s.kpCertificate)) {
 			qtsSock->setPrivateKey(g.s.kpCertificate.second);
@@ -347,7 +354,7 @@ void ServerHandler::run() {
 		// Setup ping timer;
 		QTimer *ticker = new QTimer(this);
 		connect(ticker, SIGNAL(timeout()), this, SLOT(sendPing()));
-		ticker->start(5000);
+		ticker->start(g.s.iPingIntervalMsec);
 
 		g.mw->rtLast = MumbleProto::Reject_RejectType_None;
 
@@ -391,6 +398,7 @@ void ServerHandler::run() {
 			msleep(100);
 		}
 		delete qtsSock;
+		delete tConnectionTimeoutTimer;
 	} while (shouldTryNextTargetServer && !qlAddresses.isEmpty());
 }
 
@@ -436,18 +444,27 @@ void ServerHandler::setSslErrors(const QList<QSslError> &errors) {
 #endif
 
 	bStrong = false;
-	if ((qscCert.size() > 0)  && (QString::fromLatin1(qscCert.at(0).digest(QCryptographicHash::Sha1).toHex()) == Database::getDigest(qsHostName, usPort)))
+	if ((qscCert.size() > 0)  && (QString::fromLatin1(qscCert.at(0).digest(QCryptographicHash::Sha1).toHex()) == database->getDigest(qsHostName, usPort)))
 		connection->proceedAnyway();
 	else
 		qlErrors = newErrors;
 }
 
 void ServerHandler::sendPing() {
+	emit pingRequested();
+}
+
+void ServerHandler::sendPingInternal() {
 	ConnectionPtr connection(cConnection);
 	if (!connection)
 		return;
 
 	if (qtsSock->state() != QAbstractSocket::ConnectedState) {
+		return;
+	}
+
+	// Ensure the TLS handshake has completed before sending pings.
+	if (!qtsSock->isEncrypted()) {
 		return;
 	}
 
@@ -542,14 +559,14 @@ void ServerHandler::message(unsigned int msgType, const QByteArray &qbaMsg) {
 					else
 						g.mw->msgBox(tr("UDP packets cannot be received from the server. Switching to TCP mode."));
 
-					Database::setUdp(qbaDigest, false);
+					database->setUdp(qbaDigest, false);
 				}
 			} else if (!bUdp && (cs.uiRemoteGood > 3) && (cs.uiGood > 3)) {
 				bUdp = true;
 				if (! NetworkConfig::TcpModeEnabled()) {
 					g.mw->msgBox(tr("UDP packets can be sent to and received from the server. Switching back to UDP mode."));
 
-					Database::setUdp(qbaDigest, true);
+					database->setUdp(qbaDigest, true);
 				}
 			}
 		}
@@ -609,7 +626,7 @@ void ServerHandler::serverConnectionStateChanged(QAbstractSocket::SocketState st
 		tConnectionTimeoutTimer = new QTimer();
 		connect(tConnectionTimeoutTimer, SIGNAL(timeout()), this, SLOT(serverConnectionTimeoutOnConnect()));
 		tConnectionTimeoutTimer->setSingleShot(true);
-		tConnectionTimeoutTimer->start(30000);
+		tConnectionTimeoutTimer->start(g.s.iConnectionTimeoutDurationMsec);
 	} else if (state == QAbstractSocket::ConnectedState) {
 		// Start TLS handshake
 		qtsSock->startClientEncryption();
@@ -633,7 +650,7 @@ void ServerHandler::serverConnectionConnected() {
 	if (! qscCert.isEmpty()) {
 		const QSslCertificate &qsc = qscCert.last();
 		qbaDigest = sha1(qsc.publicKey().toDer());
-		bUdp = Database::getUdp(qbaDigest);
+		bUdp = database->getUdp(qbaDigest);
 	} else {
 		// Shouldn't reach this
 		qCritical("Server must have a certificate. Dropping connection");
@@ -660,7 +677,7 @@ void ServerHandler::serverConnectionConnected() {
 	mpa.set_username(u8(qsUserName));
 	mpa.set_password(u8(qsPassword));
 
-	QStringList tokens = Database::getTokens(qbaDigest);
+	QStringList tokens = database->getTokens(qbaDigest);
 	foreach(const QString &qs, tokens)
 		mpa.add_tokens(u8(qs));
 
@@ -685,6 +702,9 @@ void ServerHandler::serverConnectionConnected() {
 		}
 
 		qusUdp = new QUdpSocket(this);
+		if (! qusUdp) {
+			qFatal("ServerHandler: qusUdp is unexpectedly a null addr");
+		}
 		if (g.s.bUdpForceTcpAddr) {
 			qusUdp->bind(qhaLocal, 0);
 		} else {
@@ -889,7 +909,7 @@ void ServerHandler::setUserTexture(unsigned int uiSession, const QByteArray &qba
 	sendMessage(mpus);
 
 	if (! texture.isEmpty()) {
-		Database::setBlob(sha1(texture), texture);
+		database->setBlob(sha1(texture), texture);
 	}
 }
 

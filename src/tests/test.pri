@@ -1,4 +1,4 @@
-# Copyright 2005-2017 The Mumble Developers. All rights reserved.
+# Copyright 2005-2018 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -27,8 +27,13 @@ LANGUAGE = C++
 VPATH *= ../.. ../../murmur ../../mumble
 INCLUDEPATH *= ../.. ../../murmur ../../mumble
 
+SOURCES += PlatformCheck.cpp
+HEADERS += PlatformCheck.h
+
 # We have to depend on OpenSSL in all tests
 # for no-pch builds to work. Our PCH headers
 # include OpenSSL, and if the headers aren't
 # in the include path, the build will break.
 include(../../qmake/openssl.pri)
+
+DESTDIR = $$DESTDIR/tests

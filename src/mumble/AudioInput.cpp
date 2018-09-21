@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -9,6 +9,7 @@
 
 #include "AudioOutput.h"
 #include "CELTCodec.h"
+#include "OpusCodec.h"
 #include "ServerHandler.h"
 #include "MainWindow.h"
 #include "User.h"
@@ -19,8 +20,10 @@
 #include "NetworkConfig.h"
 #include "VoiceRecorder.h"
 
-#ifdef USE_OPUS
-#include "opus.h"
+#ifdef USE_RNNOISE
+extern "C" {
+#include "rnnoise.h"
+}
 #endif
 
 // Remember that we cannot use static member classes that are not pointers, as the constructor
@@ -86,15 +89,22 @@ AudioInput::AudioInput() : opusBuffer(g.s.iFramesPerPacket * (SAMPLE_RATE / 100)
 	iFrameSize = SAMPLE_RATE / 100;
 
 #ifdef USE_OPUS
-	if (!g.s.bUseOpusMusicEncoding) {
-		opusState = opus_encoder_create(SAMPLE_RATE, 1, OPUS_APPLICATION_VOIP, NULL);
-		qWarning("AudioInput: Opus encoder set for VOIP");
-	} else {
-		opusState = opus_encoder_create(SAMPLE_RATE, 1, OPUS_APPLICATION_AUDIO, NULL);
-		qWarning("AudioInput: Opus encoder set for Music");
-	}
+	oCodec = g.oCodec;
+	if (oCodec) {
+		if (!g.s.bUseOpusMusicEncoding) {
+			opusState = oCodec->opus_encoder_create(SAMPLE_RATE, 1, OPUS_APPLICATION_VOIP, NULL);
+			qWarning("AudioInput: Opus encoder set for VOIP");
+		} else {
+			opusState = oCodec->opus_encoder_create(SAMPLE_RATE, 1, OPUS_APPLICATION_AUDIO, NULL);
+			qWarning("AudioInput: Opus encoder set for Music");
+		}
 
-	opus_encoder_ctl(opusState, OPUS_SET_VBR(0)); // CBR
+		oCodec->opus_encoder_ctl(opusState, OPUS_SET_VBR(0)); // CBR
+	}
+#endif
+
+#ifdef USE_RNNOISE
+	denoiseState = rnnoise_create();
 #endif
 
 	qWarning("AudioInput: %d bits/s, %d hz, %d sample", iAudioQuality, iSampleRate, iFrameSize);
@@ -149,8 +159,15 @@ AudioInput::~AudioInput() {
 	wait();
 
 #ifdef USE_OPUS
-	if (opusState)
-		opus_encoder_destroy(opusState);
+	if (opusState) {
+		oCodec->opus_encoder_destroy(opusState);
+	}
+#endif
+
+#ifdef USE_RNNOISE
+	if (denoiseState) {
+		rnnoise_destroy(denoiseState);
+	}
 #endif
 
 	if (ceEncoder) {
@@ -729,13 +746,13 @@ int AudioInput::encodeOpusFrame(short *source, int size, EncodingOutputBuffer& b
 	int len = 0;
 #ifdef USE_OPUS
 	if (bResetEncoder) {
-		opus_encoder_ctl(opusState, OPUS_RESET_STATE, NULL);
+		oCodec->opus_encoder_ctl(opusState, OPUS_RESET_STATE, NULL);
 		bResetEncoder = false;
 	}
 
-	opus_encoder_ctl(opusState, OPUS_SET_BITRATE(iAudioQuality));
+	oCodec->opus_encoder_ctl(opusState, OPUS_SET_BITRATE(iAudioQuality));
 
-	len = opus_encode(opusState, source, size, &buffer[0], static_cast<opus_int32>(buffer.size()));
+	len = oCodec->opus_encode(opusState, source, size, &buffer[0], static_cast<opus_int32>(buffer.size()));
 	const int tenMsFrameCount = (size / iFrameSize);
 	iBitrate = (len * 100 * 8) / tenMsFrameCount;
 #endif
@@ -794,6 +811,22 @@ void AudioInput::encodeAudioFrame() {
 
 	QMutexLocker l(&qmSpeex);
 	resetAudioProcessor();
+
+#ifdef USE_RNNOISE
+	// At the time of writing this code, RNNoise only supports a sample rate of 48000 Hz.
+	if (g.s.bDenoise && denoiseState && (iFrameSize == 480)) {
+		float denoiseFrames[480];
+		for (int i = 0; i < 480; i++) {
+			denoiseFrames[i] = psMic[i];
+		}
+
+		rnnoise_process_frame(denoiseState, denoiseFrames, denoiseFrames);
+
+		for (int i = 0; i < 480; i++) {
+			psMic[i] = denoiseFrames[i];
+		}
+	}
+#endif
 
 	speex_preprocess_ctl(sppPreprocess, SPEEX_PREPROCESS_GET_AGC_GAIN, &iArg);
 	float gainValue = static_cast<float>(iArg);

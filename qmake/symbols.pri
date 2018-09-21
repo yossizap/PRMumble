@@ -1,16 +1,10 @@
-# Copyright 2005-2017 The Mumble Developers. All rights reserved.
+# Copyright 2005-2018 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 CONFIG(symbols):macx {
-	CONFIG(debug, debug|release) {
-		DSYM_DESTDIR = $${PWD}/debug
-	}
-
-	CONFIG(release, debug|release) {
-		DSYM_DESTDIR = $${PWD}/release
-	}
+	DSYM_DESTDIR = $${DESTDIR}
 
 	contains(TEMPLATE, 'app') {
 		DSYM_TARGET_FULLPATH = ${TARGET}

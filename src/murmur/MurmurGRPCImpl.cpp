@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -123,7 +123,7 @@ void GRPCStart() {
 
 	service = new MurmurRPCImpl(address, credentials);
 
-	qWarning("GRPC: lisetning on '%s'", qPrintable(address));
+	qWarning("GRPC: listening on '%s'", qPrintable(address));
 }
 
 void GRPCStop() {
@@ -132,74 +132,17 @@ void GRPCStop() {
 	}
 }
 
-MurmurRPCImpl::MurmurRPCImpl(const QString &address, std::shared_ptr<::grpc::ServerCredentials> credentials) : m_cleanupTimer(this) {
+MurmurRPCImpl::MurmurRPCImpl(const QString &address, std::shared_ptr<::grpc::ServerCredentials> credentials) {
 	::grpc::ServerBuilder builder;
 	builder.AddListeningPort(u8(address), credentials);
 	builder.RegisterService(&m_V1Service);
 	m_completionQueue = builder.AddCompletionQueue();
 	m_server = builder.BuildAndStart();
 	meta->connectListener(this);
-	connect(&m_cleanupTimer, SIGNAL(timeout()), this, SLOT(cleanup()));
-	m_cleanupTimer.setSingleShot(false);
-	m_cleanupTimer.start(1000 * 60);
 	start();
 }
 
 MurmurRPCImpl::~MurmurRPCImpl() {
-}
-
-// This function periodically runs to clean up disconnected listeners. We need
-// this because (as of 2015-07-21) the grpc library does not tell us when a
-// client disconnects.
-void MurmurRPCImpl::cleanup() {
-	for (auto i = m_metaServiceListeners.begin(); i != m_metaServiceListeners.end(); ) {
-		auto listener = *i;
-		if (listener->context.IsCancelled()) {
-			i = m_metaServiceListeners.erase(i);
-			listener->deref();
-		} else {
-			++i;
-		}
-	}
-
-	for (auto i = m_contextActionListeners.begin(); i != m_contextActionListeners.end(); ) {
-		auto &ref = i.value();
-		for (auto j = ref.begin(); j != ref.end(); ) {
-			auto listener = j.value();
-			if (listener->context.IsCancelled()) {
-				j = ref.erase(j);
-				listener->deref();
-			} else {
-				++j;
-			}
-		}
-
-		if (ref.isEmpty()) {
-			i = m_contextActionListeners.erase(i);
-		} else {
-			++i;
-		}
-	}
-
-	for (auto i = m_serverServiceListeners.begin(); i != m_serverServiceListeners.end(); ) {
-		auto listener = i.value();
-		if (listener->context.IsCancelled()) {
-			i = m_serverServiceListeners.erase(i);
-			listener->deref();
-		} else {
-			++i;
-		}
-	}
-
-	for (auto i = m_authenticators.begin(); i != m_authenticators.end(); ) {
-		auto listener = i.value();
-		if (listener->context.IsCancelled()) {
-			i = m_authenticators.erase(i);
-			listener->deref();
-		} else {
-			++i;
-		}
-	}
 }
 
 // ToRPC/FromRPC methods convert data to/from grpc protocol buffer messages.
@@ -431,12 +374,8 @@ void MurmurRPCImpl::removeTextMessageFilter(const ::Server *s) {
 	if (!filter) {
 		return;
 	}
-	if (filter->context.IsCancelled()) {
-		filter->ref();
-		filter->error(::grpc::Status(::grpc::CANCELLED, "filter detached"));
-	}
+	filter->error(::grpc::Status(::grpc::CANCELLED, "filter detached"));
 	m_textMessageFilters.remove(s->iServerNum);
-	filter->deref();
 }
 
 // Removes a connected authenticator.
@@ -445,12 +384,8 @@ void MurmurRPCImpl::removeAuthenticator(const ::Server *s) {
 	if (!authenticator) {
 		return;
 	}
-	if (!authenticator->context.IsCancelled()) {
-		authenticator->ref();
-		authenticator->error(::grpc::Status(::grpc::CANCELLED, "authenticator detached"));
-	}
+	authenticator->error(::grpc::Status(::grpc::CANCELLED, "authenticator detached"));
 	m_authenticators.remove(s->iServerNum);
-	authenticator->deref();
 }
 
 // Called when a connecting user needs to be authenticated.
@@ -1035,7 +970,7 @@ void MurmurRPCImpl::contextAction(const ::User *user, const QString &action, uns
 // exception.
 ::ServerUser *MustUser(const Server *server, unsigned int session) {
 	auto user = server->qhUsers.value(session);
-	if (!user) {
+	if (!user || user->sState != ServerUser::Authenticated) {
 		throw ::grpc::Status(::grpc::NOT_FOUND, "invalid user");
 	}
 	return user;
@@ -1265,6 +1200,15 @@ void V1_ServerEvents::impl(bool) {
 	rpc->m_serverServiceListeners.insert(server->iServerNum, this);
 }
 
+void V1_ServerEvents::done(bool) {
+	auto &ssls = rpc->m_serverServiceListeners;
+	auto i = std::find(ssls.begin(), ssls.end(), this);
+	if (i != ssls.end()) {
+		ssls.erase(i);
+	}
+	deref();
+}
+
 void V1_GetUptime::impl(bool) {
 	::MurmurRPC::Uptime uptime;
 	uptime.set_secs(meta->tUptime.elapsed()/1000000LL);
@@ -1283,6 +1227,15 @@ void V1_GetVersion::impl(bool) {
 
 void V1_Events::impl(bool) {
 	rpc->m_metaServiceListeners.insert(this);
+}
+
+void V1_Events::done(bool) {
+	auto &msls = rpc->m_metaServiceListeners;
+	auto i = std::find(msls.begin(), msls.end(), this);
+	if (i != msls.end()) {
+		msls.erase(i);
+	}
+	deref();
 }
 
 void V1_ContextActionAdd::impl(bool) {
@@ -1332,6 +1285,9 @@ void V1_ContextActionRemove::impl(bool) {
 	} else {
 		// Remove context action from all users
 		foreach(::ServerUser *user, server->qhUsers) {
+			if (user->sState != ServerUser::Authenticated) {
+				continue;
+			}
 			rpc->removeActiveContextAction(server, user, action);
 			server->sendMessage(user, mpcam);
 		}
@@ -1348,6 +1304,24 @@ void V1_ContextActionEvents::impl(bool) {
 	}
 
 	rpc->m_contextActionListeners[server->iServerNum].insert(u8(request.action()), this);
+}
+
+void V1_ContextActionEvents::done(bool) {
+	auto server = MustServer(request);
+	auto &cals = rpc->m_contextActionListeners;
+	auto &scals = cals[server->iServerNum];
+
+	auto i = std::find(scals.begin(), scals.end(), this);
+	if (i != scals.end()) {
+		scals.erase(i);
+	}
+	deref();
+	if (scals.isEmpty()) {
+		auto i = std::find(cals.begin(), cals.end(), scals);
+		if (i != cals.end()) {
+			cals.erase(i);
+		}
+	}
 }
 
 void V1_TextMessageSend::impl(bool) {
@@ -1391,6 +1365,15 @@ void V1_TextMessageFilter::impl(bool) {
 		rpc->m_textMessageFilters.insert(server->iServerNum, this);
 	};
 	stream.Read(&request, callback(onInitialize));
+}
+
+void V1_TextMessageFilter::done(bool) {
+	auto server = MustServer(request);
+	auto filter = rpc->m_textMessageFilters.value(server->iServerNum);
+	if (filter == this) {
+		rpc->m_textMessageFilters.remove(server->iServerNum);
+	}
+	deref();
 }
 
 void V1_LogQuery::impl(bool) {
@@ -1548,10 +1531,7 @@ void V1_ChannelRemove::impl(bool) {
 		throw ::grpc::Status(::grpc::INVALID_ARGUMENT, "cannot remove the root channel");
 	}
 
-	{
-		QWriteLocker wl(&server->qrwlVoiceThread);
-		server->removeChannel(channel);
-	}
+	server->removeChannel(channel);
 
 	end();
 }
@@ -1601,6 +1581,9 @@ void V1_UserQuery::impl(bool) {
 	list.mutable_server()->set_id(server->iServerNum);
 
 	foreach(const ::ServerUser *user, server->qhUsers) {
+		if (user->sState != ServerUser::Authenticated) {
+			continue;
+		}
 		auto rpcUser = list.add_users();
 		ToRPC(server, user, rpcUser);
 	}
@@ -1623,6 +1606,9 @@ void V1_UserGet::impl(bool) {
 		// Lookup user by name
 		QString qsName = u8(request.name());
 		foreach(const ::ServerUser *user, server->qhUsers) {
+			if (user->sState != ServerUser::Authenticated) {
+				continue;
+			}
 			if (user->qsName == qsName) {
 				ToRPC(server, user, &rpcUser);
 				end(rpcUser);
@@ -1979,6 +1965,14 @@ void V1_AuthenticatorStream::impl(bool) {
 		rpc->m_authenticators.insert(server->iServerNum, this);
 	};
 	stream.Read(&request, callback(onInitialize));
+}
+
+void V1_AuthenticatorStream::done(bool) {
+	auto i = std::find(rpc->m_authenticators.begin(), rpc->m_authenticators.end(), this);
+	if (i != rpc->m_authenticators.end()) {
+		rpc->m_authenticators.erase(i);
+	}
+	deref();
 }
 
 void V1_DatabaseUserQuery::impl(bool) {

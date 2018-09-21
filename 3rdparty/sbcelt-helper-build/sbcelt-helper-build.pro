@@ -1,4 +1,4 @@
-include (../../qmake/compiler.pri)
+include(../../qmake/compiler.pri)
 
 BUILDDIR=$$basename(PWD)
 SOURCEDIR=$$replace(BUILDDIR,-helper-build,-src)
@@ -49,31 +49,26 @@ SOURCES = \
         $$CELTDIR/rangeenc.c \
         $$CELTDIR/rate.c \
         $$CELTDIR/vq.c \
-	sbcelt-helper.c \
-	alloc.c
+        sbcelt-helper.c \
+        alloc.c
 
 unix:!macx {
-	UNAME=$$system(uname -s)
-	contains(UNAME, Linux) {
-		SOURCES *= ../lib/futex-linux.c seccomp-sandbox.c sbcelt-sandbox-linux.c pdeath-linux.c
-		LIBS += -lrt
-	}
-	contains(UNAME, FreeBSD) {
-		SOURCES *= ../lib/futex-freebsd.c sbcelt-sandbox-freebsd.c pdeath-kqueue.c
-	}
+  UNAME=$$system(uname -s)
+  contains(UNAME, Linux) {
+    SOURCES *= ../lib/futex-linux.c seccomp-sandbox.c sbcelt-sandbox-linux.c pdeath-linux.c
+    LIBS += -lrt
+  }
+  contains(UNAME, FreeBSD) {
+    SOURCES *= ../lib/futex-freebsd.c sbcelt-sandbox-freebsd.c pdeath-kqueue.c
+  }
 }
 
 macx {
-	SOURCES *= ../lib/futex-stub.c sbcelt-sandbox-darwin.c pdeath-kqueue.c
-}
-
-CONFIG(release, debug|release) {
-  DESTDIR = ../../release
+  SOURCES *= ../lib/futex-stub.c sbcelt-sandbox-darwin.c pdeath-kqueue.c
 }
 
 CONFIG(debug, debug|release) {
   DEFINES *= USE_LOGFILE
-  DESTDIR = ../../debug/
 }
 
 include(../../qmake/symbols.pri)

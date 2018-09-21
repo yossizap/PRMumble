@@ -1,4 +1,4 @@
-// Copyright 2005-2017 The Mumble Developers. All rights reserved.
+// Copyright 2005-2018 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -128,6 +128,9 @@ class Server : public QThread {
 		QRegExp qrUserName;
 		QRegExp qrChannelName;
 
+		unsigned int iMessageLimit;
+		unsigned int iMessageBurst;
+
 		QVariant qvSuggestVersion;
 		QVariant qvSuggestPositional;
 		QVariant qvSuggestPushToTalk;
@@ -171,6 +174,7 @@ class Server : public QThread {
 
 	private:
 		int iChannelNestingLimit;
+		int iChannelCountLimit;
 
 	public slots:
 		void regSslError(const QList<QSslError> &);
