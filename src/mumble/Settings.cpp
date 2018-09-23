@@ -406,12 +406,11 @@ Settings::Settings() {
 	bDirectInputVerboseLogging = false;
 	bEnableUIAccess = true;
 
-	for (int i=Log::firstMsgType; i<=Log::lastMsgType; ++i)
+	for (int i=Log::firstMsgType; i<=Log::lastMsgType; ++i) {
 		//qmMessages.insert(i, Settings::LogConsole | Settings::LogBalloon | Settings::LogTTS);
 		qmMessages.insert(i, Settings::LogConsole);
-
-	for (int i=Log::firstMsgType; i<=Log::lastMsgType; ++i)
 		qmMessageSounds.insert(i, QString());
+	}
 
 	qmMessageSounds[Log::CriticalError] = QLatin1String(":/Critical.ogg");
 	qmMessageSounds[Log::PermissionDenied] = QLatin1String(":/PermissionDenied.ogg");

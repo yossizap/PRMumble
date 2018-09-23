@@ -886,7 +886,7 @@ void MainWindow::openUrl(const QUrl &url) {
 		return;
 	}
 	if (url.scheme() != QLatin1String("prmumble")) {
-		g.l->log(Log::Warning, tr("URL scheme is not 'mumble'"));
+		g.l->log(Log::Warning, tr("URL scheme is not 'prmumble'"));
 		return;
 	}
 /*
@@ -3051,7 +3051,7 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 			QStringList qsl;
 			foreach(QSslError e, g.sh->qlErrors)
 				qsl << QString::fromLatin1("<li>%1</li>").arg(e.errorString());
-/*
+/* PR can't handle pop up windows - just auto accept a new certificate
 			QMessageBox qmb(QMessageBox::Warning, QLatin1String("PRMumble"),
 			                tr("<p>%1</p><ul>%2</ul><p>The specific errors with this certificate are:</p><ol>%3</ol>"
 			                   "<p>Do you wish to accept this certificate anyway?<br />(It will also be stored so you won't be asked this again.)</p>"
@@ -3075,6 +3075,11 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 				}
 				break;
 			}*/
+
+            /* Perform the "Yes" button logic without user input */
+            g.db->setDigest(host, port, QString::fromLatin1(c.digest(QCryptographicHash::Sha1).toHex()));
+            qaServerDisconnect->setEnabled(true);
+            on_Reconnect_timeout();
 		}
 	} else if (err == QAbstractSocket::SslHandshakeFailedError) {
 		QMessageBox::warning(this, tr("SSL Version mismatch"), tr("This server is using an older encryption standard, and is no longer supported by modern versions of Mumble."), QMessageBox::Ok);
