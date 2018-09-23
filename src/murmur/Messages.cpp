@@ -156,6 +156,7 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 		ok = false;
 	}
 	
+    /* Only allow clients that sent Project reality's GUID */
 	if (ok && msg.prguid() != "{7cf19ff0-2950-4551-b329-07dd9469f605}") {
 		reason = QString::fromLatin1("This server requires you to use Project Reality Mumble. This is automatically launched when playing Project Reality. http://www.realitymod.com");
 		rtType = MumbleProto::Reject_RejectType_AuthenticatorFail;
