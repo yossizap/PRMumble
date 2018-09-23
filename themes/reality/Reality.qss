@@ -113,15 +113,27 @@ QComboBox:on {
 	border-bottom-right-radius: 0;
 }
 
-QComboBox::drop-down {
-	background-color: #ffffff; 
-	border-radius: 5px;
-	border: 0;
-	width: 25px;
+QComboBox::drop-down,
+QAbstractSpinBox::drop-down,
+QSpinBox::drop-down,
+QDateTimeEdit::drop-down {
+  background-color: #191919;
+  border: 0;
+  margin-left: 4px;
+  margin-right: 12px;
+  margin-top: 5px;
 }
 
-QComboBox::down-arrow {
-	image: url(:/drop-down-arrow.png);
+QComboBox::down-arrow,
+QDateTimeEdit::down-arrow {
+  margin-top: -2px;
+  image: url(skin:controls/arrow_down.svg);
+  width: 14px;
+}
+
+QComboBox::down-arrow:disabled,
+QDateTimeEdit::down-arrow:disabled {
+  image: url(skin:controls/arrow_down_disabled.svg);
 }
 
 QComboBox QAbstractItemView {
@@ -158,12 +170,29 @@ QCheckBox {
 	spacing: 5px;
 }
 
+QLabel,
+QCheckBox,
+QAbstractCheckBox,
+QTreeView::indicator,
+QRadioButton {
+  color: #d8d8d8;
+  background: transparent;
+}
+
 QTreeView::indicator,
 QCheckBox::indicator {
 	width: 20px;
 	height: 20px;
 	border-radius: 5px;
 	background-color: #ffffff;
+}
+
+QMenu::indicator {
+  width: 12px;
+  left: 6px;
+  padding-top: 2px;
+  height: 25px;
+  width: 25px;
 }
 
 QCheckBox::indicator:checked,
@@ -184,27 +213,22 @@ QTreeView::indicator:checked:disabled {
   image: url(skin:controls/checkbox_check_disabled.svg);
 }
 
-QCheckBox::indicator:focus,
-QTreeView::indicator:focus,
-QRadioButton::indicator:focus,
-QComboBox:focus {
-  background-color: #3e4f5e;
+QRadioButton::indicator {
+  background: #444;
+  border: 1px solid #444;
+  border-radius: 7px;
+  height: 12px;
+  width: 12px;
 }
 
-QCheckBox::indicator:focus:hover,
-QTreeView::indicator:focus:hover,
-QRadioButton::indicator:focus:hover,
-QComboBox:focus:hover {
-  background-color: #485d6f;
-  border-color: #485d6f;
+QTreeView::indicator {
+  background: #444;
 }
 
-QCheckBox::indicator:hover,
-QTreeView::indicator:hover,
-QRadioButton::indicator:hover,
-QComboBox:hover {
-  background-color: #595959;
-  border-color: #555;
+QRadioButton::indicator:disabled {
+  background-color: #282828;
+  margin: 1px;
+  border: 1px solid transparent;
 }
 
 QRadioButton::indicator:checked {
@@ -224,6 +248,44 @@ QSpinBox {
 	padding: 0 5px;
 }
 
+QSpinBox:disabled,
+QAbstractSpinBox:disabled {
+  border: 1px solid transparent;
+  background-color: #282828;
+}
+
+QAbstractSpinBox::drop-down,
+QSpinBox::drop-down {
+  background-color: #191919;
+  border: 0;
+  margin-left: 4px;
+  margin-right: 12px;
+  margin-top: 5px;
+}
+
+QSpinBox:focus,
+QAbstractSpinBox:focus {
+  background-color: #191919;
+}
+
+QSpinBox:focus:hover,
+QAbstractSpinBox:focus:hover {
+  border-color: #485d6f;
+}
+
+QLineEdit:hover,
+QSpinBox:hover,
+QAbstractSpinBox:hover,
+QComboBox:editable:hover {
+  background-color: #191919;
+  border-color: #555;
+}
+
+QSpinBox:focus,
+QAbstractSpinBox:focus {
+  border-color: #3e4f5e;
+}
+
 QSpinBox::up-button,
 QSpinBox::down-button {
 	background-color: #ffffff; 
@@ -232,14 +294,47 @@ QSpinBox::down-button {
 	width: 20px;
 }
 
-QSpinBox::up-arrow {
-	image: url(:/spin-up-arrow.png);
-	padding: 2px 0 0;
+QSpinBox::up-button,
+QAbstractSpinBox::up-button {
+  padding-right: 4px;
+  image: url(skin:controls/arrow_up.svg);
+  width: 14px;
+  padding-top: 1px;
 }
 
-QSpinBox::down-arrow {
-	image: url(:/spin-down-arrow.png);
-	padding: 0 0 2px;
+QSpinBox::up-button:disabled,
+QAbstractSpinBox::up-button:disabled {
+  image: url(skin:controls/arrow_up_disabled.svg);
+  border: 1px solid transparent;
+  background-color: #282828;
+}
+
+QSpinBox::down-button,
+QAbstractSpinBox::down-button {
+  padding-right: 4px;
+  image: url(skin:controls/arrow_down.svg);
+  width: 14px;
+  padding-bottom: 1px;
+}
+
+QSpinBox::down-button:disabled,
+QAbstractSpinBox::down-button:disabled {
+  image: url(skin:controls/arrow_down_disabled.svg);
+  border: 1px solid transparent;
+  background-color: #282828;
+}
+
+QHeaderView::down-arrow,
+QHeaderView::up-arrow {
+  margin: 1px;
+  top: 1px;
+  right: 5px;
+  width: 14px;
+}
+
+QComboBox::down-arrow:disabled,
+QDateTimeEdit::down-arrow:disabled {
+  image: url(skin:controls/arrow_down_disabled.svg);
 }
 
 QSlider::groove:horizontal {
@@ -392,11 +487,11 @@ QScrollBar::sub-line:vertical {
 }
 
 QScrollBar::up-arrow:vertical {
-	image: url(:/scrollbar-up-arrow.png);
+	image: url(skin:control/scrollbar-up-arrow.png);
 }
 
 QScrollBar::down-arrow:vertical {
-	image: url(:/scrollbar-down-arrow.png);
+	image: url(skin:control/scrollbar-down-arrow.png);
 }
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
