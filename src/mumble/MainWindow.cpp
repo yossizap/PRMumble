@@ -1148,6 +1148,16 @@ void MainWindow::setupView(bool toggle_minimize) {
 		       geometry().height()-newgeom.height()+geom.height());
 		move(geom.x(), geom.y());
 	}
+
+	// Display the Transmit Mode Dropdown, if configured to do so, otherwise
+	// hide it.
+	if (g.s.bShowTransmitModeComboBox) {
+		qaTransmitMode->setVisible(true);
+		qaTransmitModeSeparator->setVisible(true);
+	} else {
+		qaTransmitMode->setVisible(false);
+		qaTransmitModeSeparator->setVisible(false);
+	}
 	
 	//show();
 	//activateWindow();
