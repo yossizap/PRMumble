@@ -118,9 +118,10 @@ void LookConfig::reloadThemes(const boost::optional<ThemeInfo::StyleInfo> config
 			qcbTheme->addItem(theme->name + QLatin1String(" - ") + styleit->name, QVariant::fromValue(*styleit));
 		}
 	}
-	
+    
     if (0 == selectedThemeEntry)
-        qcbTheme->setCurrentIndex(1);
+        /* Set PR in the themes combobox instead of blank */
+        qcbTheme->setCurrentIndex(0);
     else
         qcbTheme->setCurrentIndex(selectedThemeEntry);
 }
