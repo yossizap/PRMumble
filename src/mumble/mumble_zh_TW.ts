@@ -2,7 +2,7 @@
 <context>
     <name>ACLEditor</name>
     <message>
-        <location filename="ACLEditor.cpp" line="+101"/>
+        <location filename="ACLEditor.cpp" line="+103"/>
         <source>Deny</source>
         <translation>拒絕</translation>
     </message>
@@ -555,14 +555,10 @@ This value allows you to set the maximum number of users allowed in the channel.
         <translation>無法初始化 ASIO 驅動</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location filename="ASIOInput.ui"/>
+        <location filename="ASIOInput.cpp" line="+37"/>
         <source>ASIO</source>
         <translation>ASIO</translation>
-    </message>
-    <message>
-        <location filename="ASIOInput.ui"/>
-        <source>Form</source>
-        <translation>表單</translation>
     </message>
     <message>
         <location/>
@@ -686,7 +682,7 @@ This value allows you to set the maximum number of users allowed in the channel.
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="About.cpp" line="+15"/>
+        <location filename="About.cpp" line="+17"/>
         <source>About Mumble</source>
         <translation>關於 Mumble</translation>
     </message>
@@ -725,11 +721,6 @@ This value allows you to set the maximum number of users allowed in the channel.
     <name>AudioInput</name>
     <message>
         <location filename="AudioInput.ui"/>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-    <message>
-        <location/>
         <source>Interface</source>
         <translation>界面</translation>
     </message>
@@ -1094,7 +1085,7 @@ This value allows you to set the maximum number of users allowed in the channel.
         <translation>隨按即說鍵放開後保持麥克風持續開啟的時間</translation>
     </message>
     <message>
-        <location filename="AudioInput.cpp" line="+597"/>
+        <location filename="AudioInput.cpp" line="+599"/>
         <source>Server maximum network bandwidth is only %1 kbit/s. Audio quality auto-adjusted to %2 kbit/s (%3 ms)</source>
         <translation>伺服器最大可用頻寬為 %1 kbit/s，語音品質自動調整為 %2 kbit/s (%3 毫秒)  </translation>
     </message>
@@ -1173,6 +1164,11 @@ This value allows you to set the maximum number of users allowed in the channel.
         <source>RNNoise</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <location/>
+        <source>Audio input</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>AudioInputDialog</name>
@@ -1235,11 +1231,6 @@ This value allows you to set the maximum number of users allowed in the channel.
     <name>AudioOutput</name>
     <message>
         <location filename="AudioOutput.ui"/>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-    <message>
-        <location/>
         <source>Interface</source>
         <translation>界面</translation>
     </message>
@@ -1569,6 +1560,11 @@ This value allows you to set the maximum number of users allowed in the channel.
     <message>
         <location/>
         <source>Attenuate PulseAudio loopback modules</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Audio output</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -2175,7 +2171,7 @@ Mumble 尚在持續開發中，開發人員希望知道使用者的需求。Mumb
         <translation>停用文字轉語音並使用音效代替。</translation>
     </message>
     <message>
-        <location filename="AudioWizard.cpp" line="+291"/>
+        <location filename="AudioWizard.cpp" line="+293"/>
         <source>%1 ms</source>
         <translation>%1 毫秒</translation>
     </message>
@@ -2434,7 +2430,7 @@ Speak loudly, as when you are annoyed or excited. Decrease the volume in the sou
         <translation>清除</translation>
     </message>
     <message numerus="yes">
-        <location filename="BanEditor.cpp" line="+177"/>
+        <location filename="BanEditor.cpp" line="+179"/>
         <source>Ban List - %n Ban(s)</source>
         <translation><numerusform>封鎖清單 - %n 封鎖</numerusform></translation>
     </message>
@@ -2999,7 +2995,7 @@ Are you sure you wish to replace your certificate?
 <context>
     <name>ChatbarTextEdit</name>
     <message>
-        <location filename="CustomElements.cpp" line="+82"/>
+        <location filename="CustomElements.cpp" line="+83"/>
         <source>Paste and &amp;Send</source>
         <oldsource>Paste and send</oldsource>
         <translation>貼上與送出(&amp;S)</translation>
@@ -3125,7 +3121,7 @@ Are you sure you wish to replace your certificate?
 <context>
     <name>ConnectDialog</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="+1134"/>
+        <location filename="ConnectDialog.cpp" line="+1144"/>
         <source>Connecting to %1</source>
         <translation>正在連接到 %1</translation>
     </message>
@@ -3213,8 +3209,13 @@ Are you sure you wish to replace your certificate?
         <translation>篩選(&amp;F)</translation>
     </message>
     <message>
+        <location line="+740"/>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="ConnectDialog.ui"/>
-        <location filename="ConnectDialog.cpp" line="-505"/>
+        <location filename="ConnectDialog.cpp" line="-1245"/>
         <source>Users</source>
         <translation>使用者</translation>
     </message>
@@ -3764,7 +3765,7 @@ Without this option enabled, using Mumble&apos;s global shortcuts in privileged 
 <context>
     <name>GlobalShortcutConfig</name>
     <message>
-        <location filename="GlobalShortcut.cpp" line="+533"/>
+        <location filename="GlobalShortcut.cpp" line="+535"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble can currently only use mouse buttons and keyboard modifier keys (Alt, Ctrl, Cmd, etc.) for global shortcuts.&lt;/p&gt;&lt;p&gt;If you want more flexibility, you can add Mumble as a trusted accessibility program in the Security &amp; Privacy section of your Mac&apos;s System Preferences.&lt;/p&gt;&lt;p&gt;In the Security &amp; Privacy preference pane, change to the Privacy tab. Then choose Accessibility (near the bottom) in the list to the left. Finally, add Mumble to the list of trusted accessibility programs.&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
@@ -3907,7 +3908,7 @@ Without this option enabled, using Mumble&apos;s global shortcuts in privileged 
 <context>
     <name>LCD</name>
     <message>
-        <location filename="LCD.cpp" line="+267"/>
+        <location filename="LCD.cpp" line="+269"/>
         <source>Not connected</source>
         <translation>未連接</translation>
     </message>
@@ -3920,14 +3921,10 @@ Without this option enabled, using Mumble&apos;s global shortcuts in privileged 
         <translation>啟用裝置</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location filename="LCD.ui"/>
+        <location filename="LCD.cpp" line="+5"/>
         <source>LCD</source>
         <translation>LCD</translation>
-    </message>
-    <message>
-        <location filename="LCD.ui"/>
-        <source>Form</source>
-        <translation>表單</translation>
     </message>
     <message>
         <location/>
@@ -3995,7 +3992,7 @@ This field describes the size of an LCD device. The size is given either in pixe
 <context>
     <name>Log</name>
     <message>
-        <location filename="Log.cpp" line="+222"/>
+        <location filename="Log.cpp" line="+224"/>
         <source>Debug</source>
         <translation>除錯</translation>
     </message>
@@ -4161,7 +4158,7 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation>[日期變更為 %1]</translation>
     </message>
     <message>
-        <location line="+74"/>
+        <location line="+77"/>
         <source>link to %1</source>
         <translation>連接到 %1</translation>
     </message>
@@ -4189,7 +4186,7 @@ This field describes the size of an LCD device. The size is given either in pixe
 <context>
     <name>LogConfig</name>
     <message>
-        <location line="-499"/>
+        <location line="-502"/>
         <source>Toggle console for %1 events</source>
         <translation>為 %1 事件啟用控制台</translation>
     </message>
@@ -4380,7 +4377,7 @@ This field describes the size of an LCD device. The size is given either in pixe
 <context>
     <name>LookConfig</name>
     <message>
-        <location filename="LookConfig.cpp" line="+30"/>
+        <location filename="LookConfig.cpp" line="+32"/>
         <source>System default</source>
         <translation>系統預設</translation>
     </message>
@@ -4709,13 +4706,13 @@ This field describes the size of an LCD device. The size is given either in pixe
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="MainWindow.cpp" line="+107"/>
-        <location line="+2701"/>
+        <location filename="MainWindow.cpp" line="+109"/>
+        <location line="+2744"/>
         <source>Root</source>
         <translation>根</translation>
     </message>
     <message>
-        <location line="-2644"/>
+        <location line="-2684"/>
         <source>Push-to-Talk</source>
         <comment>Global Shortcut</comment>
         <translation>按鍵發話</translation>
@@ -4793,13 +4790,13 @@ This field describes the size of an LCD device. The size is given either in pixe
     </message>
     <message>
         <location filename="MainWindow.cpp" line="+4"/>
-        <location line="+159"/>
-        <location line="+2638"/>
+        <location line="+168"/>
+        <location line="+2669"/>
         <source>Mumble -- %1</source>
         <translation>Mumble -- %1</translation>
     </message>
     <message>
-        <location line="-2766"/>
+        <location line="-2797"/>
         <source>&amp;Window</source>
         <translation>視窗(&amp;W)</translation>
     </message>
@@ -4825,7 +4822,7 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation>Mumble 正與伺服器連線中。你希望關閉還是最小化？</translation>
     </message>
     <message>
-        <location line="-252"/>
+        <location line="-261"/>
         <source>Mute Self</source>
         <comment>Global Shortcut</comment>
         <translation>關閉麥克風</translation>
@@ -4867,14 +4864,14 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation>悄悄話/大喊</translation>
     </message>
     <message>
-        <location line="+79"/>
-        <location line="+2797"/>
+        <location line="+88"/>
+        <location line="+2829"/>
         <source>&lt;center&gt;Not connected&lt;/center&gt;</source>
         <oldsource>Not connected</oldsource>
         <translation>&lt;center&gt;未連接&lt;/center&gt;</translation>
     </message>
     <message>
-        <location line="-2349"/>
+        <location line="-2381"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -4931,12 +4928,13 @@ This field describes the size of an LCD device. The size is given either in pixe
     </message>
     <message>
         <location line="+76"/>
-        <location line="+1497"/>
+        <location line="+1498"/>
+        <location line="+22"/>
         <source>Transmit Mode set to Continuous</source>
         <translation>語音發送模式設為連續</translation>
     </message>
     <message>
-        <location line="-1397"/>
+        <location line="-1419"/>
         <source>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</translation>
     </message>
@@ -4946,14 +4944,14 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation>&lt;h2&gt;語音頻道&lt;/h2&gt;&lt;p&gt;使用 128 bit OCB-AES128 加密&lt;br /&gt;平均延遲 %1 毫秒 (誤差 %4)&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-179"/>
-        <location line="+448"/>
+        <location line="-180"/>
+        <location line="+449"/>
         <source>Register yourself as %1</source>
         <translation>註冊自己成為 %1</translation>
     </message>
     <message>
-        <location line="-448"/>
-        <location line="+448"/>
+        <location line="-449"/>
+        <location line="+449"/>
         <source>&lt;p&gt;You are about to register yourself on this server. This action cannot be undone, and your username cannot be changed once this is done. You will forever be known as &apos;%1&apos; on this server.&lt;/p&gt;&lt;p&gt;Are you sure you want to register yourself?&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
@@ -5030,7 +5028,7 @@ This field describes the size of an LCD device. The size is given either in pixe
     <message>
         <location line="+76"/>
         <location line="+270"/>
-        <location line="+611"/>
+        <location line="+641"/>
         <source>Message to channel %1</source>
         <translation>發送文字訊息到 %1 頻道</translation>
     </message>
@@ -5065,7 +5063,7 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+81"/>
         <source>&lt;center&gt;Type message to channel &apos;%1&apos; here&lt;/center&gt;</source>
         <oldsource>Type message to channel '%1' here</oldsource>
         <translation>&lt;center&gt;在此輸入給 %1 頻道的文字訊息&lt;/center&gt;</translation>
@@ -5100,7 +5098,7 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation>無法辨識圖檔格式。</translation>
     </message>
     <message>
-        <location line="-3103"/>
+        <location line="-3147"/>
         <source>&amp;User</source>
         <translation>使用者(&amp;U)</translation>
     </message>
@@ -5110,7 +5108,7 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation>頻道(&amp;C)</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+65"/>
         <location line="+26"/>
         <source>Use in conjunction with Whisper to.</source>
         <comment>Global Shortcut</comment>
@@ -5133,6 +5131,24 @@ This field describes the size of an LCD device. The size is given either in pixe
         <source>Cycle Transmit Mode</source>
         <comment>Global Shortcut</comment>
         <translation>循環發送模式</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to Push-To-Talk</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to Continuous</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to VAD</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
@@ -5199,18 +5215,20 @@ This field describes the size of an LCD device. The size is given either in pixe
     </message>
     <message>
         <location line="+41"/>
-        <location line="+1484"/>
+        <location line="+1485"/>
+        <location line="+40"/>
         <source>Transmit Mode set to Voice Activity</source>
         <translation>語音發送模式設為語音活動時</translation>
     </message>
     <message>
-        <location line="-1479"/>
-        <location line="+1483"/>
+        <location line="-1520"/>
+        <location line="+1484"/>
+        <location line="+16"/>
         <source>Transmit Mode set to Push-to-Talk</source>
         <translation>語音發送模式設為按鍵發話</translation>
     </message>
     <message>
-        <location line="-1332"/>
+        <location line="-1348"/>
         <source>&lt;p&gt;Connected users: %1/%2&lt;/p&gt;</source>
         <translation>&lt;p&gt;已連接的使用者：%1／%2&lt;/p&gt;</translation>
     </message>
@@ -5261,12 +5279,12 @@ This field describes the size of an LCD device. The size is given either in pixe
     </message>
     <message>
         <location line="+4"/>
-        <location line="+1524"/>
+        <location line="+1554"/>
         <source>&amp;View Certificate</source>
         <translation>檢視憑證(&amp;V)</translation>
     </message>
     <message>
-        <location line="-1230"/>
+        <location line="-1260"/>
         <location line="+19"/>
         <source>Enter reason</source>
         <translation>輸入原因</translation>
@@ -5281,12 +5299,12 @@ This field describes the size of an LCD device. The size is given either in pixe
         <location line="+103"/>
         <location line="+4"/>
         <location line="+266"/>
-        <location line="+611"/>
+        <location line="+641"/>
         <source>To %1: %2</source>
         <translation>發送給 %1: %2</translation>
     </message>
     <message>
-        <location line="-984"/>
+        <location line="-1014"/>
         <location line="+107"/>
         <source>Message to %1</source>
         <translation>發送訊息給 %1</translation>
@@ -5368,7 +5386,7 @@ This field describes the size of an LCD device. The size is given either in pixe
         <translation>關於 Qt</translation>
     </message>
     <message>
-        <location line="+469"/>
+        <location line="+499"/>
         <source>SSL Verification failed: %1</source>
         <translation>SSL 認證失敗: %1</translation>
     </message>
@@ -5400,7 +5418,7 @@ This field describes the size of an LCD device. The size is given either in pixe
     </message>
     <message>
         <location line="+11"/>
-        <location filename="Messages.cpp" line="+70"/>
+        <location filename="Messages.cpp" line="+72"/>
         <source>Invalid username</source>
         <translation>無效的使用者名稱</translation>
     </message>
@@ -5445,8 +5463,8 @@ Otherwise abort and check your certificate and username.</source>
         <translation>未註冊使用者的伺服器密碼錯誤，請重試。</translation>
     </message>
     <message>
-        <location line="-2238"/>
-        <location line="+2450"/>
+        <location line="-2269"/>
+        <location line="+2482"/>
         <source>Images (*.png *.jpg *.jpeg)</source>
         <translation>圖片 (*.png *.jpg *.jpeg)</translation>
     </message>
@@ -5943,7 +5961,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>這將啟用簡潔視窗模式，該模式將隱藏日誌欄與選單。</translation>
     </message>
     <message>
-        <location filename="Messages.cpp" line="+408"/>
+        <location filename="Messages.cpp" line="+416"/>
         <source>You muted and deafened %1.</source>
         <translation>你已關閉 %1 麥克風與喇叭。</translation>
     </message>
@@ -5983,7 +6001,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%2 抑制了 %1。</translation>
     </message>
     <message>
-        <location line="-218"/>
+        <location line="-214"/>
         <source>%1 moved to %2.</source>
         <translation>%1 移動至 %2。</translation>
     </message>
@@ -5998,12 +6016,12 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%3 將 %1 從 %2 移動到此。</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+48"/>
         <source>%1 is now muted and deafened.</source>
         <translation>%1 現在被關閉麥克風和關閉喇叭.</translation>
     </message>
     <message>
-        <location line="-296"/>
+        <location line="-304"/>
         <source>Your account information can not be verified currently. Please try again later</source>
         <translation>您的帳戶信息目前無法確認，請稍候重試</translation>
     </message>
@@ -6089,7 +6107,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>沒有權限。</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+42"/>
         <source>%1 connected and entered channel.</source>
         <translation type="unfinished"/>
     </message>
@@ -6099,7 +6117,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 已連線。</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+91"/>
         <source>%1 is now muted.</source>
         <translation>%1 現在被關閉麥克風。</translation>
     </message>
@@ -6210,7 +6228,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-173"/>
+        <location line="-169"/>
         <source>You joined %1.</source>
         <translation type="unfinished"/>
     </message>
@@ -6231,7 +6249,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+240"/>
+        <location line="+236"/>
         <source>%1 disconnected.</source>
         <translation>%1 離線。</translation>
     </message>
@@ -6263,7 +6281,12 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%2%1: %3</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+149"/>
+        <source>Failed to load Opus, it will not be available for audio encoding/decoding.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+58"/>
         <source>The server requests minimum client version %1</source>
         <translation>伺服器要求使用 %1 以上版本客戶端</translation>
     </message>
@@ -6288,7 +6311,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>伺服器要求關閉按鍵發話。</translation>
     </message>
     <message>
-        <location line="-464"/>
+        <location line="-470"/>
         <source>You were unmuted by %1.</source>
         <translation>你被 %1 取消關閉麥克風。</translation>
     </message>
@@ -6323,12 +6346,12 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 被 %2 取消關閉麥克風。</translation>
     </message>
     <message>
-        <location line="+367"/>
+        <location line="+373"/>
         <source>Unable to find matching CELT codecs with other clients. You will not be able to talk to all users.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="-433"/>
+        <location line="-439"/>
         <source>You were muted and deafened by %1.</source>
         <oldsource>You were deafened by %1.</oldsource>
         <translation>你被 %1 關閉麥克風與喇叭。</translation>
@@ -6354,7 +6377,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%3 被 %1 從服務器踢出並封鎖： %2。</translation>
     </message>
     <message>
-        <location line="-270"/>
+        <location line="-266"/>
         <source>You were moved to %1 by %2.</source>
         <translation>你被從 %1 移動到 %2。</translation>
     </message>
@@ -6364,7 +6387,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 進入頻道。</translation>
     </message>
     <message>
-        <location line="-225"/>
+        <location line="-237"/>
         <source>Server connection rejected: %1.</source>
         <translation>伺服器拒絕連接: %1。</translation>
     </message>
@@ -6374,12 +6397,12 @@ Otherwise abort and check your certificate and username.</source>
         <translation>拒絕: %1。</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+110"/>
         <source>%1 renamed to %2.</source>
         <translation>%1 更改名稱為 %2。</translation>
     </message>
     <message>
-        <location line="+235"/>
+        <location line="+231"/>
         <source>%1 left channel and disconnected.</source>
         <translation>%1 離開頻道且離線。</translation>
     </message>
@@ -6389,7 +6412,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>來至 %1 的消息</translation>
     </message>
     <message>
-        <location filename="UserModel.cpp" line="+1391"/>
+        <location filename="UserModel.cpp" line="+1393"/>
         <source>You have User Dragging set to &quot;Do Nothing&quot; so the user wasn&apos;t moved.</source>
         <translation type="unfinished"/>
     </message>
@@ -6662,7 +6685,7 @@ the channel&apos;s context menu.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="-3067"/>
+        <location filename="MainWindow.cpp" line="-3111"/>
         <source>&amp;Developer</source>
         <translation type="unfinished"/>
     </message>
@@ -6826,6 +6849,16 @@ the channel&apos;s context menu.</source>
         <source>R&amp;egister...</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <location/>
+        <source>Show</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Shows the main Mumble window.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Manual</name>
@@ -6923,7 +6956,7 @@ the channel&apos;s context menu.</source>
 <context>
     <name>NetworkConfig</name>
     <message>
-        <location filename="NetworkConfig.cpp" line="+29"/>
+        <location filename="NetworkConfig.cpp" line="+31"/>
         <source>Network</source>
         <translation>網路</translation>
     </message>
@@ -7178,8 +7211,8 @@ Prevents the client from sending potentially identifying information about the o
 <context>
     <name>Overlay</name>
     <message>
-        <location filename="OverlayEditorScene.cpp" line="+97"/>
-        <location filename="OverlayUser.cpp" line="+129"/>
+        <location filename="OverlayEditorScene.cpp" line="+99"/>
+        <location filename="OverlayUser.cpp" line="+131"/>
         <source>Silent</source>
         <translation>靜音</translation>
     </message>
@@ -7208,7 +7241,7 @@ Prevents the client from sending potentially identifying information about the o
         <translation>頻道</translation>
     </message>
     <message>
-        <location filename="Overlay.cpp" line="+205"/>
+        <location filename="Overlay.cpp" line="+207"/>
         <source>Failed to create communication with overlay at %2: %1. No overlay will be available.</source>
         <translation>無法在 %2 建立連接：%1。沒有可用的浮動視窗。</translation>
     </message>
@@ -7216,7 +7249,7 @@ Prevents the client from sending potentially identifying information about the o
 <context>
     <name>OverlayClient</name>
     <message>
-        <location filename="OverlayUserGroup.cpp" line="+76"/>
+        <location filename="OverlayUserGroup.cpp" line="+78"/>
         <source>Filter</source>
         <translation>過濾</translation>
     </message>
@@ -7294,7 +7327,7 @@ Prevents the client from sending potentially identifying information about the o
 <context>
     <name>OverlayConfig</name>
     <message>
-        <location filename="OverlayConfig.cpp" line="+80"/>
+        <location filename="OverlayConfig.cpp" line="+82"/>
         <source>To move the users, drag the little red dot.</source>
         <translation>拖動小紅點移動使用者清單。</translation>
     </message>
@@ -7781,7 +7814,7 @@ To upgrade these files to their latest versions, click the button below.</source
     <name>PluginConfig</name>
     <message>
         <location filename="Plugins.ui"/>
-        <location filename="Plugins.cpp" line="+73"/>
+        <location filename="Plugins.cpp" line="+74"/>
         <source>Plugins</source>
         <translation>外掛</translation>
     </message>
@@ -7797,11 +7830,6 @@ To upgrade these files to their latest versions, click the button below.</source
     </message>
     <message>
         <location filename="Plugins.ui"/>
-        <source>Form</source>
-        <translation>表單</translation>
-    </message>
-    <message>
-        <location/>
         <source>Options</source>
         <translation>選項</translation>
     </message>
@@ -7916,7 +7944,7 @@ To upgrade these files to their latest versions, click the button below.</source
 <context>
     <name>PulseAudioSystem</name>
     <message>
-        <location filename="PulseAudio.cpp" line="+799"/>
+        <location filename="PulseAudio.cpp" line="+800"/>
         <source>Default Input</source>
         <translation>預設輸入</translation>
     </message>
@@ -7942,7 +7970,7 @@ To upgrade these files to their latest versions, click the button below.</source
 <context>
     <name>RichTextEditor</name>
     <message>
-        <location filename="RichTextEditor.cpp" line="+234"/>
+        <location filename="RichTextEditor.cpp" line="+236"/>
         <source>Failed to load image</source>
         <translation>讀取圖片失敗</translation>
     </message>
@@ -8043,7 +8071,7 @@ To upgrade these files to their latest versions, click the button below.</source
 <context>
     <name>ServerHandler</name>
     <message>
-        <location filename="ServerHandler.cpp" line="+299"/>
+        <location filename="ServerHandler.cpp" line="+301"/>
         <source>Unable to resolve hostname</source>
         <translation type="unfinished"/>
     </message>
@@ -8081,7 +8109,7 @@ To upgrade these files to their latest versions, click the button below.</source
 <context>
     <name>ServerView</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="-753"/>
+        <location filename="ConnectDialog.cpp" line="-761"/>
         <source>Favorite</source>
         <translation>我的最愛</translation>
     </message>
@@ -8097,6 +8125,11 @@ To upgrade these files to their latest versions, click the button below.</source
     </message>
     <message>
         <location line="+7"/>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Africa</source>
         <translation>非洲</translation>
     </message>
@@ -8273,7 +8306,7 @@ To upgrade these files to their latest versions, click the button below.</source
 <context>
     <name>Tokens</name>
     <message>
-        <location filename="Tokens.cpp" line="+42"/>
+        <location filename="Tokens.cpp" line="+44"/>
         <source>Empty Token</source>
         <translation>空白授權碼</translation>
     </message>
@@ -8479,7 +8512,7 @@ An access token is a text string, which can be used as a password for very simpl
         <translation>連接時間</translation>
     </message>
     <message>
-        <location filename="UserInformation.cpp" line="+83"/>
+        <location filename="UserInformation.cpp" line="+85"/>
         <source>%1w</source>
         <translation>%1w</translation>
     </message>
@@ -8788,7 +8821,7 @@ An access token is a text string, which can be used as a password for very simpl
 <context>
     <name>VersionCheck</name>
     <message>
-        <location filename="VersionCheck.cpp" line="+118"/>
+        <location filename="VersionCheck.cpp" line="+120"/>
         <source>Upgrade Mumble</source>
         <translation>更新 Mumble</translation>
     </message>
@@ -8837,7 +8870,7 @@ An access token is a text string, which can be used as a password for very simpl
         <translation>認証鏈</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+19"/>
         <source>Certificate details</source>
         <translation>認証詳細信息</translation>
     </message>
@@ -8940,7 +8973,7 @@ An access token is a text string, which can be used as a password for very simpl
 <context>
     <name>VoiceRecorder</name>
     <message>
-        <location filename="VoiceRecorder.cpp" line="+262"/>
+        <location filename="VoiceRecorder.cpp" line="+264"/>
         <source>Recorder failed to create directory &apos;%1&apos;</source>
         <translation>建立 %1 目錄失敗</translation>
     </message>
@@ -8974,7 +9007,7 @@ An access token is a text string, which can be used as a password for very simpl
     <name>VoiceRecorderDialog</name>
     <message>
         <location filename="VoiceRecorderDialog.ui"/>
-        <location filename="VoiceRecorderDialog.cpp" line="+108"/>
+        <location filename="VoiceRecorderDialog.cpp" line="+110"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+9"/>
@@ -9112,9 +9145,17 @@ Please contact your server administrator for further information.</source>
     </message>
 </context>
 <context>
+    <name>WASAPIInput</name>
+    <message>
+        <location filename="WASAPI.cpp" line="+463"/>
+        <source>Access to the microphone was denied. Please check that your operating system&apos;s microphone settings allow Mumble to use the microphone.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WASAPISystem</name>
     <message>
-        <location filename="WASAPI.cpp" line="+241"/>
+        <location line="-219"/>
         <source>Default Device</source>
         <translation>預設裝置</translation>
     </message>

@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -292,6 +292,7 @@ Settings::Settings() {
 	//const QSysInfo::WinVersion winVer = QSysInfo::windowsVersion();
 	bHideInTray = true;//(winVer != QSysInfo::WV_WINDOWS7 && winVer != QSysInfo::WV_WINDOWS8);
 #else
+	const bool isUnityDesktop = QProcessEnvironment::systemEnvironment().value(QLatin1String("XDG_CURRENT_DESKTOP")) == QLatin1String("Unity");
 	bHideInTray = true;
 #endif
 	bStateInTray = false;
@@ -425,7 +426,7 @@ Settings::Settings() {
 	qmMessageSounds[Log::ChannelJoin] = QLatin1String(":/UserJoinedChannel.ogg");
 	qmMessageSounds[Log::ChannelLeave] = QLatin1String(":/UserLeftChannel.ogg");
 	qmMessageSounds[Log::ChannelJoinConnect] = qmMessageSounds[Log::ChannelJoin];
-	qmMessageSounds[Log::ChannelLeaveDisconnect] = qmMessageSounds[Log::UserLeave];
+	qmMessageSounds[Log::ChannelLeaveDisconnect] = qmMessageSounds[Log::ChannelLeave];
 	qmMessageSounds[Log::YouMutedOther] = QLatin1String(":/UserMutedYouOrByYou.ogg");
 	qmMessageSounds[Log::YouMuted] = QLatin1String(":/UserMutedYouOrByYou.ogg");
 	qmMessageSounds[Log::YouKicked] = QLatin1String(":/UserKickedYouOrByYou.ogg");

@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -12,13 +12,15 @@
 #include "OverlayText.h"
 #include "User.h"
 #include "Channel.h"
-#include "Global.h"
 #include "Message.h"
 #include "Database.h"
 #include "NetworkConfig.h"
 #include "ServerHandler.h"
 #include "MainWindow.h"
 #include "GlobalShortcut.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 OverlayEditorScene::OverlayEditorScene(const OverlaySettings &srcos, QObject *p) : QGraphicsScene(p), os(srcos) {
 	tsColor = Settings::Talking;
@@ -556,7 +558,7 @@ void OverlayEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *e) {
 		QMenu *qmObjTrans = qm.addMenu(tr("Object Opacity"));
 		QActionGroup *qagObject = new QActionGroup(&qm);
 		for (int i=0;i<8;++i) {
-			qreal o = i + 1 / 8.0;
+			qreal o = (i + 1) / 8.0;
 
 			objectOpacity[i] = new QAction(tr("%1%").arg(o * 100.0f, 0, 'f', 1), qagObject);
 			objectOpacity[i]->setCheckable(true);

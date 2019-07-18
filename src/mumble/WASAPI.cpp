@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -7,8 +7,11 @@
 
 #include "WASAPI.h"
 #include "WASAPINotificationClient.h"
-#include "Global.h"
 
+#include "MainWindow.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 // Now that Win7 is published, which includes public versions of these
 // interfaces, we simply inherit from those but use the "old" IIDs.
@@ -456,6 +459,9 @@ void WASAPIInput::run() {
 		hr = pMicAudioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_EVENTCALLBACK, 0, 0, micpwfx, NULL);
 		if (FAILED(hr)) {
 			qWarning("WASAPIInput: Mic Initialize failed: hr=0x%08lx", hr);
+			if (hr == E_ACCESSDENIED) {
+				g.mw->msgBox(tr("Access to the microphone was denied. Please check that your operating system's microphone settings allow Mumble to use the microphone."));
+			}
 			goto cleanup;
 		}
 	}

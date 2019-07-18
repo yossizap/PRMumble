@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -7,9 +7,11 @@
 
 #include "About.h"
 
-#include "Global.h"
 #include "MainWindow.h"
 #include "License.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 AboutDialog::AboutDialog(QWidget *p) : QDialog(p) {
 	setWindowTitle(tr("About Mumble"));
@@ -57,14 +59,14 @@ AboutDialog::AboutDialog(QWidget *p) : QDialog(p) {
 	              ).arg(QLatin1String(MUMBLE_RELEASE))
 				  .arg(QLatin1String("http://mumble.sourceforge.net/"))
 				  .arg(QLatin1String("http://www.realitymod.com/"))
-				  .arg(QLatin1String("2005-2012"))
-				  .arg(QLatin1String("2013")));
+				  .arg(QLatin1String("Copyright 2005-2019 The Mumble Developers"))
 	QHBoxLayout *qhbl=new QHBoxLayout(about);
 	qhbl->addWidget(icon);
 	qhbl->addWidget(text);
 
 	qtwTab->addTab(about, tr("&About PR Mumble"));
 	qtwTab->addTab(qteLicense, tr("&License"));
+	qtwTab->addTab(qteAuthors, tr("A&uthors"));
 	qtwTab->addTab(qtb3rdPartyLicense, tr("&Third-Party Licenses"));
 
 	QPushButton *okButton = new QPushButton(tr("OK"), this);

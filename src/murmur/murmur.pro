@@ -1,4 +1,4 @@
-# Copyright 2005-2018 The Mumble Developers. All rights reserved.
+# Copyright 2005-2019 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -43,7 +43,7 @@ win32 {
   RESOURCES *= murmur.qrc
   SOURCES *= Tray.cpp About.cpp
   HEADERS *= Tray.h About.h
-  LIBS *= -luser32
+  LIBS *= -luser32 -ladvapi32
   win32-msvc* {
     QMAKE_POST_LINK = $$QMAKE_POST_LINK$$escape_expand(\\n\\t)$$quote(mt.exe -nologo -updateresource:$(DESTDIR_TARGET);1 -manifest ../mumble/mumble.appcompat.manifest)
   }
@@ -136,8 +136,6 @@ ice {
   }
 
   unix:!macx:CONFIG(static) {
-    INCLUDEPATH *= /opt/Ice-3.3/include
-    QMAKE_LIBDIR *= /opt/Ice-3.3/lib
     LIBS *= -lbz2
     QMAKE_CXXFLAGS *= -fPIC
   }
@@ -199,7 +197,7 @@ bonjour {
     LIBS *= -lDNSSD
   }
   unix:!macx {
-    system(pkg-config --exists avahi-compat-libdns_sd avahi-client) {
+    system($$PKG_CONFIG --exists avahi-compat-libdns_sd avahi-client) {
       must_pkgconfig(avahi-compat-libdns_sd)
       must_pkgconfig(avahi-client)
     } else {

@@ -1,4 +1,4 @@
-# Copyright 2005-2018 The Mumble Developers. All rights reserved.
+# Copyright 2005-2019 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -54,11 +54,6 @@ macx {
 unix:!macx:CONFIG(buildenv) {
   INCLUDEPATH *= $$(MUMBLE_ICE_PREFIX)/include/
   slice.commands = $$(MUMBLE_ICE_PREFIX)/bin/slice2cpp --checksum -I$$(MUMBLE_ICE_PREFIX)/slice/ ../Murmur.ice
-}
-
-unix:!macx:CONFIG(static) {
-  INCLUDEPATH *= /opt/Ice-3.3/include
-  slice.commands = /opt/Ice-3.3/bin/slice2cpp --checksum -I/opt/Ice-3.3/slice ../Murmur.ice
 }
 
 macx:CONFIG(static) {

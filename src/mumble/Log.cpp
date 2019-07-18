@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -10,12 +10,14 @@
 #include "AudioOutput.h"
 #include "AudioOutputSample.h"
 #include "Channel.h"
-#include "Global.h"
 #include "MainWindow.h"
 #include "NetworkConfig.h"
 #include "RichTextEditor.h"
 #include "ServerHandler.h"
 #include "TextToSpeech.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 static ConfigWidget *LogConfigDialogNew(Settings &st) {
 	return new LogConfig(st);
@@ -263,8 +265,8 @@ const char *Log::colorClasses[] = {
 const QStringList Log::allowedSchemes() {
 	QStringList qslAllowedSchemeNames;
 	qslAllowedSchemeNames << QLatin1String("mumble");
-    qslAllowedSchemeNames << QLatin1String("PRMumble");
-    qslAllowedSchemeNames << QLatin1String("prmumble");
+	qslAllowedSchemeNames << QLatin1String("PRMumble");
+	qslAllowedSchemeNames << QLatin1String("prmumble");
 	qslAllowedSchemeNames << QLatin1String("http");
 	qslAllowedSchemeNames << QLatin1String("https");
 	qslAllowedSchemeNames << QLatin1String("ftp");

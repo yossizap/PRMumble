@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -11,13 +11,15 @@
 #include "AudioOutputSample.h"
 #include "AudioOutputSpeech.h"
 #include "User.h"
-#include "Global.h"
 #include "Message.h"
 #include "Plugins.h"
 #include "PacketDataStream.h"
 #include "ServerHandler.h"
 #include "Timer.h"
 #include "VoiceRecorder.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 // Remember that we cannot use static member classes that are not pointers, as the constructor
 // for AudioOutputRegistrar() might be called before they are initialized, as the constructor

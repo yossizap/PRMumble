@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -10,8 +10,10 @@
 
 #include "AudioInput.h"
 #include "AudioOutput.h"
-#include "Global.h"
 #include "MainWindow.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 static ConfigWidget *LookConfigNew(Settings &st) {
 	return new LookConfig(st);
@@ -99,7 +101,7 @@ void LookConfig::reloadThemes(const boost::optional<ThemeInfo::StyleInfo> config
 	int selectedThemeEntry = 0;
 	
 	qcbTheme->clear();
-    /* Only allow PR's theme or a user defined one, default is removed due to compatibility issues
+	/* Only allow PR's theme or a user defined one, default is removed due to compatibility issues
 	qcbTheme->addItem(tr("None")); */
 	for (ThemeMap::const_iterator theme = themes.begin();
 	     theme != themes.end();
@@ -118,12 +120,12 @@ void LookConfig::reloadThemes(const boost::optional<ThemeInfo::StyleInfo> config
 			qcbTheme->addItem(theme->name + QLatin1String(" - ") + styleit->name, QVariant::fromValue(*styleit));
 		}
 	}
-    
-    if (0 == selectedThemeEntry)
-        /* Set PR in the themes combobox instead of blank */
-        qcbTheme->setCurrentIndex(0);
-    else
-        qcbTheme->setCurrentIndex(selectedThemeEntry);
+
+	if (0 == selectedThemeEntry)
+		/* Set PR in the themes combobox instead of blank */
+		qcbTheme->setCurrentIndex(0);
+	else
+		qcbTheme->setCurrentIndex(selectedThemeEntry);
 }
 
 void LookConfig::load(const Settings &r) {
@@ -226,10 +228,11 @@ void LookConfig::save() const {
 	
 	QVariant themeData = qcbTheme->itemData(qcbTheme->currentIndex());
 	if (themeData.isNull()) {
-        /* Set PR's theme if none was set */
-        themeData = qcbTheme->itemData(1);
-    }
-    Themes::setConfiguredStyle(s, themeData.value<ThemeInfo::StyleInfo>(), s.requireRestartToApply);
+		/* Set PR's theme if none was set */
+		themeData = qcbTheme->itemData(1);
+	}
+
+	Themes::setConfiguredStyle(s, themeData.value<ThemeInfo::StyleInfo>(), s.requireRestartToApply);
 }
 
 void LookConfig::accept() const {

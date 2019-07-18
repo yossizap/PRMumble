@@ -2,7 +2,7 @@
 <context>
     <name>ACLEditor</name>
     <message>
-        <location filename="ACLEditor.cpp" line="+101"/>
+        <location filename="ACLEditor.cpp" line="+103"/>
         <source>Deny</source>
         <translation>Zakázat</translation>
     </message>
@@ -560,14 +560,10 @@ Tato hodnota Vám umožňuje nastavit maximální počet povolených uživatelů
         <translation>Nelze instancovat ovladač ASIO</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location filename="ASIOInput.ui"/>
+        <location filename="ASIOInput.cpp" line="+37"/>
         <source>ASIO</source>
         <translation>ASIO</translation>
-    </message>
-    <message>
-        <location filename="ASIOInput.ui"/>
-        <source>Form</source>
-        <translation>Tiskopis</translation>
     </message>
     <message>
         <location/>
@@ -691,7 +687,7 @@ Tato hodnota Vám umožňuje nastavit maximální počet povolených uživatelů
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="About.cpp" line="+15"/>
+        <location filename="About.cpp" line="+17"/>
         <source>About Mumble</source>
         <translation>O programu Mumble</translation>
     </message>
@@ -730,11 +726,6 @@ Tato hodnota Vám umožňuje nastavit maximální počet povolených uživatelů
     <name>AudioInput</name>
     <message>
         <location filename="AudioInput.ui"/>
-        <source>Form</source>
-        <translation>Formulář</translation>
-    </message>
-    <message>
-        <location/>
         <source>Interface</source>
         <translation>Rozhraní</translation>
     </message>
@@ -1099,7 +1090,7 @@ Tato hodnota Vám umožňuje nastavit maximální počet povolených uživatelů
         <translation>Doba, kdy mikrofon stále přijímá po uvolnění klávesy pro mluvení</translation>
     </message>
     <message>
-        <location filename="AudioInput.cpp" line="+597"/>
+        <location filename="AudioInput.cpp" line="+599"/>
         <source>Server maximum network bandwidth is only %1 kbit/s. Audio quality auto-adjusted to %2 kbit/s (%3 ms)</source>
         <translation>Maximální propustnost sítě na serveru je %1 kbit/s. Kvalita zvuku byla automaticky upravena na %2 kbit/s (%3 ms) </translation>
     </message>
@@ -1178,6 +1169,11 @@ Tato hodnota Vám umožňuje nastavit maximální počet povolených uživatelů
         <source>RNNoise</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <location/>
+        <source>Audio input</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>AudioInputDialog</name>
@@ -1240,11 +1236,6 @@ Tato hodnota Vám umožňuje nastavit maximální počet povolených uživatelů
     <name>AudioOutput</name>
     <message>
         <location filename="AudioOutput.ui"/>
-        <source>Form</source>
-        <translation>Formulář</translation>
-    </message>
-    <message>
-        <location/>
         <source>Interface</source>
         <translation>Rozhraní</translation>
     </message>
@@ -1575,6 +1566,11 @@ Tato hodnota Vám umožňuje nastavit maximální počet povolených uživatelů
         <location/>
         <source>Attenuate PulseAudio loopback modules</source>
         <translation>Ztlumit moduly zpětné smyčky PulseAudio</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Audio output</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2183,7 +2179,7 @@ Mumble je pod neustálým vývojem, a tým vývojářů se chce zaměřit na fun
         <translation>Vypnout Text-Na-Řeč a míst toho použít zvuky.</translation>
     </message>
     <message>
-        <location filename="AudioWizard.cpp" line="+291"/>
+        <location filename="AudioWizard.cpp" line="+293"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
@@ -2448,7 +2444,7 @@ Mluvte nahlas, jako kdybyste byli podráždění nebo nadšení. Snižujte hlasi
         <translation>Vyčistit</translation>
     </message>
     <message numerus="yes">
-        <location filename="BanEditor.cpp" line="+177"/>
+        <location filename="BanEditor.cpp" line="+179"/>
         <source>Ban List - %n Ban(s)</source>
         <translation><numerusform>Seznam zákazů - %n zákaz</numerusform><numerusform>Seznam zákazů - %n zákazy</numerusform><numerusform>Seznam zákazů - %n zákazů</numerusform><numerusform>Seznam zákazů - %n zákazů</numerusform></translation>
     </message>
@@ -3022,7 +3018,7 @@ Jste si jisti, že chcete certifikát nahradit?
 <context>
     <name>ChatbarTextEdit</name>
     <message>
-        <location filename="CustomElements.cpp" line="+82"/>
+        <location filename="CustomElements.cpp" line="+83"/>
         <source>Paste and &amp;Send</source>
         <oldsource>Paste and send</oldsource>
         <translation>&amp;Vložit a odeslat</translation>
@@ -3148,7 +3144,7 @@ Jste si jisti, že chcete certifikát nahradit?
 <context>
     <name>ConnectDialog</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="+1134"/>
+        <location filename="ConnectDialog.cpp" line="+1144"/>
         <source>Connecting to %1</source>
         <translation>Připojuji se k %1</translation>
     </message>
@@ -3236,8 +3232,13 @@ Jste si jisti, že chcete certifikát nahradit?
         <translation>&amp;Filtry</translation>
     </message>
     <message>
+        <location line="+740"/>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="ConnectDialog.ui"/>
-        <location filename="ConnectDialog.cpp" line="-505"/>
+        <location filename="ConnectDialog.cpp" line="-1245"/>
         <source>Users</source>
         <translation>Uživatelé</translation>
     </message>
@@ -3788,7 +3789,7 @@ Without this option enabled, using Mumble&apos;s global shortcuts in privileged 
 <context>
     <name>GlobalShortcutConfig</name>
     <message>
-        <location filename="GlobalShortcut.cpp" line="+533"/>
+        <location filename="GlobalShortcut.cpp" line="+535"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble can currently only use mouse buttons and keyboard modifier keys (Alt, Ctrl, Cmd, etc.) for global shortcuts.&lt;/p&gt;&lt;p&gt;If you want more flexibility, you can add Mumble as a trusted accessibility program in the Security &amp; Privacy section of your Mac&apos;s System Preferences.&lt;/p&gt;&lt;p&gt;In the Security &amp; Privacy preference pane, change to the Privacy tab. Then choose Accessibility (near the bottom) in the list to the left. Finally, add Mumble to the list of trusted accessibility programs.&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble nyní může používat pro globální zkratky pouze tlačítka myši a modifikační klávesy klávesnice (Alt, Ctrl, Cmd, atd.).&lt;/p&gt;&lt;p&gt;Pokud chcete používat více kláves můžete Mumble přidat jako důvěryhodný program pro usnadnění v části Zabezpečení a Soukromí v nastavení systému Mac.&lt;/p&gt;&lt;p&gt;V panelu přejděte na kartu Soukromí, pak v seznamu vlevo zvolte Usnadnění (ve spodní části). Nakonec přidejte Mubme do seznamu důvěryhodných programů.&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -3931,7 +3932,7 @@ Without this option enabled, using Mumble&apos;s global shortcuts in privileged 
 <context>
     <name>LCD</name>
     <message>
-        <location filename="LCD.cpp" line="+267"/>
+        <location filename="LCD.cpp" line="+269"/>
         <source>Not connected</source>
         <translation>Nepřipojeno</translation>
     </message>
@@ -3944,14 +3945,10 @@ Without this option enabled, using Mumble&apos;s global shortcuts in privileged 
         <translation>Povolit toto zařízení</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location filename="LCD.ui"/>
+        <location filename="LCD.cpp" line="+5"/>
         <source>LCD</source>
         <translation>LCD</translation>
-    </message>
-    <message>
-        <location filename="LCD.ui"/>
-        <source>Form</source>
-        <translation>Formulář</translation>
     </message>
     <message>
         <location/>
@@ -4021,7 +4018,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
 <context>
     <name>Log</name>
     <message>
-        <location filename="Log.cpp" line="+222"/>
+        <location filename="Log.cpp" line="+224"/>
         <source>Debug</source>
         <translation>Ladění</translation>
     </message>
@@ -4188,7 +4185,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
 </translation>
     </message>
     <message>
-        <location line="+74"/>
+        <location line="+77"/>
         <source>link to %1</source>
         <translation>odkaz na %1</translation>
     </message>
@@ -4216,7 +4213,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
 <context>
     <name>LogConfig</name>
     <message>
-        <location line="-499"/>
+        <location line="-502"/>
         <source>Toggle console for %1 events</source>
         <translation>Zapnout konzoli pro události %1</translation>
     </message>
@@ -4407,7 +4404,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
 <context>
     <name>LookConfig</name>
     <message>
-        <location filename="LookConfig.cpp" line="+30"/>
+        <location filename="LookConfig.cpp" line="+32"/>
         <source>System default</source>
         <translation>Výchozí nastavení systému</translation>
     </message>
@@ -4736,13 +4733,13 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="MainWindow.cpp" line="+107"/>
-        <location line="+2701"/>
+        <location filename="MainWindow.cpp" line="+109"/>
+        <location line="+2744"/>
         <source>Root</source>
         <translation>Kořen</translation>
     </message>
     <message>
-        <location line="-2644"/>
+        <location line="-2684"/>
         <source>Push-to-Talk</source>
         <comment>Global Shortcut</comment>
         <translation>Mluvení při stisku klávesy</translation>
@@ -4820,13 +4817,13 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
     </message>
     <message>
         <location filename="MainWindow.cpp" line="+4"/>
-        <location line="+159"/>
-        <location line="+2638"/>
+        <location line="+168"/>
+        <location line="+2669"/>
         <source>Mumble -- %1</source>
         <translation>Mumble -- %1 </translation>
     </message>
     <message>
-        <location line="-2766"/>
+        <location line="-2797"/>
         <source>&amp;Window</source>
         <translation>&amp;Okno</translation>
     </message>
@@ -4852,7 +4849,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <translation>Mumble je nyní připojen k serveru. Opravdu ho chcete Zavřit nebo Minimalizovat?</translation>
     </message>
     <message>
-        <location line="-252"/>
+        <location line="-261"/>
         <source>Mute Self</source>
         <comment>Global Shortcut</comment>
         <translation>Ztlumit se</translation>
@@ -4894,14 +4891,14 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <translation>Šeptat/Křičet</translation>
     </message>
     <message>
-        <location line="+79"/>
-        <location line="+2797"/>
+        <location line="+88"/>
+        <location line="+2829"/>
         <source>&lt;center&gt;Not connected&lt;/center&gt;</source>
         <oldsource>Not connected</oldsource>
         <translation>&lt;center&gt;Nepřipojen&lt;/center&gt;</translation>
     </message>
     <message>
-        <location line="-2349"/>
+        <location line="-2381"/>
         <source>Clear</source>
         <translation>Vyčistit</translation>
     </message>
@@ -4958,12 +4955,13 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
     </message>
     <message>
         <location line="+76"/>
-        <location line="+1497"/>
+        <location line="+1498"/>
+        <location line="+22"/>
         <source>Transmit Mode set to Continuous</source>
         <translation>Režim přenosu přepnut na Nepřetržitý</translation>
     </message>
     <message>
-        <location line="-1397"/>
+        <location line="-1419"/>
         <source>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</translation>
     </message>
@@ -4973,14 +4971,14 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <translation>&lt;h2&gt;Zvukový kanál&lt;/h2&gt;&lt;p&gt;Zašifrován pomocí 128 bit OCB-AES128&lt;br /&gt;průměrné zpoždění %1 ms (odchylka %4)&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-179"/>
-        <location line="+448"/>
+        <location line="-180"/>
+        <location line="+449"/>
         <source>Register yourself as %1</source>
         <translation>Registrovat se jako %1</translation>
     </message>
     <message>
-        <location line="-448"/>
-        <location line="+448"/>
+        <location line="-449"/>
+        <location line="+449"/>
         <source>&lt;p&gt;You are about to register yourself on this server. This action cannot be undone, and your username cannot be changed once this is done. You will forever be known as &apos;%1&apos; on this server.&lt;/p&gt;&lt;p&gt;Are you sure you want to register yourself?&lt;/p&gt;</source>
         <translation>&lt;p&gt;Chystáte se k registraci na tomto serveru. Tuto činnost nelze vrátit zpět, a jakmile je toto provedeno, Vaše uživatelské jméno nelze změnit. Na tomto serveru budete navždy známi jako &apos;%1&apos;.&lt;/p&gt;&lt;p&gt;Jste si jisti, že se chcete zaregistrovat?&lt;/p&gt;</translation>
     </message>
@@ -5057,7 +5055,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
     <message>
         <location line="+76"/>
         <location line="+270"/>
-        <location line="+611"/>
+        <location line="+641"/>
         <source>Message to channel %1</source>
         <translation>Zpráva do kanálu %1</translation>
     </message>
@@ -5092,7 +5090,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <translation type="unfinished"/>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+81"/>
         <source>&lt;center&gt;Type message to channel &apos;%1&apos; here&lt;/center&gt;</source>
         <oldsource>Type message to channel '%1' here</oldsource>
         <translation>&lt;center&gt;Zde napište zprávu pro kanál &apos;%1&apos;&lt;/center&gt;</translation>
@@ -5127,7 +5125,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <translation>Formát obrázku nerozpoznán.</translation>
     </message>
     <message>
-        <location line="-3103"/>
+        <location line="-3147"/>
         <source>&amp;User</source>
         <translation>&amp;Uživatel</translation>
     </message>
@@ -5137,7 +5135,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <translation>&amp;Kanál</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+65"/>
         <location line="+26"/>
         <source>Use in conjunction with Whisper to.</source>
         <comment>Global Shortcut</comment>
@@ -5160,6 +5158,24 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <source>Cycle Transmit Mode</source>
         <comment>Global Shortcut</comment>
         <translation>Přepnout režim přenosu</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to Push-To-Talk</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to Continuous</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to VAD</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
@@ -5226,18 +5242,20 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
     </message>
     <message>
         <location line="+41"/>
-        <location line="+1484"/>
+        <location line="+1485"/>
+        <location line="+40"/>
         <source>Transmit Mode set to Voice Activity</source>
         <translation>Režim přenosu přepnut na Při aktivitě hlasu</translation>
     </message>
     <message>
-        <location line="-1479"/>
-        <location line="+1483"/>
+        <location line="-1520"/>
+        <location line="+1484"/>
+        <location line="+16"/>
         <source>Transmit Mode set to Push-to-Talk</source>
         <translation>Režim přenosu přepnut na Mluvení při stisku klávesy</translation>
     </message>
     <message>
-        <location line="-1332"/>
+        <location line="-1348"/>
         <source>&lt;p&gt;Connected users: %1/%2&lt;/p&gt;</source>
         <translation>&lt;p&gt;Připojeno uživatelů: %1/%2&lt;/p&gt;</translation>
     </message>
@@ -5288,12 +5306,12 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
     </message>
     <message>
         <location line="+4"/>
-        <location line="+1524"/>
+        <location line="+1554"/>
         <source>&amp;View Certificate</source>
         <translation>Zobrazit &amp;Certifikát</translation>
     </message>
     <message>
-        <location line="-1230"/>
+        <location line="-1260"/>
         <location line="+19"/>
         <source>Enter reason</source>
         <translation>Zadejte důvod</translation>
@@ -5308,12 +5326,12 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <location line="+103"/>
         <location line="+4"/>
         <location line="+266"/>
-        <location line="+611"/>
+        <location line="+641"/>
         <source>To %1: %2</source>
         <translation>Pro %1: %2</translation>
     </message>
     <message>
-        <location line="-984"/>
+        <location line="-1014"/>
         <location line="+107"/>
         <source>Message to %1</source>
         <translation>Zpráva pro %1</translation>
@@ -5395,7 +5413,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
         <translation>O Qt</translation>
     </message>
     <message>
-        <location line="+469"/>
+        <location line="+499"/>
         <source>SSL Verification failed: %1</source>
         <translation>Ověření SSL selhalo: %1</translation>
     </message>
@@ -5427,7 +5445,7 @@ Toto pole popisuje velikost LCD zařízení. Velikost je udávána buď v pixele
     </message>
     <message>
         <location line="+11"/>
-        <location filename="Messages.cpp" line="+70"/>
+        <location filename="Messages.cpp" line="+72"/>
         <source>Invalid username</source>
         <translation>Neplatné jméno uživatele</translation>
     </message>
@@ -5474,8 +5492,8 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>Špatné heslo serveru pro účet neregistrovaného uživatele, prosím zkuste znovu.</translation>
     </message>
     <message>
-        <location line="-2238"/>
-        <location line="+2450"/>
+        <location line="-2269"/>
+        <location line="+2482"/>
         <source>Images (*.png *.jpg *.jpeg)</source>
         <translation>Obrázky (*.png *.jpg *.jpeg)</translation>
     </message>
@@ -5972,7 +5990,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>Toto zapne minimální zobrazení, kde jsou okna záznamu a menu skryta.</translation>
     </message>
     <message>
-        <location filename="Messages.cpp" line="+408"/>
+        <location filename="Messages.cpp" line="+416"/>
         <source>You muted and deafened %1.</source>
         <translation>Zeslabili a ohlušili jste uživatele %1.</translation>
     </message>
@@ -6012,7 +6030,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>%1 potlačen uživatelem %2.</translation>
     </message>
     <message>
-        <location line="-218"/>
+        <location line="-214"/>
         <source>%1 moved to %2.</source>
         <translation>%1 přesunut do %2.</translation>
     </message>
@@ -6027,12 +6045,12 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>%1 přesunut z %2 uživatelem %3.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+48"/>
         <source>%1 is now muted and deafened.</source>
         <translation>%1 je nyní zeslaben a ohlušen.</translation>
     </message>
     <message>
-        <location line="-296"/>
+        <location line="-304"/>
         <source>Your account information can not be verified currently. Please try again later</source>
         <translation>Informace o vašem účtu nemohou být momentálně ověřeny. Zkuste to prosím později</translation>
     </message>
@@ -6118,7 +6136,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>Oprávnění zamítnuto.</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+42"/>
         <source>%1 connected and entered channel.</source>
         <translation type="unfinished"/>
     </message>
@@ -6128,7 +6146,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>%1 se připojil.</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+91"/>
         <source>%1 is now muted.</source>
         <translation>%1 je nyní zeslaben.</translation>
     </message>
@@ -6239,7 +6257,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>Vaše potlačení bylo zrušeno uživatelem %1.</translation>
     </message>
     <message>
-        <location line="-173"/>
+        <location line="-169"/>
         <source>You joined %1.</source>
         <translation type="unfinished"/>
     </message>
@@ -6260,7 +6278,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>%1 přejmenován na %2 uživatelem %3.</translation>
     </message>
     <message>
-        <location line="+240"/>
+        <location line="+236"/>
         <source>%1 disconnected.</source>
         <translation>%1 odpojen.</translation>
     </message>
@@ -6292,7 +6310,12 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>%2%1: %3</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+149"/>
+        <source>Failed to load Opus, it will not be available for audio encoding/decoding.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+58"/>
         <source>The server requests minimum client version %1</source>
         <translation>Server vyžaduje minimální verze klienta %1</translation>
     </message>
@@ -6317,7 +6340,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>Server vyžaduje, aby mluvení při stisku tlačítka bylo vypnuto.</translation>
     </message>
     <message>
-        <location line="-464"/>
+        <location line="-470"/>
         <source>You were unmuted by %1.</source>
         <translation>%1 Vás zesílil.</translation>
     </message>
@@ -6352,12 +6375,12 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>%1 zesílil %2.</translation>
     </message>
     <message>
-        <location line="+367"/>
+        <location line="+373"/>
         <source>Unable to find matching CELT codecs with other clients. You will not be able to talk to all users.</source>
         <translation>Nelze nalézt odpovídající kodeky CELT s ostatními klienty. Nebudete schopni mluvit ke všem uživatelům.</translation>
     </message>
     <message>
-        <location line="-433"/>
+        <location line="-439"/>
         <source>You were muted and deafened by %1.</source>
         <oldsource>You were deafened by %1.</oldsource>
         <translation>%1 Vás zeslabil a ohlušil.</translation>
@@ -6383,7 +6406,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>%3 byl vykopnut a zakázán uživatelem %1: %2.</translation>
     </message>
     <message>
-        <location line="-270"/>
+        <location line="-266"/>
         <source>You were moved to %1 by %2.</source>
         <translation>Byli jste přesunuti do %1 uživatelem %2.</translation>
     </message>
@@ -6393,7 +6416,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>%1 vstoupil do kanálu.</translation>
     </message>
     <message>
-        <location line="-225"/>
+        <location line="-237"/>
         <source>Server connection rejected: %1.</source>
         <translation>Spojení se serverem odmítnuto: %1.</translation>
     </message>
@@ -6403,12 +6426,12 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>Zamítnuto: %1.</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+110"/>
         <source>%1 renamed to %2.</source>
         <translation>%1 přejmenován na %2.</translation>
     </message>
     <message>
-        <location line="+235"/>
+        <location line="+231"/>
         <source>%1 left channel and disconnected.</source>
         <translation>%1 opustil kanál a odpojil se.</translation>
     </message>
@@ -6418,7 +6441,7 @@ Jinak přerušte a zkontrolujte Váš certifikát a uživatelské jméno.</trans
         <translation>Zpráva od %1</translation>
     </message>
     <message>
-        <location filename="UserModel.cpp" line="+1391"/>
+        <location filename="UserModel.cpp" line="+1393"/>
         <source>You have User Dragging set to &quot;Do Nothing&quot; so the user wasn&apos;t moved.</source>
         <translation type="unfinished"/>
     </message>
@@ -6694,7 +6717,7 @@ kontextové nabídce kanálů.</translation>
         <translation>Otevře dialogové okno s posuvníkem pro hlasitost. Toto použijte u ostatních uživatelů v místnosti.</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="-3067"/>
+        <location filename="MainWindow.cpp" line="-3111"/>
         <source>&amp;Developer</source>
         <translation type="unfinished"/>
     </message>
@@ -6858,6 +6881,16 @@ kontextové nabídce kanálů.</translation>
         <source>R&amp;egister...</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <location/>
+        <source>Show</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Shows the main Mumble window.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Manual</name>
@@ -6955,7 +6988,7 @@ kontextové nabídce kanálů.</translation>
 <context>
     <name>NetworkConfig</name>
     <message>
-        <location filename="NetworkConfig.cpp" line="+29"/>
+        <location filename="NetworkConfig.cpp" line="+31"/>
         <source>Network</source>
         <translation>Síť</translation>
     </message>
@@ -7210,8 +7243,8 @@ Prevents the client from sending potentially identifying information about the o
 <context>
     <name>Overlay</name>
     <message>
-        <location filename="OverlayEditorScene.cpp" line="+97"/>
-        <location filename="OverlayUser.cpp" line="+129"/>
+        <location filename="OverlayEditorScene.cpp" line="+99"/>
+        <location filename="OverlayUser.cpp" line="+131"/>
         <source>Silent</source>
         <translation>Mlčící</translation>
     </message>
@@ -7240,7 +7273,7 @@ Prevents the client from sending potentially identifying information about the o
         <translation>Kanál</translation>
     </message>
     <message>
-        <location filename="Overlay.cpp" line="+205"/>
+        <location filename="Overlay.cpp" line="+207"/>
         <source>Failed to create communication with overlay at %2: %1. No overlay will be available.</source>
         <translation>Nelze vytvořit komunikaci s překryvem v %2: %1. Nebude dostupný žádný překryv.</translation>
     </message>
@@ -7248,7 +7281,7 @@ Prevents the client from sending potentially identifying information about the o
 <context>
     <name>OverlayClient</name>
     <message>
-        <location filename="OverlayUserGroup.cpp" line="+76"/>
+        <location filename="OverlayUserGroup.cpp" line="+78"/>
         <source>Filter</source>
         <translation>Filtr</translation>
     </message>
@@ -7326,7 +7359,7 @@ Prevents the client from sending potentially identifying information about the o
 <context>
     <name>OverlayConfig</name>
     <message>
-        <location filename="OverlayConfig.cpp" line="+80"/>
+        <location filename="OverlayConfig.cpp" line="+82"/>
         <source>To move the users, drag the little red dot.</source>
         <translation>Pro přesun uživatelů, táhněte malou červenou tečkou.</translation>
     </message>
@@ -7814,7 +7847,7 @@ Pro aktualizaci těchto souborů na jejich poslední verzi, klikněte na tlačí
     <name>PluginConfig</name>
     <message>
         <location filename="Plugins.ui"/>
-        <location filename="Plugins.cpp" line="+73"/>
+        <location filename="Plugins.cpp" line="+74"/>
         <source>Plugins</source>
         <translation>Zásuvné Moduly</translation>
     </message>
@@ -7830,11 +7863,6 @@ Pro aktualizaci těchto souborů na jejich poslední verzi, klikněte na tlačí
     </message>
     <message>
         <location filename="Plugins.ui"/>
-        <source>Form</source>
-        <translation>Formulář</translation>
-    </message>
-    <message>
-        <location/>
         <source>Options</source>
         <translation>Volby</translation>
     </message>
@@ -7949,7 +7977,7 @@ Pro aktualizaci těchto souborů na jejich poslední verzi, klikněte na tlačí
 <context>
     <name>PulseAudioSystem</name>
     <message>
-        <location filename="PulseAudio.cpp" line="+799"/>
+        <location filename="PulseAudio.cpp" line="+800"/>
         <source>Default Input</source>
         <translation>Výchozí Vstup</translation>
     </message>
@@ -7975,7 +8003,7 @@ Pro aktualizaci těchto souborů na jejich poslední verzi, klikněte na tlačí
 <context>
     <name>RichTextEditor</name>
     <message>
-        <location filename="RichTextEditor.cpp" line="+234"/>
+        <location filename="RichTextEditor.cpp" line="+236"/>
         <source>Failed to load image</source>
         <translation>Nelze načíst obrázek</translation>
     </message>
@@ -8076,7 +8104,7 @@ Pro aktualizaci těchto souborů na jejich poslední verzi, klikněte na tlačí
 <context>
     <name>ServerHandler</name>
     <message>
-        <location filename="ServerHandler.cpp" line="+299"/>
+        <location filename="ServerHandler.cpp" line="+301"/>
         <source>Unable to resolve hostname</source>
         <translation type="unfinished"/>
     </message>
@@ -8114,7 +8142,7 @@ Pro aktualizaci těchto souborů na jejich poslední verzi, klikněte na tlačí
 <context>
     <name>ServerView</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="-753"/>
+        <location filename="ConnectDialog.cpp" line="-761"/>
         <source>Favorite</source>
         <translation>Oblíbené</translation>
     </message>
@@ -8130,6 +8158,11 @@ Pro aktualizaci těchto souborů na jejich poslední verzi, klikněte na tlačí
     </message>
     <message>
         <location line="+7"/>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Africa</source>
         <translation>Afrika</translation>
     </message>
@@ -8306,7 +8339,7 @@ Pro aktualizaci těchto souborů na jejich poslední verzi, klikněte na tlačí
 <context>
     <name>Tokens</name>
     <message>
-        <location filename="Tokens.cpp" line="+42"/>
+        <location filename="Tokens.cpp" line="+44"/>
         <source>Empty Token</source>
         <translation>Prázdný Znak</translation>
     </message>
@@ -8515,7 +8548,7 @@ Znak přístupu je textový řetězec, který může být použit jako heslo pro
         <translation>Čas připojení</translation>
     </message>
     <message>
-        <location filename="UserInformation.cpp" line="+83"/>
+        <location filename="UserInformation.cpp" line="+85"/>
         <source>%1w</source>
         <translation>%1w</translation>
     </message>
@@ -8824,7 +8857,7 @@ Znak přístupu je textový řetězec, který může být použit jako heslo pro
 <context>
     <name>VersionCheck</name>
     <message>
-        <location filename="VersionCheck.cpp" line="+118"/>
+        <location filename="VersionCheck.cpp" line="+120"/>
         <source>Upgrade Mumble</source>
         <translation>Aktualizovat Mumble</translation>
     </message>
@@ -8873,7 +8906,7 @@ Znak přístupu je textový řetězec, který může být použit jako heslo pro
         <translation>Řetěz certifikátů</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+19"/>
         <source>Certificate details</source>
         <translation>Podrobnosti certifikátu</translation>
     </message>
@@ -8976,7 +9009,7 @@ Znak přístupu je textový řetězec, který může být použit jako heslo pro
 <context>
     <name>VoiceRecorder</name>
     <message>
-        <location filename="VoiceRecorder.cpp" line="+262"/>
+        <location filename="VoiceRecorder.cpp" line="+264"/>
         <source>Recorder failed to create directory &apos;%1&apos;</source>
         <translation>Nahrávač nemohl vytvořit adresář &apos;%1&apos;</translation>
     </message>
@@ -9010,7 +9043,7 @@ Znak přístupu je textový řetězec, který může být použit jako heslo pro
     <name>VoiceRecorderDialog</name>
     <message>
         <location filename="VoiceRecorderDialog.ui"/>
-        <location filename="VoiceRecorderDialog.cpp" line="+108"/>
+        <location filename="VoiceRecorderDialog.cpp" line="+110"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+9"/>
@@ -9148,9 +9181,17 @@ Prosím kontaktujte Vašeho administrátora serveru pro další informace.</tran
     </message>
 </context>
 <context>
+    <name>WASAPIInput</name>
+    <message>
+        <location filename="WASAPI.cpp" line="+463"/>
+        <source>Access to the microphone was denied. Please check that your operating system&apos;s microphone settings allow Mumble to use the microphone.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WASAPISystem</name>
     <message>
-        <location filename="WASAPI.cpp" line="+241"/>
+        <location line="-219"/>
         <source>Default Device</source>
         <translation>Výchozí zařízení</translation>
     </message>

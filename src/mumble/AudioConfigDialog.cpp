@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -118,7 +118,7 @@ void AudioInputDialog::load(const Settings &r) {
 	qlePushClickPathOn->setText(r.qsTxAudioCueOn);
 	qlePushClickPathOff->setText(r.qsTxAudioCueOff);
 
-    /* PR doesn't need transmission configuration 
+	/* PR doesn't need transmission configuration 
 	loadComboBox(qcbTransmit, r.atTransmit);
 	loadSlider(qsTransmitHold, r.iVoiceHold);
 	loadSlider(qsTransmitMin, iroundf(r.fVADmin * 32767.0f + 0.5f));
@@ -126,7 +126,7 @@ void AudioInputDialog::load(const Settings &r) {
 	loadSlider(qsFrames, (r.iFramesPerPacket == 1) ? 1 : (r.iFramesPerPacket/2 + 1));
 	loadSlider(qsDoublePush, iroundf(static_cast<float>(r.uiDoublePush) / 1000.f + 0.5f));
 	loadSlider(qsPTTHold, static_cast<int>(r.pttHold));
-    
+
 	if (r.vsVAD == Settings::Amplitude)
 		qrbAmplitude->setChecked(true);
 	else
@@ -134,7 +134,7 @@ void AudioInputDialog::load(const Settings &r) {
 
 	loadCheckBox(qcbPushWindow, r.bShowPTTButtonWindow);
 	loadCheckBox(qcbPushClick, r.bTxAudioCue);
-    */
+	*/
 	loadSlider(qsQuality, r.iQuality);
 	if (r.iNoiseSuppress != 0)
 		loadSlider(qsNoise, - r.iNoiseSuppress);
@@ -175,16 +175,16 @@ void AudioInputDialog::save() const {
 	s.iFramesPerPacket = (s.iFramesPerPacket == 1) ? 1 : ((s.iFramesPerPacket-1) * 2);
 	s.uiDoublePush = qsDoublePush->value() * 1000;
 	s.pttHold = qsPTTHold->value();
-    //This line was originally: 
-    // static_cast<Settings::AudioTransmit>(qcbTransmit->currentIndex());
-    // but it was disabled since we only want PTT in PR
+	//This line was originally: 
+	// static_cast<Settings::AudioTransmit>(qcbTransmit->currentIndex());
+	// but it was disabled since we only want PTT in PR
 	s.atTransmit = Settings::PushToTalk; 
 
 	// Idle auto actions
 	s.iIdleTime = qsbIdle->value() * 60;
 	s.iaeIdleAction = static_cast<Settings::IdleAction>(qcbIdleAction->currentIndex());
 	s.bUndoIdleActionUponActivity = qcbUndoIdleAction->isChecked();
-    
+
 	s.bShowPTTButtonWindow = qcbPushWindow->isChecked();
 	s.bTxAudioCue = qcbPushClick->isChecked();
 	s.qsTxAudioCueOn = qlePushClickPathOn->text();
@@ -284,9 +284,9 @@ void AudioInputDialog::updateBitrate() {
 	if (g.uiSession && (total > g.iMaxBandwidth)) {
 		qlBitrate->setEnabled(false);
 	}
-    else {
-        qlBitrate->setEnabled(true);
-    }
+	else {
+        	qlBitrate->setEnabled(true);
+	}
 
 	QString v = tr("%1 kbit/s (Audio %2, Position %4, Overhead %3)")
 	        .arg(total / 1000.0, 0, 'f', 1)
@@ -462,7 +462,7 @@ void AudioOutputDialog::load(const Settings &r) {
 	loadCheckBox(qcbAttenuateUsersOnPrioritySpeak, r.bAttenuateUsersOnPrioritySpeak);
 	loadCheckBox(qcbOnlyAttenuateSameOutput, r.bOnlyAttenuateSameOutput);
 	loadCheckBox(qcbAttenuateLoopbacks, r.bAttenuateLoopbacks);
-    qgbAdvancedAttenuation->setVisible(false);
+	qgbAdvancedAttenuation->setVisible(false);
 	loadSlider(qsJitter, r.iJitterBufferSize);
 	loadComboBox(qcbLoopback, r.lmLoopMode);
 	loadSlider(qsPacketDelay, static_cast<int>(r.dMaxPacketDelay));

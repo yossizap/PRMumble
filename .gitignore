@@ -7,9 +7,10 @@ asio/
 local/
 indent.sh
 *.pdb
-*.sln
 *.sdf
+*.sln
 *.suo
+*.swp
 *.aps
 *.vcxproj
 *.vcxproj.*
@@ -42,3 +43,4 @@ doxygen/
 .qmake.stash
 .DS_Store
 .directory
+*.orig

@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -22,7 +22,6 @@
 #include "ConnectDialog.h"
 #include "Database.h"
 #include "DeveloperConsole.h"
-#include "Global.h"
 #include "GlobalShortcut.h"
 #include "Log.h"
 #include "Net.h"
@@ -55,6 +54,9 @@
 #ifdef Q_OS_MAC
 #include "AppNap.h"
 #endif
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 MessageBoxEvent::MessageBoxEvent(QString m) : QEvent(static_cast<QEvent::Type>(MB_QEVENT)) {
 	msg = m;
@@ -138,6 +140,9 @@ MainWindow::MainWindow(QWidget *p) : QMainWindow(p) {
 	connect(qmChannel, SIGNAL(aboutToShow()), this, SLOT(qmChannel_aboutToShow()));
 	connect(qteChat, SIGNAL(entered(QString)), this, SLOT(sendChatbarMessage(QString)));
 
+	// Tray
+	connect(qstiIcon, SIGNAL(messageClicked()), this, SLOT(showRaiseWindow()));
+	connect(qaShow, SIGNAL(triggered()), this, SLOT(showRaiseWindow()));
 
 	// Explicitely add actions to mainwindow so their shortcuts are available
 	// if only the main window is visible (e.g. minimal mode)
@@ -251,12 +256,6 @@ void MainWindow::createActions() {
 
 	gsMetaChannel=new GlobalShortcut(this, idx++, tr("Join Channel", "Global Shortcut"));
 	gsMetaChannel->setObjectName(QLatin1String("MetaChannel"));
-
-	gsToggleOverlay=new GlobalShortcut(this, idx++, tr("Toggle Overlay", "Global Shortcut"), false);
-	gsToggleOverlay->setObjectName(QLatin1String("ToggleOverlay"));
-	gsToggleOverlay->qsToolTip = tr("Toggle state of in-game overlay.", "Global Shortcut");
-	gsToggleOverlay->qsWhatsThis = tr("This will switch the states of the in-game overlay.", "Global Shortcut");
-	connect(gsToggleOverlay, SIGNAL(down(QVariant)), g.o, SLOT(toggleShow()));
 
 	gsMinimal=new GlobalShortcut(this, idx++, tr("Toggle Minimal", "Global Shortcut"));
 	gsMinimal->setObjectName(QLatin1String("ToggleMinimal"));
@@ -1275,9 +1274,8 @@ void MainWindow::on_qaSelfRegister_triggered() {
 }
 
 void MainWindow::qcbTransmitMode_activated(int index) {
-	switch (index) 
-    {
-    /* Disabled for PR
+	switch (index) {
+	/* Disabled for PR
 		case 0: // Continuous
 			g.s.atTransmit = Settings::Continuous;
 			g.l->log(Log::Information, tr("Transmit Mode set to Continuous"));
@@ -1287,7 +1285,7 @@ void MainWindow::qcbTransmitMode_activated(int index) {
 			g.s.atTransmit = Settings::VAD;
 			g.l->log(Log::Information, tr("Transmit Mode set to Voice Activity"));
 			return;
-    */
+	*/
 		case 2: // Push-to-Talk
         default:
 			g.s.atTransmit = Settings::PushToTalk;
@@ -1310,7 +1308,8 @@ void MainWindow::on_qmServer_aboutToShow() {
 	// Don't add qaHide on macOS.
 	// There is no way to bring the window back (no 'tray' for Mumble on macOS),
 	// and the system has built-in hide functionality via Cmd-H.
-	qmServer->addAction(qaHide);
+	if (qstiIcon->isSystemTrayAvailable())
+		qmServer->addAction(qaHide);
 #endif
 	qmServer->addAction(qaQuit);
 
@@ -2774,7 +2773,7 @@ void MainWindow::on_gsCycleTransmitMode_triggered(bool down, QVariant)
 
 		switch (g.s.atTransmit)
 		{
-            /* Disabled for PR
+			/* Disabled for PR
 			case Settings::Continuous:
 				g.s.atTransmit = Settings::VAD;
 				g.l->log(Log::Information, tr("Transmit Mode set to Voice Activity"));
@@ -2783,8 +2782,8 @@ void MainWindow::on_gsCycleTransmitMode_triggered(bool down, QVariant)
 				g.s.atTransmit = Settings::PushToTalk;
 				g.l->log(Log::Information, tr("Transmit Mode set to Push-to-Talk"));
 				break;
-            */
-            default:
+			*/
+			default:
 			case Settings::PushToTalk:
 				g.s.atTransmit = Settings::Continuous;
 				g.l->log(Log::Information, tr("Transmit Mode set to Continuous"));
@@ -3051,7 +3050,8 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 			QStringList qsl;
 			foreach(QSslError e, g.sh->qlErrors)
 				qsl << QString::fromLatin1("<li>%1</li>").arg(e.errorString());
-/* PR can't handle pop up windows - just auto accept a new certificate
+
+			/* PR can't handle pop up windows - just auto accept a new certificate
 			QMessageBox qmb(QMessageBox::Warning, QLatin1String("PRMumble"),
 			                tr("<p>%1</p><ul>%2</ul><p>The specific errors with this certificate are:</p><ol>%3</ol>"
 			                   "<p>Do you wish to accept this certificate anyway?<br />(It will also be stored so you won't be asked this again.)</p>"
@@ -3076,10 +3076,10 @@ void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString re
 				break;
 			}*/
 
-            /* Perform the "Yes" button logic without user input */
-            g.db->setDigest(host, port, QString::fromLatin1(c.digest(QCryptographicHash::Sha1).toHex()));
-            qaServerDisconnect->setEnabled(true);
-            on_Reconnect_timeout();
+            		/* Perform the "Yes" button logic without user input */
+            		g.db->setDigest(host, port, QString::fromLatin1(c.digest(QCryptographicHash::Sha1).toHex()));
+            		qaServerDisconnect->setEnabled(true);
+            		on_Reconnect_timeout();
 		}
 	} else if (err == QAbstractSocket::SslHandshakeFailedError) {
 		QMessageBox::warning(this, tr("SSL Version mismatch"), tr("This server is using an older encryption standard, and is no longer supported by modern versions of Mumble."), QMessageBox::Ok);
@@ -3181,6 +3181,7 @@ void MainWindow::trayAboutToShow() {
 	qmTray->clear();
 	if (top) {
 		qmTray->addAction(qaQuit);
+		qmTray->addAction(qaShow);
 		qmTray->addSeparator();
 		qmTray->addAction(qaAudioDeaf);
 		qmTray->addAction(qaAudioMute);
@@ -3188,13 +3189,16 @@ void MainWindow::trayAboutToShow() {
 		qmTray->addAction(qaAudioMute);
 		qmTray->addAction(qaAudioDeaf);
 		qmTray->addSeparator();
+		qmTray->addAction(qaShow);
 		qmTray->addAction(qaQuit);
 	}
 }
 
-void MainWindow::on_Icon_messageClicked() {
-	if (isMinimized())
+void MainWindow::showRaiseWindow() {
+	if (isMinimized()) {
 		setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+	}
+
 	show();
 	raise();
 	activateWindow();
@@ -3205,10 +3209,11 @@ void MainWindow::on_Icon_activated(QSystemTrayIcon::ActivationReason reason) {
 		case QSystemTrayIcon::Trigger:
 		case QSystemTrayIcon::DoubleClick:
 		case QSystemTrayIcon::MiddleClick:
-			setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-			show();
-			raise();
-			activateWindow();
+		if (isMinimized()) {
+			showRaiseWindow();
+		} else {
+			showMinimized();
+		}
 		default: break;
 	}
 }

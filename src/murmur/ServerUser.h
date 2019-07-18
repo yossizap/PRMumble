@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -7,6 +7,7 @@
 #define MUMBLE_MURMUR_SERVERUSER_H_
 
 #include <QtCore/QStringList>
+#include <QtCore/QTime>
 
 #ifdef Q_OS_UNIX
 #include <sys/socket.h>
@@ -62,18 +63,12 @@ struct WhisperTarget {
 
 class Server;
 
-#if __cplusplus > 199711L
-        typedef std::chrono::time_point<std::chrono::steady_clock> time_point;
-#else
-        typedef clock_t time_point;
-#endif
-
 // Simple algorithm for rate limiting
 class LeakyBucket {
 	private:
 		unsigned int tokensPerSec, maxTokens;
 		long currentTokens;
-		time_point lastUpdate;
+		QTime lastUpdate;
 
 	public:
 		// Returns true if packets should be dropped

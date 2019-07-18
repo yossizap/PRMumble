@@ -1,4 +1,4 @@
-# Copyright 2005-2018 The Mumble Developers. All rights reserved.
+# Copyright 2005-2019 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -7,9 +7,9 @@ include(../mumble.pri)
 include(../../qmake/python.pri)
 include(../../qmake/lrelease.pri)
 
-DEFINES		*= MUMBLE
-TEMPLATE	= app
-TARGET		= PRMumble
+DEFINES *= MUMBLE
+TEMPLATE = app
+TARGET = PRMumble
 
 !CONFIG(qt4-legacy-compat) {
   CONFIG += no-qt4-legacy-compat
@@ -221,6 +221,7 @@ CONFIG(qtspeech) {
 }
 
 RESOURCES *= mumble.qrc mumble_translations.qrc ../../themes/MumbleTheme.qrc
+
 # Add the various mumble_flags_XX.qrc files to RESOURCES...
 include(flags/mumble_flags.pri)
 
@@ -283,7 +284,7 @@ CONFIG(static) {
   DEFINES *= USE_MANUAL_PLUGIN
 }
 
-unix:!CONFIG(bundled-speex):system(pkg-config --atleast-version=1.2 speexdsp):system(pkg-config --atleast-version=1.2 speex) {
+unix:!CONFIG(bundled-speex):system($$PKG_CONFIG --atleast-version=1.2 speexdsp):system($$PKG_CONFIG --atleast-version=1.2 speex) {
   CONFIG *= no-bundled-speex
 }
 
@@ -317,7 +318,7 @@ CONFIG(sbcelt) {
   LIBS *= -lcelt -lsbcelt
   DEFINES *= SBCELT_PREFIX_API SBCELT_COMPAT_API USE_SBCELT
 } else {
-  unix:!CONFIG(bundled-celt):system(pkg-config --atleast-version=0.7.0 celt) {
+  unix:!CONFIG(bundled-celt):system($$PKG_CONFIG --atleast-version=0.7.0 celt) {
     CONFIG *= no-bundled-celt
   }
   CONFIG(no-bundled-celt) {
@@ -351,7 +352,7 @@ CONFIG(no-vorbis-recording) {
   DEFINES *= NO_VORBIS_RECORDING
 }
 
-unix:!CONFIG(bundled-opus):system(pkg-config --exists opus) {
+unix:!CONFIG(bundled-opus):system($$PKG_CONFIG --exists opus) {
   must_pkgconfig(opus)
   DEFINES *= USE_OPUS
 } else {
@@ -371,7 +372,7 @@ unix:!CONFIG(bundled-opus):system(pkg-config --exists opus) {
   }
 }
 
-unix:!CONFIG(bundled-rnnoise):system(pkg-config --exists rnnoise) {
+unix:!CONFIG(bundled-rnnoise):system($$PKG_CONFIG --exists rnnoise) {
   must_pkgconfig(rnnoise)
   DEFINES *= USE_RNNOISE
 } else {
@@ -470,8 +471,8 @@ win32 {
 }
 
 unix {
-  HAVE_PULSEAUDIO=$$system(pkg-config --modversion --silence-errors libpulse)
-  HAVE_JACKAUDIO=$$system(pkg-config --modversion --silence-errors jack)
+  HAVE_PULSEAUDIO=$$system($$PKG_CONFIG --modversion --silence-errors libpulse)
+  HAVE_JACKAUDIO=$$system($$PKG_CONFIG --modversion --silence-errors jack)
 
   !isEmpty(HAVE_PULSEAUDIO):!CONFIG(no-pulseaudio) {
     CONFIG *= pulseaudio
@@ -625,7 +626,7 @@ bonjour {
     LIBS *= -lDNSSD
   }
   unix:!macx {
-    system(pkg-config --exists avahi-compat-libdns_sd avahi-client) {
+    system($$PKG_CONFIG --exists avahi-compat-libdns_sd avahi-client) {
       must_pkgconfig(avahi-compat-libdns_sd)
       must_pkgconfig(avahi-client)
     } else {
@@ -643,7 +644,7 @@ dbus {
 
 speechd {
   DEFINES *= USE_SPEECHD
-  system(pkg-config --atleast-version=0.8 speech-dispatcher) {
+  system($$PKG_CONFIG --atleast-version=0.8 speech-dispatcher) {
     DEFINES *= USE_SPEECHD_PKGCONFIG
     must_pkgconfig(speech-dispatcher)
   } else {

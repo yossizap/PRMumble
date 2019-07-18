@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -156,7 +156,7 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 		ok = false;
 	}
 	
-    /* Only allow clients that sent Project reality's GUID */
+	/* Only allow clients that sent Project reality's GUID */
 	if (ok && msg.prguid() != "{7cf19ff0-2950-4551-b329-07dd9469f605}") {
 		reason = QString::fromLatin1("This server requires you to use Project Reality Mumble. This is automatically launched when playing Project Reality. http://www.realitymod.com");
 		rtType = MumbleProto::Reject_RejectType_AuthenticatorFail;
@@ -1081,6 +1081,13 @@ void Server::msgChannelState(ServerUser *uSource, MumbleProto::ChannelState &msg
 					}
 					qlAdd << l;
 				}
+			}
+		}
+
+		if (msg.has_max_users()) {
+			if (! hasPermission(uSource, c, ChanACL::Write)) {
+				PERM_DENIED(uSource, c, ChanACL::Write);
+				return;
 			}
 		}
 

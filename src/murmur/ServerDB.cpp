@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -51,32 +51,32 @@ QSqlDatabase *ServerDB::db = NULL;
 Timer ServerDB::tLogClean;
 QString ServerDB::qsUpgradeSuffix;
 
-void ServerDB::loadOrSetupMetaPKBDF2IterationsCount(QSqlQuery &query) {
+void ServerDB::loadOrSetupMetaPBKDF2IterationCount(QSqlQuery &query) {
 	if (!Meta::mp.legacyPasswordHash) {
 		if (Meta::mp.kdfIterations <= 0) {
 			// Configuration doesn't specify an override, load from db
-			
+
 			SQLDO("SELECT `value` FROM `%1meta` WHERE `keystring` = 'pbkdf2_iterations'");
 			if (query.next()) {
 				Meta::mp.kdfIterations = query.value(0).toInt();
 			}
-			
+
 			if (Meta::mp.kdfIterations <= 0) {
 				// Didn't get a valid iteration count from DB, overwrite
 				Meta::mp.kdfIterations = PBKDF2::benchmark();
-				
-				qWarning() << "Performed initial PBKDF2 benchmark. Will use " << Meta::mp.kdfIterations << " iterations as default";
-				
+
+				qWarning() << "Performed initial PBKDF2 benchmark. Will use" << Meta::mp.kdfIterations << "iterations as default";
+
 				SQLPREP("INSERT INTO `%1meta` (`keystring`, `value`) VALUES('pbkdf2_iterations',?)");
 				query.addBindValue(Meta::mp.kdfIterations);
 				SQLEXEC();
 			}
 		}
-		
+
 		if (Meta::mp.kdfIterations < PBKDF2::BENCHMARK_MINIMUM_ITERATION_COUNT) {
-			qWarning() << "Configured default PBKDF2 iteration count of " << Meta::mp.kdfIterations << " is below minimum recommended value of " << PBKDF2::BENCHMARK_MINIMUM_ITERATION_COUNT << " and could be insecure.";
+			qWarning() << "Configured default PBKDF2 iteration count of" << Meta::mp.kdfIterations << "is below minimum recommended value of" << PBKDF2::BENCHMARK_MINIMUM_ITERATION_COUNT << "and could be insecure.";
 		}
-	}	
+	}
 }
 
 ServerDB::ServerDB() {
@@ -212,8 +212,8 @@ ServerDB::ServerDB() {
 
 	if (query.next())
 		version = query.value(0).toInt();
-	
-	loadOrSetupMetaPKBDF2IterationsCount(query);
+
+	loadOrSetupMetaPBKDF2IterationCount(query);
 
 	if (version < 6) {
 		if (version > 0) {
@@ -438,31 +438,6 @@ ServerDB::ServerDB() {
 				foreach(const qsp &key, qlForeignKeys) {
 					if (key.first.startsWith(Meta::mp.qsDBPrefix))
 						ServerDB::exec(query, QString::fromLatin1("ALTER TABLE `%1` DROP FOREIGN KEY `%2`").arg(key.first).arg(key.second), true);
-				}
-
-
-				SQLPREP("SELECT TABLE_NAME, CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA=? AND CONSTRAINT_TYPE='UNIQUE'");
-				query.addBindValue(Meta::mp.qsDatabase);
-				SQLEXEC();
-				while (query.next())
-					qlIndexes << qsp(query.value(0).toString(), query.value(1).toString());
-
-				foreach(const qsp &key, qlIndexes) {
-					if (key.first.startsWith(Meta::mp.qsDBPrefix))
-						ServerDB::exec(query, QString::fromLatin1("ALTER TABLE `%1` DROP INDEX `%2`").arg(key.first).arg(key.second), true);
-				}
-
-				qlIndexes.clear();
-
-				SQLPREP("SELECT DISTINCT TABLE_NAME, INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA=? AND INDEX_NAME != 'PRIMARY';");
-				query.addBindValue(Meta::mp.qsDatabase);
-				SQLEXEC();
-				while (query.next())
-					qlIndexes << qsp(query.value(0).toString(), query.value(1).toString());
-
-				foreach(const qsp &key, qlIndexes) {
-					if (key.first.startsWith(Meta::mp.qsDBPrefix))
-						ServerDB::exec(query, QString::fromLatin1("ALTER TABLE `%1` DROP INDEX `%2`").arg(key.first).arg(key.second), true);
 				}
 			}
 			SQLDO("CREATE TABLE `%1servers`(`server_id` INTEGER PRIMARY KEY AUTO_INCREMENT) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin");
@@ -858,36 +833,40 @@ int Server::registerUser(const QMap<int, QString> &info) {
 	if (res == -1)
 		return res;
 
-	TransactionHolder th;
-
-	QSqlQuery &query = *th.qsqQuery;
 	int id = 0;
 
-	if (res < 0) {
-		SQLPREP("SELECT MAX(`user_id`)+1 AS id FROM `%1users` WHERE `server_id`=? AND `user_id` < 1000000000");
-		query.addBindValue(iServerNum);
-		SQLEXEC();
-		if (query.next())
-			id = query.value(0).toInt();
-	} else {
-		id = res;
-	}
+	{
+		TransactionHolder th;
+
+		QSqlQuery &query = *th.qsqQuery;
 	
-	if (Meta::mp.qsDBDriver == "QPSQL") {
-		SQLPREP("INSERT INTO `%1users` (`server_id`, `user_id`, `name`) VALUES (:server_id,:user_id,:name) ON CONFLICT (`server_id`, `name`) DO UPDATE SET `user_id` = :u_user_id WHERE `%1users`.`server_id` = :u_server_id AND `%1users`.`name` = :u_name");
-		query.bindValue(":server_id", iServerNum);
-		query.bindValue(":user_id", id);
-		query.bindValue(":name", name);
-		query.bindValue(":u_server_id", iServerNum);
-		query.bindValue(":u_user_id", id);
-		query.bindValue(":u_name", name);
-		SQLEXEC();
-	} else {
-		SQLPREP("REPLACE INTO `%1users` (`server_id`, `user_id`, `name`) VALUES (?,?,?)");
-		query.addBindValue(iServerNum);
-		query.addBindValue(id);
-		query.addBindValue(name);
-		SQLEXEC();
+
+		if (res < 0) {
+			SQLPREP("SELECT MAX(`user_id`)+1 AS id FROM `%1users` WHERE `server_id`=? AND `user_id` < 1000000000");
+			query.addBindValue(iServerNum);
+			SQLEXEC();
+			if (query.next())
+				id = query.value(0).toInt();
+		} else {
+			id = res;
+		}
+
+		if (Meta::mp.qsDBDriver == "QPSQL") {
+			SQLPREP("INSERT INTO `%1users` (`server_id`, `user_id`, `name`) VALUES (:server_id,:user_id,:name) ON CONFLICT (`server_id`, `name`) DO UPDATE SET `user_id` = :u_user_id WHERE `%1users`.`server_id` = :u_server_id AND `%1users`.`name` = :u_name");
+			query.bindValue(":server_id", iServerNum);
+			query.bindValue(":user_id", id);
+			query.bindValue(":name", name);
+			query.bindValue(":u_server_id", iServerNum);
+			query.bindValue(":u_user_id", id);
+			query.bindValue(":u_name", name);
+			SQLEXEC();
+		} else {
+			SQLPREP("REPLACE INTO `%1users` (`server_id`, `user_id`, `name`) VALUES (?,?,?)");
+			query.addBindValue(iServerNum);
+			query.addBindValue(id);
+			query.addBindValue(name);
+			SQLEXEC();
+		}
 	}
 	
 	qhUserNameCache.remove(id);

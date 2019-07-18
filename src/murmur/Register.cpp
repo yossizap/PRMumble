@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -89,7 +89,7 @@ void Server::update() {
 		tag.appendChild(t);
 	}
 
-	QNetworkRequest qnr(QUrl(QLatin1String("https://mumble.info/register.cgi")));
+	QNetworkRequest qnr(QUrl(QLatin1String("https://publist-registration.mumble.info/v1/register")));
 	qnr.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("text/xml"));
 
 	QSslConfiguration ssl = qnr.sslConfiguration();

@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -291,14 +291,16 @@ bool AudioOutputSpeech::needSamples(unsigned int snum) {
 						memset(pOut, 0, sizeof(float) * iFrameSize);
 				} else if (umtType == MessageHandler::UDPVoiceOpus) {
 #ifdef USE_OPUS
-					decodedSamples = oCodec->opus_decode_float(opusState,
-					                                           qba.isEmpty() ?
-					                                               NULL :
-					                                               reinterpret_cast<const unsigned char *>(qba.constData()),
-					                                           qba.size(),
-					                                           pOut,
-					                                           iAudioBufferSize,
-					                                           0);
+					if (oCodec) {
+						decodedSamples = oCodec->opus_decode_float(opusState,
+						                                           qba.isEmpty() ?
+						                                               NULL :
+						                                               reinterpret_cast<const unsigned char *>(qba.constData()),
+						                                           qba.size(),
+						                                           pOut,
+						                                           iAudioBufferSize,
+						                                           0);
+					}
 
 					if (decodedSamples < 0) {
 						decodedSamples = iFrameSize;
@@ -354,7 +356,9 @@ bool AudioOutputSpeech::needSamples(unsigned int snum) {
 						memset(pOut, 0, sizeof(float) * iFrameSize);
 				} else if (umtType == MessageHandler::UDPVoiceOpus) {
 #ifdef USE_OPUS
-					decodedSamples = oCodec->opus_decode_float(opusState, NULL, 0, pOut, iFrameSize, 0);
+					if (oCodec) {
+						decodedSamples = oCodec->opus_decode_float(opusState, NULL, 0, pOut, iFrameSize, 0);
+					}
 
 					if (decodedSamples < 0) {
 						decodedSamples = iFrameSize;

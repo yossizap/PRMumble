@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2017 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -7,6 +7,8 @@
 #include "excludecheck.h"
 
 #include "overlay_exe/overlay_exe.h"
+
+#undef max // for std::numeric_limits<T>::max()
 
 static HANDLE hMapObject = NULL;
 static HANDLE hHookMutex = NULL;

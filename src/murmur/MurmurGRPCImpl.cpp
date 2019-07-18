@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -1506,8 +1506,10 @@ void V1_ChannelAdd::impl(bool) {
 
 	{
 		QWriteLocker wl(&server->qrwlVoiceThread);
-		nc = server->addChannel(parent, qsName);
+		nc = server->addChannel(parent, qsName, request.temporary(), request.position());
 	}
+
+	nc->qsDesc = u8(request.description());
 
 	server->updateChannel(nc);
 	int newid = nc->iId;
@@ -1516,6 +1518,9 @@ void V1_ChannelAdd::impl(bool) {
 	mpcs.set_channel_id(newid);
 	mpcs.set_parent(parent->iId);
 	mpcs.set_name(request.name());
+	mpcs.set_temporary(request.temporary());
+	mpcs.set_position(request.position());
+	mpcs.set_description(request.description());
 	server->sendAll(mpcs);
 
 	::MurmurRPC::Channel resChannel;
@@ -2040,7 +2045,7 @@ void V1_DatabaseUserUpdate::impl(bool) {
 				QString name = u->qsName;
 				QString comment = u->qsComment;
 				if (info.contains(ServerDB::User_Name)) {
-					comment = info.value(ServerDB::User_Name);
+					name = info.value(ServerDB::User_Name);
 				}
 				if (info.contains(ServerDB::User_Comment)) {
 					comment = info.value(ServerDB::User_Comment);

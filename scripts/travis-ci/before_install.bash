@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 #
-# Copyright 2005-2018 The Mumble Developers. All rights reserved.
+# Copyright 2005-2019 The Mumble Developers. All rights reserved.
 # Use of this source code is governed by a BSD-style license
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -22,13 +22,13 @@ if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
 	elif [ "${MUMBLE_QT}" == "qt5" ] && [ "${MUMBLE_HOST}" == "x86_64-linux-gnu" ]; then
 		sudo apt-get -qq update
 		sudo apt-get build-dep -qq mumble
-		sudo apt-get install qt5-default qttools5-dev qttools5-dev-tools qtbase5-dev qtbase5-dev-tools qttranslations5-l10n libqt5svg5-dev
+		sudo apt-get install libqt5sql5 libqt5sql5-sqlite qt5-default qttools5-dev qttools5-dev-tools qtbase5-dev qtbase5-dev-tools qttranslations5-l10n libqt5svg5-dev
 		sudo apt-get install libjack-jackd2-dev
 	elif [ "${MUMBLE_QT}" == "qt5" ] && [ "${MUMBLE_HOST}" == "i686-w64-mingw32" ]; then
 		sudo dpkg --add-architecture i386
 		sudo apt-get -qq update
-		echo "deb https://dl.mumble.info/mirror/pkg.mxe.cc/repos/apt/debian jessie main" | sudo tee /etc/apt/sources.list.d/mxeapt.list
-		sudo apt-key adv --keyserver x-hkp://keys.gnupg.net --recv-keys D43A795B73B16ABE9643FE1AFD8FFF16DB45C6AB
+		echo "deb https://dl.mumble.info/mirror/mirror.mxe.cc/repos/apt xenial main" | sudo tee /etc/apt/sources.list.d/mxe.list
+		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 86B72ED9
 		sudo apt-get -qq update
 		sudo apt-get install \
 			wine \
@@ -46,8 +46,8 @@ if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
 	elif [ "${MUMBLE_QT}" == "qt5" ] && [ "${MUMBLE_HOST}" == "x86_64-w64-mingw32" ]; then
 		sudo dpkg --add-architecture i386
 		sudo apt-get -qq update
-		echo "deb https://dl.mumble.info/mirror/pkg.mxe.cc/repos/apt/debian jessie main" | sudo tee /etc/apt/sources.list.d/mxeapt.list
-		sudo apt-key adv --keyserver x-hkp://keys.gnupg.net --recv-keys D43A795B73B16ABE9643FE1AFD8FFF16DB45C6AB
+		echo "deb https://dl.mumble.info/mirror/mirror.mxe.cc/repos/apt xenial main" | sudo tee /etc/apt/sources.list.d/mxe.list
+		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 86B72ED9
 		sudo apt-get -qq update
 		sudo apt-get install \
 			wine \

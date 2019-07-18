@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -9,9 +9,11 @@
 
 #include "AudioInput.h"
 #include "AudioOutputSample.h"
-#include "Global.h"
 #include "Log.h"
 #include "MainWindow.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 CompletablePage::CompletablePage(QWizard *p) : QWizardPage(p) {
 	bComplete = true;
@@ -131,9 +133,9 @@ AudioWizard::AudioWizard(QWidget *p) : QWizard(p) {
 		}
 	}
 
-    /* Only enable PTT for PR */
+	/* Only enable PTT for PR */
 	//if (g.s.atTransmit == Settings::PushToTalk)
-    qrPTT->setChecked(true);
+	qrPTT->setChecked(true);
 	/*else if (g.s.vsVAD == Settings::Amplitude)
 		qrAmplitude->setChecked(true);
 	else
@@ -332,7 +334,7 @@ void AudioWizard::showPage(int pageid) {
 		g.s.bMute = false;
 	}
 
-    /* Only enable PTT for PR */
+	/* Only enable PTT for PR */
 	if ((cp == qwpTrigger) || (cp == qwpSettings)) {
 		if (! bTransmitChanged)
 			g.s.atTransmit = sOldSettings.atTransmit;
@@ -340,10 +342,10 @@ void AudioWizard::showPage(int pageid) {
 			g.s.atTransmit = Settings::PushToTalk;
 		else
 			//g.s.atTransmit = Settings::VAD;
-            g.s.atTransmit = Settings::PushToTalk;
+		g.s.atTransmit = Settings::PushToTalk;
 	} else {
 		//g.s.atTransmit = Settings::Continuous;
-        g.s.atTransmit = Settings::PushToTalk;
+		g.s.atTransmit = Settings::PushToTalk;
 	}
 }
 
@@ -362,7 +364,7 @@ void AudioWizard::playChord() {
 	AudioOutputPtr ao = g.ao;
 	if (! ao || aosSource || bInit)
 		return;
-	aosSource = ao->playSample(QLatin1String("skin:wb_male.oga"), true);
+	aosSource = ao->playSample(QLatin1String(":/wb_male.oga"), true);
 }
 
 void AudioWizard::restartAudio() {
@@ -407,8 +409,9 @@ void AudioWizard::accept() {
 		g.s.atTransmit = Settings::PushToTalk;
 	else
 		//g.s.atTransmit = Settings::VAD;
-        /* Only allow PTT in PR */
-        g.s.atTransmit = Settings::PushToTalk;
+
+	/* Only allow PTT in PR */
+	g.s.atTransmit = Settings::PushToTalk;
 
 	g.s.bMute = sOldSettings.bMute;
 	g.s.bDeaf = sOldSettings.bDeaf;

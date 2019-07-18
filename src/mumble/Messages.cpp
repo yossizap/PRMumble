@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -15,7 +15,6 @@
 #include "Connection.h"
 #include "ConnectDialog.h"
 #include "Database.h"
-#include "Global.h"
 #include "GlobalShortcut.h"
 #include "Log.h"
 #include "MainWindow.h"
@@ -29,6 +28,9 @@
 #include "VersionCheck.h"
 #include "ViewCert.h"
 #include "CryptState.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 #define ACTOR_INIT \
 	ClientUser *pSrc=NULL; \
@@ -286,10 +288,6 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 			pmModel->moveUser(pDst, channel);
 		}
 
-		if (msg.has_user_id()) {
-			pmModel->setUserId(pDst, msg.user_id());
-		}
-
 		if (msg.has_hash()) {
 			pmModel->setHash(pDst, u8(msg.hash()));
 		}
@@ -301,6 +299,10 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 				g.l->log(Log::UserJoin, tr("%1 connected.").arg(Log::formatClientUser(pDst, Log::Source)));
 			}
 		}
+	}
+
+	if (msg.has_user_id()) {
+		pmModel->setUserId(pDst, msg.user_id());
 	}
 
 	if (channel) {
@@ -320,18 +322,18 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 					} else {
 						g.l->log(Log::SelfChannelJoinOther, tr("You were moved to %1 by %2.").arg(Log::formatChannel(channel)).arg(Log::formatClientUser(pSrc, Log::Source)));
 					}
-				} else if ((channel == pSelf->cChannel) || oldChannel == pSelf->cChannel) {
+				} else if (pSrc == pSelf) {
+					if (channel == pSelf->cChannel) {
+						g.l->log(Log::ChannelJoin, tr("You moved %1 to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)));
+					} else {
+						g.l->log(Log::ChannelLeave, tr("You moved %1 to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)));
+					}
+				} else if ((channel == pSelf->cChannel) || (oldChannel == pSelf->cChannel)) {
 					if (pDst == pSrc) {
 						if (channel == pSelf->cChannel) {
 							g.l->log(Log::ChannelJoin, tr("%1 entered channel.").arg(Log::formatClientUser(pDst, Log::Target)));
 						} else {
 							g.l->log(Log::ChannelLeave, tr("%1 moved to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)));
-						}
-					} else if (pSrc == pSelf) {
-						if (channel == pSelf->cChannel) {
-							g.l->log(Log::ChannelJoin, tr("You moved %1 to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)));
-						} else {
-							g.l->log(Log::ChannelLeave, tr("You moved %1 to %2.").arg(Log::formatClientUser(pDst, Log::Target)).arg(Log::formatChannel(channel)));
 						}
 					} else {
 						if (channel == pSelf->cChannel) {
@@ -873,7 +875,13 @@ void MainWindow::msgCodecVersion(const MumbleProto::CodecVersion &msg) {
 	bool pref = msg.prefer_alpha();
 
 #ifdef USE_OPUS
+	static bool warnedOpus = false;
 	g.bOpus = msg.opus();
+
+	if (!g.oCodec && !warnedOpus) {
+		g.l->log(Log::CriticalError, tr("Failed to load Opus, it will not be available for audio encoding/decoding."));
+		warnedOpus = true;
+	}
 #endif
 
 	// Workaround for broken 1.2.2 servers
@@ -898,15 +906,15 @@ void MainWindow::msgCodecVersion(const MumbleProto::CodecVersion &msg) {
 
 	int willuse = pref ? g.iCodecAlpha : g.iCodecBeta;
 
-	static bool warned = false;
+	static bool warnedCELT = false;
 
 	if (! g.qmCodecs.contains(willuse)) {
-		if (! warned) {
+		if (! warnedCELT) {
 			g.l->log(Log::CriticalError, tr("Unable to find matching CELT codecs with other clients. You will not be able to talk to all users."));
-			warned = true;
+			warnedCELT = true;
 		}
 	} else {
-		warned = false;
+		warnedCELT = false;
 	}
 }
 

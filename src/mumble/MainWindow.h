@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -75,10 +75,12 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		QMap<unsigned int, UserLocalVolumeDialog *> qmUserVolTracker;
 
 		GlobalShortcut *gsPushTalk, *gsResetAudio, *gsMuteSelf, *gsDeafSelf;
+
 		GlobalShortcut *gsUnlink, *gsPushMute, *gsMetaChannel, *gsToggleOverlay;
 		GlobalShortcut *gsMinimal, *gsVolumeUp, *gsVolumeDown, *gsWhisper, *gsMetaLink;
 		GlobalShortcut *gsPRSquad, *gsPRSLAll, *gsPRSL1, *gsPRSL2, *gsPRSL3, *gsPRSL4;
 		GlobalShortcut *gsPRSL5, *gsPRSL6, *gsPRSL7, *gsPRSL8, *gsPRSL9, *gsPRSLCommander;
+
 		DockTitleBar *dtbLogDockTitle, *dtbChatDockTitle;
 
 		ACLEditor *aclEdit;
@@ -170,11 +172,11 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		virtual void closeEvent(QCloseEvent *e);
 		virtual void hideEvent(QHideEvent *e);
 		virtual void showEvent(QShowEvent *e);
-        void changeEvent(QEvent* e) Q_DECL_OVERRIDE;
-        void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
-        
-        QMenu *createPopupMenu() Q_DECL_OVERRIDE;
-        
+		void changeEvent(QEvent* e) Q_DECL_OVERRIDE;
+		void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+
+		QMenu *createPopupMenu() Q_DECL_OVERRIDE;
+
 		bool handleSpecialContextMenu(const QUrl &url, const QPoint &pos_, bool focus = false);
 		Channel* getContextMenuChannel();
 		ClientUser* getContextMenuUser();
@@ -257,11 +259,11 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_gsMuteSelf_down(QVariant);
 		void on_gsDeafSelf_down(QVariant);
 		void on_gsWhisper_triggered(bool, QVariant);
-        void addTarget(ShortcutTarget *);
-        void removeTarget(ShortcutTarget *st);
-        void on_gsCycleTransmitMode_triggered(bool, QVariant);
+		void addTarget(ShortcutTarget *);
+		void removeTarget(ShortcutTarget *st);
+		void on_gsCycleTransmitMode_triggered(bool, QVariant);
 		void on_gsSendTextMessage_triggered(bool, QVariant);
-        void on_gsSendClipboardTextMessage_triggered(bool, QVariant);
+		void on_gsSendClipboardTextMessage_triggered(bool, QVariant);
 		void on_PRCommSquadRadio_triggered(bool, QVariant);
 		void on_PRCommSLAll_triggered(bool, QVariant);
 		void on_PRCommSL1_triggered(bool, QVariant);
@@ -275,7 +277,6 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void on_PRCommSL9_triggered(bool, QVariant);
 		void on_PRCommSLCommander_triggered(bool, QVariant);
 		void on_Reconnect_timeout();
-		void on_Icon_messageClicked();
 		void on_Icon_activated(QSystemTrayIcon::ActivationReason);
 		void voiceRecorderDialog_finished(int);
 		void qtvUserCurrentChanged(const QModelIndex &, const QModelIndex &);
@@ -296,6 +297,7 @@ class MainWindow : public QMainWindow, public MessageHandler, public Ui::MainWin
 		void pttReleased();
 		void whisperReleased(QVariant scdata);
 		void onResetAudio();
+		void showRaiseWindow();
 		void on_qaFilterToggle_triggered();
 		/// Opens a save dialog for the image referenced by qtcSaveImageCursor.
 		void saveImageAs();

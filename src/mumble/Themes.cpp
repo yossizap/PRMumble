@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -6,34 +6,36 @@
 #include "mumble_pch.hpp"
 
 #include "Themes.h"
-#include "Global.h"
 #include "MainWindow.h"
 #include "MumbleApplication.h"
 
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
+
 boost::optional<ThemeInfo::StyleInfo> Themes::getConfiguredStyle(const Settings &settings) {
 	const ThemeMap themes = getThemes();
-    ThemeMap::const_iterator themeIt;
-    ThemeInfo::StylesMap::const_iterator styleIt;
+	ThemeMap::const_iterator themeIt;
+	ThemeInfo::StylesMap::const_iterator styleIt;
 
-    /* Set PRMumble as the default theme if there's no theme entry in the registry */
+	/* Set PRMumble as the default theme if there's no theme entry in the registry */
 	if (settings.themeName.isEmpty()) {
-	    themeIt = themes.find(QLatin1String("PRMumble"));
-    }
-    else {
-	    themeIt = themes.find(settings.themeName);
-    }
+		themeIt = themes.find(QLatin1String("PRMumble"));
+	}
+	else {
+		themeIt = themes.find(settings.themeName);
+	}
 	if (themeIt == themes.end()) {
 		qWarning() << "Could not find configured theme" << settings.themeName;
 		return boost::none;
 	}
 	
-    /* Set Reality as the default theme style if there's no theme style entry in the registry */
+	/* Set Reality as the default theme style if there's no theme style entry in the registry */
 	if (settings.themeStyleName.isEmpty()) {
-        styleIt = themeIt->styles.find(QLatin1String("Reality"));
-    }
-    else {
-        styleIt = themeIt->styles.find(settings.themeStyleName);
-    }
+		styleIt = themeIt->styles.find(QLatin1String("Reality"));
+	}
+	else {
+		styleIt = themeIt->styles.find(settings.themeStyleName);
+	}
 	if (styleIt == themeIt->styles.end()) {
 		qWarning() << "Configured theme" << settings.themeName << "does not have configured style" << settings.themeStyleName;
 		return boost::none;
@@ -101,11 +103,17 @@ bool Themes::applyConfigured() {
 	QDir::setSearchPaths(QLatin1String("skin"), skinPaths);
 
 	QString themeQss = QString::fromUtf8(file.readAll());
+	setTheme(themeQss, skinPaths);
+	return true;
+}
 
+void Themes::setTheme(QString &themeQss, QStringList &skinPaths) {
+	QDir::setSearchPaths(QLatin1String("skin"), skinPaths);
+	
 	QString userStylesheetFn = userStylesheetPath();
 	QString userStylesheetContent;
 	if (readStylesheet(userStylesheetFn, userStylesheetContent)) {
-		qWarning("Themes: allowing user stylesheet at '%s' to override the chosen theme", qPrintable(userStylesheetFn));
+		qWarning("Themes: allowing user stylesheet at '%s' to override the stylesheet", qPrintable(userStylesheetFn));
 	}
 	
 	qApp->setStyleSheet(
@@ -114,7 +122,6 @@ bool Themes::applyConfigured() {
 		userStylesheetContent
 	);
 
-	return true;
 }
 
 bool Themes::apply() {

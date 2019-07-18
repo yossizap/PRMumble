@@ -1,4 +1,4 @@
-// Copyright 2005-2018 The Mumble Developers. All rights reserved.
+// Copyright 2005-2019 The Mumble Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
@@ -15,10 +15,12 @@
 
 #include "Channel.h"
 #include "Database.h"
-#include "Global.h"
 #include "ServerHandler.h"
 #include "WebFetch.h"
 #include "ServerResolver.h"
+
+// We define a global macro called 'g'. This can lead to issues when included code uses 'g' as a type or parameter name (like protobuf 3.7 does). As such, for now, we have to make this our last include.
+#include "Global.h"
 
 QMap<QString, QIcon> ServerItem::qmIcons;
 QList<PublicInfo> ConnectDialog::qlPublicServers;
@@ -89,10 +91,12 @@ ServerView::ServerView(QWidget *p) : QTreeWidget(p) {
 		siPublic = new ServerItem(tr("Public Internet"), ServerItem::PublicType);
 		siPublic->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
 		addTopLevelItem(siPublic);
-		
-		
+
 		siPublic->setExpanded(false);
-	
+
+		// The continent code is empty when the server's IP address is not in the GeoIP database
+		qmContinentNames.insert(QLatin1String(""), tr("Unknown"));
+
 		qmContinentNames.insert(QLatin1String("af"), tr("Africa"));
 		qmContinentNames.insert(QLatin1String("as"), tr("Asia"));
 		qmContinentNames.insert(QLatin1String("na"), tr("North America"));
@@ -101,7 +105,7 @@ ServerView::ServerView(QWidget *p) : QTreeWidget(p) {
 		qmContinentNames.insert(QLatin1String("oc"), tr("Oceania"));
 	} else {
 		qWarning()<< "Public list disabled";
-		
+
 		siPublic = NULL;
 	}
 }
@@ -182,7 +186,7 @@ bool ServerView::dropMimeData(QTreeWidgetItem *, int, const QMimeData *mime, Qt:
 
 ServerItem *ServerView::getParent(const QString &continentcode, const QString &countrycode, const QString &countryname, const QString &usercontinent, const QString &usercountry) {
 	ServerItem *continent = qmContinent.value(continentcode);
-	if (! continent) {
+	if (!continent) {
 		QString name = qmContinentNames.value(continentcode);
 		if (name.isEmpty())
 			name = continentcode;
@@ -190,26 +194,32 @@ ServerItem *ServerView::getParent(const QString &continentcode, const QString &c
 		qmContinent.insert(continentcode, continent);
 		siPublic->addServerItem(continent);
 
-		if (continentcode == usercontinent) {
-			continent->setExpanded(true);
-			scrollToItem(continent, QAbstractItemView::PositionAtTop);
+		if (!continentcode.isEmpty()) {
+			if (continentcode == usercontinent) {
+				continent->setExpanded(true);
+				scrollToItem(continent, QAbstractItemView::PositionAtTop);
+			}
 		} else {
-			continent->setExpanded(false);
+			continent->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
 		}
 	}
+
+	// If the continent code is empty, we put the server directly into the "Unknown" continent
+	if (continentcode.isEmpty()) {
+		return continent;
+	}
+
 	ServerItem *country = qmCountry.value(countrycode);
-	if (! country) {
+	if (!country) {
 		country = new ServerItem(countryname, ServerItem::PublicType, continentcode, countrycode);
 		qmCountry.insert(countrycode, country);
 		country->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
 
 		continent->addServerItem(country);
 
-		if (countrycode == usercountry) {
+		if (!countrycode.isEmpty() && countrycode == usercountry) {
 			country->setExpanded(true);
 			scrollToItem(country, QAbstractItemView::PositionAtTop);
-		} else {
-			country->setExpanded(false);
 		}
 	}
 	return country;
@@ -1770,7 +1780,7 @@ void ConnectDialog::fetched(QByteArray xmlData, QUrl, QMap<QString, QString> hea
 				pi.quUrl = e.attribute(QLatin1String("url"));
 				pi.qsIp = e.attribute(QLatin1String("ip"));
 				pi.usPort = e.attribute(QLatin1String("port")).toUShort();
-				pi.qsCountry = e.attribute(QLatin1String("country"));
+				pi.qsCountry = e.attribute(QLatin1String("country"), tr("Unknown"));
 				pi.qsCountryCode = e.attribute(QLatin1String("country_code")).toLower();
 				pi.qsContinentCode = e.attribute(QLatin1String("continent_code")).toLower();
 				pi.bCA = e.attribute(QLatin1String("ca")).toInt() ? true : false;

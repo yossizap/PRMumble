@@ -2,7 +2,7 @@
 <context>
     <name>ACLEditor</name>
     <message>
-        <location filename="ACLEditor.cpp" line="+101"/>
+        <location filename="ACLEditor.cpp" line="+103"/>
         <source>Deny</source>
         <translation>Weigeren</translation>
     </message>
@@ -559,14 +559,10 @@ Waarde bepaalt het maximale aantal toegestane gebruikers in het kanaal. Mits waa
         <translation>ASIO-stuurprogramma initialiseren mislukt</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location filename="ASIOInput.ui"/>
+        <location filename="ASIOInput.cpp" line="+37"/>
         <source>ASIO</source>
         <translation>ASIO</translation>
-    </message>
-    <message>
-        <location filename="ASIOInput.ui"/>
-        <source>Form</source>
-        <translation>Formulier</translation>
     </message>
     <message>
         <location/>
@@ -690,7 +686,7 @@ Waarde bepaalt het maximale aantal toegestane gebruikers in het kanaal. Mits waa
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="About.cpp" line="+15"/>
+        <location filename="About.cpp" line="+17"/>
         <source>About Mumble</source>
         <translation>Over Mumble</translation>
     </message>
@@ -729,11 +725,6 @@ Waarde bepaalt het maximale aantal toegestane gebruikers in het kanaal. Mits waa
     <name>AudioInput</name>
     <message>
         <location filename="AudioInput.ui"/>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <location/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
@@ -1098,7 +1089,7 @@ Waarde bepaalt het maximale aantal toegestane gebruikers in het kanaal. Mits waa
         <translation>Tijdsduur dat microfoon openblijft nadat de druk-om-te-praten knop wordt losgelaten.</translation>
     </message>
     <message>
-        <location filename="AudioInput.cpp" line="+597"/>
+        <location filename="AudioInput.cpp" line="+599"/>
         <source>Server maximum network bandwidth is only %1 kbit/s. Audio quality auto-adjusted to %2 kbit/s (%3 ms)</source>
         <translation>Servers&apos; maximum netwerkbandbreedte is slechts %1 kbit/s. Geluidskwaliteit automatisch versteld naar %2 kbit/s (%3 ms)</translation>
     </message>
@@ -1177,6 +1168,11 @@ Waarde bepaalt het maximale aantal toegestane gebruikers in het kanaal. Mits waa
         <source>RNNoise</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <location/>
+        <source>Audio input</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>AudioInputDialog</name>
@@ -1239,11 +1235,6 @@ Waarde bepaalt het maximale aantal toegestane gebruikers in het kanaal. Mits waa
     <name>AudioOutput</name>
     <message>
         <location filename="AudioOutput.ui"/>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <location/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
@@ -1574,6 +1565,11 @@ Waarde bepaalt het maximale aantal toegestane gebruikers in het kanaal. Mits waa
         <location/>
         <source>Attenuate PulseAudio loopback modules</source>
         <translation>PulseAudio loopback modules afzwakken</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Audio output</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2178,7 +2174,7 @@ Mumble wordt doorontwikkeld gericht op functionaliteit waar meeste gebruikers be
         <translation>Gebruik geluiden in plaats van Tekst-naar-Spraak.</translation>
     </message>
     <message>
-        <location filename="AudioWizard.cpp" line="+291"/>
+        <location filename="AudioWizard.cpp" line="+293"/>
         <source>%1 ms</source>
         <translation>%1 ms</translation>
     </message>
@@ -2442,7 +2438,7 @@ Luid spreken, zoals zijnde geïrriteerd/opgewonden. Verlaag geluidsconfiguraties
         <translation>Wissen</translation>
     </message>
     <message numerus="yes">
-        <location filename="BanEditor.cpp" line="+177"/>
+        <location filename="BanEditor.cpp" line="+179"/>
         <source>Ban List - %n Ban(s)</source>
         <translation><numerusform>Banlijst - %n Ban</numerusform><numerusform>Banlijst - %n Ban(s)</numerusform></translation>
     </message>
@@ -3015,7 +3011,7 @@ Zeker dat je jouw certificaat wilt vervangen?
 <context>
     <name>ChatbarTextEdit</name>
     <message>
-        <location filename="CustomElements.cpp" line="+82"/>
+        <location filename="CustomElements.cpp" line="+83"/>
         <source>Paste and &amp;Send</source>
         <oldsource>Paste and send</oldsource>
         <translation>Plakken en &amp;Verzenden</translation>
@@ -3141,7 +3137,7 @@ Zeker dat je jouw certificaat wilt vervangen?
 <context>
     <name>ConnectDialog</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="+1134"/>
+        <location filename="ConnectDialog.cpp" line="+1144"/>
         <source>Connecting to %1</source>
         <translation>Verbinden met %1</translation>
     </message>
@@ -3229,8 +3225,13 @@ Zeker dat je jouw certificaat wilt vervangen?
         <translation>&amp;Filters</translation>
     </message>
     <message>
+        <location line="+740"/>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="ConnectDialog.ui"/>
-        <location filename="ConnectDialog.cpp" line="-505"/>
+        <location filename="ConnectDialog.cpp" line="-1245"/>
         <source>Users</source>
         <translation>Gebruikers</translation>
     </message>
@@ -3786,7 +3787,7 @@ Zonder deze optie ingeschakeld, werken Mumble&apos;s globale snelkoppelingen nie
 <context>
     <name>GlobalShortcutConfig</name>
     <message>
-        <location filename="GlobalShortcut.cpp" line="+533"/>
+        <location filename="GlobalShortcut.cpp" line="+535"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mumble can currently only use mouse buttons and keyboard modifier keys (Alt, Ctrl, Cmd, etc.) for global shortcuts.&lt;/p&gt;&lt;p&gt;If you want more flexibility, you can add Mumble as a trusted accessibility program in the Security &amp; Privacy section of your Mac&apos;s System Preferences.&lt;/p&gt;&lt;p&gt;In the Security &amp; Privacy preference pane, change to the Privacy tab. Then choose Accessibility (near the bottom) in the list to the left. Finally, add Mumble to the list of trusted accessibility programs.&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;body&gt;&lt;p&gt;Mumble slechts muisknoppen en speciale toetsenbord-toetsen gebruiken (Alt, Ctrl, Cmd, etc.) voor globale sneltoetsen.&lt;/p&gt;&lt;p&gt;Als je meer flexibiliteit vereist, stel Mumble als een vertrouwd toegankelijkheidsprogramma onder Beveiliging &amp; Privacy sectie van je Mac&apos;s systeeminstellingen in.&lt;/p&gt;&lt;p&gt;Beveiliging &amp; Privacy voorkeurspaneel → Privacy-tab → Toegankelijkheid onder  linksaan in lijst is waar je Mumble toevoegt.&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -3929,7 +3930,7 @@ Zonder deze optie ingeschakeld, werken Mumble&apos;s globale snelkoppelingen nie
 <context>
     <name>LCD</name>
     <message>
-        <location filename="LCD.cpp" line="+267"/>
+        <location filename="LCD.cpp" line="+269"/>
         <source>Not connected</source>
         <translation>Niet verbonden</translation>
     </message>
@@ -3942,14 +3943,10 @@ Zonder deze optie ingeschakeld, werken Mumble&apos;s globale snelkoppelingen nie
         <translation>Apparaat activeren</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location filename="LCD.ui"/>
+        <location filename="LCD.cpp" line="+5"/>
         <source>LCD</source>
         <translation>LCD</translation>
-    </message>
-    <message>
-        <location filename="LCD.ui"/>
-        <source>Form</source>
-        <translation>Vorm</translation>
     </message>
     <message>
         <location/>
@@ -4018,7 +4015,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
 <context>
     <name>Log</name>
     <message>
-        <location filename="Log.cpp" line="+222"/>
+        <location filename="Log.cpp" line="+224"/>
         <source>Debug</source>
         <translation>Fouten opsporen</translation>
     </message>
@@ -4185,7 +4182,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
 </translation>
     </message>
     <message>
-        <location line="+74"/>
+        <location line="+77"/>
         <source>link to %1</source>
         <translation>koppel aan %1</translation>
     </message>
@@ -4213,7 +4210,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
 <context>
     <name>LogConfig</name>
     <message>
-        <location line="-499"/>
+        <location line="-502"/>
         <source>Toggle console for %1 events</source>
         <translation>Log bij %1-gebeurtenissen tonen</translation>
     </message>
@@ -4404,7 +4401,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
 <context>
     <name>LookConfig</name>
     <message>
-        <location filename="LookConfig.cpp" line="+30"/>
+        <location filename="LookConfig.cpp" line="+32"/>
         <source>System default</source>
         <translation>Standaardinstelling</translation>
     </message>
@@ -4733,13 +4730,13 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="MainWindow.cpp" line="+107"/>
-        <location line="+2701"/>
+        <location filename="MainWindow.cpp" line="+109"/>
+        <location line="+2744"/>
         <source>Root</source>
         <translation>Stam</translation>
     </message>
     <message>
-        <location line="-2644"/>
+        <location line="-2684"/>
         <source>Push-to-Talk</source>
         <comment>Global Shortcut</comment>
         <translation>Druk-om-te-Praten:</translation>
@@ -4817,13 +4814,13 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
     </message>
     <message>
         <location filename="MainWindow.cpp" line="+4"/>
-        <location line="+159"/>
-        <location line="+2638"/>
+        <location line="+168"/>
+        <location line="+2669"/>
         <source>Mumble -- %1</source>
         <translation>Mumble -- %1</translation>
     </message>
     <message>
-        <location line="-2766"/>
+        <location line="-2797"/>
         <source>&amp;Window</source>
         <translation>&amp;Venster</translation>
     </message>
@@ -4849,7 +4846,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <translation>Verbonden met een server - afsluiten of minimaliseren?</translation>
     </message>
     <message>
-        <location line="-252"/>
+        <location line="-261"/>
         <source>Mute Self</source>
         <comment>Global Shortcut</comment>
         <translation>Demp jezelf</translation>
@@ -4891,14 +4888,14 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <translation>Fluisteren/Schreeuwen</translation>
     </message>
     <message>
-        <location line="+79"/>
-        <location line="+2797"/>
+        <location line="+88"/>
+        <location line="+2829"/>
         <source>&lt;center&gt;Not connected&lt;/center&gt;</source>
         <oldsource>Not connected</oldsource>
         <translation>&lt;center&gt;Niet verbonden&lt;/center&gt;</translation>
     </message>
     <message>
-        <location line="-2349"/>
+        <location line="-2381"/>
         <source>Clear</source>
         <translation>Wissen</translation>
     </message>
@@ -4955,12 +4952,13 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
     </message>
     <message>
         <location line="+76"/>
-        <location line="+1497"/>
+        <location line="+1498"/>
+        <location line="+22"/>
         <source>Transmit Mode set to Continuous</source>
         <translation>Zendmodus staat op Continue</translation>
     </message>
     <message>
-        <location line="-1397"/>
+        <location line="-1419"/>
         <source>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1 (%2)&lt;br /&gt;%3&lt;/p&gt;</translation>
     </message>
@@ -4970,14 +4968,14 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <translation>&lt;h2&gt;Spraakkanaal&lt;/h2&gt;&lt;p&gt;Versleuteld met 128-bit OCB-AES128&lt;br /&gt;%1 ms gemiddelde latentie (%4 afwijking)&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-179"/>
-        <location line="+448"/>
+        <location line="-180"/>
+        <location line="+449"/>
         <source>Register yourself as %1</source>
         <translation>Jezelf (%1) registeren</translation>
     </message>
     <message>
-        <location line="-448"/>
-        <location line="+448"/>
+        <location line="-449"/>
+        <location line="+449"/>
         <source>&lt;p&gt;You are about to register yourself on this server. This action cannot be undone, and your username cannot be changed once this is done. You will forever be known as &apos;%1&apos; on this server.&lt;/p&gt;&lt;p&gt;Are you sure you want to register yourself?&lt;/p&gt;</source>
         <translation>&lt;p&gt;Je staat op het punt om jezelf op de server te registreren. Deze actie kan niet ongedaan gemaakt worden, en je gebruikersnaam kan niet veranderen. Je wordt voor altijd bekend als &apos;%1&apos; op deze server.&lt;/p&gt;&lt;p&gt;Zeker registreren?&lt;/p&gt;</translation>
     </message>
@@ -5054,7 +5052,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
     <message>
         <location line="+76"/>
         <location line="+270"/>
-        <location line="+611"/>
+        <location line="+641"/>
         <source>Message to channel %1</source>
         <translation>Bericht naar kanaal %1</translation>
     </message>
@@ -5089,7 +5087,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <translation>Falende server-verbinding.</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+81"/>
         <source>&lt;center&gt;Type message to channel &apos;%1&apos; here&lt;/center&gt;</source>
         <oldsource>Type message to channel '%1' here</oldsource>
         <translation>&lt;center&gt;Bericht naar kanaal &apos;%1&apos; (hier typen)&lt;/center&gt;</translation>
@@ -5124,7 +5122,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <translation>Afbeeldingsbestandsindeling kon niet worden herkend.</translation>
     </message>
     <message>
-        <location line="-3103"/>
+        <location line="-3147"/>
         <source>&amp;User</source>
         <translation>&amp;Gebruiker</translation>
     </message>
@@ -5134,7 +5132,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <translation>&amp;Kanaal</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+65"/>
         <location line="+26"/>
         <source>Use in conjunction with Whisper to.</source>
         <comment>Global Shortcut</comment>
@@ -5157,6 +5155,24 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <source>Cycle Transmit Mode</source>
         <comment>Global Shortcut</comment>
         <translation>Verzet zendmodus</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to Push-To-Talk</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to Continuous</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Set Transmit Mode to VAD</source>
+        <comment>Global Shortcut</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location line="+3"/>
@@ -5223,18 +5239,20 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
     </message>
     <message>
         <location line="+41"/>
-        <location line="+1484"/>
+        <location line="+1485"/>
+        <location line="+40"/>
         <source>Transmit Mode set to Voice Activity</source>
         <translation>Zendmodus naar Spraakactivtiteit ingesteld</translation>
     </message>
     <message>
-        <location line="-1479"/>
-        <location line="+1483"/>
+        <location line="-1520"/>
+        <location line="+1484"/>
+        <location line="+16"/>
         <source>Transmit Mode set to Push-to-Talk</source>
         <translation>Zendmodus op Druk-om-te-Praten ingesteld</translation>
     </message>
     <message>
-        <location line="-1332"/>
+        <location line="-1348"/>
         <source>&lt;p&gt;Connected users: %1/%2&lt;/p&gt;</source>
         <translation>&lt;p&gt;Gebruikers verbonden: %1/%2&lt;/p&gt;</translation>
     </message>
@@ -5285,12 +5303,12 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
     </message>
     <message>
         <location line="+4"/>
-        <location line="+1524"/>
+        <location line="+1554"/>
         <source>&amp;View Certificate</source>
         <translation>&amp;Certificaat weergeven</translation>
     </message>
     <message>
-        <location line="-1230"/>
+        <location line="-1260"/>
         <location line="+19"/>
         <source>Enter reason</source>
         <translation>Reden typen</translation>
@@ -5305,12 +5323,12 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <location line="+103"/>
         <location line="+4"/>
         <location line="+266"/>
-        <location line="+611"/>
+        <location line="+641"/>
         <source>To %1: %2</source>
         <translation>Naar %1: %2</translation>
     </message>
     <message>
-        <location line="-984"/>
+        <location line="-1014"/>
         <location line="+107"/>
         <source>Message to %1</source>
         <translation>Bericht naar %1</translation>
@@ -5392,7 +5410,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
         <translation>Over Qt</translation>
     </message>
     <message>
-        <location line="+469"/>
+        <location line="+499"/>
         <source>SSL Verification failed: %1</source>
         <translation>SSL-verificatie mislukt: %1</translation>
     </message>
@@ -5424,7 +5442,7 @@ Veld beschrijft LCD-apparaatgrootte aangeduid in pixels (voor Grafische LCD&apos
     </message>
     <message>
         <location line="+11"/>
-        <location filename="Messages.cpp" line="+70"/>
+        <location filename="Messages.cpp" line="+72"/>
         <source>Invalid username</source>
         <translation>Gebruikersnaam ongeldig</translation>
     </message>
@@ -5469,8 +5487,8 @@ Otherwise abort and check your certificate and username.</source>
         <translation>Verkeerd serverwachtwoord voor ongeregistreerde account; opnieuw proberen.</translation>
     </message>
     <message>
-        <location line="-2238"/>
-        <location line="+2450"/>
+        <location line="-2269"/>
+        <location line="+2482"/>
         <source>Images (*.png *.jpg *.jpeg)</source>
         <translation>Afbeeldingen (*.png *.jpg *.jpeg)</translation>
     </message>
@@ -5967,7 +5985,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>Wisselt naar minimalistisch venster waar geschiedenisvenster &amp; menu verbergen.</translation>
     </message>
     <message>
-        <location filename="Messages.cpp" line="+408"/>
+        <location filename="Messages.cpp" line="+416"/>
         <source>You muted and deafened %1.</source>
         <translation>Je dempte &amp; doofde %1.</translation>
     </message>
@@ -6007,7 +6025,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 onderdrukt (door %2).</translation>
     </message>
     <message>
-        <location line="-218"/>
+        <location line="-214"/>
         <source>%1 moved to %2.</source>
         <translation>%1 verplaatst naar %2.</translation>
     </message>
@@ -6022,12 +6040,12 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 hiernaartoe verplaatst uit %2 (door %3).</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+48"/>
         <source>%1 is now muted and deafened.</source>
         <translation>%1 gedempt &amp; gedoofd.</translation>
     </message>
     <message>
-        <location line="-296"/>
+        <location line="-304"/>
         <source>Your account information can not be verified currently. Please try again later</source>
         <translation>Accountinformatie kan nu niet geverifieerd worden. Graag later opnieuw proberen.</translation>
     </message>
@@ -6113,7 +6131,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>Geen toestemming.</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+42"/>
         <source>%1 connected and entered channel.</source>
         <translation type="unfinished"/>
     </message>
@@ -6123,7 +6141,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 verbindde.</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+91"/>
         <source>%1 is now muted.</source>
         <translation>%1 gedempt.</translation>
     </message>
@@ -6234,7 +6252,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>Onderdrukking opgeheven (door %1).</translation>
     </message>
     <message>
-        <location line="-173"/>
+        <location line="-169"/>
         <source>You joined %1.</source>
         <translation>Je ging %1 binnen.</translation>
     </message>
@@ -6255,7 +6273,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 hernoemd naar %2 (door %3).</translation>
     </message>
     <message>
-        <location line="+240"/>
+        <location line="+236"/>
         <source>%1 disconnected.</source>
         <translation>%1 verbrak verbinding.</translation>
     </message>
@@ -6287,7 +6305,12 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%2%1: %3</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+149"/>
+        <source>Failed to load Opus, it will not be available for audio encoding/decoding.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+58"/>
         <source>The server requests minimum client version %1</source>
         <translation>Server verwacht minstens Mumble versie %1</translation>
     </message>
@@ -6312,7 +6335,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>Server verzoekt Druk-om-te-Praten uit te schakelen...</translation>
     </message>
     <message>
-        <location line="-464"/>
+        <location line="-470"/>
         <source>You were unmuted by %1.</source>
         <translation>Ontdempt (door %1).</translation>
     </message>
@@ -6347,12 +6370,12 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%2 ontdempte %1.</translation>
     </message>
     <message>
-        <location line="+367"/>
+        <location line="+373"/>
         <source>Unable to find matching CELT codecs with other clients. You will not be able to talk to all users.</source>
         <translation>Overeenkomende CELT-codecs met andere Mumblers vinden mislukt. Je kunt niet met anderen praten.</translation>
     </message>
     <message>
-        <location line="-433"/>
+        <location line="-439"/>
         <source>You were muted and deafened by %1.</source>
         <oldsource>You were deafened by %1.</oldsource>
         <translation>Gedempt &amp; gedoofd (door %1).</translation>
@@ -6378,7 +6401,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 weggeschopt %3: %2.</translation>
     </message>
     <message>
-        <location line="-270"/>
+        <location line="-266"/>
         <source>You were moved to %1 by %2.</source>
         <translation>Verplaatst naar %1 (door %2).</translation>
     </message>
@@ -6388,7 +6411,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>%1 kwam kanaal binnen.</translation>
     </message>
     <message>
-        <location line="-225"/>
+        <location line="-237"/>
         <source>Server connection rejected: %1.</source>
         <translation>Serververbinding afgewezen: %1.</translation>
     </message>
@@ -6398,12 +6421,12 @@ Otherwise abort and check your certificate and username.</source>
         <translation>Geweigerd: %1.</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+110"/>
         <source>%1 renamed to %2.</source>
         <translation>%1 hernoemd naar %2.</translation>
     </message>
     <message>
-        <location line="+235"/>
+        <location line="+231"/>
         <source>%1 left channel and disconnected.</source>
         <translation>%1 verliet kanaal (verbrak verbinding).</translation>
     </message>
@@ -6413,7 +6436,7 @@ Otherwise abort and check your certificate and username.</source>
         <translation>Bericht van %1</translation>
     </message>
     <message>
-        <location filename="UserModel.cpp" line="+1391"/>
+        <location filename="UserModel.cpp" line="+1393"/>
         <source>You have User Dragging set to &quot;Do Nothing&quot; so the user wasn&apos;t moved.</source>
         <translation>Je hebt gebruikerssleping ingesteld op &quot;Doe Niets&quot; dus de gebruiker is niet versleept.</translation>
     </message>
@@ -6707,7 +6730,7 @@ Extra kanalen markeerbaar vanuit kanaalcontextmenu.</translation>
         <translation>Opent een venster met een volumeschuifje. Gebruik op andere kanaalgebruiker(s).</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="-3067"/>
+        <location filename="MainWindow.cpp" line="-3111"/>
         <source>&amp;Developer</source>
         <translation>&amp;Ontwikkelaar</translation>
     </message>
@@ -6871,6 +6894,16 @@ Extra kanalen markeerbaar vanuit kanaalcontextmenu.</translation>
         <source>R&amp;egister...</source>
         <translation>R&amp;egistreer...</translation>
     </message>
+    <message>
+        <location/>
+        <source>Show</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location/>
+        <source>Shows the main Mumble window.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Manual</name>
@@ -6968,7 +7001,7 @@ Extra kanalen markeerbaar vanuit kanaalcontextmenu.</translation>
 <context>
     <name>NetworkConfig</name>
     <message>
-        <location filename="NetworkConfig.cpp" line="+29"/>
+        <location filename="NetworkConfig.cpp" line="+31"/>
         <source>Network</source>
         <translation>Netwerk</translation>
     </message>
@@ -7225,8 +7258,8 @@ Voorkomt dat Mumble potentieel identificerende informatie over het besturingssys
 <context>
     <name>Overlay</name>
     <message>
-        <location filename="OverlayEditorScene.cpp" line="+97"/>
-        <location filename="OverlayUser.cpp" line="+129"/>
+        <location filename="OverlayEditorScene.cpp" line="+99"/>
+        <location filename="OverlayUser.cpp" line="+131"/>
         <source>Silent</source>
         <translation>Stil</translation>
     </message>
@@ -7255,7 +7288,7 @@ Voorkomt dat Mumble potentieel identificerende informatie over het besturingssys
         <translation>Kanaal</translation>
     </message>
     <message>
-        <location filename="Overlay.cpp" line="+205"/>
+        <location filename="Overlay.cpp" line="+207"/>
         <source>Failed to create communication with overlay at %2: %1. No overlay will be available.</source>
         <translation>Totstandbrenging communicatie met overlay bij %2 mislukt: %1. Overlay is daarom niet beschikbaar.</translation>
     </message>
@@ -7263,7 +7296,7 @@ Voorkomt dat Mumble potentieel identificerende informatie over het besturingssys
 <context>
     <name>OverlayClient</name>
     <message>
-        <location filename="OverlayUserGroup.cpp" line="+76"/>
+        <location filename="OverlayUserGroup.cpp" line="+78"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
@@ -7341,7 +7374,7 @@ Voorkomt dat Mumble potentieel identificerende informatie over het besturingssys
 <context>
     <name>OverlayConfig</name>
     <message>
-        <location filename="OverlayConfig.cpp" line="+80"/>
+        <location filename="OverlayConfig.cpp" line="+82"/>
         <source>To move the users, drag the little red dot.</source>
         <translation>Om gebruikers te verplaatsen sleep je rooie puntjes.</translation>
     </message>
@@ -7829,7 +7862,7 @@ Om naar laatste versie te upgraden klik onderstaande knop.</translation>
     <name>PluginConfig</name>
     <message>
         <location filename="Plugins.ui"/>
-        <location filename="Plugins.cpp" line="+73"/>
+        <location filename="Plugins.cpp" line="+74"/>
         <source>Plugins</source>
         <translation>Plug-ins</translation>
     </message>
@@ -7845,11 +7878,6 @@ Om naar laatste versie te upgraden klik onderstaande knop.</translation>
     </message>
     <message>
         <location filename="Plugins.ui"/>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <location/>
         <source>Options</source>
         <translation>Opties</translation>
     </message>
@@ -7964,7 +7992,7 @@ Om naar laatste versie te upgraden klik onderstaande knop.</translation>
 <context>
     <name>PulseAudioSystem</name>
     <message>
-        <location filename="PulseAudio.cpp" line="+799"/>
+        <location filename="PulseAudio.cpp" line="+800"/>
         <source>Default Input</source>
         <translation>Standaardinvoer</translation>
     </message>
@@ -7990,7 +8018,7 @@ Om naar laatste versie te upgraden klik onderstaande knop.</translation>
 <context>
     <name>RichTextEditor</name>
     <message>
-        <location filename="RichTextEditor.cpp" line="+234"/>
+        <location filename="RichTextEditor.cpp" line="+236"/>
         <source>Failed to load image</source>
         <translation>Afbeelding laden mislukt</translation>
     </message>
@@ -8091,7 +8119,7 @@ Om naar laatste versie te upgraden klik onderstaande knop.</translation>
 <context>
     <name>ServerHandler</name>
     <message>
-        <location filename="ServerHandler.cpp" line="+299"/>
+        <location filename="ServerHandler.cpp" line="+301"/>
         <source>Unable to resolve hostname</source>
         <translation>Falende hostnaamresolutie</translation>
     </message>
@@ -8129,7 +8157,7 @@ Om naar laatste versie te upgraden klik onderstaande knop.</translation>
 <context>
     <name>ServerView</name>
     <message>
-        <location filename="ConnectDialog.cpp" line="-753"/>
+        <location filename="ConnectDialog.cpp" line="-761"/>
         <source>Favorite</source>
         <translation>Favoriet</translation>
     </message>
@@ -8145,6 +8173,11 @@ Om naar laatste versie te upgraden klik onderstaande knop.</translation>
     </message>
     <message>
         <location line="+7"/>
+        <source>Unknown</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Africa</source>
         <translation>Afrika</translation>
     </message>
@@ -8321,7 +8354,7 @@ Om naar laatste versie te upgraden klik onderstaande knop.</translation>
 <context>
     <name>Tokens</name>
     <message>
-        <location filename="Tokens.cpp" line="+42"/>
+        <location filename="Tokens.cpp" line="+44"/>
         <source>Empty Token</source>
         <translation>Lege Sleutel</translation>
     </message>
@@ -8529,7 +8562,7 @@ Toegangssleutels zijn tekenreeksen; zijnden wachtwoorden t.b.v. simpel kanaaltoe
         <translation>Verbindingstijd</translation>
     </message>
     <message>
-        <location filename="UserInformation.cpp" line="+83"/>
+        <location filename="UserInformation.cpp" line="+85"/>
         <source>%1w</source>
         <translation>%1w</translation>
     </message>
@@ -8838,7 +8871,7 @@ Toegangssleutels zijn tekenreeksen; zijnden wachtwoorden t.b.v. simpel kanaaltoe
 <context>
     <name>VersionCheck</name>
     <message>
-        <location filename="VersionCheck.cpp" line="+118"/>
+        <location filename="VersionCheck.cpp" line="+120"/>
         <source>Upgrade Mumble</source>
         <translation>Mumble bijwerken</translation>
     </message>
@@ -8887,7 +8920,7 @@ Toegangssleutels zijn tekenreeksen; zijnden wachtwoorden t.b.v. simpel kanaaltoe
         <translation>Certificaatketting</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+19"/>
         <source>Certificate details</source>
         <translation>Certificaatdetails</translation>
     </message>
@@ -8990,7 +9023,7 @@ Toegangssleutels zijn tekenreeksen; zijnden wachtwoorden t.b.v. simpel kanaaltoe
 <context>
     <name>VoiceRecorder</name>
     <message>
-        <location filename="VoiceRecorder.cpp" line="+262"/>
+        <location filename="VoiceRecorder.cpp" line="+264"/>
         <source>Recorder failed to create directory &apos;%1&apos;</source>
         <translation>Map &apos;%1&apos; maken (door geluidsrecorder) mislukt</translation>
     </message>
@@ -9024,7 +9057,7 @@ Toegangssleutels zijn tekenreeksen; zijnden wachtwoorden t.b.v. simpel kanaaltoe
     <name>VoiceRecorderDialog</name>
     <message>
         <location filename="VoiceRecorderDialog.ui"/>
-        <location filename="VoiceRecorderDialog.cpp" line="+108"/>
+        <location filename="VoiceRecorderDialog.cpp" line="+110"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+9"/>
@@ -9162,9 +9195,17 @@ Contacteer je serverbeheerder voor meer informatie.</translation>
     </message>
 </context>
 <context>
+    <name>WASAPIInput</name>
+    <message>
+        <location filename="WASAPI.cpp" line="+463"/>
+        <source>Access to the microphone was denied. Please check that your operating system&apos;s microphone settings allow Mumble to use the microphone.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>WASAPISystem</name>
     <message>
-        <location filename="WASAPI.cpp" line="+241"/>
+        <location line="-219"/>
         <source>Default Device</source>
         <translation>Standaardapparaat</translation>
     </message>
