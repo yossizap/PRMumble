@@ -56,10 +56,11 @@ AboutDialog::AboutDialog(QWidget *p) : QDialog(p) {
 	                  "<p><b>A voice-chat utility for gamers, customized for Project Reality</b></p>"
 	                  "<p><tt><a href=\"%3\">%3</a></tt></p>"
 	                  "<p><tt><a href=\"%2\">%2</a></tt></p>"
-	              ).arg(QLatin1String(MUMBLE_RELEASE))
-				  .arg(QLatin1String("http://mumble.sourceforge.net/"))
-				  .arg(QLatin1String("http://www.realitymod.com/"))
-				  .arg(QLatin1String("Copyright 2005-2019 The Mumble Developers"))
+        ).arg(QLatin1String(MUMBLE_RELEASE))
+         .arg(QLatin1String("http://mumble.sourceforge.net/"))
+         .arg(QLatin1String("http://www.realitymod.com/"))
+         .arg(QLatin1String("2005-2019"))
+         .arg(QLatin1String("2019")));
 	QHBoxLayout *qhbl=new QHBoxLayout(about);
 	qhbl->addWidget(icon);
 	qhbl->addWidget(text);
