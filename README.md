@@ -1,69 +1,119 @@
-Mumble - A voice chat utility for gamers
-=======================================
+# Project Reality Mumble
 
-[![Build Status](https://dev.azure.com/Mumble-VoIP/Mumble/_apis/build/status/Mumble-CI?branchName=master)](https://dev.azure.com/Mumble-VoIP/Mumble/_build/latest?definitionId=1?branchName=master)
+This repository contains a fork of the open source Mumble project, designed to be used as
+an integrated part of the Project Reality mod. The integration of Mumble into the game
+allowed us to replace BF2's VOIP system with positional audio and higher quality codecs.
 
-> *http://mumble.info/*  
-> *#mumble on freenode*
+In addition to providing positional audio this fork also takes care of creating shortcuts
+for in game communication, such as cross-squad whispers, local speech, commander whisper etc.
 
-Mumble is a voicechat program for gamers written on top of Qt and Opus.
+The client is meant to be executed soley by the PR Launcher on game launch since it's
+incapable of connecting to regular mumble servers and PR murmur without being in an active
+game session.
 
-There are two modules in Mumble; the client (mumble) and the server
-(murmur). The client works on Win32/64, Linux and Mac OS X, while the
-server should work on anything Qt can be installed on.
+# WINDOWS PREREQUISITES:
+Get all the prerequires listed here(Make sure you follow up on the "temporarily remove Microsoft Visual C++ 2010 * Redistributable for the installer to work"):
+https://web.archive.org/web/20170609174712/http://wiki.mumble.info/wiki/BuildingWindows
+Direct X SDK (June 2010) isn't mentioned there but you need it as well.
 
-Note that when we say Win32, we mean Windows XP or newer.
+# DEPENDENCIES:
 
-## Running Mumble
+## Windows
+Follow the guide at Mumble's wiki to install the dependencies from the mumble-releng repo:
+https://web.archive.org/web/20170609174712/http://wiki.mumble.info/wiki/BuildingWindows
+Run everything through the cygwin shell provided at C:\MumbleBuild\win32-static-1.3.x-2017-06-03-f0df4cd-863 and replace
+the mumble-releng folder in C:\MumbleBuild\win32-static-1.3.x-2017-06-03-f0df4cd-863 with the one in this repo and work from there.
 
-On Windows, after installation, you should have a new Mumble folder in your
-Start Menu, from which you can start Mumble.
+I had to reinstall the prerequisites twice and tweak a couple of mumble-releng scripts to 
+get things to work. Hopefully the fixes will work for you as well but you might need to 
+hack it a bit.
 
-On Mac OS X, to install Mumble, drag the application from the downloaded
-disk image into your `/Applications` folder.
+I couldn't get Ice-3.6.3 to fully compile so I downloaded the official version from
+https://github.com/zeroc-ice/ice/releases
+installed it and copied the missing files from C:\Program Files (x86)\ZeroC\Ice-3.6.3\* to C:\Program Files (x86)\ZeroC\Ice-3.6.3\*
 
-Once Mumble is launched, you need a server to connect to. Either create your
-own or join a friend's.
+## Linux
+Simply run:
 
-## Running Murmur on Unix-like systems
+    apt-get install build-essential pkg-config qt5-default libqt5svg5-dev \
+                libboost-dev libasound2-dev libssl-dev \
+                libspeechd-dev libzeroc-ice-dev libpulse-dev \
+                libcap-dev libprotobuf-dev protobuf-compiler \
+                libogg-dev libavahi-compat-libdnssd-dev libsndfile1-dev \
+                libg15daemon-client-dev libxi-dev 
+                
+# BUILDING 
 
-Murmur should be run from the command line, so start a shell (command prompt)
-and go to wherever you installed Mumble. Run murmur as
+## WINDOWS PRMUMBLE AND PRMURMUR:
+Once you have all of the dependencies ready enter the mumble repo in this folder using the 
+windows shell provided at `C:\MumbleBuild\win32-static-1.3.x-xxxx-xx-xx-tag-xxx` and 
+configure the repo with:
 
-```
-murmurd [-supw <password>] [-ini <inifile>] [-fg] [v]
+    qmake -recursive main.pro CONFIG+="release static no-overlay no-bonjour no-update \
+    no-asio no-g15 tests warnings-as-errors no-elevation no-crash-report" CONFIG-="sse2"
 
--supw   Set a new password for the user SuperUser, which is hardcoded to
-        bypass ACLs. Keep this password safe. Until you set a password,
-        the SuperUser is disabled. If you use this option, murmur will
-        set the password in the database and then exit.
+Then you will be able to run:
 
--ini    Use an inifile other than murmur.ini, use this to run several instances
-        of murmur from the same directory. Make sure each instance is using
-        a separate database.
+    jom clean
+    jom
 
--fg     Run in the foreground, logging to standard output.
+### Windows build with Linux
+I found this way easier than building on windows since the dependencies just work without 
+any effort.
 
--v      More verbose logging.
-```
+1) Add MXE's repository to your system's sources
 
-## Running Murmur on Mac OS X
+    echo "deb http://pkg.mxe.cc/repos/apt/debian jessie main" > /etc/apt/sources.list.d/mxeapt.list
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D43A795B73B16ABE9643FE1AFD8FFF16DB45C6AB
+    apt-get update
 
-Murmur is distributed separately from the Mumble client on Mac OS X.
-It is called Static OS X Server and can be downloaded from the main webpage.
+2) Install the required packages
 
-Once downloaded it can be run in the same way as on any other Unix-like system.
-For more information please see the 'Running Murmur on Unix-like systems' above.
+    apt-get install \
+	mxe-${ARCH}-w64-mingw32.static-qtbase \
+	mxe-${ARCH}-w64-mingw32.static-qtsvg \
+	mxe-${ARCH}-w64-mingw32.static-qttools \
+	mxe-${ARCH}-w64-mingw32.static-qttranslations \
+	mxe-${ARCH}-w64-mingw32.static-boost \
+	mxe-${ARCH}-w64-mingw32.static-protobuf \
+	mxe-${ARCH}-w64-mingw32.static-sqlite \
+	mxe-${ARCH}-w64-mingw32.static-flac \
+ 	mxe-${ARCH}-w64-mingw32.static-ogg \
+	mxe-${ARCH}-w64-mingw32.static-vorbis \
+	mxe-${ARCH}-w64-mingw32.static-libsndfile
 
-## Running Murmur on Win32
+3) Export environment variable to tell QMake where MXE's protobuf compiler is
 
-Doubleclick the Murmur icon to start murmur. There will be a small icon on your
-taskbar from which you can view the log.
+    export MUMBLE_PROTOC=/usr/lib/mxe/usr/x86_64-unknown-linux-gnu/bin/protoc
 
-To set the superuser password, run murmur with the parameters `-supw <password>`.
+4) Add MXE's directory to PATH
 
-## Bandwidth usage
+    PATH=$PATH:/usr/lib/mxe/usr/bin
 
-Mumble will use 10-40 kbit/s outgoing, and the same incoming for each user.
-So if there are 10 other users on the server with you, your incoming
-bandwidth requirement will be 100-400 kbit/s if they all talk at the same time.
+5) Run QMake to process the project(s) files
+
+    ${ARCH}-w64-mingw32.static-qmake-qt5 -recursive CONFIG+="release g15-emulator no-overlay no-bonjour no-elevation no-ice"
+
+6) Start the build
+
+    make
+
+NOTE: Overlay, Logitech G15 LCD, ZeroC Ice, Bonjour won't work when compiling with linux but we aren't using those atm anyways.
+
+## LINUX PRMURMUR
+NOTE: If you were building the windows client through linux open a new shell without the 
+MUMBLE_PROTOC export and then run:
+
+    qmake -recursive main.pro CONFIG+=no-client
+    make
+
+# UPGRADING MUMBLE:
+Checkout to the master branch and run:
+
+    git pull https://github.com/mumble-voip/mumble master
+
+Once master's head is synced with upstream - checkout to the PRMumble branch and run 
+git merge with the master branch.
+
+Go over the changes carefully and take a look at the commit history of the PRMumble branch 
+to understand which changes were required for it to work with PR's Launcher and audio dlls.
