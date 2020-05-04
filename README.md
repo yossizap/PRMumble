@@ -13,14 +13,18 @@ game session.
 
 # WINDOWS PREREQUISITES:
 Get all the prerequires listed here(Make sure you follow up on the "temporarily remove Microsoft Visual C++ 2010 * Redistributable for the installer to work"):
+
 https://web.archive.org/web/20170609174712/http://wiki.mumble.info/wiki/BuildingWindows
+
 Direct X SDK (June 2010) isn't mentioned there but you need it as well.
 
 # DEPENDENCIES:
 
 ## Windows
 Follow the guide at Mumble's wiki to install the dependencies from the mumble-releng repo:
+
 https://web.archive.org/web/20170609174712/http://wiki.mumble.info/wiki/BuildingWindows
+
 Run everything through the cygwin shell provided at C:\MumbleBuild\win32-static-1.3.x-2017-06-03-f0df4cd-863 and replace
 the mumble-releng folder in C:\MumbleBuild\win32-static-1.3.x-2017-06-03-f0df4cd-863 with the one in this repo and work from there.
 
